@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
-import { useState } from "react";
+import Image from 'next/image';
+import { useState } from 'react';
 
 interface PropertyHeroGalleryProps {
   galleryImages: string[];
@@ -24,7 +24,7 @@ export function PropertyHeroGallery({
   };
 
   return (
-    <section className="bg-white">
+    <section className="">
       <div className="container mx-auto px-4">
         {/* Desktop: 1 large + 4 small grid */}
         <div className="relative hidden py-6 md:block">

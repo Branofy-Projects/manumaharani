@@ -1,18 +1,18 @@
-import { PropertyActivities } from "@/components/PropertyActivities";
-import { PropertyAmenities } from "@/components/PropertyAmenities";
-import { PropertyBedrooms } from "@/components/PropertyBedrooms";
-import { PropertyBreadcrumb } from "@/components/PropertyBreadcrumb";
-import { PropertyCancellationPolicy } from "@/components/PropertyCancellationPolicy";
-import { PropertyDirection } from "@/components/PropertyDirection";
-import { PropertyEnquiryForm } from "@/components/PropertyEnquiryForm";
-import { PropertyFAQ } from "@/components/PropertyFAQ";
-import { PropertyHeroGallery } from "@/components/PropertyHeroGallery";
-import { PropertyHouseRules } from "@/components/PropertyHouseRules";
-import { PropertyInfo } from "@/components/PropertyInfo";
-import { PropertyMeals } from "@/components/PropertyMeals";
-import { PropertyQuickNotes } from "@/components/PropertyQuickNotes";
-import { PropertyRealMoments } from "@/components/PropertyRealMoments";
-import { PropertyStickyNav } from "@/components/PropertyStickyNav";
+import { PropertyActivities } from '@/components/PropertyActivities';
+import { PropertyAmenities } from '@/components/PropertyAmenities';
+import { PropertyBedrooms } from '@/components/PropertyBedrooms';
+import { PropertyBreadcrumb } from '@/components/PropertyBreadcrumb';
+import { PropertyCancellationPolicy } from '@/components/PropertyCancellationPolicy';
+import { PropertyDirection } from '@/components/PropertyDirection';
+import { PropertyEnquiryForm } from '@/components/PropertyEnquiryForm';
+import { PropertyFAQ } from '@/components/PropertyFAQ';
+import { PropertyHeroGallery } from '@/components/PropertyHeroGallery';
+import { PropertyHouseRules } from '@/components/PropertyHouseRules';
+import { PropertyInfo } from '@/components/PropertyInfo';
+import { PropertyMeals } from '@/components/PropertyMeals';
+import { PropertyQuickNotes } from '@/components/PropertyQuickNotes';
+import { PropertyRealMoments } from '@/components/PropertyRealMoments';
+import { PropertyStickyNav } from '@/components/PropertyStickyNav';
 
 export default function Page() {
   const breadcrumbItems = [
@@ -31,12 +31,13 @@ export default function Page() {
     { href: "#reviews", label: "Reviews" },
   ];
 
-  const heroImage = "/tiger.png";
+  const heroImage =
+    "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000";
   const galleryImages = [
-    "/tiger.png",
-    "/tiger.png",
-    "/tiger.png",
-    "/tiger.png",
+    "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
+    "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
+    "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
+    "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
   ];
 
   const propertyAmenities = [
@@ -47,12 +48,42 @@ export default function Page() {
   ];
 
   const bedrooms = [
-    { id: 1, image: "/tiger.png", name: "Bedroom 1" },
-    { id: 2, image: "/tiger.png", name: "Bedroom 2" },
-    { id: 3, image: "/tiger.png", name: "Bedroom 3" },
-    { id: 4, image: "/tiger.png", name: "Bedroom 4" },
-    { id: 5, image: "/tiger.png", name: "Bedroom 5" },
-    { id: 6, image: "/tiger.png", name: "Bedroom 6" },
+    {
+      id: 1,
+      image:
+        "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
+      name: "Bedroom 1",
+    },
+    {
+      id: 2,
+      image:
+        "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
+      name: "Bedroom 2",
+    },
+    {
+      id: 3,
+      image:
+        "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
+      name: "Bedroom 3",
+    },
+    {
+      id: 4,
+      image:
+        "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
+      name: "Bedroom 4",
+    },
+    {
+      id: 5,
+      image:
+        "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
+      name: "Bedroom 5",
+    },
+    {
+      id: 6,
+      image:
+        "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
+      name: "Bedroom 6",
+    },
   ];
 
   const amenitiesList = [
@@ -66,10 +97,30 @@ export default function Page() {
   ];
 
   const realMoments = [
-    { alt: "Real Moment 1", id: "1", image: "/tiger.png" },
-    { alt: "Real Moment 2", id: "2", image: "/tiger.png" },
-    { alt: "Real Moment 3", id: "3", image: "/tiger.png" },
-    { alt: "Real Moment 4", id: "4", image: "/tiger.png" },
+    {
+      alt: "Real Moment 1",
+      id: "1",
+      image:
+        "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
+    },
+    {
+      alt: "Real Moment 2",
+      id: "2",
+      image:
+        "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
+    },
+    {
+      alt: "Real Moment 3",
+      id: "3",
+      image:
+        "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
+    },
+    {
+      alt: "Real Moment 4",
+      id: "4",
+      image:
+        "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
+    },
   ];
 
   const directionsList = [
@@ -90,7 +141,8 @@ export default function Page() {
       description:
         "Children, elders, and pets are welcome at this lovely holiday home. Take a nice break from the routine with your loved ones and enjoy fine hospitality with us.",
       id: "1",
-      image: "/tiger.png",
+      image:
+        "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
       imagePosition: "left" as const,
       title: "Host family getaways",
     },
@@ -98,7 +150,8 @@ export default function Page() {
       description:
         "With themed interiors, wallpapers, vibrant colours and stylish corners, this villa in Lonavala makes a stunning backdrop for photoshoots.",
       id: "2",
-      image: "/tiger.png",
+      image:
+        "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
       imagePosition: "left" as const,
       title: "Plan Your Photoshoots",
     },
@@ -106,7 +159,8 @@ export default function Page() {
       description:
         "Savour smoky barbecue grills (both veg and non-veg) served fresh on the lawns. Pair them with your favourite cocktails or mocktails and enjoy a laid-back evening under the stars.",
       id: "3",
-      image: "/tiger.png",
+      image:
+        "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
       imagePosition: "left" as const,
       title: "Have BBQ Nights",
     },
@@ -151,7 +205,7 @@ export default function Page() {
   ];
 
   return (
-    <main className="bg-white pt-[100px] md:pt-[140px]">
+    <main className="bg-[#f3eee7] pt-[100px] md:pt-[140px]">
       <PropertyBreadcrumb items={breadcrumbItems} />
       <PropertyHeroGallery
         galleryImages={galleryImages}
@@ -160,7 +214,7 @@ export default function Page() {
       <PropertyStickyNav items={navItems} />
 
       {/* Main Content */}
-      <section className="bg-white py-10">
+      <section className="py-10">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
             {/* Left Column - Property Details */}
@@ -188,11 +242,11 @@ export default function Page() {
 
               <PropertyQuickNotes notesText="To ensure a smooth and enjoyable experience, we've listed a few key notes about the property. Please review them before your stay." />
 
-              <PropertyDirection
+              {/* <PropertyDirection
                 address="QG72+FCG Shilatne, Maharashtra"
                 coordinates="18°45'49.3&quot;N 73°30'03.9&quot;E"
                 directions={directionsList}
-              />
+              /> */}
 
               <PropertyActivities activities={activitiesList} />
 

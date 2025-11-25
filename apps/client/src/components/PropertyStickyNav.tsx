@@ -9,7 +9,7 @@ interface PropertyStickyNavProps {
 
 export function PropertyStickyNav({ items }: PropertyStickyNavProps) {
   return (
-    <nav className="sticky top-[72px] md:top-[68px] z-30 bg-white shadow-sm">
+    <nav className="sticky top-[72px] md:top-[68px] z-30 bg-[#f3eee7] shadow-sm">
       <div className="container mx-auto px-4">
         <div className="flex gap-8 overflow-x-auto py-4 text-sm font-medium scrollbar-hide">
           {items.map((item) => (

@@ -9,7 +9,7 @@ interface BreadcrumbProps {
 
 export function PropertyBreadcrumb({ items }: BreadcrumbProps) {
   return (
-    <div className="bg-white py-4 pt-0">
+    <div className=" py-4 pt-0">
       <div className="container mx-auto px-0 md:px-4">
         <div className="flex items-center gap-2 text-sm text-gray-600">
           {items.map((item, index) => (
