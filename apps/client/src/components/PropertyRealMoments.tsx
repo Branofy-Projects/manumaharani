@@ -3,14 +3,14 @@
 import Image from 'next/image';
 import { useState } from 'react';
 
-interface RealMoment {
-  id: string;
-  image: string;
-  alt: string;
-}
-
 interface PropertyRealMomentsProps {
   moments: RealMoment[];
+}
+
+interface RealMoment {
+  alt: string;
+  id: string;
+  image: string;
 }
 
 export function PropertyRealMoments({ moments }: PropertyRealMomentsProps) {

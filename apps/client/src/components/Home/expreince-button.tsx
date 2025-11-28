@@ -3,60 +3,67 @@ import React from "react";
 
 import { cn } from "@/lib/utils";
 
+import { HomeExperiencesSection } from "./home-experiences-section";
+
 export default function ExperienceButton() {
   const [isChooserOpen, setIsChooserOpen] = React.useState(false);
-  const categories = [
-    "Family & Friends",
-    "Wilderness Traveller",
-    "Social or Corporate",
-    "Couple Traveller",
-  ];
+
+  // Disable body scroll when panel is open
+  React.useEffect(() => {
+    if (isChooserOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isChooserOpen]);
 
   return (
     <>
       <button
-        className="fixed bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-40 px-6 sm:px-8 py-3 sm:py-3.5 rounded-full bg-black/80 text-white tracking-wide text-base shadow-lg hover:bg-black transition-colors"
+        className="fixed bottom-6 left-1/2 z-40 -translate-x-1/2 rounded-full bg-black/80 px-6 py-3 text-base tracking-wide text-white shadow-lg transition-colors hover:bg-black sm:bottom-8 sm:px-8 sm:py-3.5"
         onClick={() => setIsChooserOpen(true)}
         type="button"
       >
         Choose Your Experience
       </button>
 
-      <div className="fixed inset-0 z-50 pointer-events-none">
-        {/* Overlay fades */}
+      {/* Fullscreen overlay and panel */}
+      <div
+        className={cn(
+          "fixed inset-0 z-50 transition-opacity duration-300 ease-out",
+          isChooserOpen
+            ? "pointer-events-auto opacity-100"
+            : "pointer-events-none opacity-0"
+        )}
+      >
+        {/* Background overlay */}
         <div
-          className={cn(
-            "absolute inset-0 transition-opacity duration-300 ease-out",
-            isChooserOpen ? "opacity-100 pointer-events-auto" : "opacity-0"
-          )}
+          className="absolute inset-0 bg-gradient-to-r from-background/95 to-background/80 backdrop-blur-sm"
           onClick={() => setIsChooserOpen(false)}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-background/90 to-transparent" />
-        </div>
+        />
 
-        {/* Panel slides */}
+        {/* Panel content */}
         <aside
           className={cn(
-            "absolute left-0 top-0 h-full w-full max-w-[620px] p-6 sm:p-14 text-foreground flex items-center",
-            "transition-transform duration-300 ease-out transform-gpu pointer-events-auto",
-            isChooserOpen ? "translate-x-0" : "-translate-x-full"
+            "absolute inset-0 flex h-full items-center overflow-y-auto text-foreground transition-transform duration-300 ease-out",
+            isChooserOpen ? "translate-y-0" : "translate-y-full"
           )}
         >
-          <ul className="group space-y-6 sm:space-y-8">
-            {categories.map((cat) => (
-              <li key={cat}>
-                <a
-                  className="block text-xl font-light sm:text-3xl md:text-6xl leading-none
-                   text-foreground font-serif transition-colors duration-200
-                   group-hover:text-foreground/60 group-focus-within:text-foreground/60
-                   hover:text-foreground focus-visible:text-foreground"
-                  href="#"
-                >
-                  {cat}
-                </a>
-              </li>
-            ))}
-          </ul>
+          <div className="h-full w-full">
+            <HomeExperiencesSection />
+          </div>
+          <button
+            aria-label="Close"
+            className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-2xl text-white transition-colors hover:bg-white/40 sm:right-6 sm:top-6"
+            onClick={() => setIsChooserOpen(false)}
+            type="button"
+          >
+            ×
+          </button>
         </aside>
       </div>
     </>

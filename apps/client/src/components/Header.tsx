@@ -1,6 +1,7 @@
 "use client";
-import { Bars3Icon, MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import { Bars3Icon } from "@heroicons/react/24/solid";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 import { HeaderWrapper } from "./HeaderWrapper";
@@ -31,13 +32,15 @@ export const Header = () => {
 
       {/* Center: brand wordmark */}
       <div className="flex-1 flex justify-center">
-        <Image
-          alt="Manu Maharani"
-          className={`transition-all duration-300 ${isScrolled ? "h-7 sm:h-8" : "h-10 sm:h-14"} w-auto`}
-          height={40}
-          src="/Logo-Manu-Maharani.png"
-          width={180}
-        />
+        <Link href="/">
+          <Image
+            alt="Manu Maharani"
+            className={`transition-all duration-300 ${isScrolled ? "h-7 sm:h-8" : "h-10 sm:h-14"} w-auto`}
+            height={40}
+            src="/Logo-Manu-Maharani.png"
+            width={180}
+          />
+        </Link>
       </div>
 
       {/* Right: language + reserve */}

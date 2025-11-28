@@ -1,9 +1,9 @@
 "use client";
-import Image from "next/image";
-import React from "react";
+import Image from 'next/image';
+import React from 'react';
 
-import WeddingAiManuMaharani from "@/components/Home/wedding-ai-manu-maharani";
-import WeddingFestivities from "@/components/WeddingFestivities";
+import WeddingAiManuMaharani from '@/components/Home/wedding-ai-manu-maharani';
+import WeddingFestivities from '@/components/WeddingFestivities';
 
 export default function Page() {
   const destinations = [
@@ -61,14 +61,6 @@ export default function Page() {
         id: "couple-shoots",
         image:
           "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1600&auto=format&fit=crop",
-        label: "Couple Shoots",
-      },
-      {
-        description:
-          "Romantic frames that capture your unique bond—elegant and timeless.",
-        id: "couple-shoots",
-        image:
-          "https://images.unsplash.com/photo-1537633552985-df8429e8048b?q=80&w=1600&auto=format&fit=crop",
         label: "Couple Shoots",
       },
       {
@@ -154,7 +146,7 @@ export default function Page() {
   };
 
   return (
-    <main className="bg-white pt-[100px] md:pt-[140px]">
+    <main className="bg-white pt-[72px] md:pt-[88px]">
       {/* Hero */}
       <section className="relative w-full min-h-[70vh] md:min-h-[80vh] flex items-center">
         <div className="absolute inset-0">
@@ -324,14 +316,7 @@ export default function Page() {
       </section>
 
       {/* Wedding Festivities */}
-      <section className="w-full" id="festivities">
-        <div className="text-center mb-6 md:mb-10">
-          <h2 className="text-2xl md:text-4xl font-thin tracking-[0.08em] uppercase">
-            Wedding Festivities
-          </h2>
-        </div>
-        <WeddingFestivities initialIndex={2} items={festivities} />
-      </section>
+      <WeddingFestivities initialIndex={2} items={festivities} />
 
       {/* Editorial/press style wedding grid */}
       <WeddingAiManuMaharani />

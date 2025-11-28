@@ -3,16 +3,16 @@
 import { useState } from 'react';
 
 interface DirectionItem {
+  content: string;
   id: string;
   title: string;
-  content: string;
 }
 
 interface PropertyDirectionProps {
-  coordinates: string;
   address: string;
-  mapEmbedUrl?: string;
+  coordinates: string;
   directions: DirectionItem[];
+  mapEmbedUrl?: string;
 }
 
 export function PropertyDirection({
@@ -21,7 +21,7 @@ export function PropertyDirection({
   directions,
   mapEmbedUrl,
 }: PropertyDirectionProps) {
-  const [expandedSection, setExpandedSection] = useState<string | null>(
+  const [expandedSection, setExpandedSection] = useState<null | string>(
     directions[0]?.id || null
   );
 

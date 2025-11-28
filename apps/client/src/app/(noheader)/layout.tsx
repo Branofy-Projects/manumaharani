@@ -1,30 +1,26 @@
-import "./globals.css";
+import "../globals.css";
 
 import localFont from "next/font/local";
-
-import Footer from "@/components/Footer";
-
-import { Header } from "../components/Header";
 
 import type { Metadata } from "next";
 
 const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
+  src: "../fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
 });
 
 const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
+  src: "../fonts/GeistVF.woff",
   variable: "--font-geist-sans",
 });
 
-export const silkSerif = localFont({
-  src: "./fonts/Silk Serif Light.otf",
+const silkSerif = localFont({
+  src: "../fonts/Silk Serif Light.otf",
   variable: "--font-silk-serif",
 });
 
-export const silkSerifItalic = localFont({
-  src: "./fonts/Silk Serif Light Italic.otf",
+const silkSerifItalic = localFont({
+  src: "../fonts/Silk Serif Light Italic.otf",
   variable: "--font-silk-serif-italic",
 });
 
@@ -43,9 +39,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${silkSerif.variable} ${silkSerifItalic.variable}`}
       >
-        <Header />
         {children}
-        <Footer />
       </body>
     </html>
   );

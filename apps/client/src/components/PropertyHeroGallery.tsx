@@ -1,18 +1,33 @@
 "use client";
 
-import Image from 'next/image';
-import { useState } from 'react';
+import Image from "next/image";
+import { useEffect, useState } from "react";
 
 interface PropertyHeroGalleryProps {
   galleryImages: string[];
   heroImage: string;
+  heroVideo?: string;
+  heroVideoPoster?: string;
 }
 
 export function PropertyHeroGallery({
   galleryImages,
   heroImage,
+  heroVideo,
+  heroVideoPoster,
 }: PropertyHeroGalleryProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(min-width: 768px)");
+    setIsDesktop(media.matches);
+
+    const listener = () => setIsDesktop(media.matches);
+    media.addEventListener("change", listener);
+    return () => media.removeEventListener("change", listener);
+  }, []);
+
   const allImages = [heroImage, ...galleryImages];
 
   const goToPrevious = () => {
@@ -29,16 +44,29 @@ export function PropertyHeroGallery({
         {/* Desktop: 1 large + 4 small grid */}
         <div className="relative hidden py-6 md:block">
           <div className="grid grid-cols-4 gap-3">
-            {/* Large hero image - spans 2 rows */}
-            <div className="relative row-span-2 col-span-2 aspect-[4/3] overflow-hidden rounded-2xl">
-              <Image
-                alt="Property Hero"
-                className="object-cover"
-                fill
-                priority
-                src={heroImage}
-              />
-            </div>
+            {/* Large hero image or video - spans 2 rows */}
+            {heroVideo ? (
+              isDesktop && (
+                <video
+                  autoPlay
+                  className="relative row-span-2 col-span-2 aspect-[4/3] overflow-hidden rounded-2xl object-cover"
+                  controls
+                  loop
+                  poster={heroVideoPoster}
+                  src={heroVideo}
+                />
+              )
+            ) : (
+              <div className="relative row-span-2 col-span-2 aspect-[4/3] overflow-hidden rounded-2xl">
+                <Image
+                  alt="Property Hero"
+                  className="object-cover"
+                  fill
+                  priority
+                  src={heroImage}
+                />
+              </div>
+            )}
 
             {/* 4 smaller images in 2x2 grid */}
             {galleryImages.slice(0, 4).map((img, idx) => (

@@ -3,13 +3,13 @@
 import { useState } from 'react';
 
 interface PropertyHouseRulesProps {
-  rulesText: string;
   fullRulesText?: string;
+  rulesText: string;
 }
 
 export function PropertyHouseRules({
-  rulesText,
   fullRulesText,
+  rulesText,
 }: PropertyHouseRulesProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 

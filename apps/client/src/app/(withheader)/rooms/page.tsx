@@ -1,18 +1,17 @@
-import { PropertyActivities } from '@/components/PropertyActivities';
-import { PropertyAmenities } from '@/components/PropertyAmenities';
-import { PropertyBedrooms } from '@/components/PropertyBedrooms';
-import { PropertyBreadcrumb } from '@/components/PropertyBreadcrumb';
-import { PropertyCancellationPolicy } from '@/components/PropertyCancellationPolicy';
-import { PropertyDirection } from '@/components/PropertyDirection';
-import { PropertyEnquiryForm } from '@/components/PropertyEnquiryForm';
-import { PropertyFAQ } from '@/components/PropertyFAQ';
-import { PropertyHeroGallery } from '@/components/PropertyHeroGallery';
-import { PropertyHouseRules } from '@/components/PropertyHouseRules';
-import { PropertyInfo } from '@/components/PropertyInfo';
-import { PropertyMeals } from '@/components/PropertyMeals';
-import { PropertyQuickNotes } from '@/components/PropertyQuickNotes';
-import { PropertyRealMoments } from '@/components/PropertyRealMoments';
-import { PropertyStickyNav } from '@/components/PropertyStickyNav';
+import { PropertyActivities } from "@/components/PropertyActivities";
+import { PropertyAmenities } from "@/components/PropertyAmenities";
+import { PropertyBedrooms } from "@/components/PropertyBedrooms";
+import { PropertyBreadcrumb } from "@/components/PropertyBreadcrumb";
+import { PropertyCancellationPolicy } from "@/components/PropertyCancellationPolicy";
+import { PropertyEnquiryForm } from "@/components/PropertyEnquiryForm";
+import { PropertyFAQ } from "@/components/PropertyFAQ";
+import { PropertyHeroGallery } from "@/components/PropertyHeroGallery";
+import { PropertyHouseRules } from "@/components/PropertyHouseRules";
+import { PropertyInfo } from "@/components/PropertyInfo";
+import { PropertyMeals } from "@/components/PropertyMeals";
+import { PropertyQuickNotes } from "@/components/PropertyQuickNotes";
+import { PropertyRealMoments } from "@/components/PropertyRealMoments";
+import { PropertyStickyNav } from "@/components/PropertyStickyNav";
 
 export default function Page() {
   const breadcrumbItems = [
@@ -33,6 +32,11 @@ export default function Page() {
 
   const heroImage =
     "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000";
+  const heroVideo =
+    "https://ik.imagekit.io/teggaadfo/manu%20-%201080WebShareName.mov/ik-video.mp4?updatedAt=1760112353814";
+  const heroVideoPoster =
+    "https://www.fourseasons.com/alt/img-opt/~70.1530.0,0000-0,0000-1536,0000-864,0000/publish/content/dam/fourseasons/images/web/BSA/BSA_1200x800.jpg";
+
   const galleryImages = [
     "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
     "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
@@ -123,19 +127,6 @@ export default function Page() {
     },
   ];
 
-  const directionsList = [
-    {
-      content: "Lonavala railway station -6km",
-      id: "railway",
-      title: "From Railway Station",
-    },
-    {
-      content: "Pune Airport - 65km",
-      id: "airport",
-      title: "From Airport",
-    },
-  ];
-
   const activitiesList = [
     {
       description:
@@ -205,11 +196,13 @@ export default function Page() {
   ];
 
   return (
-    <main className="bg-[#f3eee7] pt-[100px] md:pt-[140px]">
+    <main className="bg-[#f3eee7] pt-[72px] md:pt-[88px]">
       <PropertyBreadcrumb items={breadcrumbItems} />
       <PropertyHeroGallery
         galleryImages={galleryImages}
         heroImage={heroImage}
+        heroVideo={heroVideo}
+        heroVideoPoster={heroVideoPoster}
       />
       <PropertyStickyNav items={navItems} />
 

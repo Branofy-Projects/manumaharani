@@ -3,13 +3,13 @@
 import { useState } from 'react';
 
 interface PropertyCancellationPolicyProps {
-  policyText: string;
   fullPolicyText?: string;
+  policyText: string;
 }
 
 export function PropertyCancellationPolicy({
-  policyText,
   fullPolicyText,
+  policyText,
 }: PropertyCancellationPolicyProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 

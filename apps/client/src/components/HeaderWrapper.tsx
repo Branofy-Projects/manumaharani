@@ -1,7 +1,6 @@
-import Image from 'next/image';
-import React from 'react';
-
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/solid';
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
+import Image from "next/image";
+import React from "react";
 
 export { HeaderWrapper } from "./HeaderWrapperClient";
 

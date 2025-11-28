@@ -1,9 +1,9 @@
 "use client";
-import Image from 'next/image';
-import React, { useEffect, useRef, useState } from 'react';
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import Image from "next/image";
+import React, { useEffect, useRef, useState } from "react";
 
-import { cn } from '@/lib/utils';
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+import { cn } from "@/lib/utils";
 
 interface Accommodation {
   description: string;
@@ -119,7 +119,7 @@ export default function AccommodationsCarousel() {
           className="text-3xl md:text-4xl font-thin tracking-widest text-center mb-12 uppercase"
           style={{ color: "#000000" }}
         >
-          Ammenities
+          Experiences
         </h2>
         {/* Carousel Row */}
         <div

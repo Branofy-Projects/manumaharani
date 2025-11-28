@@ -23,7 +23,7 @@ const experiences = [
 export const HomeExperiencesSection = () => {
   return (
     <section
-      className="w-full flex flex-col items-center relative py-16 md:py-20"
+      className="relative flex h-full w-full flex-col items-center justify-center py-12 sm:py-16 md:py-20"
       id="experiences"
       style={{
         backgroundAttachment: "fixed",
@@ -33,18 +33,18 @@ export const HomeExperiencesSection = () => {
         backgroundSize: "cover",
       }}
     >
-      <div className="absolute inset-0 bg-black/70 z-0 pointer-events-none" />
-      <div className="relative z-10 w-full max-w-6xl mx-auto px-4">
-        <h2 className="text-white text-center font-light tracking-wide text-2xl sm:text-4xl md:text-5xl leading-tight">
+      <div className="pointer-events-none absolute inset-0 z-0 bg-black/70" />
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <h2 className="text-center font-thin leading-tight tracking-wide text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl">
           Experience Manu
-          <br className="hidden sm:block" />
+          <br />
           Maharani As
         </h2>
 
-        <div className="mt-14 md:mt-8 grid grid-col-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 place-items-center min-h-[50vh]">
+        <div className="mt-10 grid grid-cols-2 gap-6 place-items-center sm:mt-12 sm:gap-8 md:mt-20 md:gap-10 lg:grid-cols-4 lg:gap-12">
           {experiences.map((item, idx) => (
             <div className="flex flex-col items-center text-center" key={idx}>
-              <div className="relative h-34 w-34 sm:h-48 sm:w-48 md:h-56 md:w-56 rounded-full overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.35)] ring-4 ring-[#bde058] outline-[6px] outline-white">
+              <div className="relative h-32 w-32 overflow-hidden rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.35)] ring-4 ring-[#bde058] sm:h-40 sm:w-40 md:h-48 md:w-48 lg:h-56 lg:w-56">
                 <Image
                   alt={item.title}
                   className="object-cover object-center"
@@ -52,7 +52,7 @@ export const HomeExperiencesSection = () => {
                   src={item.img}
                 />
               </div>
-              <p className="mt-5 text-white text-lg md:text-xl font-light leading-tight">
+              <p className="mt-4 font-light leading-tight text-white text-sm sm:text-base md:text-lg lg:text-xl">
                 {item.title}
               </p>
             </div>

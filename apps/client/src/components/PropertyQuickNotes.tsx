@@ -3,13 +3,13 @@
 import { useState } from 'react';
 
 interface PropertyQuickNotesProps {
-  notesText: string;
   fullNotesText?: string;
+  notesText: string;
 }
 
 export function PropertyQuickNotes({
-  notesText,
   fullNotesText,
+  notesText,
 }: PropertyQuickNotesProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 

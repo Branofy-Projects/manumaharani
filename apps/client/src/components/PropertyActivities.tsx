@@ -1,11 +1,11 @@
 import Image from 'next/image';
 
 interface Activity {
-  id: string;
-  title: string;
   description: string;
+  id: string;
   image: string;
   imagePosition?: "left" | "right";
+  title: string;
 }
 
 interface PropertyActivitiesProps {
