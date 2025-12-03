@@ -1,0 +1,39 @@
+# Ignore everything except what we need for the build
+.git
+.github
+.vscode
+.turbo
+
+# Keep these files needed for build
+!package.json
+!yarn.lock
+!.yarnrc.yml
+!.yarn
+!turbo.json
+
+# Keep packages and apps directories
+!packages
+!apps
+
+# Ignore node_modules everywhere
+**/node_modules
+
+# Ignore build outputs
+**/.next
+**/dist
+**/build
+**/out
+
+# Ignore temp files
+**/.turbo
+**/*.log
+
+# Ignore env files
+**/.env*
+
+# Ignore other apps we don't need
+apps/admin
+
+# Documentation
+*.md
+
