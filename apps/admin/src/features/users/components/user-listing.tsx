@@ -1,11 +1,11 @@
-import { redirect } from 'next/navigation';
+import { getUsers } from "@repo/actions/users/user-actions.server";
+import { redirect } from "next/navigation";
 
-import { getCurrentUser } from '@/lib/auth-utils';
-import { searchParamsCache } from '@/lib/searchparams';
-import { getUsers } from '@repo/actions/users/user-actions.server';
+import { getCurrentUser } from "@/lib/auth-utils";
+import { searchParamsCache } from "@/lib/searchparams";
 
-import { UserTable } from './user-tables';
-import { columns } from './user-tables/columns';
+import { UserTable } from "./user-tables";
+import { columns } from "./user-tables/columns";
 
 import type { TGetUsersFilters } from "@repo/actions/users/user-actions.types";
 
@@ -31,7 +31,5 @@ export default async function UserListingPage() {
 
   const { total, users } = await getUsers(filters);
 
-  console.log("users", total);
-
-  return <UserTable columns={columns} data={[]} totalItems={0} />;
+  return <UserTable columns={columns} data={users} totalItems={total} />;
 }

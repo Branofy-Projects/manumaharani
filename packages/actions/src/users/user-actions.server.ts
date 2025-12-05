@@ -1,12 +1,11 @@
-import { headers } from 'next/headers';
-import { unauthorized } from 'next/navigation';
-
-import { auth } from '@repo/auth/auth.config';
-import { and, count, db, eq, like, or, Users } from '@repo/db';
-
-import { AppResponseHandler } from '../utils/app-response-handler';
+import { auth } from "@repo/auth/auth.config";
+import { and, count, db, eq, like, or, Users } from "@repo/db";
+import { headers } from "next/headers";
+import { unauthorized } from "next/navigation";
 
 import type { TGetUsersFilters } from "./user-actions.types";
+
+import { AppResponseHandler } from "../utils/app-response-handler";
 
 export async function createUser(data: {
   email: string;
@@ -214,7 +213,7 @@ async function getCurrentSession() {
 }
 
 // Helper function to check if user is admin
-function isAdmin(userRole?: string | null) {
+function isAdmin(userRole?: null | string) {
   if (!userRole) return false;
   return userRole === "admin" || userRole === "super_admin";
 }
