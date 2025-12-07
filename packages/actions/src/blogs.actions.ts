@@ -5,6 +5,7 @@ import type { TNewBlog, TBlog } from "@repo/db";
 
 import { getOrSet, bumpVersion } from "./libs/cache";
 import { blogBySlugKey, featuredBlogsKey } from "./libs/keys";
+import { safeDbQuery } from "./utils/db-error-handler";
 
 type TGetBlogsFilters = {
   search?: string;
@@ -16,7 +17,9 @@ type TGetBlogsFilters = {
 };
 
 export const getBlogs = async (filters: TGetBlogsFilters = {}) => {
-  if (!db) return { blogs: [], total: 0 };
+  if (!db || !process.env.DATABASE_URL) {
+    return { blogs: [], total: 0 };
+  }
 
   const conditions = [];
   
@@ -38,32 +41,49 @@ export const getBlogs = async (filters: TGetBlogsFilters = {}) => {
 
   const where = conditions.length > 0 ? and(...conditions) : undefined;
 
-  const [{ count: total }] = await db
-    .select({ count: count() })
-    .from(Blogs)
-    .where(where);
+  const totalResult = await safeDbQuery(
+    async () => {
+      const result = await db
+        .select({ count: count() })
+        .from(Blogs)
+        .where(where);
+      return result[0]?.count ?? 0;
+    },
+    0,
+    "blogs",
+    "count query"
+  );
+
+  const total = typeof totalResult === "number" ? totalResult : 0;
 
   const page = Math.max(1, filters.page || 1);
   const limit = Math.max(1, filters.limit || 10);
   const offset = (page - 1) * limit;
 
-  const blogs = await db.query.Blogs.findMany({
-    where,
-    limit,
-    offset,
-    with: {
-      author: true,
-      featuredImage: true,
-      images: {
-        with: { image: true },
-        orderBy: (images, { asc }) => [asc(images.order)],
-      },
+  const blogs = await safeDbQuery(
+    async () => {
+      return await db.query.Blogs.findMany({
+        where,
+        limit,
+        offset,
+        with: {
+          author: true,
+          featuredImage: true,
+          images: {
+            with: { image: true },
+            orderBy: (images, { asc }) => [asc(images.order)],
+          },
+        },
+        orderBy: (blogs, { desc }) => [desc(blogs.published_at)],
+      });
     },
-    orderBy: (blogs, { desc }) => [desc(blogs.published_at)],
-  });
+    [],
+    "blogs",
+    "findMany query"
+  );
 
   return {
-    blogs: blogs as unknown as TBlog[],
+    blogs: (blogs || []) as unknown as TBlog[],
     total,
   };
 };

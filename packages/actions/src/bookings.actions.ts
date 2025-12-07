@@ -2,6 +2,7 @@
 import { and, count, eq, gte, lte, or } from "@repo/db";
 import { db, Bookings, BookingPayments } from "@repo/db";
 import type { TNewBooking, TNewBookingPayment } from "@repo/db";
+import { safeDbQuery } from "./utils/db-error-handler";
 
 type TGetBookingsFilters = {
   search?: string;
@@ -15,7 +16,9 @@ type TGetBookingsFilters = {
 };
 
 export const getBookings = async (filters: TGetBookingsFilters = {}) => {
-  if (!db) return { bookings: [], total: 0 };
+  if (!db || !process.env.DATABASE_URL) {
+    return { bookings: [], total: 0 };
+  }
 
   const conditions = [];
   
@@ -52,30 +55,47 @@ export const getBookings = async (filters: TGetBookingsFilters = {}) => {
 
   const where = conditions.length > 0 ? and(...conditions) : undefined;
 
-  const [{ count: total }] = await db
-    .select({ count: count() })
-    .from(Bookings)
-    .where(where);
+  const totalResult = await safeDbQuery(
+    async () => {
+      const result = await db
+        .select({ count: count() })
+        .from(Bookings)
+        .where(where);
+      return result[0]?.count ?? 0;
+    },
+    0,
+    "bookings",
+    "count query"
+  );
+
+  const total = typeof totalResult === "number" ? totalResult : 0;
 
   const page = Math.max(1, filters.page || 1);
   const limit = Math.max(1, filters.limit || 10);
   const offset = (page - 1) * limit;
 
-  const bookings = await db.query.Bookings.findMany({
-    where,
-    limit,
-    offset,
-    with: {
-      roomType: true,
-      room: true,
-      user: true,
-      payments: true,
+  const bookings = await safeDbQuery(
+    async () => {
+      return await db.query.Bookings.findMany({
+        where,
+        limit,
+        offset,
+        with: {
+          roomType: true,
+          room: true,
+          user: true,
+          payments: true,
+        },
+        orderBy: (bookings, { desc }) => [desc(bookings.created_at)],
+      });
     },
-    orderBy: (bookings, { desc }) => [desc(bookings.created_at)],
-  });
+    [],
+    "bookings",
+    "findMany query"
+  );
 
   return {
-    bookings,
+    bookings: bookings || [],
     total,
   };
 };

@@ -45,6 +45,8 @@ export default function AppSidebar() {
   const { isOpen } = useMediaQuery();
   const { user } = useAuth();
   const router = useRouter();
+  const [mounted, setMounted] = React.useState(false);
+
   const handleSwitchTenant = (_tenantId: string) => {
     // Tenant switching functionality would be implemented here
   };
@@ -52,19 +54,36 @@ export default function AppSidebar() {
   const activeTenant = tenants[0];
 
   React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  React.useEffect(() => {
     // Side effects based on sidebar state changes
   }, [isOpen]);
 
+  if (!mounted) {
+    return (
+      <Sidebar collapsible="icon">
+        <SidebarHeader>
+          <div className="h-12 w-full animate-pulse rounded-md bg-muted" />
+        </SidebarHeader>
+        <SidebarContent className="overflow-x-hidden">
+          <div className="h-64 w-full animate-pulse rounded-md bg-muted" />
+        </SidebarContent>
+      </Sidebar>
+    );
+  }
+
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader>
+      <SidebarHeader suppressHydrationWarning>
         <OrgSwitcher
           defaultTenant={activeTenant!}
           onTenantSwitch={handleSwitchTenant}
           tenants={tenants}
         />
       </SidebarHeader>
-      <SidebarContent className="overflow-x-hidden">
+      <SidebarContent className="overflow-x-hidden" suppressHydrationWarning>
         <SidebarGroup>
           <SidebarGroupLabel>Overview</SidebarGroupLabel>
           <SidebarMenu>
@@ -74,7 +93,7 @@ export default function AppSidebar() {
                 <Collapsible
                   asChild
                   className="group/collapsible"
-                  defaultOpen={item.isActive}
+                  defaultOpen={mounted ? item.isActive : false}
                   key={item.title}
                 >
                   <SidebarMenuItem>
@@ -88,7 +107,7 @@ export default function AppSidebar() {
                         <IconChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                       </SidebarMenuButton>
                     </CollapsibleTrigger>
-                    <CollapsibleContent>
+                    <CollapsibleContent suppressHydrationWarning>
                       <SidebarMenuSub>
                         {item.items?.map((subItem) => (
                           <SidebarMenuSubItem key={subItem.title}>
@@ -124,11 +143,11 @@ export default function AppSidebar() {
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter suppressHydrationWarning>
         <SidebarMenu>
           <SidebarMenuItem>
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
+              <DropdownMenuTrigger asChild suppressHydrationWarning>
                 <SidebarMenuButton
                   className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                   size="lg"
@@ -148,6 +167,7 @@ export default function AppSidebar() {
                 className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
                 side="bottom"
                 sideOffset={4}
+                suppressHydrationWarning
               >
                 <DropdownMenuLabel className="p-0 font-normal">
                   <div className="px-1 py-1.5">

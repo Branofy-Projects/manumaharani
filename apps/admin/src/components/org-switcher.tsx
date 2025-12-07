@@ -25,6 +25,11 @@ export function OrgSwitcher({
   const [selectedTenant, setSelectedTenant] = React.useState<
     Tenant | undefined
   >(defaultTenant || (tenants.length > 0 ? tenants[0] : undefined));
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleTenantSwitch = (tenant: Tenant) => {
     setSelectedTenant(tenant);
@@ -36,11 +41,22 @@ export function OrgSwitcher({
   if (!selectedTenant) {
     return null;
   }
+
+  if (!mounted) {
+    return (
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <div className="h-12 w-full animate-pulse rounded-md bg-muted" />
+        </SidebarMenuItem>
+      </SidebarMenu>
+    );
+  }
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+          <DropdownMenuTrigger asChild suppressHydrationWarning>
             <SidebarMenuButton
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               size="lg"
@@ -58,6 +74,7 @@ export function OrgSwitcher({
           <DropdownMenuContent
             align="start"
             className="w-[--radix-dropdown-menu-trigger-width]"
+            suppressHydrationWarning
           >
             {tenants.map((tenant) => (
               <DropdownMenuItem

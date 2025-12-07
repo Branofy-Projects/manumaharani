@@ -1,10 +1,36 @@
 import {
-    IconAlertTriangle, IconArrowRight, IconBrandGithub, IconBrandTwitter, IconCheck,
-    IconChevronLeft, IconChevronRight, IconCommand, IconCreditCard, IconDeviceLaptop,
-    IconDotsVertical, IconFile, IconFileText, IconHelpCircle, IconLayoutDashboard, IconLayoutKanban,
-    IconLoader2, IconLogin, IconMoon, IconPhoto, IconPizza, IconPlus, IconSettings, IconShoppingBag,
-    IconSun, IconTrash, IconUser, IconUserCircle, IconUserEdit, IconUserX, IconX
-} from '@tabler/icons-react';
+  IconAlertTriangle,
+  IconArrowRight,
+  IconBrandGithub,
+  IconBrandTwitter,
+  IconCheck,
+  IconChevronLeft,
+  IconChevronRight,
+  IconCommand,
+  IconCreditCard,
+  IconDeviceLaptop,
+  IconDotsVertical,
+  IconFile,
+  IconFileText,
+  IconHelpCircle,
+  IconLayoutDashboard,
+  IconLayoutKanban,
+  IconLoader2,
+  IconLogin,
+  IconMoon,
+  IconPhoto,
+  IconPizza,
+  IconPlus,
+  IconSettings,
+  IconShoppingBag,
+  IconSun,
+  IconTrash,
+  IconUser,
+  IconUserCircle,
+  IconUserEdit,
+  IconUserX,
+  IconX,
+} from "@tabler/icons-react";
 
 import type { IconProps } from "@tabler/icons-react";
 

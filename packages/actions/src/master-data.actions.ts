@@ -2,13 +2,23 @@
 import { db, Amenities, Policies, Faqs } from "@repo/db";
 import type { TNewAmenity, TNewPolicy, TNewFaq } from "@repo/db";
 import { eq } from "@repo/db";
+import { safeDbQuery } from "./utils/db-error-handler";
 
 export const getAmenities = async () => {
-  if (!db) return [];
+  if (!db || !process.env.DATABASE_URL) {
+    return [];
+  }
 
-  return db.query.Amenities.findMany({
-    orderBy: (amenities, { asc }) => [asc(amenities.label)],
-  });
+  return await safeDbQuery(
+    async () => {
+      return await db.query.Amenities.findMany({
+        orderBy: (amenities, { asc }) => [asc(amenities.label)],
+      });
+    },
+    [],
+    "amenities",
+    "findMany query"
+  );
 };
 
 export const createAmenity = async (data: TNewAmenity) => {
@@ -38,11 +48,20 @@ export const deleteAmenity = async (id: number) => {
 };
 
 export const getPolicies = async () => {
-  if (!db) return [];
+  if (!db || !process.env.DATABASE_URL) {
+    return [];
+  }
 
-  return db.query.Policies.findMany({
-    orderBy: (policies, { asc }) => [asc(policies.label)],
-  });
+  return await safeDbQuery(
+    async () => {
+      return await db.query.Policies.findMany({
+        orderBy: (policies, { asc }) => [asc(policies.label)],
+      });
+    },
+    [],
+    "policies",
+    "findMany query"
+  );
 };
 
 export const getPoliciesByKind = async (kind: "include" | "exclude") => {
@@ -81,9 +100,18 @@ export const deletePolicy = async (id: number) => {
 };
 
 export const getFaqs = async () => {
-  if (!db) return [];
+  if (!db || !process.env.DATABASE_URL) {
+    return [];
+  }
 
-  return db.query.Faqs.findMany();
+  return await safeDbQuery(
+    async () => {
+      return await db.query.Faqs.findMany();
+    },
+    [],
+    "faqs",
+    "findMany query"
+  );
 };
 
 export const createFaq = async (data: TNewFaq) => {

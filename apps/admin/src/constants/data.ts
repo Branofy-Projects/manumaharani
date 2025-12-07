@@ -16,47 +16,116 @@ export const navItems: NavItem[] = [
   {
     icon: "dashboard",
     isActive: false,
-    items: [], // Empty array as there are no child items for Dashboard
+    items: [],
     shortcut: ["d", "d"],
     title: "Dashboard",
-    url: "/dashboard/overview",
+    url: "/overview",
   },
   {
-    icon: "product",
-    isActive: false,
-    items: [], // No child items
-    shortcut: ["p", "p"],
-    title: "Product",
-    url: "/dashboard/product",
+    icon: "settings",
+    isActive: true,
+    title: "Accommodations",
+    url: "#",
+    items: [
+      {
+        icon: "product",
+        shortcut: ["r", "t"],
+        title: "Room Types",
+        url: "/room-types",
+      },
+      {
+        icon: "product",
+        shortcut: ["r", "m"],
+        title: "Rooms",
+        url: "/rooms",
+      },
+      {
+        icon: "billing",
+        shortcut: ["b", "k"],
+        title: "Bookings",
+        url: "/bookings",
+      },
+    ],
+  },
+  {
+    icon: "post",
+    isActive: true,
+    title: "Content",
+    url: "#",
+    items: [
+      {
+        icon: "post",
+        shortcut: ["b", "l"],
+        title: "Blogs",
+        url: "/blogs",
+      },
+      {
+        icon: "media",
+        shortcut: ["g", "a"],
+        title: "Gallery",
+        url: "/gallery",
+      },
+      {
+        icon: "help",
+        shortcut: ["t", "s"],
+        title: "Testimonials",
+        url: "/testimonials",
+      },
+    ],
+  },
+  {
+    icon: "settings",
+    isActive: true,
+    title: "Master Data",
+    url: "#",
+    items: [
+      {
+        icon: "media",
+        shortcut: ["a", "m"],
+        title: "Amenities",
+        url: "/amenities",
+      },
+      {
+        icon: "page",
+        shortcut: ["p", "o"],
+        title: "Policies",
+        url: "/policies",
+      },
+      {
+        icon: "help",
+        shortcut: ["f", "a"],
+        title: "FAQs",
+        url: "/faqs",
+      },
+    ],
+  },
+  {
+    icon: "user",
+    isActive: true,
+    title: "Users",
+    url: "#",
+    items: [
+      {
+        icon: "user",
+        shortcut: ["u", "s"],
+        title: "All Users",
+        url: "/user",
+      },
+    ],
   },
   {
     icon: "billing",
     isActive: true,
     title: "Account",
-    url: "#", // Placeholder as there is no direct link for the parent
-
+    url: "#",
     items: [
       {
         icon: "userPen",
         shortcut: ["m", "m"],
         title: "Profile",
-        url: "/dashboard/profile",
-      },
-      {
-        icon: "login",
-        shortcut: ["l", "l"],
-        title: "Login",
-        url: "/",
+        url: "/profile",
       },
     ],
-  },
-  {
-    icon: "kanban",
-    isActive: false,
-    items: [], // No child items
-    shortcut: ["k", "k"],
-    title: "Kanban",
-    url: "/dashboard/kanban",
   },
 ] as const;
 

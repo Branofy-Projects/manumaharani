@@ -21,15 +21,6 @@ import { Faqs } from "./schema/faqs.schema";
 import { Images } from "./schema/images.schema";
 import { policyKindEnum, Policies } from "./schema/policies.schema";
 
-// Resort Schema
-import {
-  Resort,
-  ResortFaqs,
-  ResortImages,
-  ResortPolicies,
-  resortStatusEnum,
-} from "./schema/resort.schema";
-
 // Room Types Schema
 import {
   bedTypeEnum,
@@ -42,7 +33,7 @@ import {
 } from "./schema/room-types.schema";
 
 // Rooms Schema
-import { Rooms, roomStatusEnum } from "./schema/rooms.schema";
+import { Rooms, RoomImages, roomStatusEnum } from "./schema/rooms.schema";
 
 // Bookings Schema
 import {
@@ -103,15 +94,6 @@ export type {
   TNewPolicy,
   TPolicyBase,
   TPolicyKind,
-  TNewResort,
-  TNewResortFaq,
-  TNewResortImage,
-  TNewResortPolicy,
-  TResortBase,
-  TResortFaqBase,
-  TResortImageBase,
-  TResortPolicyBase,
-  TResortStatus,
   TBedType,
   TNewRoomType,
   TNewRoomTypeAmenity,
@@ -151,10 +133,6 @@ export type {
   TBooking,
   TBookingWithDetails,
   TGallery,
-  TResort,
-  TResortFaq,
-  TResortImage,
-  TResortPolicy,
   TRoom,
   TRoomType,
   TRoomTypeAmenity,
@@ -189,11 +167,6 @@ export {
   Images,
   Policies,
   policyKindEnum,
-  Resort,
-  ResortFaqs,
-  ResortImages,
-  ResortPolicies,
-  resortStatusEnum,
   bedTypeEnum,
   RoomTypeAmenities,
   RoomTypeFaqs,
@@ -202,6 +175,7 @@ export {
   RoomTypes,
   roomTypeStatusEnum,
   Rooms,
+  RoomImages,
   roomStatusEnum,
   BookingPayments,
   Bookings,
@@ -232,16 +206,13 @@ export const schemaWithoutRelations = {
   Amenities,
   Policies,
   Faqs,
-  Resort,
-  ResortImages,
-  ResortPolicies,
-  ResortFaqs,
   RoomTypes,
   RoomTypeImages,
   RoomTypeAmenities,
   RoomTypePolicies,
   RoomTypeFaqs,
   Rooms,
+  RoomImages,
   Bookings,
   BookingPayments,
   Blogs,
@@ -255,16 +226,47 @@ export const schema = {
   ...relations,
 };
 
-if (process.env.NODE_ENV !== "production") {
-  config({ path: "../../.env" });
+// Only load dotenv in Node.js runtime (not Edge Runtime)
+// Edge Runtime doesn't support process.cwd(), so we check runtime first
+if (
+  process.env.NODE_ENV !== "production" &&
+  typeof process !== "undefined" &&
+  process.cwd &&
+  typeof process.cwd === "function" &&
+  !process.env.NEXT_RUNTIME // Edge Runtime sets this
+) {
+  try {
+    config({ path: "../../.env" });
+  } catch (error) {
+    // Silently fail if .env file doesn't exist or in Edge Runtime
+    // This is expected when running in Edge Runtime or when .env is not present
+  }
 }
 
 const getDatabaseUrl = () => {
   const url = process.env.DATABASE_URL;
   if (!url) {
-    throw new Error("DATABASE_URL environment variable is required");
+    console.error("❌ DATABASE_URL is not set in environment variables");
+    console.error("Please check your .env file in the project root");
+    throw new Error(
+      "DATABASE_URL environment variable is required. Please set it in your .env file."
+    );
   }
+
+  // Basic URL validation
+  try {
+    new URL(url);
+  } catch (urlError) {
+    console.error("❌ DATABASE_URL is not a valid URL:", url);
+    throw new Error(
+      `DATABASE_URL is not a valid URL: ${urlError instanceof Error ? urlError.message : String(urlError)}`
+    );
+  }
+
   return url;
 };
 
 export const db = drizzle(getDatabaseUrl(), { schema });
+
+// Export utilities
+export * from "./utils/file-utils";

@@ -7,12 +7,6 @@ import type { TGalleryBase } from "./gallery.schema";
 import type { TImage } from "./images.schema";
 import type { TPolicyBase } from "./policies.schema";
 import type {
-  TResortBase,
-  TResortFaqBase,
-  TResortImageBase,
-  TResortPolicyBase,
-} from "./resort.schema";
-import type {
   TRoomTypeAmenityBase,
   TRoomTypeBase,
   TRoomTypeFaqBase,
@@ -21,25 +15,6 @@ import type {
 } from "./room-types.schema";
 import type { TRoomBase } from "./rooms.schema";
 import type { TTestimonialBase } from "./testimonials.schema";
-
-// Resort Types with Relations
-export type TResortImage = TResortImageBase & {
-  image: TImage;
-};
-
-export type TResortPolicy = TResortPolicyBase & {
-  policy: TPolicyBase;
-};
-
-export type TResortFaq = TResortFaqBase & {
-  faq: TFaqBase;
-};
-
-export type TResort = TResortBase & {
-  images: TResortImage[];
-  policies: TResortPolicy[];
-  faqs: TResortFaq[];
-};
 
 // Room Type Types with Relations
 export type TRoomTypeImage = TRoomTypeImageBase & {
@@ -59,7 +34,6 @@ export type TRoomTypeFaq = TRoomTypeFaqBase & {
 };
 
 export type TRoomType = TRoomTypeBase & {
-  resort: TResortBase;
   images: TRoomTypeImage[];
   amenities: TRoomTypeAmenity[];
   policies: TRoomTypePolicy[];
@@ -68,7 +42,6 @@ export type TRoomType = TRoomTypeBase & {
 
 // Room Types with Relations
 export type TRoom = TRoomBase & {
-  resort: TResortBase;
   roomType: TRoomType;
 };
 
@@ -100,14 +73,12 @@ export type TBlog = TBlogBase & {
 
 // Gallery Types with Relations
 export type TGallery = TGalleryBase & {
-  resort: TResortBase;
   image: TImage | null;
   videoThumbnail: TImage | null;
 };
 
 // Testimonial Types with Relations
 export type TTestimonial = TTestimonialBase & {
-  resort: TResortBase;
   user: TUser | null;
   guestAvatar: TImage | null;
 };

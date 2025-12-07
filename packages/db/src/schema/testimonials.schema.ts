@@ -5,7 +5,6 @@ import { createInsertSchema } from 'drizzle-zod';
 
 import { Users } from './auth.schema';
 import { Images } from './images.schema';
-import { Resort } from './resort.schema';
 
 export const testimonialStatusEnum = pgEnum("testimonial_status", [
   "pending",
@@ -17,9 +16,6 @@ export const Testimonials = pgTable(
   "testimonials",
   {
     id: serial("id").primaryKey(),
-    resort_id: integer("resort_id")
-      .references(() => Resort.id, { onDelete: "cascade" })
-      .notNull(),
 
     guest_avatar_id: integer("guest_avatar_id").references(() => Images.id, {
       onDelete: "set null",
@@ -50,7 +46,6 @@ export const Testimonials = pgTable(
       .$onUpdate(() => new Date()),
   },
   (table) => [
-    index("testimonials_resort_id_idx").on(table.resort_id),
     index("testimonials_user_id_idx").on(table.user_id),
     index("testimonials_status_idx").on(table.status),
     index("testimonials_rating_idx").on(table.rating),

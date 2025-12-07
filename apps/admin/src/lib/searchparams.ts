@@ -13,7 +13,10 @@ export const searchParams = {
   page: parseAsInteger.withDefault(1),
   perPage: parseAsInteger.withDefault(10),
   q: parseAsString,
-
+  status: parseAsString,
+  payment_status: parseAsString,
+  category: parseAsString,
+  type: parseAsString,
   roles: parseAsArrayOf(parseAsStringEnum(userRoles.enumValues)),
   // advanced filter
   // filters: getFiltersStateParser().withDefault([]),

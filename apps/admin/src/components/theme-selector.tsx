@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from 'react';
 import { useThemeConfig } from '@/components/active-theme';
 import { Label } from '@/components/ui/label';
 import {
@@ -46,9 +47,25 @@ const MONO_THEMES = [
 
 export function ThemeSelector() {
   const { activeTheme, setActiveTheme } = useThemeConfig();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <div className="flex items-center gap-2">
+        <Label className="sr-only" htmlFor="theme-selector">
+          Theme
+        </Label>
+        <div className="h-9 w-32 animate-pulse rounded-md bg-muted" />
+      </div>
+    );
+  }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2" suppressHydrationWarning>
       <Label className="sr-only" htmlFor="theme-selector">
         Theme
       </Label>

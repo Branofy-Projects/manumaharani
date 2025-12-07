@@ -1,13 +1,19 @@
 import {
-    index, integer, numeric, pgEnum, pgTable, serial, text, timestamp
-} from 'drizzle-orm/pg-core';
-import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+  index,
+  integer,
+  numeric,
+  pgEnum,
+  pgTable,
+  serial,
+  text,
+  timestamp,
+} from "drizzle-orm/pg-core";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
-import { Amenities } from './amenities.schema';
-import { Faqs } from './faqs.schema';
-import { Images } from './images.schema';
-import { Policies } from './policies.schema';
-import { Resort } from './resort.schema';
+import { Amenities } from "./amenities.schema";
+import { Faqs } from "./faqs.schema";
+import { Images } from "./images.schema";
+import { Policies } from "./policies.schema";
 
 export const roomTypeStatusEnum = pgEnum("room_type_status", [
   "active",
@@ -26,9 +32,7 @@ export const RoomTypes = pgTable(
   "room_types",
   {
     id: serial("id").primaryKey(),
-    resort_id: integer("resort_id")
-      .references(() => Resort.id, { onDelete: "cascade" })
-      .notNull(),
+    // resort_id removed - no longer needed for single-resort app
 
     description: text("description").notNull(),
     name: text("name").notNull(),
@@ -59,7 +63,6 @@ export const RoomTypes = pgTable(
   },
   (table) => [
     index("room_types_slug_idx").on(table.slug),
-    index("room_types_resort_id_idx").on(table.resort_id),
     index("room_types_status_idx").on(table.status),
     index("room_types_is_featured_idx").on(table.is_featured),
   ]

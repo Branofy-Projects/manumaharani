@@ -2,7 +2,6 @@ import { index, integer, pgEnum, pgTable, serial, text, timestamp } from 'drizzl
 import { createInsertSchema } from 'drizzle-zod';
 
 import { Images } from './images.schema';
-import { Resort } from './resort.schema';
 
 export const galleryCategoryEnum = pgEnum("gallery_category", [
   "rooms",
@@ -21,9 +20,6 @@ export const Gallery = pgTable(
   "gallery",
   {
     id: serial("id").primaryKey(),
-    resort_id: integer("resort_id")
-      .references(() => Resort.id, { onDelete: "cascade" })
-      .notNull(),
 
     description: text("description"),
     title: text("title").notNull(),
@@ -49,7 +45,6 @@ export const Gallery = pgTable(
       .$onUpdate(() => new Date()),
   },
   (table) => [
-    index("gallery_resort_id_idx").on(table.resort_id),
     index("gallery_type_idx").on(table.type),
     index("gallery_category_idx").on(table.category),
     index("gallery_is_featured_idx").on(table.is_featured),

@@ -1,3 +1,5 @@
+"use client";
+
 import { Mail, Text, UserCheck } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
