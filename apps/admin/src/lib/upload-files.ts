@@ -103,12 +103,20 @@ export function uploadSingleWithProgress(
           };
           resolve(result);
         } else {
-          reject(
-            new Error(json.error || `Upload failed with status ${xhr.status}`)
-          );
+          // Provide more detailed error message
+          const errorMsg = json.error || `Upload failed with status ${xhr.status}`;
+          console.error("Upload error details:", {
+            status: xhr.status,
+            statusText: xhr.statusText,
+            response: json,
+            error: errorMsg,
+          });
+          reject(new Error(errorMsg));
         }
-      } catch {
-        reject(new Error("Upload failed"));
+      } catch (parseError) {
+        console.error("Failed to parse upload response:", parseError);
+        console.error("Raw response:", xhr.responseText);
+        reject(new Error(`Upload failed: ${xhr.statusText || "Unknown error"}`));
       }
     });
 
