@@ -16,70 +16,69 @@ import type {
 import type { TRoomBase } from "./rooms.schema";
 import type { TTestimonialBase } from "./testimonials.schema";
 
-// Room Type Types with Relations
-export type TRoomTypeImage = TRoomTypeImageBase & {
-  image: TImage;
-};
-
-export type TRoomTypeAmenity = TRoomTypeAmenityBase & {
-  amenity: TAmenityBase;
-};
-
-export type TRoomTypePolicy = TRoomTypePolicyBase & {
-  policy: TPolicyBase;
-};
-
-export type TRoomTypeFaq = TRoomTypeFaqBase & {
-  faq: TFaqBase;
-};
-
-export type TRoomType = TRoomTypeBase & {
-  images: TRoomTypeImage[];
-  amenities: TRoomTypeAmenity[];
-  policies: TRoomTypePolicy[];
-  faqs: TRoomTypeFaq[];
-};
-
-// Room Types with Relations
-export type TRoom = TRoomBase & {
-  roomType: TRoomType;
-};
-
-// Booking Types with Relations
-export type TBooking = TBookingBase & {
-  roomType: TRoomTypeBase;
-  room: TRoomBase | null;
-  user: TUser | null;
-  payments: TBookingPaymentBase[];
-};
-
-export type TBookingWithDetails = TBookingBase & {
-  roomType: TRoomType;
-  room: TRoom | null;
-  user: TUser | null;
-  payments: TBookingPaymentBase[];
-};
+export type TBlog = {
+  author: null | TUser;
+  featuredImage: null | TImage;
+  images: TBlogImage[];
+} & TBlogBase;
 
 // Blog Types with Relations
-export type TBlogImage = TBlogImageBase & {
+export type TBlogImage = {
   image: TImage;
-};
+} & TBlogImageBase;
 
-export type TBlog = TBlogBase & {
-  author: TUser | null;
-  featuredImage: TImage | null;
-  images: TBlogImage[];
-};
+// Booking Types with Relations
+export type TBooking = {
+  payments: TBookingPaymentBase[];
+  room: null | TRoomBase;
+  roomType: TRoomTypeBase;
+  user: null | TUser;
+} & TBookingBase;
+
+export type TBookingWithDetails = {
+  payments: TBookingPaymentBase[];
+  room: null | TRoom;
+  roomType: TRoomType;
+  user: null | TUser;
+} & TBookingBase;
 
 // Gallery Types with Relations
-export type TGallery = TGalleryBase & {
-  image: TImage | null;
-  videoThumbnail: TImage | null;
-};
+export type TGallery = {
+  image: null | TImage;
+  videoThumbnail: null | TImage;
+} & TGalleryBase;
+
+// Room Types with Relations
+export type TRoom = {
+  roomType: TRoomType;
+} & TRoomBase;
+
+export type TRoomType = {
+  amenities: TRoomTypeAmenity[];
+  faqs: TRoomTypeFaq[];
+  images: TRoomTypeImage[];
+  policies: TRoomTypePolicy[];
+} & TRoomTypeBase;
+
+export type TRoomTypeAmenity = {
+  amenity: TAmenityBase;
+} & TRoomTypeAmenityBase;
+
+export type TRoomTypeFaq = {
+  faq: TFaqBase;
+} & TRoomTypeFaqBase;
+
+// Room Type Types with Relations
+export type TRoomTypeImage = {
+  image: TImage;
+} & TRoomTypeImageBase;
+
+export type TRoomTypePolicy = {
+  policy: TPolicyBase;
+} & TRoomTypePolicyBase;
 
 // Testimonial Types with Relations
-export type TTestimonial = TTestimonialBase & {
-  user: TUser | null;
-  guestAvatar: TImage | null;
-};
-
+export type TTestimonial = {
+  guestAvatar: null | TImage;
+  user: null | TUser;
+} & TTestimonialBase;

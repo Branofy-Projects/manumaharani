@@ -1,6 +1,8 @@
 import { config } from "dotenv";
 import { drizzle } from "drizzle-orm/neon-http";
 
+// Core Schemas
+import { Amenities } from "./schema/amenities.schema";
 // Auth Schema
 import {
   Accounts,
@@ -14,13 +16,31 @@ import {
   Users,
   Verifications,
 } from "./schema/auth.schema";
-
-// Core Schemas
-import { Amenities } from "./schema/amenities.schema";
+// Blog Schema
+import {
+  blogCategoryEnum,
+  BlogImages,
+  Blogs,
+  blogStatusEnum,
+} from "./schema/blogs.schema";
+// Bookings Schema
+import {
+  BookingPayments,
+  Bookings,
+  bookingStatusEnum,
+  paymentStatusEnum,
+} from "./schema/bookings.schema";
 import { Faqs } from "./schema/faqs.schema";
+// Gallery Schema
+import {
+  Gallery,
+  galleryCategoryEnum,
+  galleryTypeEnum,
+} from "./schema/gallery.schema";
 import { Images } from "./schema/images.schema";
-import { policyKindEnum, Policies } from "./schema/policies.schema";
-
+import { Policies, policyKindEnum } from "./schema/policies.schema";
+// Relations
+import * as relations from "./schema/relations.schema";
 // Room Types Schema
 import {
   bedTypeEnum,
@@ -31,41 +51,13 @@ import {
   RoomTypes,
   roomTypeStatusEnum,
 } from "./schema/room-types.schema";
-
 // Rooms Schema
-import { Rooms, RoomImages, roomStatusEnum } from "./schema/rooms.schema";
-
-// Bookings Schema
-import {
-  BookingPayments,
-  Bookings,
-  bookingStatusEnum,
-  paymentStatusEnum,
-} from "./schema/bookings.schema";
-
-// Blog Schema
-import {
-  BlogImages,
-  Blogs,
-  blogCategoryEnum,
-  blogStatusEnum,
-} from "./schema/blogs.schema";
-
-// Gallery Schema
-import {
-  Gallery,
-  galleryCategoryEnum,
-  galleryTypeEnum,
-} from "./schema/gallery.schema";
-
+import { RoomImages, Rooms, roomStatusEnum } from "./schema/rooms.schema";
 // Testimonials Schema
 import {
   Testimonials,
   testimonialStatusEnum,
 } from "./schema/testimonials.schema";
-
-// Relations
-import * as relations from "./schema/relations.schema";
 
 export type {
   TAccount,
@@ -89,59 +81,6 @@ export type { TFaqBase, TInsertFaq, TNewFaq } from "./schema/faqs.schema";
 
 export type { TImage, TNewImage } from "./schema/images.schema";
 
-export type {
-  TInsertPolicy,
-  TNewPolicy,
-  TPolicyBase,
-  TPolicyKind,
-  TBedType,
-  TNewRoomType,
-  TNewRoomTypeAmenity,
-  TNewRoomTypeFaq,
-  TNewRoomTypeImage,
-  TNewRoomTypePolicy,
-  TRoomTypeAmenityBase,
-  TRoomTypeBase,
-  TRoomTypeFaqBase,
-  TRoomTypeImageBase,
-  TRoomTypePolicyBase,
-  TRoomTypeStatus,
-  TNewRoom,
-  TRoomBase,
-  TRoomStatus,
-  TBookingBase,
-  TBookingPaymentBase,
-  TBookingStatus,
-  TNewBooking,
-  TNewBookingPayment,
-  TPaymentStatus,
-  TBlogBase,
-  TBlogCategory,
-  TBlogImageBase,
-  TBlogStatus,
-  TNewBlog,
-  TNewBlogImage,
-  TGalleryBase,
-  TGalleryCategory,
-  TGalleryType,
-  TNewGallery,
-  TNewTestimonial,
-  TTestimonialBase,
-  TTestimonialStatus,
-  TBlog,
-  TBlogImage,
-  TBooking,
-  TBookingWithDetails,
-  TGallery,
-  TRoom,
-  TRoomType,
-  TRoomTypeAmenity,
-  TRoomTypeFaq,
-  TRoomTypeImage,
-  TRoomTypePolicy,
-  TTestimonial,
-} from "./schema/types.schema";
-
 /**
  * --------------------------------------- Export Drizzle Utilities ---------------------------------------
  */
@@ -153,72 +92,72 @@ export * from "drizzle-orm";
 export {
   // Auth
   Accounts,
-  EmailVerificationTokens,
-  PasswordResetTokens,
-  Sessions,
-  TwoFactorTokens,
-  UserAuditLog,
-  UserPreferences,
-  userRoles,
-  Users,
-  Verifications,
   Amenities,
+  bedTypeEnum,
+  blogCategoryEnum,
+  BlogImages,
+  Blogs,
+  blogStatusEnum,
+  BookingPayments,
+  Bookings,
+  bookingStatusEnum,
+  EmailVerificationTokens,
   Faqs,
+  Gallery,
+  galleryCategoryEnum,
+  galleryTypeEnum,
   Images,
+  PasswordResetTokens,
+  paymentStatusEnum,
   Policies,
   policyKindEnum,
-  bedTypeEnum,
+  RoomImages,
+  Rooms,
+  roomStatusEnum,
   RoomTypeAmenities,
   RoomTypeFaqs,
   RoomTypeImages,
   RoomTypePolicies,
   RoomTypes,
   roomTypeStatusEnum,
-  Rooms,
-  RoomImages,
-  roomStatusEnum,
-  BookingPayments,
-  Bookings,
-  bookingStatusEnum,
-  paymentStatusEnum,
-  BlogImages,
-  Blogs,
-  blogCategoryEnum,
-  blogStatusEnum,
-  Gallery,
-  galleryCategoryEnum,
-  galleryTypeEnum,
+  Sessions,
   Testimonials,
   testimonialStatusEnum,
+  TwoFactorTokens,
+  UserAuditLog,
+  UserPreferences,
+  userRoles,
+  Users,
+  Verifications,
 };
 
 export const schemaWithoutRelations = {
-  Users,
-  Sessions,
   Accounts,
-  Verifications,
-  PasswordResetTokens,
-  EmailVerificationTokens,
-  TwoFactorTokens,
-  UserPreferences,
-  UserAuditLog,
-  Images,
   Amenities,
-  Policies,
-  Faqs,
-  RoomTypes,
-  RoomTypeImages,
-  RoomTypeAmenities,
-  RoomTypePolicies,
-  RoomTypeFaqs,
-  Rooms,
-  RoomImages,
-  Bookings,
-  BookingPayments,
-  Blogs,
   BlogImages,
+  Blogs,
+  BookingPayments,
+  Bookings,
+  EmailVerificationTokens,
+  Faqs,
   Gallery,
+  Images,
+  PasswordResetTokens,
+  Policies,
+  RoomImages,
+  Rooms,
+  RoomTypeAmenities,
+  RoomTypeFaqs,
+  RoomTypeImages,
+  RoomTypePolicies,
+  RoomTypes,
+  Sessions,
   Testimonials,
+  TwoFactorTokens,
+  UserAuditLog,
+  UserPreferences,
+  Users,
+  Verifications,
 };
 
 export const schema = {

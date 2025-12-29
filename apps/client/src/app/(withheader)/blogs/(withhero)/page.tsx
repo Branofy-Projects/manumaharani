@@ -1,6 +1,8 @@
-import Image from 'next/image';
-import Link from 'next/link';
+import { getBlogs } from "@repo/actions/blogs.actions";
+import Image from "next/image";
+import Link from "next/link";
 
+import { calculateReadTime } from "@/lib/utils";
 const blogPosts = [
   {
     category: "Wedding Stories",
@@ -70,34 +72,33 @@ const blogPosts = [
   },
 ];
 
-export default function BlogsPage() {
-  return (
-    <main className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <section className="relative h-[60vh] min-h-[400px] w-full overflow-hidden">
-        <Image
-          alt="Wedding Blog"
-          className="object-cover object-center"
-          fill
-          priority
-          src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=80"
-        />
-        <div className="absolute inset-0 bg-black/50" />
-        <div className="absolute inset-0 pt-[80px] flex items-center justify-center">
-          <div className="text-center">
-            <h1
-              className={`mb-4 text-4xl px-16 font-thin tracking-[0.2em] md:tracking-[0.3em] uppercase text-white md:text-5xl lg:text-6xl`}
-            >
-              Lakeside Stories
-            </h1>
-            <p className={`text-lg font-light text-white/90 mt-10 md:text-xl`}>
-              A space where we share stories, guides, and moments from our
-              jungle–lake sanctuary in Jim Corbett.
-            </p>
-          </div>
-        </div>
-      </section>
+export const metadata = {
+  description: "Read the latest blog posts from ManuMaharani Jungle Resort.",
+  title: "Blog Posts | ManuMaharani",
+};
 
+export default async function BlogsPage(props: PageProps<"/blogs">) {
+  const searchParams = await props.searchParams;
+
+  const page = Number(
+    isNaN(Number(searchParams.page)) ? "1" : searchParams.page
+  );
+  const limit = Number(
+    isNaN(Number(searchParams.limit)) ? "10" : searchParams.limit
+  );
+
+  const { blogs, total } = await getBlogs({ limit, page, status: "published" });
+
+  const totalPages = Math.ceil(total / limit);
+
+  const pagination = {
+    currentPage: page,
+    totalItems: total,
+    totalPages,
+  };
+
+  return (
+    <>
       {/* Blog Grid */}
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
         <div className="mb-12 flex flex-col items-center justify-between gap-4 sm:flex-row">
@@ -126,7 +127,7 @@ export default function BlogsPage() {
         </div>
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {blogPosts.map((post) => (
+          {blogs.map((post) => (
             <Link
               className="group overflow-hidden rounded-lg bg-white shadow-md transition-all hover:shadow-xl"
               href={`/blogs/${post.id}`}
@@ -134,10 +135,10 @@ export default function BlogsPage() {
             >
               <div className="relative h-64 overflow-hidden">
                 <Image
-                  alt={post.title}
+                  alt={post.featuredImage?.alt_text || post.title}
                   className="object-cover object-center transition-transform duration-500 group-hover:scale-110"
                   fill
-                  src={post.image}
+                  src={post.featuredImage?.small_url}
                 />
                 <div className="absolute left-4 top-4 rounded-full bg-white px-4 py-1 text-xs font-semibold uppercase tracking-wide text-gray-900">
                   {post.category}
@@ -147,9 +148,9 @@ export default function BlogsPage() {
                 <div
                   className={`mb-3 flex items-center gap-4 text-xs text-gray-500`}
                 >
-                  <span>{post.date}</span>
+                  <span>{post.created_at?.toLocaleDateString()}</span>
                   <span>•</span>
-                  <span>{post.readTime}</span>
+                  <span>{calculateReadTime(post.content)} min read</span>
                 </div>
                 <h3
                   className={`mb-3 text-xl font-light leading-tight text-gray-900 transition-colors group-hover:text-gray-600`}
@@ -174,26 +175,25 @@ export default function BlogsPage() {
         <div className="mt-16 flex items-center justify-center gap-2">
           <button
             className={`rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 transition-all hover:border-gray-900 hover:bg-gray-900 hover:text-white`}
+            disabled={pagination.currentPage === 1}
           >
             Previous
           </button>
-          <button
-            className={`rounded-lg bg-gray-900 px-4 py-2 text-sm text-white`}
-          >
-            1
-          </button>
-          <button
-            className={`rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 transition-all hover:border-gray-900 hover:bg-gray-900 hover:text-white`}
-          >
-            2
-          </button>
-          <button
-            className={`rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 transition-all hover:border-gray-900 hover:bg-gray-900 hover:text-white`}
-          >
-            3
-          </button>
+          {pagination.totalPages > 1 && (
+            <>
+              {Array.from({ length: pagination.totalPages }, (_, index) => (
+                <button
+                  className={`rounded-lg px-4 py-2 text-sm text-gray-700 transition-all hover:border-gray-900 hover:bg-gray-900 hover:text-white`}
+                  key={index}
+                >
+                  {index + 1}
+                </button>
+              ))}
+            </>
+          )}
           <button
             className={`rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 transition-all hover:border-gray-900 hover:bg-gray-900 hover:text-white`}
+            disabled={pagination.currentPage === pagination.totalPages}
           >
             Next
           </button>
@@ -227,6 +227,6 @@ export default function BlogsPage() {
           </form>
         </div>
       </section>
-    </main>
+    </>
   );
 }

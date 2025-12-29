@@ -3837,6 +3837,7 @@ __metadata:
   resolution: "client@workspace:apps/client"
   dependencies:
     "@heroicons/react": "npm:^2.2.0"
+    "@repo/actions": "npm:*"
     "@repo/eslint-config": "npm:*"
     "@repo/typescript-config": "npm:*"
     "@tailwindcss/postcss": "npm:^4"

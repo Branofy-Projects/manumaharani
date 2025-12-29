@@ -1,35 +1,21 @@
 import { redis } from "./redis";
 
 type CacheOptions<T> = {
+  deserialize?: (raw: string) => T;
   key: string;
-  ttlSeconds?: number;
-  swrSeconds?: number;
   revalidate?: boolean;
   serialize?: (val: T) => string;
-  deserialize?: (raw: string) => T;
+  swrSeconds?: number;
+  ttlSeconds?: number;
 };
-
-export async function getJSON<T>(key: string): Promise<T | null> {
-  const raw = await redis.json.get<T>(key);
-  return raw;
-}
-
-export async function setJSON<T>(key: string, val: T, ttlSeconds?: number) {
-  const raw = JSON.stringify(val);
-  if (ttlSeconds && ttlSeconds > 0) {
-    await redis.set(key, raw, { ex: ttlSeconds });
-  } else {
-    await redis.set(key, raw);
-  }
-}
 
 export async function bumpVersion(namespace: string) {
   await redis.incr(`v:${namespace}`);
 }
 
-export async function getVersion(namespace: string): Promise<number> {
-  const v = await redis.get<number>(`v:${namespace}`);
-  return typeof v === "number" ? v : 0;
+export async function getJSON<T>(key: string): Promise<null | T> {
+  const raw = await redis.json.get<T>(key);
+  return raw;
 }
 
 export async function getOrSet<T>(
@@ -37,11 +23,11 @@ export async function getOrSet<T>(
   opts: CacheOptions<T>
 ): Promise<T> {
   const {
+    deserialize = (v) => JSON.parse(v) as T,
     key,
-    ttlSeconds,
     revalidate = false,
     serialize = (v) => JSON.stringify(v),
-    deserialize = (v) => JSON.parse(v) as T,
+    ttlSeconds,
   } = opts;
 
   if (!revalidate) {
@@ -66,3 +52,16 @@ export async function getOrSet<T>(
   return data;
 }
 
+export async function getVersion(namespace: string): Promise<number> {
+  const v = await redis.get<number>(`v:${namespace}`);
+  return typeof v === "number" ? v : 0;
+}
+
+export async function setJSON<T>(key: string, val: T, ttlSeconds?: number) {
+  const raw = JSON.stringify(val);
+  if (ttlSeconds && ttlSeconds > 0) {
+    await redis.set(key, raw, { ex: ttlSeconds });
+  } else {
+    await redis.set(key, raw);
+  }
+}

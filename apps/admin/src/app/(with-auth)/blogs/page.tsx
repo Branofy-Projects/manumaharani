@@ -43,4 +43,3 @@ export default async function Page(props: PageProps<"/blogs">) {
     </PageContainer>
   );
 }
-
