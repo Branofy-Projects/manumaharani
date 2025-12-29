@@ -1,5 +1,7 @@
 "use client";
 
+import Link from 'next/link';
+
 import { Badge } from '@/components/ui/badge';
 import { DataTableColumnHeader } from '@/components/ui/table/data-table-column-header';
 
@@ -29,7 +31,12 @@ export const columns: ColumnDef<TRoom>[] = [
       const room = row.original;
       return (
         <div className="flex flex-col">
-          <div className="font-medium font-mono">{room.room_number}</div>
+          <Link
+            href={`/rooms/${room.id}`}
+            className="font-medium font-mono hover:underline cursor-pointer"
+          >
+            {room.room_number}
+          </Link>
           <div className="text-sm text-muted-foreground">Floor {room.floor}</div>
         </div>
       );

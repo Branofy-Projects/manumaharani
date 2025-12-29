@@ -104,7 +104,8 @@ export function uploadSingleWithProgress(
           resolve(result);
         } else {
           // Provide more detailed error message
-          const errorMsg = json.error || `Upload failed with status ${xhr.status}`;
+          const errorMsg =
+            json.error || `Upload failed with status ${xhr.status}`;
           console.error("Upload error details:", {
             status: xhr.status,
             statusText: xhr.statusText,
@@ -116,7 +117,9 @@ export function uploadSingleWithProgress(
       } catch (parseError) {
         console.error("Failed to parse upload response:", parseError);
         console.error("Raw response:", xhr.responseText);
-        reject(new Error(`Upload failed: ${xhr.statusText || "Unknown error"}`));
+        reject(
+          new Error(`Upload failed: ${xhr.statusText || "Unknown error"}`)
+        );
       }
     });
 
@@ -241,4 +244,3 @@ export async function uploadFilesWithProgress(
 
   return Promise.all(tasks);
 }
-

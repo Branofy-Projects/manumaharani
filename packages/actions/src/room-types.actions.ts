@@ -221,7 +221,6 @@ export const getRoomTypeById = async (id: number) => {
   return db.query.RoomTypes.findFirst({
     where: eq(RoomTypes.id, id),
     with: {
-      resort: true,
       images: {
         with: { image: true },
         orderBy: (images, { asc }) => [asc(images.order)],

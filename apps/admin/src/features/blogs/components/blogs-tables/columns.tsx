@@ -1,5 +1,7 @@
 "use client";
 
+import Link from 'next/link';
+
 import { Badge } from '@/components/ui/badge';
 import { DataTableColumnHeader } from '@/components/ui/table/data-table-column-header';
 
@@ -21,7 +23,12 @@ export const columns: ColumnDef<TBlog>[] = [
       const blog = row.original;
       return (
         <div className="flex flex-col">
-          <div className="font-medium">{blog.title}</div>
+          <Link
+            href={`/blogs/${blog.id}`}
+            className="font-medium hover:underline cursor-pointer"
+          >
+            {blog.title}
+          </Link>
           <div className="text-sm text-muted-foreground line-clamp-1">{blog.excerpt || "—"}</div>
         </div>
       );

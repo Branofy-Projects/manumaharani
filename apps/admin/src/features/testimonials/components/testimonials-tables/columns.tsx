@@ -1,5 +1,7 @@
 "use client";
 
+import Link from 'next/link';
+
 import { Badge } from '@/components/ui/badge';
 import { DataTableColumnHeader } from '@/components/ui/table/data-table-column-header';
 
@@ -21,7 +23,12 @@ export const columns: ColumnDef<TTestimonial>[] = [
       const testimonial = row.original;
       return (
         <div className="flex flex-col">
-          <div className="font-medium">{testimonial.guest_name}</div>
+          <Link
+            href={`/testimonials/${testimonial.id}`}
+            className="font-medium hover:underline cursor-pointer"
+          >
+            {testimonial.guest_name}
+          </Link>
           <div className="text-sm text-muted-foreground">{testimonial.guest_email || "—"}</div>
         </div>
       );

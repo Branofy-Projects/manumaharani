@@ -19,7 +19,7 @@ import { ImagesArraySchema } from '@/lib/image-schema';
 import { uploadFilesWithProgress } from '@/lib/upload-files';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createImages } from '@repo/actions/images.actions';
-import { createBlog } from '@repo/actions';
+import { createBlog, updateBlog } from '@repo/actions';
 import type { TBlog } from "@repo/db";
 
 import type {
@@ -143,18 +143,30 @@ const BlogForm = (props: TBlogFormProps) => {
         }
       }
 
-      // Create blog
-      await createBlog({
-        title: data.title,
-        content: data.content,
-        slug,
-        excerpt: excerpt || data.title,
-        featured_image_id: featuredImageId,
-        status: "draft",
-        category: "general",
-      });
-
-      toast.success("Blog post created successfully!");
+      // Create or update blog
+      if (props.blogId) {
+        // Update existing blog
+        await updateBlog(parseInt(props.blogId, 10), {
+          title: data.title,
+          content: data.content,
+          slug,
+          excerpt: excerpt || data.title,
+          featured_image_id: featuredImageId,
+        });
+        toast.success("Blog post updated successfully!");
+      } else {
+        // Create new blog
+        await createBlog({
+          title: data.title,
+          content: data.content,
+          slug,
+          excerpt: excerpt || data.title,
+          featured_image_id: featuredImageId,
+          status: "draft",
+          category: "general",
+        });
+        toast.success("Blog post created successfully!");
+      }
       
       // Small delay to ensure toast is visible, then redirect
       setTimeout(() => {
@@ -178,8 +190,8 @@ const BlogForm = (props: TBlogFormProps) => {
       // Check if it's a URL-related error
       if (errorMessage.toLowerCase().includes("invalid url") || 
           errorMessage.toLowerCase().includes("url")) {
-        console.warn("URL error detected, but blog may have been created. Attempting redirect...");
-        toast.success("Blog post created successfully!");
+        console.warn("URL error detected, but blog may have been saved. Attempting redirect...");
+        toast.success(props.blogId ? "Blog post updated successfully!" : "Blog post created successfully!");
         setTimeout(() => {
           if (typeof window !== 'undefined') {
             window.location.href = '/blogs';
@@ -299,10 +311,10 @@ const BlogForm = (props: TBlogFormProps) => {
                   {isSubmitting || isThumbnailUploading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      {isThumbnailUploading ? "Uploading image..." : "Creating..."}
+                      {isThumbnailUploading ? "Uploading image..." : props.blogId ? "Updating..." : "Creating..."}
                     </>
                   ) : (
-                    "Create Blog Post"
+                    props.blogId ? "Update Blog Post" : "Create Blog Post"
                   )}
                 </Button>
               </div>

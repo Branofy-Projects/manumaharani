@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { DataTableColumnHeader } from '@/components/ui/table/data-table-column-header';
 
 import { CellAction } from './cell-action';
@@ -11,7 +13,12 @@ export const columns: ColumnDef<TAmenity>[] = [
   {
     accessorKey: "label",
     cell: ({ row }) => {
-      return <div className="font-medium">{row.original.label}</div>;
+      const amenity = row.original;
+      return (
+        <Link href={`/amenities/${amenity.id}`} className="hover:underline">
+          <div className="font-medium">{amenity.label}</div>
+        </Link>
+      );
     },
     enableColumnFilter: true,
     header: ({ column }: { column: Column<TAmenity, unknown> }) => (

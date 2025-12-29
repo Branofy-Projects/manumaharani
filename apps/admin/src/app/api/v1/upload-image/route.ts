@@ -1,9 +1,9 @@
-import crypto from 'crypto';
-import { NextRequest, NextResponse } from 'next/server';
-import path from 'path';
-import sharp from 'sharp';
+import crypto from "crypto";
+import { NextRequest, NextResponse } from "next/server";
+import path from "path";
+import sharp from "sharp";
 
-import { bucket } from '@/lib/gcs';
+import { bucket } from "@/lib/gcs";
 
 export const runtime = "nodejs";
 
@@ -84,8 +84,14 @@ async function uploadAndMakeVariantsFromBuffer(
     throw new Error("GCP_BUCKET_NAME environment variable is not set");
   }
 
-  if (!process.env.GCP_PROJECT_ID || !process.env.GCP_CLIENT_EMAIL || !process.env.GCP_PRIVATE_KEY) {
-    throw new Error("GCS credentials are not configured. Please check GCP_PROJECT_ID, GCP_CLIENT_EMAIL, and GCP_PRIVATE_KEY environment variables");
+  if (
+    !process.env.GCP_PROJECT_ID ||
+    !process.env.GCP_CLIENT_EMAIL ||
+    !process.env.GCP_PRIVATE_KEY
+  ) {
+    throw new Error(
+      "GCS credentials are not configured. Please check GCP_PROJECT_ID, GCP_CLIENT_EMAIL, and GCP_PRIVATE_KEY environment variables"
+    );
   }
 
   for (const [key, cfg] of Object.entries(IMAGE_SIZES)) {
@@ -94,7 +100,7 @@ async function uploadAndMakeVariantsFromBuffer(
       const { buffer, metadata } = await processImage(input, size);
       const fileName = tsName(originalName, cfg.suffix);
       const destination = `uploads/${fileName}`;
-      
+
       try {
         await bucket().file(destination).save(buffer, {
           contentType: "image/webp",
@@ -111,10 +117,12 @@ async function uploadAndMakeVariantsFromBuffer(
         const errorMsg = `GCS upload failed for ${size}: ${gcsError?.message || String(gcsError)}`;
         console.error(errorMsg, gcsError);
         errors.push(errorMsg);
-        
+
         // Check for common GCS errors
         if (gcsError?.code === 403) {
-          errors.push("GCS Permission denied. Check service account permissions.");
+          errors.push(
+            "GCS Permission denied. Check service account permissions."
+          );
         } else if (gcsError?.code === 404) {
           errors.push(`GCS Bucket '${process.env.GCP_BUCKET_NAME}' not found.`);
         }
@@ -127,9 +135,10 @@ async function uploadAndMakeVariantsFromBuffer(
   }
 
   if (variants.length === 0) {
-    const errorDetails = errors.length > 0 
-      ? ` Errors: ${errors.join("; ")}` 
-      : " Check GCS configuration and permissions.";
+    const errorDetails =
+      errors.length > 0
+        ? ` Errors: ${errors.join("; ")}`
+        : " Check GCS configuration and permissions.";
     throw new Error(`Failed to process any image variants.${errorDetails}`);
   }
 
@@ -191,7 +200,7 @@ export async function POST(req: NextRequest) {
           { status: 400 }
         );
       }
-      
+
       // Validate file type
       if (!file.type.startsWith("image/")) {
         return NextResponse.json(
@@ -199,7 +208,7 @@ export async function POST(req: NextRequest) {
           { status: 400 }
         );
       }
-      
+
       const result = await uploadAndMakeVariantsFromFile(file);
       return NextResponse.json({ success: true, data: result });
     }
@@ -265,25 +274,30 @@ export async function POST(req: NextRequest) {
       code: error?.code,
       name: error?.name,
     });
-    
+
     // Provide more helpful error messages
     let errorMessage = error?.message || "Upload failed";
-    
+
     // Check for common issues
     if (errorMessage.includes("GCP_BUCKET_NAME")) {
-      errorMessage = "GCS bucket name is not configured. Please set GCP_BUCKET_NAME in your .env file.";
+      errorMessage =
+        "GCS bucket name is not configured. Please set GCP_BUCKET_NAME in your .env file.";
     } else if (errorMessage.includes("GCS credentials")) {
-      errorMessage = "GCS credentials are missing. Please configure GCP_PROJECT_ID, GCP_CLIENT_EMAIL, and GCP_PRIVATE_KEY in your .env file.";
-    } else if (errorMessage.includes("Permission denied") || error?.code === 403) {
-      errorMessage = "GCS permission denied. Please check that your service account has Storage Admin role.";
+      errorMessage =
+        "GCS credentials are missing. Please configure GCP_PROJECT_ID, GCP_CLIENT_EMAIL, and GCP_PRIVATE_KEY in your .env file.";
+    } else if (
+      errorMessage.includes("Permission denied") ||
+      error?.code === 403
+    ) {
+      errorMessage =
+        "GCS permission denied. Please check that your service account has Storage Admin role.";
     } else if (errorMessage.includes("not found") || error?.code === 404) {
       errorMessage = `GCS bucket '${process.env.GCP_BUCKET_NAME}' not found. Please verify the bucket name.`;
     }
-    
+
     return NextResponse.json(
       { success: false, error: errorMessage },
       { status: 500 }
     );
   }
 }
-

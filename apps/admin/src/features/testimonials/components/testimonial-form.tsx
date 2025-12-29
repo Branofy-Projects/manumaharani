@@ -22,7 +22,7 @@ import { ImagesArraySchema } from '@/lib/image-schema';
 import { uploadFilesWithProgress } from '@/lib/upload-files';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createImages } from '@repo/actions/images.actions';
-import { createTestimonial } from '@repo/actions';
+import { createTestimonial, updateTestimonial } from '@repo/actions';
 import type { TTestimonial } from "@repo/db";
 
 import type { FormImage as FileUploaderFormImage } from "@/components/file-uploader";
@@ -150,20 +150,35 @@ const TestimonialForm = (props: TTestimonialFormProps) => {
         }
       }
 
-      await createTestimonial({
-        guest_name: data.guest_name,
-        guest_email: data.guest_email || null,
-        guest_location: data.guest_location || null,
-        content: data.content,
-        rating: data.rating,
-        title: data.title || null,
-        guest_avatar_id: avatarId,
-        status: data.status,
-        platform: data.platform || "website",
-        admin_notes: data.admin_notes || null,
-      });
-
-      toast.success("Testimonial created successfully!");
+      if (props.testimonialId) {
+        await updateTestimonial(parseInt(props.testimonialId, 10), {
+          guest_name: data.guest_name,
+          guest_email: data.guest_email || null,
+          guest_location: data.guest_location || null,
+          content: data.content,
+          rating: data.rating,
+          title: data.title || null,
+          guest_avatar_id: avatarId,
+          status: data.status,
+          platform: data.platform || "website",
+          admin_notes: data.admin_notes || null,
+        });
+        toast.success("Testimonial updated successfully!");
+      } else {
+        await createTestimonial({
+          guest_name: data.guest_name,
+          guest_email: data.guest_email || null,
+          guest_location: data.guest_location || null,
+          content: data.content,
+          rating: data.rating,
+          title: data.title || null,
+          guest_avatar_id: avatarId,
+          status: data.status,
+          platform: data.platform || "website",
+          admin_notes: data.admin_notes || null,
+        });
+        toast.success("Testimonial created successfully!");
+      }
       
       setTimeout(() => {
         try {
@@ -448,10 +463,10 @@ const TestimonialForm = (props: TTestimonialFormProps) => {
                   {isSubmitting || isAvatarUploading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      {isAvatarUploading ? "Uploading avatar..." : "Creating..."}
+                      {isAvatarUploading ? "Uploading avatar..." : props.testimonialId ? "Updating..." : "Creating..."}
                     </>
                   ) : (
-                    "Create Testimonial"
+                    props.testimonialId ? "Update Testimonial" : "Create Testimonial"
                   )}
                 </Button>
               </div>

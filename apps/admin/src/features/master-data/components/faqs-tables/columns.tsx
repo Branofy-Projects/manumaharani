@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { DataTableColumnHeader } from '@/components/ui/table/data-table-column-header';
 
 import { CellAction } from './cell-action';
@@ -11,7 +13,12 @@ export const columns: ColumnDef<TFaq>[] = [
   {
     accessorKey: "question",
     cell: ({ row }) => {
-      return <div className="font-medium">{row.original.question}</div>;
+      const faq = row.original;
+      return (
+        <Link href={`/faqs/${faq.id}`} className="hover:underline">
+          <div className="font-medium">{faq.question}</div>
+        </Link>
+      );
     },
     enableColumnFilter: true,
     header: ({ column }: { column: Column<TFaq, unknown> }) => (

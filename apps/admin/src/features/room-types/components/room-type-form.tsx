@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createRoomType } from '@repo/actions';
+import { createRoomType, updateRoomType } from '@repo/actions';
 import type { TRoomType } from "@repo/db";
 
 const BED_TYPES = [
@@ -90,24 +90,35 @@ export const RoomTypeForm = (props: TRoomTypeFormProps) => {
         base_price: data.base_price,
       });
 
-      // Create room type
-      const result = await createRoomType({
-        name: data.name,
-        description: data.description,
-        slug,
-        bed_type: data.bed_type,
-        max_occupancy: data.max_occupancy,
-        number_of_beds: data.number_of_beds,
-        size_sqft: data.size_sqft,
-        base_price: data.base_price.toString(),
-        status: "active",
-        order: 0,
-      });
-
-      console.log("Room type created successfully:", result);
-
-      // Show success toast
-      toast.success("Room type created successfully!");
+      // Create or update room type
+      if (props.roomTypeId) {
+        await updateRoomType(parseInt(props.roomTypeId, 10), {
+          name: data.name,
+          description: data.description,
+          slug,
+          bed_type: data.bed_type,
+          max_occupancy: data.max_occupancy,
+          number_of_beds: data.number_of_beds,
+          size_sqft: data.size_sqft,
+          base_price: data.base_price.toString(),
+        });
+        toast.success("Room type updated successfully!");
+      } else {
+        const result = await createRoomType({
+          name: data.name,
+          description: data.description,
+          slug,
+          bed_type: data.bed_type,
+          max_occupancy: data.max_occupancy,
+          number_of_beds: data.number_of_beds,
+          size_sqft: data.size_sqft,
+          base_price: data.base_price.toString(),
+          status: "active",
+          order: 0,
+        });
+        console.log("Room type created successfully:", result);
+        toast.success("Room type created successfully!");
+      }
       
       // Small delay to ensure toast is visible, then redirect
       setTimeout(() => {
@@ -333,10 +344,10 @@ export const RoomTypeForm = (props: TRoomTypeFormProps) => {
                   {isSubmitting ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Creating...
+                      {props.roomTypeId ? "Updating..." : "Creating..."}
                     </>
                   ) : (
-                    "Create Room Type"
+                    props.roomTypeId ? "Update Room Type" : "Create Room Type"
                   )}
                 </Button>
               </div>

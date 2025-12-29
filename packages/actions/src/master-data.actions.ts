@@ -41,6 +41,14 @@ export const updateAmenity = async (id: number, data: Partial<TNewAmenity>) => {
   return updated;
 };
 
+export const getAmenityById = async (id: number) => {
+  if (!db) return null;
+
+  return db.query.Amenities.findFirst({
+    where: eq(Amenities.id, id),
+  });
+};
+
 export const deleteAmenity = async (id: number) => {
   if (!db) throw new Error("Database connection not available");
 
@@ -93,6 +101,14 @@ export const updatePolicy = async (id: number, data: Partial<TNewPolicy>) => {
   return updated;
 };
 
+export const getPolicyById = async (id: number) => {
+  if (!db) return null;
+
+  return db.query.Policies.findFirst({
+    where: eq(Policies.id, id),
+  });
+};
+
 export const deletePolicy = async (id: number) => {
   if (!db) throw new Error("Database connection not available");
 
@@ -132,6 +148,14 @@ export const updateFaq = async (id: number, data: Partial<TNewFaq>) => {
     .returning();
   
   return updated;
+};
+
+export const getFaqById = async (id: number) => {
+  if (!db) return null;
+
+  return db.query.Faqs.findFirst({
+    where: eq(Faqs.id, id),
+  });
 };
 
 export const deleteFaq = async (id: number) => {

@@ -1,5 +1,7 @@
 "use client";
 
+import Link from 'next/link';
+
 import { Badge } from '@/components/ui/badge';
 import { DataTableColumnHeader } from '@/components/ui/table/data-table-column-header';
 
@@ -15,7 +17,12 @@ export const columns: ColumnDef<TGallery>[] = [
       const item = row.original;
       return (
         <div className="flex flex-col">
-          <div className="font-medium">{item.title || "Untitled"}</div>
+          <Link
+            href={`/gallery/${item.id}`}
+            className="font-medium hover:underline cursor-pointer"
+          >
+            {item.title || "Untitled"}
+          </Link>
           <div className="text-sm text-muted-foreground line-clamp-1">{item.description || "—"}</div>
         </div>
       );

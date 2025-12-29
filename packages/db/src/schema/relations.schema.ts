@@ -11,7 +11,7 @@ import { Policies } from './policies.schema';
 import {
     RoomTypeAmenities, RoomTypeFaqs, RoomTypeImages, RoomTypePolicies, RoomTypes
 } from './room-types.schema';
-import { Rooms } from './rooms.schema';
+import { RoomImages, Rooms } from './rooms.schema';
 import { Testimonials } from './testimonials.schema';
 
 
@@ -79,6 +79,18 @@ export const roomRelations = relations(Rooms, ({ many, one }) => ({
   roomType: one(RoomTypes, {
     fields: [Rooms.room_type_id],
     references: [RoomTypes.id],
+  }),
+  images: many(RoomImages),
+}));
+
+export const roomImagesRelations = relations(RoomImages, ({ one }) => ({
+  room: one(Rooms, {
+    fields: [RoomImages.room_id],
+    references: [Rooms.id],
+  }),
+  image: one(Images, {
+    fields: [RoomImages.image_id],
+    references: [Images.id],
   }),
 }));
 
@@ -168,4 +180,5 @@ export const faqRelations = relations(Faqs, ({ many }) => ({
 export const imageRelations = relations(Images, ({ many }) => ({
   blogImages: many(BlogImages),
   roomTypeImages: many(RoomTypeImages),
+  roomImages: many(RoomImages),
 }));

@@ -56,7 +56,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         <DropdownMenuItem onClick={() => onCopy(data.id)}>
           <Copy className="mr-2 h-4 w-4" /> Copy ID
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => router.push(`/rooms/${data.id}`)}>
+        <DropdownMenuItem onClick={() => router.push(`/rooms/${data.id}/edit`)}>
           <Edit className="mr-2 h-4 w-4" /> Edit
         </DropdownMenuItem>
         <DropdownMenuSeparator />

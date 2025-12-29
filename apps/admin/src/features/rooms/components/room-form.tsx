@@ -32,7 +32,7 @@ import { ImagesArraySchema } from "@/lib/image-schema";
 import { uploadFilesWithProgress } from "@/lib/upload-files";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createImages } from "@repo/actions/images.actions";
-import { createRoom, updateRoomImages } from "@repo/actions";
+import { createRoom, updateRoom, updateRoomImages } from "@repo/actions";
 import { getRoomTypes } from "@repo/actions/room-types.actions";
 import type { TRoom } from "@repo/db";
 
@@ -198,21 +198,35 @@ export const RoomForm = (props: TRoomFormProps) => {
           }
         });
 
-        // Create room first
-        const room = await createRoom({
-          title: data.title,
-          description: data.description || null,
-          room_type_id: parseInt(data.room_type_id),
-          floor: data.floor,
-          room_number: data.room_number,
-          status: data.status,
-          notes: data.notes || null,
-        });
-
-        // Then update images
-        await updateRoomImages(room.id, final);
-
-        toast.success("Room created successfully!");
+        // Create or update room
+        let room;
+        if (props.roomId) {
+          room = await updateRoom(parseInt(props.roomId, 10), {
+            title: data.title,
+            description: data.description || null,
+            room_type_id: parseInt(data.room_type_id),
+            floor: data.floor,
+            room_number: data.room_number,
+            status: data.status,
+            notes: data.notes || null,
+          });
+          // Update images
+          await updateRoomImages(parseInt(props.roomId, 10), final);
+          toast.success("Room updated successfully!");
+        } else {
+          room = await createRoom({
+            title: data.title,
+            description: data.description || null,
+            room_type_id: parseInt(data.room_type_id),
+            floor: data.floor,
+            room_number: data.room_number,
+            status: data.status,
+            notes: data.notes || null,
+          });
+          // Then update images
+          await updateRoomImages(room.id, final);
+          toast.success("Room created successfully!");
+        }
 
         // Small delay to ensure toast is visible, then redirect
         setTimeout(() => {
@@ -227,18 +241,30 @@ export const RoomForm = (props: TRoomFormProps) => {
           }
         }, 100);
       } else {
-        // Create room without images
-        await createRoom({
-          title: data.title,
-          description: data.description || null,
-          room_type_id: parseInt(data.room_type_id),
-          floor: data.floor,
-          room_number: data.room_number,
-          status: data.status,
-          notes: data.notes || null,
-        });
-
-        toast.success("Room created successfully!");
+        // Create or update room without images
+        if (props.roomId) {
+          await updateRoom(parseInt(props.roomId, 10), {
+            title: data.title,
+            description: data.description || null,
+            room_type_id: parseInt(data.room_type_id),
+            floor: data.floor,
+            room_number: data.room_number,
+            status: data.status,
+            notes: data.notes || null,
+          });
+          toast.success("Room updated successfully!");
+        } else {
+          await createRoom({
+            title: data.title,
+            description: data.description || null,
+            room_type_id: parseInt(data.room_type_id),
+            floor: data.floor,
+            room_number: data.room_number,
+            status: data.status,
+            notes: data.notes || null,
+          });
+          toast.success("Room created successfully!");
+        }
 
         // Small delay to ensure toast is visible, then redirect
         setTimeout(() => {
@@ -519,10 +545,10 @@ export const RoomForm = (props: TRoomFormProps) => {
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                         {isImagesUploading
                           ? "Uploading images..."
-                          : "Creating..."}
+                          : props.roomId ? "Updating..." : "Creating..."}
                       </>
                     ) : (
-                      "Create Room"
+                      props.roomId ? "Update Room" : "Create Room"
                     )}
                   </Button>
                 </div>

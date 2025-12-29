@@ -22,7 +22,7 @@ import { ImagesArraySchema } from '@/lib/image-schema';
 import { uploadFilesWithProgress } from '@/lib/upload-files';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createImages } from '@repo/actions/images.actions';
-import { createGallery } from '@repo/actions';
+import { createGallery, updateGallery } from '@repo/actions';
 import type { TGallery } from "@repo/db";
 
 import type { FormImage as FileUploaderFormImage } from "@/components/file-uploader";
@@ -155,16 +155,27 @@ const GalleryForm = (props: TGalleryFormProps) => {
         imageId = imageData.image_id;
       }
 
-      await createGallery({
-        title: data.title,
-        description: data.description || null,
-        image_id: imageId,
-        type: data.type,
-        category: data.category,
-        video_url: data.type === "video" ? data.video_url || null : null,
-      });
-
-      toast.success("Gallery item created successfully!");
+      if (props.galleryId) {
+        await updateGallery(parseInt(props.galleryId, 10), {
+          title: data.title,
+          description: data.description || null,
+          image_id: imageId,
+          type: data.type,
+          category: data.category,
+          video_url: data.type === "video" ? data.video_url || null : null,
+        });
+        toast.success("Gallery item updated successfully!");
+      } else {
+        await createGallery({
+          title: data.title,
+          description: data.description || null,
+          image_id: imageId,
+          type: data.type,
+          category: data.category,
+          video_url: data.type === "video" ? data.video_url || null : null,
+        });
+        toast.success("Gallery item created successfully!");
+      }
       
       setTimeout(() => {
         try {
@@ -369,10 +380,10 @@ const GalleryForm = (props: TGalleryFormProps) => {
                   {isSubmitting || isImageUploading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      {isImageUploading ? "Uploading image..." : "Creating..."}
+                      {isImageUploading ? "Uploading image..." : props.galleryId ? "Updating..." : "Creating..."}
                     </>
                   ) : (
-                    "Create Gallery Item"
+                    props.galleryId ? "Update Gallery Item" : "Create Gallery Item"
                   )}
                 </Button>
               </div>

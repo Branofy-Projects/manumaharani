@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { Badge } from '@/components/ui/badge';
 import { DataTableColumnHeader } from '@/components/ui/table/data-table-column-header';
 
@@ -12,7 +14,12 @@ export const columns: ColumnDef<TPolicy>[] = [
   {
     accessorKey: "label",
     cell: ({ row }) => {
-      return <div className="font-medium">{row.original.label}</div>;
+      const policy = row.original;
+      return (
+        <Link href={`/policies/${policy.id}`} className="hover:underline">
+          <div className="font-medium">{policy.label}</div>
+        </Link>
+      );
     },
     enableColumnFilter: true,
     header: ({ column }: { column: Column<TPolicy, unknown> }) => (

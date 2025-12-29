@@ -89,8 +89,11 @@ export const getRoomById = async (id: number) => {
     return await db.query.Rooms.findFirst({
       where: eq(Rooms.id, id),
       with: {
-        resort: true,
         roomType: true,
+        images: {
+          with: { image: true },
+          orderBy: (images, { asc }) => [asc(images.order)],
+        },
       },
     });
   } catch (error) {
