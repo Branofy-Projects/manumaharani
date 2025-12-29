@@ -1,35 +1,39 @@
 "use client";
 
-import Link from 'next/link';
+import Link from "next/link";
 
-import { Badge } from '@/components/ui/badge';
-import { DataTableColumnHeader } from '@/components/ui/table/data-table-column-header';
+import { Badge } from "@/components/ui/badge";
+import { DataTableColumnHeader } from "@/components/ui/table/data-table-column-header";
 
-import { CellAction } from './cell-action';
+import { CellAction } from "./cell-action";
 
-import type { TBlog } from "@repo/db";
+import type { TBlog } from "@repo/db/schema/types.schema";
 import type { Column, ColumnDef } from "@tanstack/react-table";
 
 const statusMap: Record<string, string> = {
+  archived: "Archived",
   draft: "Draft",
   published: "Published",
-  archived: "Archived",
 };
 
 export const columns: ColumnDef<TBlog>[] = [
   {
     accessorKey: "title",
+
     cell: ({ row }) => {
       const blog = row.original;
+
       return (
-        <div className="flex flex-col">
+        <div className="flex flex-col w-[300px]">
           <Link
-            href={`/blogs/${blog.id}`}
-            className="font-medium hover:underline cursor-pointer"
+            className="font-medium hover:underline cursor-pointer truncate line-clamp-1"
+            href={`/blogs/${blog.slug}`}
           >
             {blog.title}
           </Link>
-          <div className="text-sm text-muted-foreground line-clamp-1">{blog.excerpt || "—"}</div>
+          <div className="text-sm text-muted-foreground truncate line-clamp-1">
+            {blog.excerpt || "—"}
+          </div>
         </div>
       );
     },
@@ -81,7 +85,9 @@ export const columns: ColumnDef<TBlog>[] = [
   {
     accessorKey: "view_count",
     cell: ({ row }) => {
-      return <div className="text-sm">{row.original.view_count || 0} views</div>;
+      return (
+        <div className="text-sm">{row.original.view_count || 0} views</div>
+      );
     },
     header: "Views",
     id: "views",
@@ -111,4 +117,3 @@ export const columns: ColumnDef<TBlog>[] = [
     id: "actions",
   },
 ];
-

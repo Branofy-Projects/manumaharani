@@ -1,7 +1,7 @@
 "use server";
-import { and, count, eq, ilike } from "@repo/db";
+import { and, count, eq, ilike, notInArray } from "@repo/db";
 import { Blogs, db } from "@repo/db";
-import { TNewBlog } from "@repo/db/schema/blogs.schema";
+import { TBlogCategory, TNewBlog } from "@repo/db/schema/blogs.schema";
 
 import { bumpVersion, getOrSet } from "./libs/cache";
 import { blogBySlugKey, featuredBlogsKey } from "./libs/keys";
@@ -11,6 +11,7 @@ import type { TBlog } from "@repo/db/schema/types.schema";
 
 type TGetBlogsFilters = {
   category?: string;
+  ignore?: number[];
   is_featured?: boolean;
   limit?: number;
   page?: number;
@@ -35,6 +36,10 @@ export const getBlogs = async (filters: TGetBlogsFilters = {}) => {
 
   if (filters.is_featured !== undefined) {
     conditions.push(eq(Blogs.is_featured, filters.is_featured ? 1 : 0));
+  }
+
+  if (filters.ignore && filters.ignore.length > 0) {
+    conditions.push(notInArray(Blogs.id, filters.ignore));
   }
 
   const where = conditions.length > 0 ? and(...conditions) : undefined;
@@ -106,6 +111,19 @@ export const getBlogBySlug = async (slug: string) => {
   );
 };
 
+export const getRelatedPosts = async (
+  category: TBlogCategory,
+  limit: number = 3
+) => {
+  return db.query.Blogs.findMany({
+    limit,
+    orderBy: (blogs, { desc }) => [desc(blogs.published_at)],
+    where: and(eq(Blogs.category, category), eq(Blogs.status, "published")),
+    with: {
+      featuredImage: true,
+    },
+  });
+};
 export const getFeaturedBlogs = async (limit: number = 3) => {
   return getOrSet(
     () =>

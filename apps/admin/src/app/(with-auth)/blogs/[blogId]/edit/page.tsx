@@ -1,10 +1,10 @@
+import { getBlogById } from "@repo/actions";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import FormCardSkeleton from "@/components/form-card-skeleton";
 import PageContainer from "@/components/layout/page-container";
 import BlogForm from "@/features/blogs/components/blog-form";
-import { getBlogById } from "@repo/actions";
 
 export const metadata = {
   title: "Dashboard: Edit Blog Post",
@@ -33,13 +33,12 @@ export default async function BlogEditPage(props: PageProps) {
       <div className="flex-1 space-y-4">
         <Suspense fallback={<FormCardSkeleton />}>
           <BlogForm
+            blogId={params.blogId}
             initialData={blog as any}
             pageTitle="Edit Blog Post"
-            blogId={params.blogId}
           />
         </Suspense>
       </div>
     </PageContainer>
   );
 }
-

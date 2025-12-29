@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "standalone",
   images: {
     remotePatterns: [
       {
@@ -19,8 +18,14 @@ const nextConfig = {
         hostname: "www.manumaharaniresorts.com",
         protocol: "https",
       },
+
+      {
+        hostname: "storage.googleapis.com",
+        protocol: "https",
+      },
     ],
   },
+  output: "standalone",
 };
 
 export default nextConfig;
