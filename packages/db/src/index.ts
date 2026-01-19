@@ -169,10 +169,8 @@ export const schema = {
 // Edge Runtime doesn't support process.cwd(), so we check runtime first
 if (
   process.env.NODE_ENV !== "production" &&
-  typeof process !== "undefined" &&
-  process.cwd &&
-  typeof process.cwd === "function" &&
-  !process.env.NEXT_RUNTIME // Edge Runtime sets this
+  typeof process !== "undefined"
+  
 ) {
   try {
     config({ path: "../../.env" });

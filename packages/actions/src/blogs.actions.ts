@@ -1,12 +1,13 @@
 "use server";
 import { and, count, eq, ilike, notInArray } from "@repo/db";
 import { Blogs, db } from "@repo/db";
-import { TBlogCategory, TNewBlog } from "@repo/db/schema/blogs.schema";
 
 import { bumpVersion, getOrSet } from "./libs/cache";
 import { blogBySlugKey, featuredBlogsKey } from "./libs/keys";
 import { safeDbQuery } from "./utils/db-error-handler";
 
+import type {  TNewBlog } from "@repo/db/schema/blogs.schema";
+import type { TBlogCategory } from "@repo/db/schema/blogs.schema";
 import type { TBlog } from "@repo/db/schema/types.schema";
 
 type TGetBlogsFilters = {

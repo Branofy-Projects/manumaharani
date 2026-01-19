@@ -1,11 +1,10 @@
 "use server";
 import { and, count, eq, gte, lte, or } from "@repo/db";
 import { BookingPayments, Bookings, db } from "@repo/db";
-import { redirect } from "next/navigation";
 
 import { safeDbQuery } from "./utils/db-error-handler";
 
-import type { TNewBooking, TNewBookingPayment } from "@repo/db";
+import type { TNewBooking, TNewBookingPayment } from "@repo/db/schema/bookings.schema";
 
 type TGetBookingsFilters = {
   check_in_date_from?: Date;
