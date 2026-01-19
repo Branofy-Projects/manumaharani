@@ -1,8 +1,6 @@
 import { getBlogs } from "@repo/actions/blogs.actions";
-import Image from "next/image";
-import Link from "next/link";
 
-import { calculateReadTime } from "@/lib/utils";
+import { BlogCard } from "@/components/Blogs/BlogCard";
 
 export const metadata = {
   description: "Read the latest blog posts from ManuMaharani Jungle Resort.",
@@ -60,48 +58,7 @@ export default async function BlogsPage(props: PageProps<"/blogs">) {
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {blogs.map((post) => (
-            <Link
-              className="group overflow-hidden rounded-lg bg-white shadow-md transition-all hover:shadow-xl"
-              href={`/blogs/${post.slug}`}
-              key={post.id}
-            >
-              <div className="relative h-64 overflow-hidden">
-                <Image
-                  alt={post.featuredImage?.alt_text || post.title}
-                  className="object-cover object-center transition-transform duration-500 group-hover:scale-110"
-                  fill
-                  src={post.featuredImage?.small_url}
-                />
-                <div className="absolute left-4 top-4 rounded-full bg-white px-4 py-1 text-xs font-semibold uppercase tracking-wide text-gray-900">
-                  {post.category}
-                </div>
-              </div>
-              <div className="p-6">
-                <div
-                  className={`mb-3 flex items-center gap-4 text-xs text-gray-500`}
-                >
-                  <span>{post.created_at?.toLocaleDateString()}</span>
-                  <span>•</span>
-                  <span>{calculateReadTime(post.content)} min read</span>
-                </div>
-                <h3
-                  className={`mb-3 text-xl font-light leading-tight text-gray-900 transition-colors group-hover:text-gray-600`}
-                >
-                  {post.title}
-                </h3>
-                <p
-                  className={`mb-4 text-sm line-clamp-2 leading-relaxed text-gray-600`}
-                >
-                  {post.excerpt}
-                </p>
-                <span
-                  className={`inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-gray-900 transition-all group-hover:gap-3`}
-                >
-                  Read More
-                  <span className="text-lg">→</span>
-                </span>
-              </div>
-            </Link>
+            <BlogCard key={post.id} post={post} />
           ))}
         </div>
 
@@ -135,7 +92,7 @@ export default async function BlogsPage(props: PageProps<"/blogs">) {
       </section>
 
       {/* Newsletter Section */}
-      <section className="bg-gray-50 py-16">
+      {/* <section className="bg-gray-50 py-16">
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <h2
             className={`mb-4 text-3xl font-light tracking-wide text-gray-900`}
@@ -160,7 +117,7 @@ export default async function BlogsPage(props: PageProps<"/blogs">) {
             </button>
           </form>
         </div>
-      </section>
+      </section> */}
     </>
   );
 }

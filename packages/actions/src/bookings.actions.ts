@@ -1,18 +1,21 @@
 "use server";
 import { and, count, eq, gte, lte, or } from "@repo/db";
-import { db, Bookings, BookingPayments } from "@repo/db";
-import type { TNewBooking, TNewBookingPayment } from "@repo/db";
+import { BookingPayments, Bookings, db } from "@repo/db";
+import { redirect } from "next/navigation";
+
 import { safeDbQuery } from "./utils/db-error-handler";
 
+import type { TNewBooking, TNewBookingPayment } from "@repo/db";
+
 type TGetBookingsFilters = {
-  search?: string;
-  page?: number;
-  limit?: number;
-  status?: string;
-  payment_status?: string;
   check_in_date_from?: Date;
   check_in_date_to?: Date;
+  limit?: number;
+  page?: number;
+  payment_status?: string;
   room_type_id?: number;
+  search?: string;
+  status?: string;
 };
 
 export const getBookings = async (filters: TGetBookingsFilters = {}) => {
@@ -21,7 +24,7 @@ export const getBookings = async (filters: TGetBookingsFilters = {}) => {
   }
 
   const conditions = [];
-  
+
   if (filters.search) {
     conditions.push(
       or(
@@ -32,23 +35,33 @@ export const getBookings = async (filters: TGetBookingsFilters = {}) => {
       )
     );
   }
-  
+
   if (filters.status) {
     conditions.push(eq(Bookings.booking_status, filters.status as any));
   }
-  
+
   if (filters.payment_status) {
     conditions.push(eq(Bookings.payment_status, filters.payment_status as any));
   }
-  
+
   if (filters.check_in_date_from) {
-    conditions.push(gte(Bookings.check_in_date, filters.check_in_date_from.toISOString().split('T')[0]));
+    conditions.push(
+      gte(
+        Bookings.check_in_date,
+        filters.check_in_date_from.toISOString().split("T")[0]
+      )
+    );
   }
-  
+
   if (filters.check_in_date_to) {
-    conditions.push(lte(Bookings.check_in_date, filters.check_in_date_to.toISOString().split('T')[0]));
+    conditions.push(
+      lte(
+        Bookings.check_in_date,
+        filters.check_in_date_to.toISOString().split("T")[0]
+      )
+    );
   }
-  
+
   if (filters.room_type_id) {
     conditions.push(eq(Bookings.room_type_id, filters.room_type_id));
   }
@@ -77,16 +90,16 @@ export const getBookings = async (filters: TGetBookingsFilters = {}) => {
   const bookings = await safeDbQuery(
     async () => {
       return await db.query.Bookings.findMany({
-        where,
         limit,
         offset,
-        with: {
-          roomType: true,
-          room: true,
-          user: true,
-          payments: true,
-        },
         orderBy: (bookings, { desc }) => [desc(bookings.created_at)],
+        where,
+        with: {
+          payments: true,
+          room: true,
+          roomType: true,
+          user: true,
+        },
       });
     },
     [],
@@ -105,7 +118,7 @@ export const createBooking = async (data: TNewBooking) => {
 
   // Generate confirmation code
   const confirmationCode = `BK${Date.now()}${Math.random().toString(36).substring(7).toUpperCase()}`;
-  
+
   const [booking] = await db
     .insert(Bookings)
     .values({
@@ -113,14 +126,11 @@ export const createBooking = async (data: TNewBooking) => {
       confirmation_code: confirmationCode,
     })
     .returning();
-  
+
   return booking;
 };
 
-export const updateBooking = async (
-  id: number,
-  data: Partial<TNewBooking>
-) => {
+export const updateBooking = async (id: number, data: Partial<TNewBooking>) => {
   if (!db) throw new Error("Database connection not available");
 
   const [updated] = await db
@@ -128,7 +138,7 @@ export const updateBooking = async (
     .set({ ...data, updated_at: new Date() })
     .where(eq(Bookings.id, id))
     .returning();
-  
+
   return updated;
 };
 
@@ -138,16 +148,16 @@ export const getBookingById = async (id: number) => {
   return db.query.Bookings.findFirst({
     where: eq(Bookings.id, id),
     with: {
+      payments: {
+        orderBy: (payments, { desc }) => [desc(payments.paid_at)],
+      },
+      room: true,
       roomType: {
         with: {
           images: { with: { image: true } },
         },
       },
-      room: true,
       user: true,
-      payments: {
-        orderBy: (payments, { desc }) => [desc(payments.paid_at)],
-      },
     },
   });
 };
@@ -158,9 +168,9 @@ export const getBookingByConfirmationCode = async (code: string) => {
   return db.query.Bookings.findFirst({
     where: eq(Bookings.confirmation_code, code),
     with: {
-      roomType: true,
-      room: true,
       payments: true,
+      room: true,
+      roomType: true,
     },
   });
 };
@@ -168,27 +178,24 @@ export const getBookingByConfirmationCode = async (code: string) => {
 export const addBookingPayment = async (data: TNewBookingPayment) => {
   if (!db) throw new Error("Database connection not available");
 
-  const [payment] = await db
-    .insert(BookingPayments)
-    .values(data)
-    .returning();
-  
+  const [payment] = await db.insert(BookingPayments).values(data).returning();
+
   // Update booking paid amount
   const booking = await db.query.Bookings.findFirst({
     where: eq(Bookings.id, data.booking_id),
   });
-  
+
   if (booking) {
     const newPaidAmount = Number(booking.paid_amount) + Number(data.amount);
     const totalAmount = Number(booking.total_amount);
-    
-    let paymentStatus: "pending" | "partial" | "paid" | "refunded" = "partial";
+
+    let paymentStatus: "paid" | "partial" | "pending" | "refunded" = "partial";
     if (newPaidAmount >= totalAmount) {
       paymentStatus = "paid";
     } else if (newPaidAmount === 0) {
       paymentStatus = "pending";
     }
-    
+
     await db
       .update(Bookings)
       .set({
@@ -197,7 +204,7 @@ export const addBookingPayment = async (data: TNewBookingPayment) => {
       })
       .where(eq(Bookings.id, data.booking_id));
   }
-  
+
   return payment;
 };
 
@@ -208,12 +215,11 @@ export const cancelBooking = async (id: number, reason?: string) => {
     .update(Bookings)
     .set({
       booking_status: "cancelled",
-      cancelled_at: new Date(),
       cancellation_reason: reason,
+      cancelled_at: new Date(),
     })
     .where(eq(Bookings.id, id))
     .returning();
-  
+
   return cancelled;
 };
-

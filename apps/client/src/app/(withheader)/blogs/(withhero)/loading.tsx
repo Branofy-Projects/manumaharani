@@ -1,24 +1,22 @@
-import { Skeleton } from "@/components/ui/skeleton";
+import { BlogCardLoading } from "@/components/Blogs/BlogCardLoading";
 
 const BlogLoading = () => {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {Array.from({ length: 9 }).map((_, index) => (
-          <div
-            className="bg-white rounded-lg shadow-md overflow-hidden"
-            key={index}
-          >
-            <Skeleton className="w-full h-48" />
-            <div className="p-6">
-              <Skeleton className="h-6 w-3/4 mb-2" />
-              <Skeleton className="h-4 w-full mb-4" />
-              <Skeleton className="h-4 w-1/2" />
-            </div>
-          </div>
+    <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+      <div className="mb-12 flex flex-col items-center justify-between gap-4 sm:flex-row">
+        <h2
+          className={`text-2xl font-light tracking-wide text-gray-900 md:text-3xl`}
+        >
+          Latest Articles
+        </h2>
+      </div>
+
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+        {[...Array(3)].map((_, index) => (
+          <BlogCardLoading key={index} />
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 

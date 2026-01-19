@@ -9,12 +9,6 @@
 
 .container {
   max-width: 100%;
-  padding: 0 1rem;
-
-  @media (min-width: 768px) {
-    max-width: var(--container);
-    padding: 0 1rem;
-  }
 }
 
 @theme inline {
@@ -168,4 +162,24 @@ body {
 
 .animate-wedding-strip-prev {
   animation: weddingStripPrev 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+input[type="date"] {
+  box-sizing: border-box;
+  outline: 0;
+  border: none;
+  width: 100%;
+  position: relative;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  background: transparent;
+  bottom: 0;
+  color: transparent;
+  cursor: pointer;
+  height: auto;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: auto;
 }

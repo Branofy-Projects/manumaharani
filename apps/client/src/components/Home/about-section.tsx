@@ -12,19 +12,20 @@ export default function AboutSection() {
         <div className="absolute inset-0 bg-black opacity-80 z-0"></div>
         <div className="text-center px-16 relative z-10">
           <h2 className="text-2xl md:text-4xl font-thin tracking-[0.08em] uppercase mb-10 leading-snug text-white">
-            WHERE LUXURY MEETS COMFORT
+            Luxury Grounded in Tradition: A Warm Indian Welcome
           </h2>
           <p className="text-sm md:text-base font-serif text-gray-200 leading-relaxed">
-            Nestled between the two primary Jim Corbett National Park entry
-            gates of Bijrani and Dhikala, Manu Maharani Resort & Spa is the best
-            place to stay in Ramnagar. With the Kosi river flowing by and the
-            Shivalik range as the backdrop, the resort offers the most luxurious
-            stay in the wilderness of Corbett. Very easily reachable from Delhi,
-            Jaipur, Rishikesh and other cities, the resort is close to all
-            tourist hotspots in Corbett.
+            At Manu Maharani, we honor the timeless philosophy of Atithi Devo
+            Bhavah—where every guest is treated as a divine presence. This is
+            more than a luxury resort; it is a sanctuary of warm hospitality
+            where modern sophistication meets traditional Indian grace. Whether
+            you are walking the pebble-strewn banks of the Kosi or enjoying a
+            quiet moment on our manicured lawns with the Shivalik hills as your
+            backdrop, our team is dedicated to crafting a stay that feels both
+            grand and deeply personal.
           </p>
           <button className="mt-8 border border-white bg-transparent text-white px-8 py-3 uppercase tracking-widest font-medium text-base hover:bg-black hover:text-[#b68833] hover:border-[#b68833] transition">
-            Discover More
+            Discover Our Sanctuary
           </button>
         </div>
       </div>

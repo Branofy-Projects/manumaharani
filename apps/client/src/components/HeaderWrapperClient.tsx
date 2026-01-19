@@ -68,16 +68,14 @@ export const HeaderWrapper = ({ children }: HeaderWrapperProps) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  console.log("sds", activeIndex, pathname);
-
   return (
-    <header className="w-full fixed top-0 left-0 z-50">
+    <header className="right-0 fixed top-0 left-0 z-50">
       {/* Hidden checkbox for mobile menu toggle */}
       <input className="hidden peer" id="mobile-menu-toggle" type="checkbox" />
 
       {/* Top bar */}
       <div className="w-full bg-background backdrop-blur supports-[backdrop-filter]:bg-[#f4efe8]/80 border-b border-black/10">
-        <div className="max-w-screen-xl mx-auto px-4 xl:px-0 py-4 transition-[height] duration-300 flex items-center justify-between gap-2 lg:gap-0">
+        <div className="max-w-screen-xl w-full mx-auto px-4 xl:px-0 py-4 transition-[height] duration-300 flex items-center justify-between gap-2 lg:gap-0">
           {children}
         </div>
       </div>
@@ -92,7 +90,6 @@ export const HeaderWrapper = ({ children }: HeaderWrapperProps) => {
             src="/Logo-Manu-Maharani.png"
             width={180}
           />
-          {/* Close button */}
           <label
             className="text-[#2b2b2b] cursor-pointer text-xl"
             htmlFor="mobile-menu-toggle"
@@ -101,7 +98,6 @@ export const HeaderWrapper = ({ children }: HeaderWrapperProps) => {
           </label>
         </div>
         <div className="h-full flex">
-          {/* Left navigation list */}
           <aside className="w-full sm:w-80 p-6 pl-10 sm:p-10 sm:pl-20 border-r border-black/10 flex-shrink-0 overflow-y-auto">
             <nav className="space-y-6 w-full text-foreground">
               {menuItems.map((item, idx) => {
@@ -146,7 +142,6 @@ export const HeaderWrapper = ({ children }: HeaderWrapperProps) => {
             </nav>
           </aside>
 
-          {/* Right content area - shows submenu on desktop */}
           {activeIndex !== undefined && menuItems[activeIndex]?.children ? (
             <div className="hidden sm:block sm:w-80 p-10 overflow-y-auto">
               <div className="max-w-xl">
@@ -169,7 +164,6 @@ export const HeaderWrapper = ({ children }: HeaderWrapperProps) => {
             </div>
           ) : null}
 
-          {/* Mobile nested submenu panel */}
           <div
             className={`sm:hidden absolute inset-0 bg-[#fff] transform-gpu transition-transform duration-300 ease-in-out ${mobileSubmenuIndex === null ? "translate-x-full pointer-events-none" : "-translate-x-px"}`}
           >

@@ -32,14 +32,11 @@ export const Header = () => {
 
       {/* Center: brand wordmark */}
       <div className="flex-1 flex justify-center">
-        <Link href="/">
-          <Image
-            alt="Manu Maharani"
-            className={`transition-all duration-300 ${isScrolled ? "h-7 sm:h-8" : "h-10 sm:h-14"} w-auto`}
-            height={40}
-            src="/Logo-Manu-Maharani.png"
-            width={180}
-          />
+        <Link
+          className={`transition-all duration-300 ${isScrolled ? "h-7 sm:h-8" : "h-10 sm:h-14"} aspect-1820/1268 relative`}
+          href="/"
+        >
+          <Image alt="Manu Maharani" fill src="/Logo-Manu-Maharani.png" />
         </Link>
       </div>
 

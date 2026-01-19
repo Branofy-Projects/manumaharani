@@ -8,44 +8,77 @@ import { cn } from "@/lib/utils";
 interface Accommodation {
   description: string;
   image: string;
+  subtitle?: string;
   title: string;
 }
 
 const accommodations: Accommodation[] = [
   {
     description:
-      "The ideal sanctuary for parents and up to two kids, this spacious luxury accommodation in Bali combines a romantic hideaway with a children's room and ample living space all on one level.",
+      "Plan guided safaris to the Bijrani and Dhikala zones with assistance from the resort team, who help with timings, permits, and briefings.",
+    image: "",
+    title: "Jungle Safaris & Wildlife",
+  },
+  {
+    description:
+      "Enjoy peaceful walks along the Kosi and cosy evenings with bonfires on select days, depending on season and weather.",
+    image: "",
+    title: "Riverside Walks & Bonfires",
+  },
+  {
+    description:
+      "Use the wide open spaces for informal games, picnics, or simply lounging together between activities.",
+    image: "",
+    title: "Family Time on the Lawns",
+  },
+  {
+    description:
+      "Combine meetings or training sessions with team‑building activities, theme dinners, and downtime in nature, all supported by the resort’s events team.",
+    image: "",
+    title: "Corporate & Social Events",
+  },
+  {
+    description:
+      "Modern, spacious rooms ideal for couples or small families who want extra space to spread out. Large beds, elegant bathrooms, and soothing interiors create a comfortable base between safaris and pool time.",
     image:
       "https://www.manumaharaniresorts.com/wp-content/uploads/2025/01/mm-executive-room.webp",
-    title: "FAMILY SUITE",
+    title: "Executive Room",
   },
   {
     description:
-      "Merging outdoor living with spacious interiors, this luxury Bali riverside villa with private pool includes a canopy bed, walk-in closet and lavish marble bathroom with freestanding tub.",
+      "Add an indulgent touch to your stay with a private in‑room Jacuzzi after a long day in the forest. This category is perfect for couples and families who enjoy a little extra pampering.",
     image:
       "https://www.manumaharaniresorts.com/wp-content/uploads/2025/01/mm-executive-room-jaccuzi.webp",
-    title: "RIVERFRONT ONE-BEDROOM VILLA",
+    title: "Executive Room with Jacuzzi",
   },
   {
     description:
-      "Our River-View Two-Bedroom Villa boasts a meditation area with the hypnotic sound of the river, a spacious outdoor living room and a private pool that combine to create a true sanctuary at our Bali resort in Ubud.",
-    image:
-      "https://www.manumaharaniresorts.com/wp-content/uploads/2022/10/DAP06598.webp",
-    title: "RIVER-VIEW TWO-BEDROOM VILLA",
-  },
-  {
-    description:
-      "Intricately carved wood, locally sourced shells and traditional ikat fabric harmonize with the surrounding hillside's rich greenery and rice terraces in this luxury Bali accommodation with private pool.",
+      "Independent, cottage‑style units with a cosy layout and easy access to lawns and pathways. Ideal for couples or solo travellers who prefer a more private",
     image:
       "https://www.manumaharaniresorts.com/wp-content/uploads/2022/04/MOK_9989.webp",
-    title: "ONE-BEDROOM VILLA",
+    title: "Luxury Cottage",
   },
   {
     description:
-      "This three-bedroom, art-filled Royal Villa with private pool – accessible through the Resort's dramatic rooftop – exemplifies casual elegance with its open-sided living and dining areas and Balinese-style accommodation.",
+      "Larger cottage units with extra space and seating, well‑suited for small families or friends travelling together. Step out directly onto green spaces and enjoy quiet mornings with tea outdoors.",
+    image:
+      "https://www.manumaharaniresorts.com/wp-content/uploads/2022/10/DAP06598.webp",
+    title: "Club Cottage",
+  },
+
+  {
+    description:
+      "Generous multi‑bed rooms designed for big families and groups who want to stay together comfortably. Ample floor space and flexible bedding make these ideal for extended stays and celebrations.",
     image:
       "https://www.manumaharaniresorts.com/wp-content/uploads/2022/11/MOK_0024-HDR.webp",
-    title: "ROYAL VILLA",
+    title: "Family Room",
+  },
+  {
+    description:
+      "A smart, value‑forward choice for couples and small families looking for a refined stay at a luxury resort in Jim Corbett without stretching the TbBuildingEstate.",
+    image:
+      "https://www.manumaharaniresorts.com/wp-content/uploads/2022/11/MOK_0024-HDR.webp",
+    title: "Deluxe Room",
   },
 ];
 
@@ -114,13 +147,17 @@ export default function AccommodationsCarousel() {
 
   return (
     <section className="w-full py-24">
-      <div className="max-w-screen-xl mx-auto px-4">
+      <div className="max-w-screen-xl mx-auto">
         <h2
-          className="text-3xl md:text-4xl font-thin tracking-widest text-center mb-12 uppercase"
+          className="text-3xl md:text-4xl font-thin tracking-widest uppercase mb-4 text-center px-4 xl:px-0"
           style={{ color: "#000000" }}
         >
-          Experiences
+          Rooms & Experiences
         </h2>
+        <p className="text-gray-700 text-base font-serif mb-8 md:mb-12 text-center px-4 xl:px-0">
+          Stay close to the river, explore the forest, or simply slow down on
+          the lawns—your time here can be as active or as easy as you like.
+        </p>
         {/* Carousel Row */}
         <div
           className="overflow-hidden h-full w-full px-2 sm:px-4 md:px-12 "
@@ -182,16 +219,10 @@ export default function AccommodationsCarousel() {
                     >
                       <div className="w-12 border-t border-gray-300 my-3" />
                       <p className="text-gray-600 text-sm text-center mb-6 min-h-[72px]">
+                        {card?.subtitle && card.subtitle}
+                        {card.subtitle && <br />}
                         {card.description}
                       </p>
-                      <div className="flex gap-3 w-full justify-center">
-                        <button className="px-5 py-2 bg-black text-[#b68833] text-xs font-semibold rounded-sm tracking-widest hover:bg-gray-800 transition">
-                          CHECK RATES
-                        </button>
-                        <button className="px-5 py-2 border border-black text-black text-xs font-semibold rounded-sm tracking-widest hover:bg-gray-100 transition">
-                          DETAILS
-                        </button>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -221,6 +252,9 @@ export default function AccommodationsCarousel() {
           <ChevronRightIcon className="w-8 h-8 text-black" />
         </button>
       </div>
+      <button className="mx-auto block mt-8 border border-black px-6 md:px-8 py-2 md:py-3 text-black tracking-widest font-medium uppercase text-xs md:text-base hover:bg-black hover:text-white transition">
+        Explore All Rooms
+      </button>
     </section>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 
 const images = [
   "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=1200&auto=format&fit=crop",
@@ -32,19 +33,16 @@ export default function HomeInstaImageSection() {
                 MANU MAHARANI RESORTS
               </h3>
               <p className="mt-4 text-sm sm:text-base opacity-90">
-                Share your memories with
-              </p>
-              <p className="mt-2 text-base sm:text-lg flex items-center gap-2">
-                <span className="text-xl">📷</span>
-                @manumaharani_resorts
+                Catch glimpses of river mornings, festive evenings, and
+                behind‑the‑scenes life <b>@manumaharani_resorts</b>
               </p>
             </div>
-            <div className="mt-10">
+            <Link className="mt-10" href="#">
               <span className="inline-block text-sm tracking-wider">
-                SEE MORE
+                Follow Our Journey
               </span>
               <div className="h-px w-40 bg-white mt-1" />
-            </div>
+            </Link>
           </div>
 
           {images.map((src, i) => (

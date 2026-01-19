@@ -1,7 +1,7 @@
 "use client";
 
-import Image from 'next/image';
-import React, { useState } from 'react';
+import Image from "next/image";
+import React, { useState } from "react";
 
 const attractions = [
   {
@@ -9,15 +9,14 @@ const attractions = [
       "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=600&q=80",
     link: "#",
     subtitle:
-      "Experience the wilderness and spot tigers, elephants, and exotic birds in their natural habitat.",
+      "Guided jeep safaris through famous zones like Bijrani and Dhikala.",
     title: "Jim Corbett National Park",
   },
   {
     image:
       "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=600&q=80",
     link: "#",
-    subtitle:
-      "Scenic lake perfect for boating and enjoying breathtaking mountain views.",
+    subtitle: "A scenic lake ideal for boating and quiet photo walks.",
     title: "Bhimtal Lake",
   },
   {
@@ -25,7 +24,7 @@ const attractions = [
       "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=600&q=80",
     link: "#",
     subtitle:
-      "A beautiful hill station known for its panoramic views of the Himalayas.",
+      "Classic hill station charm with shopping, cable cars, and lakeside strolls.",
     title: "Nainital",
   },
   {
@@ -33,7 +32,7 @@ const attractions = [
       "https://images.unsplash.com/photo-1571847141223-0f9a3d1c2c5e?auto=format&fit=crop&w=600&q=80",
     link: "#",
     subtitle:
-      "Ancient temples and spiritual sites nestled in the serene mountains.",
+      "Ancient temple complex set amid deodar forests, perfect for a spiritual day trip.",
     title: "Jageshwar Temples",
   },
   {
@@ -41,7 +40,7 @@ const attractions = [
       "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=600&q=80",
     link: "#",
     subtitle:
-      "Adventure activities including river rafting, trekking, and camping.",
+      "Seasonal walks, photography, and riverbank relaxation right by the resort area.",
     title: "Kosi River",
   },
   {
@@ -49,7 +48,7 @@ const attractions = [
       "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=600&q=80",
     link: "#",
     subtitle:
-      "Picturesque village offering stunning views and peaceful surroundings.",
+      "A peaceful hill destination known for views, orchards, and slow travel.",
     title: "Mukteshwar",
   },
 ];
@@ -67,26 +66,23 @@ export default function NearbyAttractions() {
 
   return (
     <section className="flex w-full flex-col items-center py-10 md:py-20">
-      <div className="mx-auto mb-8 flex w-full max-w-screen-xl flex-col items-center gap-4 px-2 md:mb-12 md:flex-row md:justify-between md:gap-0 md:px-0">
-        <h2
-          className="text-lg font-light uppercase tracking-widest md:text-3xl"
-          style={{ color: "#000000" }}
-        >
-          Nearby Attractions
-        </h2>
-        <a
-          className="border-b-2 border-black pb-1 text-xs font-semibold uppercase tracking-widest text-black transition-all hover:text-gray-600 md:text-sm"
-          href="#"
-        >
-          View All
-        </a>
-      </div>
+      <h2
+        className="text-3xl md:text-4xl font-thin tracking-widest uppercase mb-4 text-center px-4 xl:px-0"
+        style={{ color: "#000000" }}
+      >
+        Nearby Attractions
+      </h2>
+      <p className="text-gray-700 text-base font-serif mb-8 md:mb-12 text-center px-4 xl:px-0">
+        Extend your stay to discover lakes, hill towns, temples, and viewpoints
+        around Corbett, all within comfortable driving distance from Manu
+        Maharani.
+      </p>
 
       {/* Desktop: Scrollable carousel with 2 items */}
-      <div className="relative mx-auto hidden w-full max-w-screen-xl md:block md:px-0">
+      <div className="relative mx-auto hidden w-full max-w-screen-xl md:block px-4 xl:px-0">
         <button
           aria-label="Previous"
-          className="absolute -left-6 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white text-2xl text-black shadow-lg transition-all hover:bg-gray-100"
+          className="absolute left-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white text-2xl text-black shadow-lg transition-all hover:bg-gray-100"
           onClick={handlePrev}
           type="button"
         >
@@ -94,7 +90,7 @@ export default function NearbyAttractions() {
         </button>
         <button
           aria-label="Next"
-          className="absolute -right-6 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white text-2xl text-black shadow-lg transition-all hover:bg-gray-100"
+          className="absolute right-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white text-2xl text-black shadow-lg transition-all hover:bg-gray-100"
           onClick={handleNext}
           type="button"
         >
@@ -127,12 +123,12 @@ export default function NearbyAttractions() {
                         {attraction.subtitle}
                       </p>
                     )}
-                    <a
+                    {/* <a
                       className="pb-1 text-[0.5rem] font-semibold uppercase tracking-widest text-white transition-all hover:text-white/70"
                       href={attraction.link}
                     >
                       View Details
-                    </a>
+                    </a> */}
                   </div>
                 </div>
               </div>
@@ -142,7 +138,7 @@ export default function NearbyAttractions() {
       </div>
 
       {/* Mobile: Grid layout */}
-      <div className="mx-auto grid w-full max-w-screen-xl grid-cols-1 gap-4 px-2 sm:grid-cols-2 md:hidden md:px-0">
+      <div className="mx-auto grid w-full max-w-screen-xl grid-cols-1 gap-4 px-4 sm:grid-cols-2 md:hidden xl:px-0">
         {attractions.map((attraction, idx) => (
           <div
             className="group relative flex min-h-[260px] flex-col justify-end overflow-hidden rounded-lg shadow-lg"
