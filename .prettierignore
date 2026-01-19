@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# Cache
+.cache/
+.turbo/
+
+# Misc
+*.lock
+yarn.lock
+package-lock.json
+pnpm-lock.yaml
+
+# IDE
+.idea/
+.vscode/
+
+# Generated files
+*.d.ts.map
+*.tsbuildinfo
+
+# Public assets
+public/
+
+# Database
+*.sql
+drizzle/
+

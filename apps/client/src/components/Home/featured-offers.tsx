@@ -67,12 +67,12 @@ export default function FeaturedOffers() {
                   {offer.subtitle}
                 </p>
               )}
-              <a
+              {/* <a
                 className="text-white text-xs md:text-[0.5rem] font-semibold tracking-widest border-white pb-1 hover:text-white/70 transition-all uppercase"
                 href={offer.link}
               >
                 View Details
-              </a>
+              </a> */}
             </div>
           </div>
         ))}
