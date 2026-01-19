@@ -230,3 +230,4 @@ export default function RoomTypeDetailsView({ roomType }: RoomTypeDetailsViewPro
   );
 }
 
+

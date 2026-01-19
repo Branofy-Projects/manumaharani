@@ -80,3 +80,4 @@ export default function AmenityDetailsView({ amenity }: AmenityDetailsViewProps)
   );
 }
 
+

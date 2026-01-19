@@ -39,3 +39,4 @@ export default async function FaqDetailsPage(props: PageProps) {
   );
 }
 
+
