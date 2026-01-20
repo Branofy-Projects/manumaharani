@@ -111,15 +111,14 @@ export default function WeddingFestivities({
           <div className="mb-6 flex items-center justify-center gap-4">
             <div className="h-px w-12 bg-gray-500 md:w-16" />
             <h2 className=" text-2xl font-thin uppercase tracking-[0.2em] text-gray-800 md:text-4xl lg:text-5xl">
-              Wedding Festivities
+              Corbett Wedding Celebrations
             </h2>
             <div className="h-px w-12 bg-gray-500 md:w-16" />
           </div>
           <p className="mx-auto font-serif  max-w-3xl text-sm leading-relaxed text-gray-600 md:text-base">
-            Unfold a tapestry of love and celebrations with intimate gatherings
-            or grand receptions. From bridal showers and haldi ceremonies to
-            mehndi and glitzy cocktail soirées, begin your journey of joy with
-            Taj Hotels.
+            From riverside mehndi to starlit receptions, celebrate every ritual across our 5
+            wedding venues. Corbett's natural beauty enhances intimate gatherings and grand
+            festivities with Kumaoni traditions and modern elegance.
           </p>
         </div>
 

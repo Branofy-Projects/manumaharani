@@ -6,5 +6,7 @@
   ],
   "editor.codeActionsOnSave": {
     "source.fixAll": "always"
-  }
+  },
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "prettier.prettier-vscode"
 }

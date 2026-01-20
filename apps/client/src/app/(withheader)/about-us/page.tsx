@@ -1,76 +1,53 @@
-"use client";
 
 import {
   ClockIcon,
-  FaceSmileIcon,
-  TruckIcon,
   WifiIcon,
 } from "@heroicons/react/24/solid";
+import { CarIcon, LaptopIcon, SmileIcon, UtensilsIcon, WavesLadderIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-// Custom icons for specific amenities where Heroicons might not have a perfect match
-// Using SVG paths for a consistent look with Heroicons
-const PoolIcon = ({ className }: { className?: string }) => (
-  <svg
-    className={className}
-    fill="currentColor"
-    viewBox="0 0 24 24"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
-  </svg>
-);
-
-const FoodIcon = ({ className }: { className?: string }) => (
-  <svg
-    className={className}
-    fill="currentColor"
-    viewBox="0 0 24 24"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path d="M18.06 22.99h1.66c.84 0 1.53-.64 1.63-1.46L23 5.05h-5V22.99zM12 15.5c-3.03 0-5.5-2.47-5.5-5.5s2.47-5.5 5.5-5.5 5.5 2.47 5.5 5.5-2.47 5.5-5.5 5.5zm0-9c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5 3.5 3.5-1.57 3.5-3.5-1.57-3.5-3.5-3.5z" />
-    <path d="M6 22.99h1.66c.84 0 1.53-.64 1.63-1.46L11 5.05H6V22.99z" />
-    <path d="M1 22.99h1.66c.84 0 1.53-.64 1.63-1.46L6 5.05H1V22.99z" />
-  </svg>
-);
-
 const amenities = [
   {
     description:
-      "Upgrading your bandwidth is easy, and it can be done right from your phone.",
+      "Need more connectivity during your Corbett escape? Upgrading your bandwidth is quick and effortless, and can be done right from your phone, ensuring you stay seamlessly connected while you unwind in nature.",
     icon: WifiIcon,
-    title: "High Speed Wifi",
+    title: "High Speed WiFi",
   },
   {
     description:
-      "With our service you may enjoy the finest life in our resort.",
+      "Our dedicated team is always on hand to make your stay effortless and memorable, whether it’s helping with reservations, arranging safari permits, or taking care of any special requests. From the moment you plan your visit to your time at Manu Maharani resort, we’re here to ensure every detail feels thoughtfully taken care of.",
     icon: ClockIcon,
     title: "Reservations 24/7",
   },
   {
-    description: "We have the fuel to start your day right.",
-    icon: FoodIcon,
+    description: "Begin your day at Nivalaya, our multi-cuisine restaurant, with a generous breakfast buffet designed to energize you for what lies ahead.",
+    icon: UtensilsIcon,
     title: "Breakfast Included",
   },
   {
     description:
-      "Our big-sized swimming pool, conveniently located in an adjacent clubhouse.",
-    icon: PoolIcon,
+      "Our spacious, family-friendly pool set within the clubhouse invites you to unwind with refreshing dips, surrounded by soothing green views. It’s the perfect place to relax and recharge after a morning spent exploring the forest.",
+    icon: WavesLadderIcon,
     title: "Outdoor Swimming Pool",
   },
   {
     description:
-      "An indoor & outdoor playground with slides, climbers and swings.",
-    icon: FaceSmileIcon,
+      "Thoughtfully designed indoor and outdoor play zones, complete with slides, climbers, and swings, offer children a safe and joyful space to explore and play, while families relax and unwind on the surrounding lawns.",
+    icon: SmileIcon,
     title: "Kids' Playground",
   },
   {
-    description: "Please consider your private parking or better yet.",
-    icon: TruckIcon,
-    title: "Parking Space",
+    description: "Secure on-site parking for cars and coaches ensures smooth, hassle-free arrivals, making it especially convenient for road travellers and corporate groups visiting Jim Corbett.",
+    icon: CarIcon,
+    title: "Ample Parking Space",
   },
+  {
+    description:"Quiet corners, reliable Wi-Fi, and thoughtfully designed flexible spaces allow you to strike a seamless balance between work and wilderness, making extended stays both productive and rejuvenating.",
+    icon: LaptopIcon,
+    title:"Work From Anywhere"
+  }
 ];
 
 export default function AboutUsPage() {
@@ -83,7 +60,7 @@ export default function AboutUsPage() {
           className="object-cover"
           fill
           priority
-          src="https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2000&auto=format&fit=crop"
+          src="/about-us/photo-1566073771259-6a8506099945.webp"
         />
         <div className="absolute inset-0 bg-black/40" />
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white">
@@ -107,7 +84,7 @@ export default function AboutUsPage() {
                 alt="Resort Exterior"
                 className="object-cover transition-transform duration-700 hover:scale-105"
                 fill
-                src="https://images.unsplash.com/photo-1582719508461-905c673771fd?q=80&w=1200&auto=format&fit=crop"
+                src="/about-us/photo-1582719508461-905c673771fd.webp"
               />
             </div>
             <div className="relative aspect-[3/4] w-full overflow-hidden rounded-lg">
@@ -115,7 +92,7 @@ export default function AboutUsPage() {
                 alt="Resort Interior"
                 className="object-cover transition-transform duration-700 hover:scale-105"
                 fill
-                src="https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1200&auto=format&fit=crop"
+                src="/about-us/photo-1590490360182-c33d57733427.webp"
               />
             </div>
             {/* Decorative element */}
@@ -133,26 +110,16 @@ export default function AboutUsPage() {
 
             <div className="space-y-6 text-base leading-relaxed text-gray-600 md:text-lg">
               <p>
-                Located a stone’s throw away from the Jim Corbett National Park
-                in Uttarakhand, Manu Maharani Resort & Spa is an ideal
-                destination for a peaceful and rejuvenating holiday in the lap
-                of wilderness.
+                Tucked away in the peaceful village of Dhikuli, between Jim Corbett’s iconic Bijrani and Dhikala safari gates, Manu Maharani Resort & Spa is a place where nature welcomes you like an old friend. Each morning begins with the gentle music of the gurgling Kosi River, mist rising over the Shivalik hills, and birdsong floating through the air. Surrounded by the lush forests of Corbett, the resort feels wonderfully secluded, yet remains an easy, comfortable drive from Delhi, Jaipur, and Rishikesh.
               </p>
               <p>
-                The chirping of birds, cool breeze and sound of the gurgling
-                Kosi river welcome you into this oasis of tranquility. We bring
-                nature to your doorstep as views of the amazing Shivalik and the
-                green of Corbett embrace you from all sides.
-              </p>
-              <p>
-                Elegance, comfort and amazing hospitality are the essence of
-                your sojourn in this Queen of Corbett resort.
+                Spread across 11 acres of serene riverside landscape, the resort brings together refined comfort and warm, intuitive hospitality. It is a space thoughtfully designed for families to slow down and reconnect, for couples to unwind by the river’s edge, and for corporate teams to find clarity and inspiration amid nature. Spacious rooms and charming cottages, each opening onto manicured lawns and accompanied by a wholesome breakfast, create a sense of effortless ease. With inviting amenities such as an outdoor swimming pool and a dedicated kids’ play area, Manu Maharani ensures that every guest—young or old—finds their own moment of joy and relaxation.
               </p>
             </div>
 
-            <div className="mt-8 font-serif text-2xl italic text-[#a88b4d]">
+            {/* <div className="mt-8 font-serif text-2xl italic text-[#a88b4d]">
               &quot;Nature&apos;s luxury at its finest.&quot;
-            </div>
+            </div> */}
           </div>
         </div>
       </section>
@@ -179,7 +146,7 @@ export default function AboutUsPage() {
                 <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#a88b4d]/10 text-[#a88b4d] transition-colors duration-300 group-hover:bg-[#a88b4d] group-hover:text-white">
                   <amenity.icon className="h-7 w-7" />
                 </div>
-                <h3 className="mb-3 font-serif text-xl font-medium text-[#2b2b2b]">
+                <h3 className="mb-3 font-serif text-xl font-semibold text-[#2b2b2b]">
                   {amenity.title}
                 </h3>
                 <p className="text-sm leading-relaxed text-gray-600">
@@ -198,7 +165,7 @@ export default function AboutUsPage() {
             alt="Resort Pool"
             className="object-cover"
             fill
-            src="https://images.unsplash.com/photo-1571896349842-6e53ce41e8f2?q=80&w=2000&auto=format&fit=crop"
+            src="/about-us/photo-467463764734-c945839849384.webp"
           />
           <div className="absolute inset-0 bg-black/60" />
         </div>
