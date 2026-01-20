@@ -7,8 +7,9 @@ WORKDIR /app
 RUN corepack enable
 
 # Copy root package files
-COPY package.json yarn.lock .yarnrc.yml ./
+COPY package.json .yarnrc.yml ./
 COPY .yarn ./.yarn
+# yarn.lock is optional with Yarn 4 - Yarn will generate it if needed
 
 # Copy workspace package files
 COPY apps/admin/package.json ./apps/admin/
@@ -35,9 +36,10 @@ COPY --from=deps /app/apps/admin/node_modules ./apps/admin/node_modules
 COPY --from=deps /app/packages ./packages
 
 # Copy source code
-COPY package.json yarn.lock .yarnrc.yml turbo.json ./
+COPY package.json .yarnrc.yml turbo.json ./
 COPY apps/admin ./apps/admin
 COPY packages ./packages
+# yarn.lock is optional with Yarn 4 - Yarn will generate it if needed
 
 # Set environment variables for build
 ENV NEXT_TELEMETRY_DISABLED=1
