@@ -43,7 +43,7 @@ export async function createUser(data: {
     return AppResponseHandler.success(result);
   } catch (error) {
     console.error("Error creating user:", error);
-    return AppResponseHandler.error("Failed to create user");
+    return AppResponseHandler.error("Failed to create user", 500);
   }
 }
 
@@ -70,15 +70,15 @@ export async function deleteUser(id: string) {
       return AppResponseHandler.error("User not found", 404);
     }
 
-    // Delete user using better-auth (this will handle cleanup of related records)
-    await auth.api.deleteUser({
-      body: { userId: id },
-    });
+    // Delete user from database directly
+    // Note: better-auth's deleteUser API is for self-deletion only (requires token)
+    // For admin deletion, we delete directly from the database
+    await db.delete(Users).where(eq(Users.id, id));
 
     return AppResponseHandler.success({ message: "User deleted successfully" });
   } catch (error) {
     console.error("Error deleting user:", error);
-    return AppResponseHandler.error("Failed to delete user");
+    return AppResponseHandler.error("Failed to delete user", 500);
   }
 }
 
@@ -120,7 +120,7 @@ export async function getUserById(id: string) {
     return AppResponseHandler.success(user);
   } catch (error) {
     console.error("Error fetching user:", error);
-    return AppResponseHandler.error("Failed to fetch user");
+    return AppResponseHandler.error("Failed to fetch user", 500);
   }
 }
 
@@ -200,13 +200,13 @@ export async function updateUser(
     return AppResponseHandler.success(updatedUser);
   } catch (error) {
     console.error("Error updating user:", error);
-    return AppResponseHandler.error("Failed to update user");
+    return AppResponseHandler.error("Failed to update user", 500);
   }
 }
 
 // Helper function to get current session
 async function getCurrentSession() {
-  const headersList = headers();
+  const headersList = await headers();
   return await auth.api.getSession({
     headers: headersList,
   });

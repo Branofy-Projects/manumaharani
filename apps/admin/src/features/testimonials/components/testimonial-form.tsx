@@ -20,7 +20,7 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { ImagesArraySchema } from '@/lib/image-schema';
 import { uploadFilesWithProgress } from '@/lib/upload-files';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { zodResolver } from '@/lib/zod-resolver';
 import { createImages } from '@repo/actions/images.actions';
 import { createTestimonial, updateTestimonial } from '@repo/actions';
 import type { TTestimonial } from "@repo/db";

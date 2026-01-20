@@ -11,13 +11,11 @@ export const getAmenities = async () => {
 
   return await safeDbQuery(
     async () => {
-      return await db.query.Amenities.findMany({
-        orderBy: (amenities, { asc }) => [asc(amenities.label)],
-      });
+      return await db.select().from(Amenities).orderBy(Amenities.label);
     },
     [],
     "amenities",
-    "findMany query"
+    "select query"
   );
 };
 
@@ -62,13 +60,11 @@ export const getPolicies = async () => {
 
   return await safeDbQuery(
     async () => {
-      return await db.query.Policies.findMany({
-        orderBy: (policies, { asc }) => [asc(policies.label)],
-      });
+      return await db.select().from(Policies).orderBy(Policies.label);
     },
     [],
     "policies",
-    "findMany query"
+    "select query"
   );
 };
 
@@ -122,11 +118,11 @@ export const getFaqs = async () => {
 
   return await safeDbQuery(
     async () => {
-      return await db.query.Faqs.findMany();
+      return await db.select().from(Faqs);
     },
     [],
     "faqs",
-    "findMany query"
+    "select query"
   );
 };
 

@@ -12,7 +12,6 @@ type TGetRoomsFilters = {
   page?: number;
   limit?: number;
   status?: "available" | "occupied" | "maintenance" | "blocked";
-  resort_id?: number;
   room_type_id?: number;
 };
 

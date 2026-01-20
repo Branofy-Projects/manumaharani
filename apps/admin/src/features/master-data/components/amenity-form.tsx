@@ -12,7 +12,7 @@ import {
     Form, FormControl, FormField, FormItem, FormLabel, FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { zodResolver } from '@/lib/zod-resolver';
 import { createAmenity, updateAmenity } from '@repo/actions';
 import type { TAmenity } from "@repo/db";
 

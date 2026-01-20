@@ -7,6 +7,8 @@ import { calculateReadTime } from "@/lib/utils";
 
 import { RelatedPostsSuspense } from "./components/RelatesPosts";
 
+export const dynamic = 'force-dynamic';
+
 export default async function BlogPost({
   params,
 }: PageProps<"/blogs/[blog-slug]">) {

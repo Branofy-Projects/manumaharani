@@ -12,7 +12,6 @@ type TGetRoomTypesFilters = {
   page?: number;
   limit?: number;
   status?: "active" | "inactive";
-  resort_id?: number;
 };
 
 export const getRoomTypes = async (filters: TGetRoomTypesFilters = {}) => {
@@ -28,10 +27,6 @@ export const getRoomTypes = async (filters: TGetRoomTypesFilters = {}) => {
 
   if (filters.status) {
     conditions.push(eq(RoomTypes.status, filters.status));
-  }
-
-  if (filters.resort_id) {
-    conditions.push(eq(RoomTypes.resort_id, filters.resort_id));
   }
 
   const where = conditions.length > 0 ? and(...conditions) : undefined;

@@ -7,8 +7,14 @@ WORKDIR /app
 RUN corepack enable
 
 # Copy root package files
-COPY package.json yarn.lock .yarnrc.yml ./
-COPY .yarn ./.yarn
+COPY package.json ./
+# Create .yarnrc.yml (required for Yarn 4 with nodeLinker: node-modules)
+# This file may not exist in the repo, so we create it with the required config
+RUN echo "nodeLinker: node-modules" > .yarnrc.yml
+# .yarn directory is optional - Corepack provides Yarn
+# Create empty .yarn directory (Yarn will create it during install if needed)
+RUN mkdir -p .yarn
+# yarn.lock is optional with Yarn 4 - Yarn will generate it if needed
 
 # Copy workspace package files
 COPY apps/admin/package.json ./apps/admin/
@@ -30,14 +36,18 @@ RUN corepack enable
 
 # Copy dependencies from deps stage
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/.yarn ./.yarn
+# .yarn directory is optional - create it if needed (Yarn will populate during install)
+RUN mkdir -p .yarn
 COPY --from=deps /app/apps/admin/node_modules ./apps/admin/node_modules
 COPY --from=deps /app/packages ./packages
+# Copy .yarnrc.yml from deps stage (created there if it didn't exist in repo)
+COPY --from=deps /app/.yarnrc.yml ./.yarnrc.yml
 
 # Copy source code
-COPY package.json yarn.lock .yarnrc.yml turbo.json ./
+COPY package.json turbo.json ./
 COPY apps/admin ./apps/admin
 COPY packages ./packages
+# yarn.lock is optional with Yarn 4 - Yarn will generate it if needed
 
 # Set environment variables for build
 ENV NEXT_TELEMETRY_DISABLED=1

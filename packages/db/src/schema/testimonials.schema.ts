@@ -28,6 +28,7 @@ export const Testimonials = pgTable(
       onDelete: "set null",
     }),
 
+    comment: text("comment"),
     content: text("content").notNull(),
     rating: integer("rating").notNull(),
     title: text("title"),

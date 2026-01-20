@@ -2,6 +2,8 @@ import { getBlogs } from "@repo/actions/blogs.actions";
 
 import { BlogCard } from "@/components/Blogs/BlogCard";
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   description: "Read the latest blog posts from ManuMaharani Jungle Resort.",
   title: "Blog Posts | ManuMaharani",
