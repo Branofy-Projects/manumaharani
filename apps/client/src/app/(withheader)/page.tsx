@@ -16,7 +16,7 @@ export default function Home() {
     <main>
       <HomeHeroSection />
       <SectionShortcuts />
-      <AboutSection />
+      {/* <AboutSection /> */}
       <FeaturedOffers />
       <AccommodationsCarousel />
       <FineDiningSection />

@@ -6,32 +6,34 @@ import {
   SparklesIcon,
   Squares2X2Icon,
 } from "@heroicons/react/24/outline";
+import { GemIcon, PhoneIcon, UtensilsIcon } from "lucide-react";
 import React from "react";
+import { MdCelebration } from "react-icons/md";
 
 const shortcuts = [
   {
-    icon: MapPinIcon,
-    label: "LOCATION",
+    icon: PhotoIcon,
+    label: "PHOTOS & VIDEOS",
   },
   {
     icon: BuildingLibraryIcon,
     label: "ACCOMMODATIONS",
   },
   {
-    icon: PhotoIcon,
-    label: "PHOTOS & VIDEOS",
-  },
-  {
-    icon: Squares2X2Icon,
-    label: "FACILITIES & AMENITIES",
+    icon: GemIcon,
+    label: "WEDDING",
   },
   {
     icon: BuildingStorefrontIcon,
     label: "DINING",
   },
   {
-    icon: SparklesIcon,
-    label: "SPA",
+    icon: BuildingStorefrontIcon,
+    label: "MICE",
+  },
+  {
+    icon: PhoneIcon,
+    label: "CONTACT US",
   },
 ];
 

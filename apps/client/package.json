@@ -14,6 +14,7 @@
   "@heroicons/react": "^2.2.0",
   "@radix-ui/react-label": "^2.1.7",
   "@radix-ui/react-popover": "^1.1.15",
+  "@repo/actions": "*",
   "clsx": "^2.1.1",
   "lucide-react": "^0.555.0",
   "next": "^15.5.4",
