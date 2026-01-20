@@ -59,7 +59,6 @@ export const getTestimonials = async (filters: TGetTestimonialsFilters = {}) => 
         offset,
         with: {
           guestAvatar: true,
-          resort: true,
           user: true,
         },
         orderBy: (testimonials, { desc }) => [desc(testimonials.created_at)],
@@ -84,7 +83,6 @@ export const getTestimonialById = async (id: number) => {
       where: eq(Testimonials.id, id),
       with: {
         guestAvatar: true,
-        resort: true,
         user: true,
       },
     });

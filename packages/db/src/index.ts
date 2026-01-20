@@ -77,9 +77,48 @@ export type {
   TNewAmenity,
 } from "./schema/amenities.schema";
 
+export type {
+  TPolicyBase,
+  TInsertPolicy,
+  TNewPolicy,
+} from "./schema/policies.schema";
+
 export type { TFaqBase, TInsertFaq, TNewFaq } from "./schema/faqs.schema";
 
 export type { TImage, TNewImage } from "./schema/images.schema";
+
+export type { TNewGallery } from "./schema/gallery.schema";
+
+export type {
+  TNewRoomType,
+} from "./schema/room-types.schema";
+
+export type {
+  TNewRoom,
+} from "./schema/rooms.schema";
+
+export type {
+  TNewTestimonial,
+} from "./schema/testimonials.schema";
+
+// Blog and Related Types
+export type {
+  TAmenity,
+  TBlog,
+  TBlogImage,
+  TBooking,
+  TBookingWithDetails,
+  TFaq,
+  TGallery,
+  TPolicy,
+  TRoom,
+  TRoomType,
+  TRoomTypeAmenity,
+  TRoomTypeFaq,
+  TRoomTypeImage,
+  TRoomTypePolicy,
+  TTestimonial,
+} from "./schema/types.schema";
 
 /**
  * --------------------------------------- Export Drizzle Utilities ---------------------------------------
@@ -203,7 +242,24 @@ const getDatabaseUrl = () => {
   return url;
 };
 
-export const db = drizzle(getDatabaseUrl(), { schema });
+// Lazy initialization of database connection
+type DrizzleDB = ReturnType<typeof drizzle<typeof schema>>;
+
+let _db: DrizzleDB | null = null;
+
+const getDb = (): DrizzleDB => {
+  if (!_db) {
+    _db = drizzle(getDatabaseUrl(), { schema });
+  }
+  return _db;
+};
+
+// Export db as a proxy that lazily initializes the connection
+export const db = new Proxy({} as DrizzleDB, {
+  get(_target, prop) {
+    return getDb()[prop as keyof DrizzleDB];
+  },
+});
 
 // Export utilities
 export * from "./utils/file-utils";

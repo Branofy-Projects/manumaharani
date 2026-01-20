@@ -6,6 +6,7 @@ export const policyKindEnum = pgEnum("policy_kind", ["include", "exclude"]);
 export const Policies = pgTable(
   "policies",
   {
+    description: text("description"),
     id: serial("id").primaryKey(),
     kind: policyKindEnum("kind").notNull(),
     label: text("label").notNull(),

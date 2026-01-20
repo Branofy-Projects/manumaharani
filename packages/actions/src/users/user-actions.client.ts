@@ -60,7 +60,7 @@ async function requireSuperAdmin() {
   }
 }
 
-export const createUser = async (data: TNewUser) => {
+export const createUser = async (data: TNewUser & { password?: string }) => {
   await requireSuperAdmin();
 
   try {
@@ -77,14 +77,14 @@ export const createUser = async (data: TNewUser) => {
       },
     });
 
-    if (!result?.data?.user) {
+    if (!result?.user) {
       throw new Error("Failed to create user");
     }
 
-    return AppResponseHandler.success(result.data.user);
+    return AppResponseHandler.success(result.user);
   } catch (error) {
     console.error("Error creating user:", error);
-    return AppResponseHandler.error("Failed to create user");
+    return AppResponseHandler.error("Failed to create user", 500);
   }
 };
 
@@ -120,27 +120,23 @@ export const updateUser = async (
     return AppResponseHandler.success(updatedUser);
   } catch (error) {
     console.error("Error updating user:", error);
-    return AppResponseHandler.error("Failed to update user");
+    return AppResponseHandler.error("Failed to update user", 500);
   }
 };
 
 export const deleteUser = async (id: string) => {
-  const token = await auth.api.getAccessToken();
   await requireSuperAdmin();
   await canModifyUser(id);
 
   try {
-    // Delete user using better-auth API
-    await auth.api.deleteUser({
-      body: { token },
-    });
-
-    // Also delete from our database directly
+    // Delete user from database directly
+    // Note: better-auth's deleteUser API is for self-deletion only (requires token)
+    // For admin deletion, we delete directly from the database
     await db.delete(schema.Users).where(eq(schema.Users.id, id));
 
     return AppResponseHandler.success({ message: "User deleted successfully" });
   } catch (error) {
     console.error("Error deleting user:", error);
-    return AppResponseHandler.error("Failed to delete user");
+    return AppResponseHandler.error("Failed to delete user", 500);
   }
 };

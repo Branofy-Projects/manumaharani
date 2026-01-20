@@ -92,7 +92,7 @@ export const getBlogs = async (filters: TGetBlogsFilters = {}) => {
   };
 };
 
-export const getBlogBySlug = async (slug: string) => {
+export const getBlogBySlug = async (slug: string): Promise<TBlog | undefined> => {
   return getOrSet(
     () =>
       db.query.Blogs.findFirst({
@@ -105,7 +105,7 @@ export const getBlogBySlug = async (slug: string) => {
             with: { image: true },
           },
         },
-      }),
+      }) as Promise<TBlog | undefined>,
     {
       key: await blogBySlugKey(slug),
     }
@@ -115,17 +115,22 @@ export const getBlogBySlug = async (slug: string) => {
 export const getRelatedPosts = async (
   category: TBlogCategory,
   limit: number = 3
-) => {
+): Promise<TBlog[]> => {
   return db.query.Blogs.findMany({
     limit,
     orderBy: (blogs, { desc }) => [desc(blogs.published_at)],
     where: and(eq(Blogs.category, category), eq(Blogs.status, "published")),
     with: {
+      author: true,
       featuredImage: true,
+      images: {
+        orderBy: (images, { asc }) => [asc(images.order)],
+        with: { image: true },
+      },
     },
-  });
+  }) as Promise<TBlog[]>;
 };
-export const getFeaturedBlogs = async (limit: number = 3) => {
+export const getFeaturedBlogs = async (limit: number = 3): Promise<TBlog[]> => {
   return getOrSet(
     () =>
       db!.query.Blogs.findMany({
@@ -135,8 +140,12 @@ export const getFeaturedBlogs = async (limit: number = 3) => {
         with: {
           author: true,
           featuredImage: true,
+          images: {
+            orderBy: (images, { asc }) => [asc(images.order)],
+            with: { image: true },
+          },
         },
-      }),
+      }) as Promise<TBlog[]>,
     {
       key: await featuredBlogsKey(),
     }
@@ -165,7 +174,7 @@ export const updateBlog = async (id: number, data: Partial<TNewBlog>) => {
   return updated;
 };
 
-export const getBlogById = async (id: number) => {
+export const getBlogById = async (id: number): Promise<TBlog | undefined> => {
   return db.query.Blogs.findFirst({
     where: eq(Blogs.id, id),
     with: {
@@ -176,7 +185,7 @@ export const getBlogById = async (id: number) => {
         with: { image: true },
       },
     },
-  });
+  }) as Promise<TBlog | undefined>;
 };
 
 export const incrementBlogViewCount = async (id: number) => {

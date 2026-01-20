@@ -371,7 +371,7 @@ export function useAuth(): UseAuthReturn {
       case "super_admin":
         return user.userRole === "super_admin";
       case "user":
-        return true; // All authenticated users have user access here
+        return true; // All authenticated users have user access 
       default:
         return false;
     }

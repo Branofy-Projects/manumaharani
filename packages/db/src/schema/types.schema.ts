@@ -6,6 +6,11 @@ import type { TFaqBase } from "./faqs.schema";
 import type { TGalleryBase } from "./gallery.schema";
 import type { TImage } from "./images.schema";
 import type { TPolicyBase } from "./policies.schema";
+
+// Simple types without relations
+export type TAmenity = TAmenityBase;
+export type TFaq = TFaqBase;
+export type TPolicy = TPolicyBase;
 import type {
   TRoomTypeAmenityBase,
   TRoomTypeBase,

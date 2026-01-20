@@ -2,6 +2,7 @@ import { pgTable, serial, text } from 'drizzle-orm/pg-core';
 import { createInsertSchema } from 'drizzle-zod';
 
 export const Amenities = pgTable("amenities", {
+  description: text("description"),
   icon: text("icon").notNull(),
   id: serial("id").primaryKey(),
   label: text("label").notNull(),

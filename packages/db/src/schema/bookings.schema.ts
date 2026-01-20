@@ -2,6 +2,7 @@ import {
     date, index, integer, numeric, pgEnum, pgTable, serial, text, timestamp, varchar
 } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+import { z } from 'zod';
 
 import { Users } from './auth.schema';
 import { RoomTypes } from './room-types.schema';
@@ -144,16 +145,12 @@ export const BookingPayments = pgTable(
 );
 
 export const insertBookingSchema = createInsertSchema(Bookings, {
-  guest_email: (guest_email) => guest_email.email("Invalid email address"),
-  guest_name: (guest_name) => guest_name.min(1, "Guest name is required"),
-  guest_phone: (guest_phone) =>
-    guest_phone.min(10, "Phone number must be at least 10 digits"),
-  number_of_adults: (number_of_adults) =>
-    number_of_adults.min(1, "At least 1 adult required"),
-  number_of_nights: (number_of_nights) =>
-    number_of_nights.min(1, "Must book at least 1 night"),
-  number_of_rooms: (number_of_rooms) =>
-    number_of_rooms.min(1, "At least 1 room required"),
+  guest_email: z.string().email("Invalid email address"),
+  guest_name: z.string().min(1, "Guest name is required"),
+  guest_phone: z.string().min(10, "Phone number must be at least 10 digits"),
+  number_of_adults: z.coerce.number().min(1, "At least 1 adult required"),
+  number_of_nights: z.coerce.number().min(1, "Must book at least 1 night"),
+  number_of_rooms: z.coerce.number().min(1, "At least 1 room required"),
 });
 
 export const selectBookingSchema = createSelectSchema(Bookings);

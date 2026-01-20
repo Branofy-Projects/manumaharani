@@ -63,7 +63,6 @@ export const getGallery = async (filters: TGetGalleryFilters = {}) => {
         with: {
           image: true,
           videoThumbnail: true,
-          resort: true,
         },
         orderBy: (gallery, { desc }) => [desc(gallery.created_at)],
       });
@@ -88,7 +87,6 @@ export const getGalleryById = async (id: number) => {
       with: {
         image: true,
         videoThumbnail: true,
-        resort: true,
       },
     });
   } catch (error) {
