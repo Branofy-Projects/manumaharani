@@ -1,5 +1,5 @@
 "use client";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from "@/lib/zod-resolver";
 import { createBlog, updateBlog } from "@repo/actions";
 import { createImages } from "@repo/actions/images.actions";
 import { blogStatusEnum } from "@repo/db/schema/blogs.schema";

@@ -1,9 +1,8 @@
 "use client";
 
+import { authClient, authHelpers } from '@repo/auth';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-
-import { authClient, authHelpers } from '@repo/auth';
 
 export interface AuthSession {
   expiresAt: Date;
@@ -99,7 +98,7 @@ export function useAuth(): UseAuthReturn {
         const sessionData = await authClient.getSession();
         if (sessionData?.data?.session && sessionData?.data?.user) {
           setSession(sessionData.data.session);
-          setUser(sessionData.data.user);
+          setUser(sessionData.data.user as AuthUser);
         }
       } catch (error) {
         console.error("Failed to initialize auth:", error);
@@ -112,19 +111,20 @@ export function useAuth(): UseAuthReturn {
   }, []);
 
   // Listen for auth state changes
-  useEffect(() => {
-    const unsubscribe = authClient.onSessionChange((session, user) => {
-      setSession(session);
-      setUser(user);
-      setIsLoading(false);
-    });
+  // Note: onSessionChange is not available in the current auth library version
+  // useEffect(() => {
+  //   const unsubscribe = authClient.onSessionChange((session, user) => {
+  //     setSession(session);
+  //     setUser(user as AuthUser);
+  //     setIsLoading(false);
+  //   });
 
-    return () => {
-      if (typeof unsubscribe === "function") {
-        unsubscribe();
-      }
-    };
-  }, []);
+  //   return () => {
+  //     if (typeof unsubscribe === "function") {
+  //       unsubscribe();
+  //     }
+  //   };
+  // }, []);
 
   // Authentication methods
   const signIn = async (email: string, password: string) => {
@@ -135,9 +135,16 @@ export function useAuth(): UseAuthReturn {
         password,
       });
 
-      if (result.data?.session && result.data?.user) {
-        setSession(result.data.session);
-        setUser(result.data.user);
+      if (result.data?.user) {
+        // Create session from token
+        const sessionData: AuthSession = {
+          expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+          id: result.data.token || '',
+          token: result.data.token || '',
+          userId: result.data.user.id,
+        };
+        setSession(sessionData);
+        setUser(result.data.user as AuthUser);
         toast.success("Signed in successfully!");
       }
 
@@ -223,8 +230,10 @@ export function useAuth(): UseAuthReturn {
   const updateUser = async (data: UpdateUserData) => {
     try {
       const result = await authClient.updateUser(data);
-      if (result.data?.user) {
-        setUser(result.data.user);
+      // Refetch session to get updated user
+      const sessionData = await authClient.getSession();
+      if (sessionData?.data?.user) {
+        setUser(sessionData.data.user as AuthUser);
         toast.success("Profile updated successfully!");
       }
       return result;
@@ -288,7 +297,7 @@ export function useAuth(): UseAuthReturn {
   const resetPassword = async (token: string, password: string) => {
     try {
       const result = await authClient.resetPassword({
-        password,
+        newPassword: password,
         token,
       });
 
@@ -307,8 +316,10 @@ export function useAuth(): UseAuthReturn {
   const verifyEmail = async (token: string) => {
     try {
       const result = await authClient.verifyEmail({ token });
-      if (result.data?.user) {
-        setUser(result.data.user);
+      // Refetch session to get updated user
+      const sessionData = await authClient.getSession();
+      if (sessionData?.data?.user) {
+        setUser(sessionData.data.user as AuthUser);
         toast.success("Email verified successfully!");
       }
       return result;
@@ -321,7 +332,10 @@ export function useAuth(): UseAuthReturn {
 
   const resendVerificationEmail = async () => {
     try {
-      const result = await authClient.sendVerificationEmail();
+      if (!user?.email) {
+        throw new Error("No user email found");
+      }
+      const result = await authClient.sendVerificationEmail({ email: user.email });
       if (result.data) {
         toast.success("Verification email sent!");
       }
@@ -357,7 +371,7 @@ export function useAuth(): UseAuthReturn {
       case "super_admin":
         return user.userRole === "super_admin";
       case "user":
-        return true; // All authenticated users have user access
+        return true; // All authenticated users have user access here
       default:
         return false;
     }

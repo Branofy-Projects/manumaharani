@@ -30,7 +30,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { ImagesArraySchema } from "@/lib/image-schema";
 import { uploadFilesWithProgress } from "@/lib/upload-files";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from "@/lib/zod-resolver";
 import { createImages } from "@repo/actions/images.actions";
 import { createRoom, updateRoom, updateRoomImages } from "@repo/actions";
 import { getRoomTypes } from "@repo/actions/room-types.actions";

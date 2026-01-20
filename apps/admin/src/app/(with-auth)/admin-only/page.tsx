@@ -1,6 +1,9 @@
 import { RoleGuard, useRoleCheck } from '@/components/auth/role-guard';
 import { requireAdmin } from '@/lib/auth-utils';
 
+// Force dynamic rendering since this page uses headers() for authentication
+export const dynamic = 'force-dynamic';
+
 // This page requires admin role on the server side
 export default async function AdminOnlyPage() {
   // Server-side role check - will redirect if not admin

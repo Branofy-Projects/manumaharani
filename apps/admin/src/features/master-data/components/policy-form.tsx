@@ -15,14 +15,14 @@ import { Input } from '@/components/ui/input';
 import {
     Select, SelectContent, SelectItem, SelectTrigger, SelectValue
 } from '@/components/ui/select';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { createPolicy, updatePolicy } from '@repo/actions';
 import type { TPolicy } from "@repo/db";
+import { zodResolver } from '@/lib/zod-resolver';
 
 const formSchema = z.object({
   label: z.string().min(1, "Label is required.").max(255),
   kind: z.enum(["include", "exclude"], {
-    required_error: "Policy type is required.",
+    message: "Policy type is required.",
   }),
 });
 

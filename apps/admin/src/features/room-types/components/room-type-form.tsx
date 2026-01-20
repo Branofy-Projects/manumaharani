@@ -17,9 +17,9 @@ import {
     Select, SelectContent, SelectItem, SelectTrigger, SelectValue
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { createRoomType, updateRoomType } from '@repo/actions';
 import type { TRoomType } from "@repo/db";
+import { zodResolver } from '@/lib/zod-resolver';
 
 const BED_TYPES = [
   { value: "single", label: "Single" },
@@ -33,10 +33,10 @@ const formSchema = z.object({
   name: z.string().min(1, "Room type name is required.").max(255),
   description: z.string().min(10, "Description is required."),
   bed_type: z.enum(["single", "double", "queen", "king", "twin"]),
-  max_occupancy: z.coerce.number().min(1, "Max occupancy must be at least 1").max(20),
-  number_of_beds: z.coerce.number().min(1, "Number of beds must be at least 1"),
-  size_sqft: z.coerce.number().min(1, "Room size must be at least 1 sq ft"),
-  base_price: z.coerce.number().min(0, "Base price must be 0 or greater"),
+  max_occupancy: z.number().min(1, "Max occupancy must be at least 1").max(20),
+  number_of_beds: z.number().min(1, "Number of beds must be at least 1"),
+  size_sqft: z.number().min(1, "Room size must be at least 1 sq ft"),
+  base_price: z.number().min(0, "Base price must be 0 or greater"),
 });
 
 type TRoomTypeFormProps = {

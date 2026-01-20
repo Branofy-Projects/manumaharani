@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { zodResolver } from '@/lib/zod-resolver';
 import { IconAlertTriangle, IconTrash } from '@tabler/icons-react';
 
 import { profileSchema } from '../utils/form-schema';
