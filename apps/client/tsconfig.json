@@ -1,24 +1,24 @@
 {
-  "extends": "@repo/typescript-config/nextjs.json",
-  "compilerOptions": {
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"],
-      "@repo/actions/*": ["../../packages/actions/src/*"]
-    }
-  },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "next-env.d.ts",
-    "next.config.js",
-    ".next/types/**/*.ts",
-    "../../packages/actions/src/bookings.actions.ts"
+ "extends": "@repo/typescript-config/nextjs.json",
+ "compilerOptions": {
+  "plugins": [
+   {
+    "name": "next"
+   }
   ],
-  "exclude": ["node_modules"]
+  "baseUrl": ".",
+  "paths": {
+   "@/*": ["./src/*"],
+   "@repo/actions/*": ["../../packages/actions/src/*"]
+  }
+ },
+ "include": [
+  "**/*.ts",
+  "**/*.tsx",
+  "next-env.d.ts",
+  "next.config.js",
+  ".next/types/**/*.ts",
+  "../../packages/actions/src/*.ts"
+ ],
+ "exclude": ["node_modules"]
 }
