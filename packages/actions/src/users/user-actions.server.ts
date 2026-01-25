@@ -1,3 +1,4 @@
+"use server";
 import { auth } from "@repo/auth/auth.config";
 import { and, count, db, eq, like, or, Users } from "@repo/db";
 import { headers } from "next/headers";

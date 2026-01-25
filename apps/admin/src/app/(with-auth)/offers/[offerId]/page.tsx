@@ -1,4 +1,4 @@
-import { getOfferById } from "@repo/actions";
+import { getOfferByIdWithDetails } from "@repo/actions/offers.actions";
 import { notFound } from "next/navigation";
 
 import OfferForm from "@/features/offers/components/offer-form";
@@ -9,7 +9,7 @@ export default async function EditOfferPage({
   params: Promise<{ offerId: string }>;
 }) {
   const { offerId } = await params;
-  const offer = await getOfferById(offerId);
+  const offer = await getOfferByIdWithDetails(offerId);
 
   if (!offer) {
     notFound();

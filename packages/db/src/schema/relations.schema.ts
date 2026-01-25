@@ -14,7 +14,7 @@ import {
 import { RoomImages, Rooms } from './rooms.schema';
 import { Testimonials } from './testimonials.schema';
 import { Events } from './events.schema';
-import { Offers } from './offers.schema';
+import { OfferFaqs, OfferHighlights, OfferImages, OfferItinerary, Offers } from './offers.schema';
 
 
 export const roomTypeRelations = relations(RoomTypes, ({ many }) => ({
@@ -186,9 +186,49 @@ export const eventRelations = relations(Events, ({ one }) => ({
   }),
 }));
 
-export const offerRelations = relations(Offers, ({ one }) => ({
+export const offerRelations = relations(Offers, ({ one, many }) => ({
   image: one(Images, {
     fields: [Offers.image],
     references: [Images.id],
+  }),
+  images: many(OfferImages),
+  highlights: many(OfferHighlights),
+  itinerary: many(OfferItinerary),
+  faqs: many(OfferFaqs),
+}));
+
+export const offerImagesRelations = relations(OfferImages, ({ one }) => ({
+  offer: one(Offers, {
+    fields: [OfferImages.offer_id],
+    references: [Offers.id],
+  }),
+  image: one(Images, {
+    fields: [OfferImages.image_id],
+    references: [Images.id],
+  }),
+}));
+
+export const offerHighlightsRelations = relations(OfferHighlights, ({ one }) => ({
+  offer: one(Offers, {
+    fields: [OfferHighlights.offer_id],
+    references: [Offers.id],
+  }),
+}));
+
+export const offerItineraryRelations = relations(OfferItinerary, ({ one }) => ({
+  offer: one(Offers, {
+    fields: [OfferItinerary.offer_id],
+    references: [Offers.id],
+  }),
+}));
+
+export const offerFaqsRelations = relations(OfferFaqs, ({ one }) => ({
+  offer: one(Offers, {
+    fields: [OfferFaqs.offer_id],
+    references: [Offers.id],
+  }),
+  faq: one(Faqs, {
+    fields: [OfferFaqs.faq_id],
+    references: [Faqs.id],
   }),
 }));

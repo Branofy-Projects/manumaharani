@@ -6,7 +6,13 @@ import type { TEventBaser } from "./events.schema";
 import type { TFaqBase } from "./faqs.schema";
 import type { TGalleryBase } from "./gallery.schema";
 import type { TImage } from "./images.schema";
-import type { TOfferBase } from "./offers.schema";
+import type {
+  TOfferBase,
+  TOfferFaqBase,
+  TOfferHighlightBase,
+  TOfferImageBase,
+  TOfferItineraryBase,
+} from "./offers.schema";
 import type { TPolicyBase } from "./policies.schema";
 
 // Simple types without relations
@@ -57,8 +63,29 @@ export type TGallery = {
   videoThumbnail: null | TImage;
 } & TGalleryBase;
 
-export type TOffer = {
+// Offer Types with Relations
+export type TOfferImage = {
   image: TImage;
+} & TOfferImageBase;
+
+export type TOfferHighlight = TOfferHighlightBase;
+
+export type TOfferItinerary = TOfferItineraryBase;
+
+export type TOfferFaq = {
+  faq: TFaqBase;
+} & TOfferFaqBase;
+
+export type TOffer = {
+  image: null | TImage;
+} & TOfferBase;
+
+export type TOfferWithDetails = {
+  faqs: TOfferFaq[];
+  highlights: TOfferHighlight[];
+  image: null | TImage;
+  images: TOfferImage[];
+  itinerary: TOfferItinerary[];
 } & TOfferBase;
 
 export type TPolicy = TPolicyBase;

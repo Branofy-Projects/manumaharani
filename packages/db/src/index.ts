@@ -39,7 +39,16 @@ import {
   galleryTypeEnum,
 } from "./schema/gallery.schema";
 import { Images } from "./schema/images.schema";
-import { Offers } from "./schema/offers.schema";
+import {
+  highlightTypeEnum,
+  offerCategoryEnum,
+  OfferFaqs,
+  OfferHighlights,
+  OfferImages,
+  OfferItinerary,
+  Offers,
+  offerStatusEnum,
+} from "./schema/offers.schema";
 import { Policies, policyKindEnum } from "./schema/policies.schema";
 // Relations
 import * as relations from "./schema/relations.schema";
@@ -111,6 +120,12 @@ export type {
   TBookingWithDetails,
   TFaq,
   TGallery,
+  TOffer,
+  TOfferFaq,
+  TOfferHighlight,
+  TOfferImage,
+  TOfferItinerary,
+  TOfferWithDetails,
   TPolicy,
   TRoom,
   TRoomType,
@@ -147,8 +162,15 @@ export {
   Gallery,
   galleryCategoryEnum,
   galleryTypeEnum,
+  highlightTypeEnum,
   Images,
+  offerCategoryEnum,
+  OfferFaqs,
+  OfferHighlights,
+  OfferImages,
+  OfferItinerary,
   Offers,
+  offerStatusEnum,
   PasswordResetTokens,
   paymentStatusEnum,
   Policies,
@@ -185,6 +207,10 @@ export const schemaWithoutRelations = {
   Faqs,
   Gallery,
   Images,
+  OfferFaqs,
+  OfferHighlights,
+  OfferImages,
+  OfferItinerary,
   Offers,
   PasswordResetTokens,
   Policies,
