@@ -36,6 +36,8 @@ export default async function proxy(request: NextRequest) {
   // Simple session check using cookies
   const hasSession = hasValidSession(request);
 
+  console.log("hasSession",hasSession, "isPublicRoute", pathname,isPublicRoute);
+  
   // If not authenticated and trying to access protected route
   if (!hasSession && !isPublicRoute) {
     const signInUrl = new URL("/sign-in", request.url);

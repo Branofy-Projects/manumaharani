@@ -1,0 +1,2 @@
+ALTER TABLE "events" ALTER COLUMN "image" DROP NOT NULL;--> statement-breakpoint
+ALTER TABLE "events" ADD CONSTRAINT "events_image_images_id_fk" FOREIGN KEY ("image") REFERENCES "public"."images"("id") ON DELETE set null ON UPDATE no action;

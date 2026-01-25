@@ -7,7 +7,7 @@ export function handleDatabaseError(
   error: any,
   tableName: string,
   context: string = "query"
-): { shouldReturn: boolean; isTableMissing: boolean } {
+): { isTableMissing: boolean; shouldReturn: boolean; } {
   const errorMessage = error?.message || String(error) || "";
   const errorString = errorMessage.toLowerCase();
 
@@ -43,8 +43,8 @@ export function handleDatabaseError(
   }
 
   return {
-    shouldReturn: isConnectionError,
     isTableMissing,
+    shouldReturn: isConnectionError,
   };
 }
 
@@ -61,7 +61,9 @@ export async function safeDbQuery<T>(
   try {
     return await queryFn();
   } catch (error: any) {
-    const { shouldReturn, isTableMissing } = handleDatabaseError(
+    console.log("error",error);
+    
+    const { isTableMissing, shouldReturn } = handleDatabaseError(
       error,
       tableName,
       context

@@ -124,7 +124,7 @@ export function ToolbarPlugin() {
           );
           const results = await uploadFilesWithProgress(
             [file],
-            () => {},
+            () => { },
             "/api/v1/upload-image"
           );
           if (results && results[0]) {

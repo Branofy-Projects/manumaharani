@@ -43,7 +43,11 @@ export async function getOrSet<T>(
   }
 
   const data = await compute();
+  console.log("data",data);
+  
   const serialized = serialize(data);
+  console.log("serialized",serialized, !!data);
+  
   if (ttlSeconds && ttlSeconds > 0) {
     await redis.set(key, serialized, { ex: ttlSeconds });
   } else {

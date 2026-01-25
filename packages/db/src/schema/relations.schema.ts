@@ -13,6 +13,8 @@ import {
 } from './room-types.schema';
 import { RoomImages, Rooms } from './rooms.schema';
 import { Testimonials } from './testimonials.schema';
+import { Events } from './events.schema';
+import { Offers } from './offers.schema';
 
 
 export const roomTypeRelations = relations(RoomTypes, ({ many }) => ({
@@ -76,21 +78,21 @@ export const roomTypeFaqsRelations = relations(RoomTypeFaqs, ({ one }) => ({
 
 export const roomRelations = relations(Rooms, ({ many, one }) => ({
   bookings: many(Bookings),
+  images: many(RoomImages),
   roomType: one(RoomTypes, {
     fields: [Rooms.room_type_id],
     references: [RoomTypes.id],
   }),
-  images: many(RoomImages),
 }));
 
 export const roomImagesRelations = relations(RoomImages, ({ one }) => ({
-  room: one(Rooms, {
-    fields: [RoomImages.room_id],
-    references: [Rooms.id],
-  }),
   image: one(Images, {
     fields: [RoomImages.image_id],
     references: [Images.id],
+  }),
+  room: one(Rooms, {
+    fields: [RoomImages.room_id],
+    references: [Rooms.id],
   }),
 }));
 
@@ -177,8 +179,16 @@ export const faqRelations = relations(Faqs, ({ many }) => ({
   roomTypes: many(RoomTypeFaqs),
 }));
 
-export const imageRelations = relations(Images, ({ many }) => ({
-  blogImages: many(BlogImages),
-  roomTypeImages: many(RoomTypeImages),
-  roomImages: many(RoomImages),
+export const eventRelations = relations(Events, ({ one }) => ({
+  image: one(Images, {
+    fields: [Events.image],
+    references: [Images.id],
+  }),
+}));
+
+export const offerRelations = relations(Offers, ({ one }) => ({
+  image: one(Images, {
+    fields: [Offers.image],
+    references: [Images.id],
+  }),
 }));

@@ -2,15 +2,24 @@ import type { TAmenityBase } from "./amenities.schema";
 import type { TUser } from "./auth.schema";
 import type { TBlogBase, TBlogImageBase } from "./blogs.schema";
 import type { TBookingBase, TBookingPaymentBase } from "./bookings.schema";
+import type { TEventBaser } from "./events.schema";
 import type { TFaqBase } from "./faqs.schema";
 import type { TGalleryBase } from "./gallery.schema";
 import type { TImage } from "./images.schema";
+import type { TOfferBase } from "./offers.schema";
 import type { TPolicyBase } from "./policies.schema";
 
 // Simple types without relations
 export type TAmenity = TAmenityBase;
-export type TFaq = TFaqBase;
-export type TPolicy = TPolicyBase;
+export type TBlog = {
+  author: null | TUser;
+  featuredImage: null | TImage;
+  images: TBlogImage[];
+} & TBlogBase;
+// Blog Types with Relations
+export type TBlogImage = {
+  image: TImage;
+} & TBlogImageBase;
 import type {
   TRoomTypeAmenityBase,
   TRoomTypeBase,
@@ -20,17 +29,6 @@ import type {
 } from "./room-types.schema";
 import type { TRoomBase } from "./rooms.schema";
 import type { TTestimonialBase } from "./testimonials.schema";
-
-export type TBlog = {
-  author: null | TUser;
-  featuredImage: null | TImage;
-  images: TBlogImage[];
-} & TBlogBase;
-
-// Blog Types with Relations
-export type TBlogImage = {
-  image: TImage;
-} & TBlogImageBase;
 
 // Booking Types with Relations
 export type TBooking = {
@@ -47,11 +45,23 @@ export type TBookingWithDetails = {
   user: null | TUser;
 } & TBookingBase;
 
+export type TEvent = {
+  image: TImage;
+} & TEventBaser;
+
+export type TFaq = TFaqBase;
+
 // Gallery Types with Relations
 export type TGallery = {
   image: null | TImage;
   videoThumbnail: null | TImage;
 } & TGalleryBase;
+
+export type TOffer = {
+  image: TImage;
+} & TOfferBase;
+
+export type TPolicy = TPolicyBase;
 
 // Room Types with Relations
 export type TRoom = {
@@ -77,6 +87,7 @@ export type TRoomTypeFaq = {
 export type TRoomTypeImage = {
   image: TImage;
 } & TRoomTypeImageBase;
+
 
 export type TRoomTypePolicy = {
   policy: TPolicyBase;

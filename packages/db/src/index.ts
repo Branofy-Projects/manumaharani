@@ -30,6 +30,7 @@ import {
   bookingStatusEnum,
   paymentStatusEnum,
 } from "./schema/bookings.schema";
+import { Events } from "./schema/events.schema";
 import { Faqs } from "./schema/faqs.schema";
 // Gallery Schema
 import {
@@ -38,6 +39,7 @@ import {
   galleryTypeEnum,
 } from "./schema/gallery.schema";
 import { Images } from "./schema/images.schema";
+import { Offers } from "./schema/offers.schema";
 import { Policies, policyKindEnum } from "./schema/policies.schema";
 // Relations
 import * as relations from "./schema/relations.schema";
@@ -58,7 +60,6 @@ import {
   Testimonials,
   testimonialStatusEnum,
 } from "./schema/testimonials.schema";
-
 export type {
   TAccount,
   TNewUser,
@@ -78,9 +79,9 @@ export type {
 } from "./schema/amenities.schema";
 
 export type {
-  TPolicyBase,
   TInsertPolicy,
   TNewPolicy,
+  TPolicyBase,
 } from "./schema/policies.schema";
 
 export type { TFaqBase, TInsertFaq, TNewFaq } from "./schema/faqs.schema";
@@ -141,11 +142,13 @@ export {
   Bookings,
   bookingStatusEnum,
   EmailVerificationTokens,
+  Events,
   Faqs,
   Gallery,
   galleryCategoryEnum,
   galleryTypeEnum,
   Images,
+  Offers,
   PasswordResetTokens,
   paymentStatusEnum,
   Policies,
@@ -178,9 +181,11 @@ export const schemaWithoutRelations = {
   BookingPayments,
   Bookings,
   EmailVerificationTokens,
+  Events,
   Faqs,
   Gallery,
   Images,
+  Offers,
   PasswordResetTokens,
   Policies,
   RoomImages,

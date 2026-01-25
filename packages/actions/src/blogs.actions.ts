@@ -97,6 +97,7 @@ export const getBlogs = async (filters: TGetBlogsFilters = {}, orderBy: TGetBlog
 };
 
 export const getBlogBySlug = async (slug: string): Promise<TBlog | undefined> => {
+  
   return getOrSet(
     () =>
       db.query.Blogs.findFirst({
@@ -156,10 +157,17 @@ export const getFeaturedBlogs = async (limit: number = 3): Promise<TBlog[]> => {
   );
 };
 
+const revalidateBlog = async (slug: string) => {
+  await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/blogs/${slug}`, { cache: 'no-store' })
+};
+
 export const createBlog = async (data: TNewBlog) => {
   const [blog] = await db.insert(Blogs).values(data).returning();
 
   await bumpVersion("blogs");
+  
+  await revalidateBlog(blog.slug);
+
 
   return blog;
 };
@@ -174,6 +182,7 @@ export const updateBlog = async (id: number, data: Partial<TNewBlog>) => {
     .returning();
 
   await bumpVersion("blogs");
+  await revalidateBlog(updated.slug);
 
   return updated;
 };

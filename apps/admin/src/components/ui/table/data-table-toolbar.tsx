@@ -34,6 +34,8 @@ export function DataTableToolbar<TData>({
     () => table.getAllColumns().filter((column) => column.getCanFilter()),
     [table]
   );
+  console.log("columns", table.getAllColumns(), columns);
+
 
   const onReset = React.useCallback(() => {
     table.resetColumnFilters();
@@ -84,21 +86,21 @@ function DataTableToolbarFilter<TData>({
       if (!columnMeta?.variant) return null;
 
       switch (columnMeta.variant) {
-      // case "asyncMultiSelect":
+        // case "asyncMultiSelect":
 
-      // case "asyncSelect":
-      //   return (
-      //     <DataTableAsyncFacetedFilter
-      //       column={column}
-      //       fetchOptions={columnMeta.fetchOptions}
-      //       initialOptions={columnMeta.options}
-      //       mapOptions={columnMeta.mapOptions}
-      //       multiple={columnMeta.variant === "asyncMultiSelect"}
-      //       searchDebounceMs={columnMeta.searchDebounceMs}
-      //       searchOptions={columnMeta.searchOptions}
-      //       title={columnMeta.label ?? column.id}
-      //     />
-      //   );
+        // case "asyncSelect":
+        //   return (
+        //     <DataTableAsyncFacetedFilter
+        //       column={column}
+        //       fetchOptions={columnMeta.fetchOptions}
+        //       initialOptions={columnMeta.options}
+        //       mapOptions={columnMeta.mapOptions}
+        //       multiple={columnMeta.variant === "asyncMultiSelect"}
+        //       searchDebounceMs={columnMeta.searchDebounceMs}
+        //       searchOptions={columnMeta.searchOptions}
+        //       title={columnMeta.label ?? column.id}
+        //     />
+        //   );
 
         case "date":
 

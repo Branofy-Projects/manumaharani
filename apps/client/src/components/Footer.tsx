@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
 
@@ -8,31 +9,90 @@ const columns = [
   {
     heading: "About",
     links: [
-      "About Us",
-      "Four Seasons For Good",
-      "Health and Safety",
-      "Careers",
-      "Contact Us",
+      {
+        href: "/about-us",
+        label: "About Us",
+      },
+      {
+        href: "/four-seasons-for-good",
+        label: "Four Seasons For Good",
+      },
+      {
+        href: "/health-and-safety",
+        label: "Health and Safety",
+      },
+      {
+        href: "/careers",
+        label: "Careers",
+      },
+      {
+        href: "/contact-us",
+        label: "Contact Us",
+      },
     ],
   },
   {
     heading: "Reservations",
-    links: ["Request an Invoice", "Find a Reservation", "Email Preferences"],
+    links: [
+      {
+        href: "/request-an-invoice",
+        label: "Request an Invoice",
+      },
+      {
+        href: "/find-a-reservation",
+        label: "Find a Reservation",
+      },
+    ]
   },
   {
     heading: "News",
-    links: ["Press Room", "New Openings", "Magazine", "Newsletter"],
+    links: [
+      {
+        href: "/press-room",
+        label: "Press Room",
+      },
+      {
+        href: "/new-openings",
+        label: "New Openings",
+      },
+      {
+        href: "/magazine",
+        label: "Magazine",
+      },
+      {
+        href: "/newsletter",
+        label: "Newsletter",
+      },
+    ]
   },
   {
     heading: "More",
     links: [
-      "Private Jet",
-      "Yachts",
-      "Residences",
-      "Villa & Residence Rentals",
-      "Extraordinary Experiences",
-      "Gift Cards",
-    ],
+      {
+        href: "/private-jet",
+        label: "Private Jet",
+      },
+      {
+        href: "/yachts",
+        label: "Yachts",
+      },
+      {
+        href: "/residences",
+        label: "Residences",
+      },
+      {
+        href: "/villa-and-residence-rentals",
+        label: "Villa & Residence Rentals",
+      },
+      {
+        href: "/extraordinary-experiences",
+        label: "Extraordinary Experiences",
+      },
+      {
+        href: "/gift-cards",
+        label: "Gift Cards",
+      },
+    ]
   },
 ];
 
@@ -70,13 +130,13 @@ export default function Footer() {
             </h3>
             <ul className="space-y-3">
               {col.links.map((link) => (
-                <li key={link}>
-                  <a
+                <li key={link.label}>
+                  <Link
                     className="uppercase text-xs tracking-widest font-semibold hover:text-foreground/70 transition"
-                    href="#"
+                    href={link.href}
                   >
-                    {link}
-                  </a>
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>

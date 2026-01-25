@@ -1,7 +1,6 @@
+import { Accounts, db, Sessions, Users, Verifications } from '@repo/db';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-
-import { Accounts, db, Sessions, Users, Verifications } from '@repo/db';
 
 // Simple email sending function placeholder
 async function sendEmail({
@@ -26,6 +25,7 @@ async function sendEmail({
 
 // Better Auth configuration
 export const auth = betterAuth({
+  secret: process.env.BETTER_AUTH_SECRET || "",
   // Database configuration with Drizzle adapter
   database: drizzleAdapter(db, {
     provider: "pg",

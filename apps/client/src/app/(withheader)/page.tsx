@@ -19,9 +19,9 @@ export default function Home() {
       {/* <AboutSection /> */}
       <FeaturedOffers />
       <AccommodationsCarousel />
-      <FineDiningSection />
+      {/* <FineDiningSection /> */}
       {/* <HomeExperiencesSection /> */}
-      <WeddingAiManuMaharani />
+      {/* <WeddingAiManuMaharani /> */}
       <JimCorbett />
       <NearbyAttractions />
       <HomeInstaImageSection />
