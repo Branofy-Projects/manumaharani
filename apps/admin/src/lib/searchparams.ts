@@ -10,14 +10,14 @@ import {
 import { userRoles } from "../../../../packages/db/src";
 
 export const searchParams = {
+  category: parseAsString,
   page: parseAsInteger.withDefault(1),
+  payment_status: parseAsString,
   perPage: parseAsInteger.withDefault(10),
   q: parseAsString,
-  status: parseAsString,
-  payment_status: parseAsString,
-  category: parseAsString,
-  type: parseAsString,
   roles: parseAsArrayOf(parseAsStringEnum(userRoles.enumValues)),
+  status: parseAsString,
+  type: parseAsString,
   // advanced filter
   // filters: getFiltersStateParser().withDefault([]),
   // joinOperator: parseAsStringEnum(['and', 'or']).withDefault('and')

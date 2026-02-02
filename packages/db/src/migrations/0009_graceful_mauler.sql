@@ -1,0 +1,1 @@
+ALTER TABLE "offers" ADD COLUMN "active" boolean DEFAULT false NOT NULL;

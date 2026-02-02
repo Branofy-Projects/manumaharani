@@ -1,5 +1,5 @@
 "use server";
-import { and, count, eq, ilike, notInArray } from "@repo/db";
+import { and, asc, count, desc, eq, ilike, notInArray } from "@repo/db";
 import { Blogs, db } from "@repo/db";
 
 import { bumpVersion, getOrSet } from "./libs/cache";
@@ -20,7 +20,11 @@ type TGetBlogsFilters = {
   status?: "archived" | "draft" | "published";
 };
 
-export const getBlogs = async (filters: TGetBlogsFilters = {}) => {
+type TGetBlogsOrderBy = {
+  published_at?: 'asc' | 'desc';
+};
+
+export const getBlogs = async (filters: TGetBlogsFilters = {}, orderBy: TGetBlogsOrderBy = {}) => {
   const conditions = [];
 
   if (filters.search) {
@@ -50,7 +54,7 @@ export const getBlogs = async (filters: TGetBlogsFilters = {}) => {
       const result = await db
         .select({ count: count() })
         .from(Blogs)
-        .where(where);
+        .where(where).orderBy(orderBy.published_at === 'asc' ? asc(Blogs.published_at) : desc(Blogs.published_at));
       return result[0]?.count ?? 0;
     },
     0,
@@ -93,6 +97,7 @@ export const getBlogs = async (filters: TGetBlogsFilters = {}) => {
 };
 
 export const getBlogBySlug = async (slug: string): Promise<TBlog | undefined> => {
+  
   return getOrSet(
     () =>
       db.query.Blogs.findFirst({
@@ -152,10 +157,17 @@ export const getFeaturedBlogs = async (limit: number = 3): Promise<TBlog[]> => {
   );
 };
 
+const revalidateBlog = async (slug: string) => {
+  await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/blogs/${slug}`, { cache: 'no-store' })
+};
+
 export const createBlog = async (data: TNewBlog) => {
   const [blog] = await db.insert(Blogs).values(data).returning();
 
   await bumpVersion("blogs");
+  
+  await revalidateBlog(blog.slug);
+
 
   return blog;
 };
@@ -170,6 +182,7 @@ export const updateBlog = async (id: number, data: Partial<TNewBlog>) => {
     .returning();
 
   await bumpVersion("blogs");
+  await revalidateBlog(updated.slug);
 
   return updated;
 };

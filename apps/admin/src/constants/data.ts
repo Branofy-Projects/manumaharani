@@ -24,8 +24,6 @@ export const navItems: NavItem[] = [
   {
     icon: "settings",
     isActive: true,
-    title: "Accommodations",
-    url: "#",
     items: [
       {
         icon: "product",
@@ -46,12 +44,12 @@ export const navItems: NavItem[] = [
         url: "/bookings",
       },
     ],
+    title: "Accommodations",
+    url: "#",
   },
   {
     icon: "post",
     isActive: true,
-    title: "Content",
-    url: "#",
     items: [
       {
         icon: "post",
@@ -72,12 +70,32 @@ export const navItems: NavItem[] = [
         url: "/testimonials",
       },
     ],
+    title: "Content",
+    url: "#",
+  },
+  {
+    icon: "kanban",
+    isActive: true,
+    items: [
+      {
+        icon: "tag",
+        shortcut: ["o", "f"],
+        title: "Offers",
+        url: "/offers",
+      },
+      {
+        icon: "calendar",
+        shortcut: ["e", "v"],
+        title: "Events",
+        url: "/events",
+      },
+    ],
+    title: "Marketing",
+    url: "#",
   },
   {
     icon: "settings",
     isActive: true,
-    title: "Master Data",
-    url: "#",
     items: [
       {
         icon: "media",
@@ -98,12 +116,12 @@ export const navItems: NavItem[] = [
         url: "/faqs",
       },
     ],
+    title: "Master Data",
+    url: "#",
   },
   {
     icon: "user",
     isActive: true,
-    title: "Users",
-    url: "#",
     items: [
       {
         icon: "user",
@@ -112,12 +130,12 @@ export const navItems: NavItem[] = [
         url: "/user",
       },
     ],
+    title: "Users",
+    url: "#",
   },
   {
     icon: "billing",
     isActive: true,
-    title: "Account",
-    url: "#",
     items: [
       {
         icon: "userPen",
@@ -126,6 +144,8 @@ export const navItems: NavItem[] = [
         url: "/profile",
       },
     ],
+    title: "Account",
+    url: "#",
   },
 ] as const;
 

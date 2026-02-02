@@ -8,6 +8,8 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
+import type { Metadata } from "next";
+
 const amenities = [
   {
     description:
@@ -44,11 +46,19 @@ const amenities = [
     title: "Ample Parking Space",
   },
   {
-    description:"Quiet corners, reliable Wi-Fi, and thoughtfully designed flexible spaces allow you to strike a seamless balance between work and wilderness, making extended stays both productive and rejuvenating.",
+    description: "Quiet corners, reliable Wi-Fi, and thoughtfully designed flexible spaces allow you to strike a seamless balance between work and wilderness, making extended stays both productive and rejuvenating.",
     icon: LaptopIcon,
-    title:"Work From Anywhere"
+    title: "Work From Anywhere"
   }
 ];
+
+export const dynamic = 'force-static';
+export const revalidate = false;
+
+export const metadata: Metadata = {
+  description: "Discover the oasis of tranquility in the lap of wilderness",
+  title: "About Us",
+};
 
 export default function AboutUsPage() {
   return (

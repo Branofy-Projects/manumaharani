@@ -1,7 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-
 import { hasValidSession } from '@repo/auth';
 import { auth } from '@repo/auth/auth.config';
+import { NextRequest, NextResponse } from 'next/server';
 
 // Public routes that don't require authentication
 const publicRoutes = [
@@ -16,7 +15,7 @@ const publicRoutes = [
 // Admin only routes - using regex patterns
 const adminRoutes = ["/user"];
 
-export default async function middleware(request: NextRequest) {
+export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Skip middleware for static files and Next.js internals
@@ -37,6 +36,8 @@ export default async function middleware(request: NextRequest) {
   // Simple session check using cookies
   const hasSession = hasValidSession(request);
 
+  console.log("hasSession",hasSession, "isPublicRoute", pathname,isPublicRoute);
+  
   // If not authenticated and trying to access protected route
   if (!hasSession && !isPublicRoute) {
     const signInUrl = new URL("/sign-in", request.url);

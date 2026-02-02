@@ -1,4 +1,4 @@
-import { getBlogBySlug } from "@repo/actions/blogs.actions";
+import { getBlogBySlug, getBlogs } from "@repo/actions/blogs.actions";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -7,7 +7,9 @@ import { calculateReadTime } from "@/lib/utils";
 
 import { RelatedPostsSuspense } from "./components/RelatesPosts";
 
-export const dynamic = 'force-dynamic';
+export const dynamicParams = true
+export const dynamic = 'force-static'
+export const revalidate = false;
 
 export default async function BlogPost({
   params,
@@ -87,7 +89,13 @@ export default async function BlogPost({
             <span>Manumaharani Team</span>
           </div>
           <span>•</span>
-          <span>{post.created_at.toISOString()}</span>
+          <span>
+            {new Date(post.created_at).toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+            })}
+          </span>
           <span>•</span>
           <span>{calculateReadTime(post.content)} min read</span>
         </div>
@@ -150,4 +158,24 @@ export default async function BlogPost({
       <RelatedPostsSuspense category={post.category} ignore={[post.id]} />
     </main>
   );
+};
+
+export async function generateMetadata({
+  params,
+}: PageProps<"/blogs/[blog-slug]">) {
+  const { "blog-slug": blogSlug } = await params;
+  const post = await getBlogBySlug(blogSlug);
+  return {
+    title: post?.title || "Blog Post Not Found",
+  };
+};
+export async function generateStaticParams() {
+  const { blogs } = await getBlogs({
+    status: "published",
+  });
+  console.log("blogs", blogs);
+
+  return blogs.map((post) => ({
+    "blog-slug": post.slug,
+  }));
 }

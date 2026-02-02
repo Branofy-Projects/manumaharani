@@ -1,83 +1,176 @@
+import { Mail, MapPin, Phone } from "lucide-react";
+import Image from "next/image";
+import React from "react";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
+import type { Metadata } from "next";
+
+export const dynamic = 'force-static';
+export const revalidate = false;
+
+export const metadata: Metadata = {
+  description: "We'd love to hear from you! Reach out to us for any inquiries or assistance.",
+  title: "Contact Us",
+};
+
 export default function ContactUsPage() {
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen w-full overflow-x-hidden bg-[#faf6f1] pt-[72px] md:pt-[88px]">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-gray-900 to-gray-700 py-20 text-white md:py-32">
-        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <h1 className="mb-4 text-4xl font-thin tracking-wide md:text-5xl lg:text-6xl">
+      <section className="relative h-[50vh] w-full md:h-[60vh]">
+        <Image
+          alt="Contact Manu Maharani Resort"
+          className="object-cover"
+          fill
+          priority
+          src="/about-us/photo-1566073771259-6a8506099945.webp"
+        />
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white">
+          <h1 className="text-4xl font-thin uppercase tracking-[0.2em] md:text-6xl">
             Contact Us
           </h1>
-          <p className="text-md md:text-xl">
-            We&apos;d love to hear from you! Reach out to us for any inquiries
-            or assistance.
+          <div className="mt-4 h-px w-24 bg-white/80" />
+          <p className="mt-4 max-w-2xl px-4 font-serif text-lg italic text-white/90 md:text-xl">
+            We&apos;d love to hear from you! Reach out to us for any inquiries or assistance.
           </p>
         </div>
       </section>
 
-      {/* Contact Form Section */}
-      <section className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
-        <h2 className="mb-8 text-center text-3xl font-thin tracking-wide text-gray-900">
-          Send us a Message
-        </h2>
-        <form className="space-y-6">
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <Input placeholder="Your Name" type="text" />
-            <Input placeholder="Your Email" type="email" />
-          </div>
-          <Input placeholder="Subject" type="text" />
-          <Textarea placeholder="Your Message" rows={6} />
-          <div className="text-center">
-            <Button
-              className="bg-gray-900 hover:bg-gray-800"
-              size="lg"
-              type="submit"
-            >
-              Send Message
-            </Button>
-          </div>
-        </form>
-      </section>
+      <section className="mx-auto max-w-7xl px-4 py-16 md:py-24">
+        <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
+          {/* Left: Contact Info */}
+          <div className="flex flex-col justify-center">
+            <h2 className="mb-6 font-serif text-3xl font-light uppercase tracking-widest text-[#2b2b2b] md:text-4xl">
+              Get in <span className="text-[#a88b4d]">Touch</span>
+            </h2>
+            <div className="mb-8 h-px w-16 bg-[#a88b4d]" />
 
-      {/* Contact Information Section */}
-      <section className="bg-gray-50 px-4 py-16 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-4xl text-center">
-          <h2 className="mb-8 text-3xl font-thin tracking-wide text-gray-900">
-            Our Information
-          </h2>
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-            <div>
-              <h3 className="mb-2 text-xl font-semibold text-gray-900">
-                Address
-              </h3>
-              <p className="text-gray-600">
-                123 Resort Road, Jim Corbett, India
-              </p>
+            <p className="mb-10 text-base leading-relaxed text-gray-600 md:text-lg">
+              Have questions about your stay? Want to plan a special event? Our team is here to help you create unforgettable memories at Manu Maharani.
+            </p>
+
+            <div className="space-y-8">
+              <div className="flex items-start gap-4">
+                <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#a88b4d]/10 text-[#a88b4d]">
+                  <MapPin className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="mb-1 font-serif text-lg font-medium text-[#2b2b2b]">Address</h3>
+                  <p className="text-gray-600">
+                    Manu Maharani Resort & Spa,<br />
+                    Dhikuli, Ramnagar,<br />
+                    Jim Corbett National Park,<br />
+                    Uttarakhand - 244715
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#a88b4d]/10 text-[#a88b4d]">
+                  <Phone className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="mb-1 font-serif text-lg font-medium text-[#2b2b2b]">Phone</h3>
+                  <p className="text-gray-600">
+                    <a className="hover:text-[#a88b4d] transition-colors" href="tel:+919876543210">+91 98765 43210</a>
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#a88b4d]/10 text-[#a88b4d]">
+                  <Mail className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="mb-1 font-serif text-lg font-medium text-[#2b2b2b]">Email</h3>
+                  <p className="text-gray-600">
+                    <a className="hover:text-[#a88b4d] transition-colors" href="mailto:info@manumaharani.com">info@manumaharani.com</a>
+                  </p>
+                </div>
+              </div>
             </div>
-            <div>
-              <h3 className="mb-2 text-xl font-semibold text-gray-900">
-                Phone
-              </h3>
-              <p className="text-gray-600">+91 98765 43210</p>
-            </div>
-            <div>
-              <h3 className="mb-2 text-xl font-semibold text-gray-900">
-                Email
-              </h3>
-              <p className="text-gray-600">info@manumaharani.com</p>
-            </div>
+          </div>
+
+          {/* Right: Contact Form */}
+          <div className="rounded-xl bg-white p-8 shadow-sm border border-gray-100">
+            <h3 className="mb-6 font-serif text-2xl font-light text-[#2b2b2b]">Send us a Message</h3>
+            <form className="space-y-6">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700" htmlFor="name">Name</label>
+                  <Input
+                    className="rounded-lg border-gray-200 bg-[#faf6f1]/30 focus:border-[#a88b4d] focus:ring-[#a88b4d]"
+                    id="name"
+                    placeholder="Your Name"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700" htmlFor="phone">Phone</label>
+                  <Input
+                    className="rounded-lg border-gray-200 bg-[#faf6f1]/30 focus:border-[#a88b4d] focus:ring-[#a88b4d]"
+                    id="phone"
+                    placeholder="Your Phone Number"
+                    type="tel"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700" htmlFor="email">Email</label>
+                <Input
+                  className="rounded-lg border-gray-200 bg-[#faf6f1]/30 focus:border-[#a88b4d] focus:ring-[#a88b4d]"
+                  id="email"
+                  placeholder="Your Email"
+                  type="email"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700" htmlFor="subject">Subject</label>
+                <Input
+                  className="rounded-lg border-gray-200 bg-[#faf6f1]/30 focus:border-[#a88b4d] focus:ring-[#a88b4d]"
+                  id="subject"
+                  placeholder="Subject"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700" htmlFor="message">Message</label>
+                <Textarea
+                  className="rounded-lg border-gray-200 bg-[#faf6f1]/30 focus:border-[#a88b4d] focus:ring-[#a88b4d]"
+                  id="message"
+                  placeholder="Your Message"
+                  rows={6}
+                />
+              </div>
+
+              <Button
+                className="w-full bg-[#2b2b2b] py-6 text-sm font-bold uppercase tracking-[0.2em] text-white hover:bg-[#a88b4d]"
+                size="lg"
+                type="submit"
+              >
+                Send Message
+              </Button>
+            </form>
           </div>
         </div>
       </section>
 
-      {/* Map Section (Placeholder) */}
-      <section className="mx-auto max-w-full px-4 py-16 sm:px-6 lg:px-8">
-        <div className="aspect-video h-96 w-full rounded-lg bg-gray-200 flex items-center justify-center text-gray-600">
-          <p>Map Placeholder</p>
-        </div>
+      {/* Map Section */}
+      <section className="h-[400px] w-full bg-gray-200">
+        <iframe
+          allowFullScreen
+          height="100%"
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3455.936669986666!2d79.1356783151129!3d29.4166669823029!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390a19f6f6f6f6f7%3A0x6f6f6f6f6f6f6f6f!2sManu%20Maharani%20Resort%20%26%20Spa!5e0!3m2!1sen!2sin!4v1620000000000!5m2!1sen!2sin"
+          style={{ border: 0 }}
+          width="100%"
+        />
       </section>
     </main>
   );

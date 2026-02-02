@@ -13,8 +13,8 @@ COPY turbo.json ./
 # Copy all package.json files for workspace resolution
 COPY apps/client/package.json ./apps/client/
 # COPY apps/admin/package.json ./apps/admin/
-# COPY packages/actions/package.json ./packages/actions/
-# COPY packages/db/package.json ./packages/db/
+COPY packages/actions/package.json ./packages/actions/
+COPY packages/db/package.json ./packages/db/
 COPY packages/eslint-config/package.json ./packages/eslint-config/
 COPY packages/typescript-config/package.json ./packages/typescript-config/
 
