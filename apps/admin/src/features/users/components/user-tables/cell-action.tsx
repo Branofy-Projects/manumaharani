@@ -1,5 +1,7 @@
 "use client";
 
+import { deleteUser } from '@repo/actions/users/user-actions.client';
+import { AppResponseHandler } from '@repo/actions/utils/app-response-handler';
 import { Copy, Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
@@ -11,8 +13,6 @@ import {
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/hooks/use-auth';
-import { deleteUser } from '@repo/actions/users/user-actions.client';
-import { AppResponseHandler } from '@repo/actions/utils/app-response-handler';
 
 import type { TUser } from "@repo/db/schema/auth.schema";
 
@@ -46,8 +46,18 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     toast.success("User ID copied to clipboard");
   };
 
-  const isSameUser = user!.id === data.id;
-  const currentUserRole = user!.userRole;
+  // Handle case where user is not loaded yet
+  if (!user) {
+    return (
+      <Button className="h-8 w-8 p-0" disabled variant="ghost">
+        <span className="sr-only">Open menu</span>
+        <MoreHorizontal className="h-4 w-4" />
+      </Button>
+    );
+  }
+
+  const isSameUser = user.id === data.id;
+  const currentUserRole = user.userRole;
 
   // Disable edit/delete if:
   // 1. Same user trying to edit themselves, OR

@@ -4,7 +4,7 @@ import Image from "next/image";
 
 
 export default async function EventsPage() {
-  const { events } = await getEvents({ limit: 100, upcomingOnly: true });
+  const { events } = await getEvents({ limit: 100 });
 
   return (
     <div className="grid grid-cols-1 max-w-screen-xl w-full mx-auto md:grid-cols-2 lg:grid-cols-4 gap-6 px-4 xl:px-0">

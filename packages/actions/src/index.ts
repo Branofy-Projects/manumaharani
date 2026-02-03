@@ -3,6 +3,7 @@ export * from "./bookings.actions";
 export * from "./events.actions";
 export * from "./gallery.actions";
 export * from "./images.actions";
+export * from "./master-data.actions";
 export * from "./offers.actions";
 export * from "./room-types.actions";
 export * from "./rooms.actions";
