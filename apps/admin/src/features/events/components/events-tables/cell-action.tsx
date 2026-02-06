@@ -1,5 +1,6 @@
 "use client";
 
+import { deleteEvent } from "@repo/actions";
 import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
@@ -14,7 +15,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { deleteEvent } from "@repo/actions";
 
 import type { TEvent } from "@repo/db/schema/types.schema";
 

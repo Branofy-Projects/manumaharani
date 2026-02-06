@@ -1,4 +1,10 @@
 'use client';
+import { useSearchParams } from 'next/navigation';
+import { useTransition } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import * as z from 'zod';
+
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -10,11 +16,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@/lib/zod-resolver';
-import { useSearchParams } from 'next/navigation';
-import { useTransition } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import * as z from 'zod';
+
 import GithubSignInButton from './github-auth-button';
 
 const formSchema = z.object({
@@ -31,8 +33,8 @@ export default function UserAuthForm() {
     email: 'demo@gmail.com'
   };
   const form = useForm<UserFormValue>({
-    resolver: zodResolver(formSchema),
-    defaultValues
+    defaultValues,
+    resolver: zodResolver(formSchema)
   });
 
   const onSubmit = async (data: UserFormValue) => {
@@ -46,8 +48,8 @@ export default function UserAuthForm() {
     <>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
           className='w-full space-y-2'
+          onSubmit={form.handleSubmit(onSubmit)}
         >
           <FormField
             control={form.control}
@@ -57,9 +59,9 @@ export default function UserAuthForm() {
                 <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input
-                    type='email'
-                    placeholder='Enter your email...'
                     disabled={loading}
+                    placeholder='Enter your email...'
+                    type='email'
                     {...field}
                   />
                 </FormControl>
@@ -69,8 +71,8 @@ export default function UserAuthForm() {
           />
 
           <Button
-            disabled={loading}
             className='mt-2 ml-auto w-full'
+            disabled={loading}
             type='submit'
           >
             Continue With Email

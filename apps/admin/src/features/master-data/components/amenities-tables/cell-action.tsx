@@ -1,5 +1,6 @@
 "use client";
 
+import { deleteAmenity } from '@repo/actions/master-data.actions';
 import { Copy, Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
@@ -7,10 +8,9 @@ import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import {
-    DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator,
-    DropdownMenuTrigger
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator,
+  DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { deleteAmenity } from '@repo/actions';
 
 import type { TAmenity } from "@repo/db";
 

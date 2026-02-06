@@ -19,8 +19,8 @@ export default async function AdminOnlyPage() {
 
         {/* Only show to admins */}
         <RoleGuard
-          requireAdmin
           fallback={<p>This content is only visible to admins</p>}
+          requireAdmin
         >
           <div className="p-4 bg-green-100 border border-green-300 rounded">
             <h3 className="font-semibold text-green-800">Admin Content</h3>
@@ -33,8 +33,8 @@ export default async function AdminOnlyPage() {
 
         {/* Only show to super admins */}
         <RoleGuard
-          requireSuperAdmin
           fallback={<p>This content is only visible to super admins</p>}
+          requireSuperAdmin
         >
           <div className="p-4 bg-red-100 border border-red-300 rounded">
             <h3 className="font-semibold text-red-800">Super Admin Content</h3>
@@ -46,8 +46,8 @@ export default async function AdminOnlyPage() {
 
         {/* Show different content based on specific role */}
         <RoleGuard
-          requiredRole="admin"
           fallback={<p>This is only for regular admins</p>}
+          requiredRole="admin"
         >
           <div className="p-4 bg-blue-100 border border-blue-300 rounded">
             <h3 className="font-semibold text-blue-800">

@@ -1,4 +1,4 @@
-import { getFaqs } from "@repo/actions";
+import { getFaqs } from "@repo/actions/master-data.actions";
 import { redirect } from "next/navigation";
 
 import { getCurrentUser } from "@/lib/auth-utils";

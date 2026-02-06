@@ -1,4 +1,5 @@
 "use client";
+import { createPolicy, updatePolicy } from '@repo/actions/master-data.actions';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
@@ -9,25 +10,25 @@ import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
-    Form, FormControl, FormField, FormItem, FormLabel, FormMessage
+  Form, FormControl, FormField, FormItem, FormLabel, FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
-    Select, SelectContent, SelectItem, SelectTrigger, SelectValue
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue
 } from '@/components/ui/select';
-import { createPolicy, updatePolicy } from '@repo/actions';
-import type { TPolicy } from "@repo/db";
 import { zodResolver } from '@/lib/zod-resolver';
 
+import type { TPolicy } from "@repo/db";
+
 const formSchema = z.object({
-  label: z.string().min(1, "Label is required.").max(255),
   kind: z.enum(["include", "exclude"], {
     message: "Policy type is required.",
   }),
+  label: z.string().min(1, "Label is required.").max(255),
 });
 
 type TPolicyFormProps = {
-  initialData: TPolicy | null;
+  initialData: null | TPolicy;
   pageTitle: string;
   policyId?: string;
 };
@@ -39,14 +40,14 @@ const PolicyForm = (props: TPolicyFormProps) => {
 
   const defaultValues = useMemo(() => {
     return {
+      kind: (initialData?.kind as "exclude" | "include") || "include",
       label: initialData?.label || "",
-      kind: (initialData?.kind as "include" | "exclude") || "include",
     };
   }, [initialData]);
 
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
     defaultValues,
+    resolver: zodResolver(formSchema),
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -113,7 +114,7 @@ const PolicyForm = (props: TPolicyFormProps) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Policy Type</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select defaultValue={field.value} onValueChange={field.onChange}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select policy type" />
@@ -131,19 +132,19 @@ const PolicyForm = (props: TPolicyFormProps) => {
 
             <div className="flex items-center gap-4">
               <Button
-                type="submit"
-                disabled={isSubmitting}
                 className="w-full sm:w-auto"
+                disabled={isSubmitting}
+                type="submit"
               >
                 {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {policyId ? "Update Policy" : "Create Policy"}
               </Button>
               <Button
+                className="w-full sm:w-auto"
+                disabled={isSubmitting}
+                onClick={() => router.push("/policies")}
                 type="button"
                 variant="outline"
-                onClick={() => router.push("/policies")}
-                disabled={isSubmitting}
-                className="w-full sm:w-auto"
               >
                 Cancel
               </Button>

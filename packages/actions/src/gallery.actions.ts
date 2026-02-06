@@ -1,16 +1,17 @@
 "use server";
 import { and, count, eq, ilike } from "@repo/db";
 import { db, Gallery } from "@repo/db";
-import type { TNewGallery, TGallery } from "@repo/db";
 
 import { bumpVersion } from "./libs/cache";
 import { safeDbQuery } from "./utils/db-error-handler";
 
+import type { TGallery, TNewGallery } from "@repo/db";
+
 type TGetGalleryFilters = {
-  search?: string;
-  page?: number;
-  limit?: number;
   category?: string;
+  limit?: number;
+  page?: number;
+  search?: string;
   type?: string;
 };
 
@@ -57,14 +58,14 @@ export const getGallery = async (filters: TGetGalleryFilters = {}) => {
   const gallery = await safeDbQuery(
     async () => {
       return await db.query.Gallery.findMany({
-        where,
         limit,
         offset,
+        orderBy: (gallery, { desc }) => [desc(gallery.created_at)],
+        where,
         with: {
           image: true,
           videoThumbnail: true,
         },
-        orderBy: (gallery, { desc }) => [desc(gallery.created_at)],
       });
     },
     [],

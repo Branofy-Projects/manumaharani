@@ -1,8 +1,10 @@
 "use server";
-import { db, Amenities, Policies, Faqs } from "@repo/db";
-import type { TNewAmenity, TNewPolicy, TNewFaq } from "@repo/db";
+import { Amenities, db, Faqs, Policies } from "@repo/db";
 import { eq } from "@repo/db";
+
 import { safeDbQuery } from "./utils/db-error-handler";
+
+import type { TNewAmenity, TNewFaq, TNewPolicy } from "@repo/db";
 
 export const getAmenities = async () => {
   if (!db || !process.env.DATABASE_URL) {
@@ -68,12 +70,12 @@ export const getPolicies = async () => {
   );
 };
 
-export const getPoliciesByKind = async (kind: "include" | "exclude") => {
+export const getPoliciesByKind = async (kind: "exclude" | "include") => {
   if (!db) return [];
 
   return db.query.Policies.findMany({
-    where: eq(Policies.kind, kind),
     orderBy: (policies, { asc }) => [asc(policies.label)],
+    where: eq(Policies.kind, kind),
   });
 };
 

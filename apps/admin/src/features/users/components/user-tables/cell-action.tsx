@@ -1,5 +1,7 @@
 "use client";
 
+import { deleteUser } from '@repo/actions/users/user-actions.client';
+import { AppResponseHandler } from '@repo/actions/utils/app-response-handler';
 import { Copy, Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
@@ -7,12 +9,10 @@ import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import {
-    DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator,
-    DropdownMenuTrigger
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator,
+  DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/hooks/use-auth';
-import { deleteUser } from '@repo/actions/users/user-actions.client';
-import { AppResponseHandler } from '@repo/actions/utils/app-response-handler';
 
 import type { TUser } from "@repo/db/schema/auth.schema";
 

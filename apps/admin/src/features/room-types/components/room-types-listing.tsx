@@ -8,9 +8,9 @@ import { RoomTypesTable } from "./room-types-tables";
 import { columns } from "./room-types-tables/columns";
 
 type TGetRoomTypesFilters = {
-  search?: string;
-  page?: number;
   limit?: number;
+  page?: number;
+  search?: string;
   status?: "active" | "inactive";
 };
 
@@ -33,7 +33,7 @@ export default async function RoomTypesListingPage() {
     return redirect("/sign-in");
   }
 
-  const { total, roomTypes } = await getRoomTypes(filters);
+  const { roomTypes, total } = await getRoomTypes(filters);
 
   return <RoomTypesTable columns={columns} data={roomTypes} totalItems={total} />;
 }

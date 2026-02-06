@@ -1,10 +1,4 @@
 "use client";
-import React, { useCallback, useMemo } from "react";
-import { z } from "zod";
-
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   closestCenter,
   DndContext,
@@ -20,52 +14,58 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { ACCEPTED_IMAGE_TYPES, MAX_FILE_SIZE } from "@repo/db/utils/file-utils";
+import React, { useCallback, useMemo } from "react";
+import { z } from "zod";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 import type { DragEndEvent } from "@dnd-kit/core";
 
 export const ExistingImageSchema = z.object({
   _type: z.literal("existing"),
-  image_id: z.number(),
-  order: z.number().int().nonnegative(),
-  small_url: z.string().url(),
-  medium_url: z.string().url(),
-  large_url: z.string().url(),
-  original_url: z.string().url(),
   alt_text: z.string().min(1, "Alt text is required"),
+  image_id: z.number(),
+  large_url: z.string().url(),
+  medium_url: z.string().url(),
+  order: z.number().int().nonnegative(),
+  original_url: z.string().url(),
+  small_url: z.string().url(),
 });
 
 export const NewImageSchema = z.object({
-  _type: z.literal("new"),
   _tmpId: z.string(),
-  previewUrl: z.string(),
+  _type: z.literal("new"),
+  alt_text: z.string().min(1, "Alt text is required"),
   file: z.any(),
   mime_type: z.string(),
+  previewUrl: z.string(),
   size: z.number(),
-  alt_text: z.string().min(1, "Alt text is required"),
 });
 
 export type ExistingFormImage = {
   _type: "existing";
+  alt_text: string;
   image_id: number;
-  order: number;
-  small_url: string;
-  medium_url: string;
   large_url: string;
+  medium_url: string;
+  order: number;
   original_url: string;
-  alt_text: string;
-};
-
-export type NewFormImage = {
-  _type: "new";
-  _tmpId: string;
-  file: File;
-  previewUrl: string;
-  size: number;
-  mime_type: string;
-  alt_text: string;
+  small_url: string;
 };
 
 export type FormImage = ExistingFormImage | NewFormImage;
+
+export type NewFormImage = {
+  _tmpId: string;
+  _type: "new";
+  alt_text: string;
+  file: File;
+  mime_type: string;
+  previewUrl: string;
+  size: number;
+};
 
 export const isExisting = (i: FormImage): i is ExistingFormImage =>
   i._type === "existing";
@@ -83,8 +83,8 @@ export const validateImages = (images: FormImage[]) => {
   });
 
   return {
-    isValid: errors.length === 0,
     errors,
+    isValid: errors.length === 0,
   };
 };
 
@@ -95,34 +95,34 @@ export const hasValidImages = (images: FormImage[]) => {
 };
 
 type Props = {
-  value: FormImage[];
-  onValueChange: (next: FormImage[]) => void;
-  multiple?: boolean;
+  disabled?: boolean;
+  id?: string;
   maxFiles?: number;
   maxSize?: number;
+  multiple?: boolean;
+  onValueChange: (next: FormImage[]) => void;
   progresses?: Record<string, number>;
-  disabled?: boolean;
   showValidation?: boolean;
-  id?: string;
+  value: FormImage[];
 };
 
 export const FileUploader: React.FC<Props> = ({
-  value,
-  onValueChange,
-  multiple = true,
+  disabled,
+  id = "file-input-hidden",
   maxFiles = 8,
   maxSize = MAX_FILE_SIZE,
+  multiple = true,
+  onValueChange,
   progresses = {},
-  disabled,
   showValidation = false,
-  id = "file-input-hidden",
+  value,
 }) => {
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
   );
 
   const onFiles = useCallback(
-    (files: FileList | File[]) => {
+    (files: File[] | FileList) => {
       const incoming = Array.from(files);
       const accept = new Set(ACCEPTED_IMAGE_TYPES);
       const filtered = incoming.filter(
@@ -134,13 +134,13 @@ export const FileUploader: React.FC<Props> = ({
       const take = filtered.slice(0, remainingSlots);
 
       const mapped: NewFormImage[] = take.map((file) => ({
-        _type: "new",
         _tmpId: crypto.randomUUID(),
+        _type: "new",
+        alt_text: "",
         file,
+        mime_type: file.type,
         previewUrl: URL.createObjectURL(file),
         size: file.size,
-        mime_type: file.type,
-        alt_text: "",
       }));
 
       onValueChange([...value, ...mapped]);
@@ -202,6 +202,10 @@ export const FileUploader: React.FC<Props> = ({
     <div className="w-full">
       <div
         className={`border-2 border-dashed rounded-md p-4 text-center ${disabled ? "opacity-50" : "cursor-pointer"}`}
+        onClick={() => {
+          if (disabled) return;
+          document.getElementById(id)?.click();
+        }}
         onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => {
           e.preventDefault();
@@ -209,27 +213,23 @@ export const FileUploader: React.FC<Props> = ({
           const files = e.dataTransfer.files;
           if (files && files.length > 0) onFiles(files);
         }}
-        onClick={() => {
-          if (disabled) return;
-          document.getElementById(id)?.click();
-        }}
       >
         <p className="text-sm">Click or drag images here</p>
         <input
-          id={id}
-          type="file"
           accept={ACCEPTED_IMAGE_TYPES.join(",")}
-          multiple={multiple}
           className="hidden"
-          onChange={onInputChange}
           disabled={disabled}
+          id={id}
+          multiple={multiple}
+          onChange={onInputChange}
+          type="file"
         />
       </div>
 
       <DndContext
-        sensors={sensors}
         collisionDetection={closestCenter}
         onDragEnd={handleDragEnd}
+        sensors={sensors}
       >
         <SortableContext
           items={items.map((i) => i.id)}
@@ -238,13 +238,13 @@ export const FileUploader: React.FC<Props> = ({
           <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {items.map(({ id, img }, idx) => (
               <SortableItem
-                key={id}
+                disabled={disabled}
                 id={id}
                 img={img}
-                progress={progresses[id] ?? 0}
-                onRemove={() => removeAt(idx)}
+                key={id}
                 onAltTextChange={(altText) => updateAltText(idx, altText)}
-                disabled={disabled}
+                onRemove={() => removeAt(idx)}
+                progress={progresses[id] ?? 0}
               />
             ))}
           </div>
@@ -268,19 +268,19 @@ export const FileUploader: React.FC<Props> = ({
 };
 
 function SortableItem({
+  disabled,
   id,
   img,
-  progress,
-  onRemove,
   onAltTextChange,
-  disabled,
+  onRemove,
+  progress,
 }: {
+  disabled?: boolean;
   id: string;
   img: FormImage;
-  progress: number;
-  onRemove: () => void;
   onAltTextChange: (altText: string) => void;
-  disabled?: boolean;
+  onRemove: () => void;
+  progress: number;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
@@ -295,9 +295,9 @@ function SortableItem({
 
   return (
     <div
+      className="relative rounded-md border bg-card overflow-hidden"
       ref={setNodeRef}
       style={style}
-      className="relative rounded-md border bg-card overflow-hidden"
     >
       <div
         className="absolute top-2 left-2 z-10 cursor-grab active:cursor-grabbing bg-black/50 rounded p-1"
@@ -305,11 +305,11 @@ function SortableItem({
         {...listeners}
       >
         <svg
-          width="12"
-          height="12"
-          viewBox="0 0 12 12"
           className="text-white"
           fill="currentColor"
+          height="12"
+          viewBox="0 0 12 12"
+          width="12"
         >
           <circle cx="2" cy="2" r="1" />
           <circle cx="2" cy="6" r="1" />
@@ -325,11 +325,11 @@ function SortableItem({
 
       <div className="absolute top-2 right-2 z-10">
         <Button
-          variant="destructive"
+          disabled={disabled}
+          onClick={onRemove}
           size="sm"
           type="button"
-          onClick={onRemove}
-          disabled={disabled}
+          variant="destructive"
         >
           ×
         </Button>
@@ -337,9 +337,9 @@ function SortableItem({
 
       <div className="aspect-video relative">
         <img
-          src={src}
           alt={img.alt_text || ""}
           className="h-full w-full object-cover"
+          src={src}
         />
         {progress > 0 && progress < 100 ? (
           <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-xs p-1">
@@ -349,17 +349,17 @@ function SortableItem({
       </div>
 
       <div className="p-3 space-y-2">
-        <Label htmlFor={`alt-text-${id}`} className="text-sm font-medium">
+        <Label className="text-sm font-medium" htmlFor={`alt-text-${id}`}>
           Alt Text *
         </Label>
         <Input
+          className={`text-sm ${!img.alt_text?.trim() ? "border-red-300 focus:border-red-500" : ""}`}
+          disabled={disabled}
           id={`alt-text-${id}`}
-          type="text"
-          value={img.alt_text}
           onChange={(e) => onAltTextChange(e.target.value)}
           placeholder="Describe this image..."
-          disabled={disabled}
-          className={`text-sm ${!img.alt_text?.trim() ? "border-red-300 focus:border-red-500" : ""}`}
+          type="text"
+          value={img.alt_text}
         />
         {!img.alt_text?.trim() && (
           <p className="text-xs text-red-500">Alt text is required</p>

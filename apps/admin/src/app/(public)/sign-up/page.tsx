@@ -9,6 +9,6 @@ export default function SignUpPage() {
 }
 
 export const metadata = {
-  title: "Sign Up",
   description: "Create a new account",
+  title: "Sign Up",
 };

@@ -1,16 +1,17 @@
 "use server";
 import { and, count, eq, ilike } from "@repo/db";
 import { db, Testimonials } from "@repo/db";
-import type { TNewTestimonial, TTestimonial } from "@repo/db";
 
 import { bumpVersion } from "./libs/cache";
 import { safeDbQuery } from "./utils/db-error-handler";
 
+import type { TNewTestimonial, TTestimonial } from "@repo/db";
+
 type TGetTestimonialsFilters = {
-  search?: string;
-  page?: number;
   limit?: number;
-  status?: "pending" | "approved" | "rejected";
+  page?: number;
+  search?: string;
+  status?: "approved" | "pending" | "rejected";
 };
 
 export const getTestimonials = async (filters: TGetTestimonialsFilters = {}) => {
@@ -54,14 +55,14 @@ export const getTestimonials = async (filters: TGetTestimonialsFilters = {}) => 
   const testimonials = await safeDbQuery(
     async () => {
       return await db.query.Testimonials.findMany({
-        where,
         limit,
         offset,
+        orderBy: (testimonials, { desc }) => [desc(testimonials.created_at)],
+        where,
         with: {
           guestAvatar: true,
           user: true,
         },
-        orderBy: (testimonials, { desc }) => [desc(testimonials.created_at)],
       });
     },
     [],

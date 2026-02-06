@@ -1,5 +1,4 @@
 "use client";
-import { zodResolver } from "@/lib/zod-resolver";
 import { createBlog, updateBlog } from "@repo/actions";
 import { createImages } from "@repo/actions/images.actions";
 import { blogStatusEnum } from "@repo/db/schema/blogs.schema";
@@ -31,6 +30,7 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { ImagesArraySchema } from "@/lib/image-schema";
 import { uploadFilesWithProgress } from "@/lib/upload-files";
+import { zodResolver } from "@/lib/zod-resolver";
 
 import type { TBlog } from "@repo/db/schema/types.schema";
 
@@ -63,17 +63,17 @@ const BlogForm = (props: TBlogFormProps) => {
       status: initialData?.status || "draft",
       thumbnail: initialData?.featuredImage
         ? [
-            {
-              _type: "existing" as const,
-              alt_text: initialData.featuredImage.alt_text || "",
-              image_id: initialData.featuredImage.id,
-              large_url: initialData.featuredImage.large_url || "",
-              medium_url: initialData.featuredImage.medium_url || "",
-              order: 0,
-              original_url: initialData.featuredImage.original_url || "",
-              small_url: initialData.featuredImage.small_url || "",
-            },
-          ]
+          {
+            _type: "existing" as const,
+            alt_text: initialData.featuredImage.alt_text || "",
+            image_id: initialData.featuredImage.id,
+            large_url: initialData.featuredImage.large_url || "",
+            medium_url: initialData.featuredImage.medium_url || "",
+            order: 0,
+            original_url: initialData.featuredImage.original_url || "",
+            small_url: initialData.featuredImage.small_url || "",
+          },
+        ]
         : [],
       title: initialData?.title || "",
     };

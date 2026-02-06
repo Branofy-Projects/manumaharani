@@ -24,7 +24,7 @@ export async function fixDatabaseSchema() {
     await db.execute(sql`ALTER TABLE "gallery" ALTER COLUMN "resort_id" DROP NOT NULL`);
     await db.execute(sql`ALTER TABLE "testimonials" ALTER COLUMN "resort_id" DROP NOT NULL`);
 
-    return { success: true, message: "Database schema fixed successfully!" };
+    return { message: "Database schema fixed successfully!", success: true };
   } catch (error: any) {
     console.error("Error fixing database:", error);
     throw new Error(`Failed to fix database: ${error?.message || String(error)}`);

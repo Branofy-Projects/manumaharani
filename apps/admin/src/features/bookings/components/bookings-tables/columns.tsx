@@ -9,17 +9,17 @@ import type { TBooking } from "@repo/db";
 import type { Column, ColumnDef } from "@tanstack/react-table";
 
 const statusMap: Record<string, string> = {
-  pending: "Pending",
-  confirmed: "Confirmed",
+  cancelled: "Cancelled",
   checked_in: "Checked In",
   checked_out: "Checked Out",
-  cancelled: "Cancelled",
+  confirmed: "Confirmed",
+  pending: "Pending",
 };
 
 const paymentStatusMap: Record<string, string> = {
-  pending: "Pending",
-  partial: "Partial",
   paid: "Paid",
+  partial: "Partial",
+  pending: "Pending",
   refunded: "Refunded",
 };
 

@@ -96,7 +96,7 @@ export const getOfferById = async (id: string): Promise<TOffer | undefined> => {
   }) as Promise<TOffer | undefined>;
 };
 
-export const getOfferByIdWithDetails = async (id: string): Promise<TOfferWithDetails | null> => {
+export const getOfferByIdWithDetails = async (id: string): Promise<null | TOfferWithDetails> => {
   const result = await safeDbQuery(
     async () => {
       return await db.query.Offers.findFirst({
@@ -129,10 +129,10 @@ export const getOfferByIdWithDetails = async (id: string): Promise<TOfferWithDet
     "findByIdWithDetails query"
   );
 
-  return result as TOfferWithDetails | null;
+  return result as null | TOfferWithDetails;
 };
 
-export const getOfferBySlug = async (slug: string): Promise<TOfferWithDetails | null> => {
+export const getOfferBySlug = async (slug: string): Promise<null | TOfferWithDetails> => {
   const result = await safeDbQuery(
     async () => {
       return await db.query.Offers.findFirst({
@@ -165,7 +165,7 @@ export const getOfferBySlug = async (slug: string): Promise<TOfferWithDetails | 
     "findBySlug query"
   );
 
-  return result as TOfferWithDetails | null;
+  return result as null | TOfferWithDetails;
 };
 
 export const getRelatedOffers = async (

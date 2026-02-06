@@ -1,10 +1,10 @@
+import { getBlogById } from "@repo/actions";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import FormCardSkeleton from "@/components/form-card-skeleton";
 import PageContainer from "@/components/layout/page-container";
 import BlogDetailsView from "@/features/blogs/components/blog-details-view";
-import { getBlogById } from "@repo/actions";
 
 export const metadata = {
   title: "Dashboard: Blog Details",

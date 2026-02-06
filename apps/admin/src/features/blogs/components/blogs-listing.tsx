@@ -8,11 +8,11 @@ import { BlogsTable } from "./blogs-tables";
 import { columns } from "./blogs-tables/columns";
 
 type TGetBlogsFilters = {
-  search?: string;
-  page?: number;
-  limit?: number;
-  status?: "draft" | "published" | "archived";
   category?: string;
+  limit?: number;
+  page?: number;
+  search?: string;
+  status?: "archived" | "draft" | "published";
 };
 
 export default async function BlogsListingPage() {
@@ -25,7 +25,7 @@ export default async function BlogsListingPage() {
     limit: pageLimit,
     page,
     ...(search && { search }),
-    ...(status && { status: status as "draft" | "published" | "archived" }),
+    ...(status && { status: status as "archived" | "draft" | "published" }),
   };
 
   const user = await getCurrentUser();
@@ -34,7 +34,7 @@ export default async function BlogsListingPage() {
     return redirect("/sign-in");
   }
 
-  const { total, blogs } = await getBlogs(filters);
+  const { blogs, total } = await getBlogs(filters);
 
   return <BlogsTable columns={columns} data={blogs} totalItems={total} />;
 }

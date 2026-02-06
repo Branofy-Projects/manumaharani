@@ -8,11 +8,11 @@ import { RoomsTable } from "./rooms-tables";
 import { columns } from "./rooms-tables/columns";
 
 type TGetRoomsFilters = {
-  search?: string;
-  page?: number;
   limit?: number;
-  status?: "available" | "occupied" | "maintenance" | "blocked";
+  page?: number;
   room_type_id?: number;
+  search?: string;
+  status?: "available" | "blocked" | "maintenance" | "occupied";
 };
 
 export default async function RoomsListingPage() {
@@ -25,7 +25,7 @@ export default async function RoomsListingPage() {
     limit: pageLimit,
     page,
     ...(search && { search }),
-    ...(status && { status: status as "available" | "occupied" | "maintenance" | "blocked" }),
+    ...(status && { status: status as "available" | "blocked" | "maintenance" | "occupied" }),
   };
 
   const user = await getCurrentUser();
@@ -34,7 +34,7 @@ export default async function RoomsListingPage() {
     return redirect("/sign-in");
   }
 
-  const { total, rooms } = await getRooms(filters);
+  const { rooms, total } = await getRooms(filters);
 
   return <RoomsTable columns={columns} data={rooms} totalItems={total} />;
 }

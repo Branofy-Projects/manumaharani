@@ -245,6 +245,7 @@ if (
   try {
     config({ path: "../../.env" });
   } catch (error) {
+    console.error("Error loading .env file:", error);
     // Silently fail if .env file doesn't exist or in Edge Runtime
     // This is expected when running in Edge Runtime or when .env is not present
   }

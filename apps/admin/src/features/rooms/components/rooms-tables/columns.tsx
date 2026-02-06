@@ -12,16 +12,16 @@ import type { Column, ColumnDef } from "@tanstack/react-table";
 
 const statusMap: Record<string, string> = {
   available: "Available",
-  occupied: "Occupied",
-  maintenance: "Maintenance",
   blocked: "Blocked",
+  maintenance: "Maintenance",
+  occupied: "Occupied",
 };
 
 const statusVariantMap = {
   available: "default",
-  occupied: "secondary",
-  maintenance: "destructive",
   blocked: "outline",
+  maintenance: "destructive",
+  occupied: "secondary",
 } as const;
 
 export const columns: ColumnDef<TRoom>[] = [
@@ -32,8 +32,8 @@ export const columns: ColumnDef<TRoom>[] = [
       return (
         <div className="flex flex-col">
           <Link
-            href={`/rooms/${room.id}`}
             className="font-medium font-mono hover:underline cursor-pointer"
+            href={`/rooms/${room.id}`}
           >
             {room.room_number}
           </Link>

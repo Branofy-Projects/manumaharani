@@ -1,10 +1,10 @@
+import { getRoomTypeById } from "@repo/actions";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import FormCardSkeleton from "@/components/form-card-skeleton";
 import PageContainer from "@/components/layout/page-container";
 import RoomTypeDetailsView from "@/features/room-types/components/room-type-details-view";
-import { getRoomTypeById } from "@repo/actions";
 
 export const metadata = {
   title: "Dashboard: Room Type Details",

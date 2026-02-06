@@ -1,10 +1,10 @@
+import { getFaqById } from "@repo/actions/master-data.actions";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import FormCardSkeleton from "@/components/form-card-skeleton";
 import PageContainer from "@/components/layout/page-container";
 import FaqForm from "@/features/master-data/components/faq-form";
-import { getFaqById } from "@repo/actions";
 
 export const metadata = {
   title: "Dashboard: Edit FAQ",
@@ -33,9 +33,9 @@ export default async function FaqEditPage(props: PageProps) {
       <div className="flex-1 space-y-4">
         <Suspense fallback={<FormCardSkeleton />}>
           <FaqForm
+            faqId={params.id}
             initialData={faq as any}
             pageTitle="Edit FAQ"
-            faqId={params.id}
           />
         </Suspense>
       </div>

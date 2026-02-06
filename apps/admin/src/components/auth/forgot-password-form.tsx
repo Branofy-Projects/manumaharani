@@ -1,12 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@/lib/zod-resolver";
-import { z } from "zod";
 import { ArrowLeft, Mail } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -18,6 +17,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { zodResolver } from "@/lib/zod-resolver";
+
 import { useAuth } from "./auth-provider";
 
 const forgotPasswordSchema = z.object({
@@ -32,17 +33,17 @@ export function ForgotPasswordForm() {
   const { sendPasswordResetEmail } = useAuth();
 
   const form = useForm<ForgotPasswordFormData>({
-    resolver: zodResolver(forgotPasswordSchema),
     defaultValues: {
       email: "",
     },
+    resolver: zodResolver(forgotPasswordSchema),
   });
 
   const onSubmit = async (data: ForgotPasswordFormData) => {
     try {
       setIsLoading(true);
       const result = await sendPasswordResetEmail(data.email);
-      
+
       if (result.error) {
         toast.error(result.error.message || "Failed to send reset email");
         return;
@@ -78,19 +79,19 @@ export function ForgotPasswordForm() {
           <p className="text-sm text-muted-foreground">
             Didn't receive the email? Check your spam folder or{" "}
             <button
-              type="button"
               className="text-primary hover:underline"
               onClick={() => {
                 setIsEmailSent(false);
                 form.reset();
               }}
+              type="button"
             >
               try again
             </button>
           </p>
 
           <Link href="/sign-in">
-            <Button variant="outline" className="w-full">
+            <Button className="w-full" variant="outline">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to sign in
             </Button>
@@ -110,7 +111,7 @@ export function ForgotPasswordForm() {
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
             control={form.control}
             name="email"
@@ -120,9 +121,9 @@ export function ForgotPasswordForm() {
                 <FormControl>
                   <Input
                     {...field}
-                    type="email"
-                    placeholder="Enter your email"
                     disabled={isLoading}
+                    placeholder="Enter your email"
+                    type="email"
                   />
                 </FormControl>
                 <FormMessage />
@@ -130,14 +131,14 @@ export function ForgotPasswordForm() {
             )}
           />
 
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button className="w-full" disabled={isLoading} type="submit">
             {isLoading ? "Sending..." : "Send reset link"}
           </Button>
         </form>
       </Form>
 
       <div className="text-center">
-        <Link href="/sign-in" className="text-sm text-primary hover:underline">
+        <Link className="text-sm text-primary hover:underline" href="/sign-in">
           <ArrowLeft className="w-4 h-4 mr-1 inline" />
           Back to sign in
         </Link>

@@ -3,20 +3,20 @@
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
+import type { Product } from "@/constants/data";
+
 import { FileUploader } from '@/components/file-uploader';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
-    Form, FormControl, FormField, FormItem, FormLabel, FormMessage
+  Form, FormControl, FormField, FormItem, FormLabel, FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
-    Select, SelectContent, SelectItem, SelectTrigger, SelectValue
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { zodResolver } from '@/lib/zod-resolver';
-
-import type { Product } from "@/constants/data";
 
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -94,11 +94,11 @@ export default function ProductForm({
                         maxSize={4 * 1024 * 1024}
                         onValueChange={field.onChange}
                         value={field.value}
-                        // disabled={loading}
-                        // progresses={progresses}
-                        // pass the onUpload function here for direct upload
-                        // onUpload={uploadFiles}
-                        // disabled={isUploading}
+                      // disabled={loading}
+                      // progresses={progresses}
+                      // pass the onUpload function here for direct upload
+                      // onUpload={uploadFiles}
+                      // disabled={isUploading}
                       />
                     </FormControl>
                     <FormMessage />

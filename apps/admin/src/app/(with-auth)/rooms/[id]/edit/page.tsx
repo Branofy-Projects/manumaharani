@@ -1,10 +1,10 @@
+import { getRoomById } from "@repo/actions";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import FormCardSkeleton from "@/components/form-card-skeleton";
 import PageContainer from "@/components/layout/page-container";
 import { RoomForm } from "@/features/rooms/components/room-form";
-import { getRoomById } from "@repo/actions";
 
 export const metadata = {
   title: "Dashboard: Edit Room",

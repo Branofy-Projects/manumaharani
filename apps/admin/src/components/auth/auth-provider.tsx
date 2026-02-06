@@ -1,8 +1,7 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from 'react';
-
 import { authClient } from '@repo/auth';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 interface AuthContextType {
   isLoading: boolean;

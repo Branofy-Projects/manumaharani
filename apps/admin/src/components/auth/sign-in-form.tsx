@@ -1,5 +1,6 @@
 "use client";
 
+import { authClient } from '@repo/auth';
 import { Eye, EyeOff, Github, Mail } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -10,12 +11,11 @@ import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
 import {
-    Form, FormControl, FormField, FormItem, FormLabel, FormMessage
+  Form, FormControl, FormField, FormItem, FormLabel, FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { zodResolver } from '@/lib/zod-resolver';
-import { authClient } from '@repo/auth';
 
 import { useAuth } from './auth-provider';
 

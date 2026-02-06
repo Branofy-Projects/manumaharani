@@ -11,8 +11,8 @@ import type { TTestimonial } from "@repo/db";
 import type { Column, ColumnDef } from "@tanstack/react-table";
 
 const statusMap: Record<string, string> = {
-  pending: "Pending",
   approved: "Approved",
+  pending: "Pending",
   rejected: "Rejected",
 };
 
@@ -24,8 +24,8 @@ export const columns: ColumnDef<TTestimonial>[] = [
       return (
         <div className="flex flex-col">
           <Link
-            href={`/testimonials/${testimonial.id}`}
             className="font-medium hover:underline cursor-pointer"
+            href={`/testimonials/${testimonial.id}`}
           >
             {testimonial.guest_name}
           </Link>

@@ -15,7 +15,7 @@ export const columns: ColumnDef<TFaq>[] = [
     cell: ({ row }) => {
       const faq = row.original;
       return (
-        <Link href={`/faqs/${faq.id}`} className="hover:underline">
+        <Link className="hover:underline" href={`/faqs/${faq.id}`}>
           <div className="font-medium">{faq.question}</div>
         </Link>
       );

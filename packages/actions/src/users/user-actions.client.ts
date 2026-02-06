@@ -2,7 +2,6 @@
 
 import { auth } from '@repo/auth/auth.config';
 import { db, eq, schema } from '@repo/db';
-import { userRoles } from '@repo/db/schema/auth.schema';
 
 import { AppResponseHandler } from '../utils/app-response-handler';
 
@@ -60,7 +59,7 @@ async function requireSuperAdmin() {
   }
 }
 
-export const createUser = async (data: TNewUser & { password?: string }) => {
+export const createUser = async (data: { password?: string } & TNewUser) => {
   await requireSuperAdmin();
 
   try {

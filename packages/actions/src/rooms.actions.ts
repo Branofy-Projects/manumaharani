@@ -1,15 +1,17 @@
 "use server";
 import { and, count, eq, ilike, inArray, or } from "@repo/db";
-import { db, Rooms, RoomImages, Images } from "@repo/db";
-import type { TNewRoom, TRoom } from "@repo/db";
+import { db, Images, RoomImages, Rooms } from "@repo/db";
+
 import { safeDbQuery } from "./utils/db-error-handler";
 
+import type { TNewRoom, TRoom } from "@repo/db";
+
 type TGetRoomsFilters = {
-  search?: string;
-  page?: number;
   limit?: number;
-  status?: "available" | "occupied" | "maintenance" | "blocked";
+  page?: number;
   room_type_id?: number;
+  search?: string;
+  status?: "available" | "blocked" | "maintenance" | "occupied";
 };
 
 export const getRooms = async (filters: TGetRoomsFilters = {}) => {
@@ -57,13 +59,13 @@ export const getRooms = async (filters: TGetRoomsFilters = {}) => {
   const rooms = await safeDbQuery(
     async () => {
       return await db.query.Rooms.findMany({
-        where,
         limit,
         offset,
+        orderBy: (rooms, { asc }) => [asc(rooms.room_number)],
+        where,
         with: {
           roomType: true,
         },
-        orderBy: (rooms, { asc }) => [asc(rooms.room_number)],
       });
     },
     [],
@@ -84,11 +86,11 @@ export const getRoomById = async (id: number) => {
     return await db.query.Rooms.findFirst({
       where: eq(Rooms.id, id),
       with: {
-        roomType: true,
         images: {
-          with: { image: true },
           orderBy: (images, { asc }) => [asc(images.order)],
+          with: { image: true },
         },
+        roomType: true,
       },
     });
   } catch (error) {
@@ -141,9 +143,9 @@ export const deleteRoom = async (id: number) => {
 export const updateRoomImages = async (
   roomId: number,
   imageUpdates: Array<{
+    alt_text?: string;
     image_id: number;
     order: number;
-    alt_text?: string;
   }>
 ) => {
   if (!db) throw new Error("Database connection not available");
@@ -189,9 +191,9 @@ export const updateRoomImages = async (
   // Create new images
   if (imagesToCreate.length > 0) {
     const newImages = imagesToCreate.map((update) => ({
-      room_id: roomId,
       image_id: update.image_id,
       order: update.order,
+      room_id: roomId,
     }));
     operations.push(db.insert(RoomImages).values(newImages));
   }

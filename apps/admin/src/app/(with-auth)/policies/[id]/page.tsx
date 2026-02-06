@@ -1,10 +1,10 @@
+import { getPolicyById } from "@repo/actions/master-data.actions";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import FormCardSkeleton from "@/components/form-card-skeleton";
 import PageContainer from "@/components/layout/page-container";
 import PolicyDetailsView from "@/features/master-data/components/policy-details-view";
-import { getPolicyById } from "@repo/actions";
 
 export const metadata = {
   title: "Dashboard: Policy Details",

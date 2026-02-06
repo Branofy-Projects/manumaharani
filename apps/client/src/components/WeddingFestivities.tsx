@@ -155,11 +155,10 @@ export default function WeddingFestivities({
               <div className="flex flex-col space-y-0 overflow-y-auto max-h-[calc(100vh-100px)]">
                 {items.map((item, index) => (
                   <button
-                    className={`py-4 text-left px-8 uppercase tracking-[0.1em] text-sm border-b border-[#dcdcdc] ${
-                      index === activeIndex
+                    className={`py-4 text-left px-8 uppercase tracking-[0.1em] text-sm border-b border-[#dcdcdc] ${index === activeIndex
                         ? "text-[#a88b4d] font-medium"
                         : "text-[#8c8c8c]"
-                    }`}
+                      }`}
                     key={item.id}
                     onClick={() => {
                       handleTabClick(index);
@@ -219,23 +218,22 @@ export default function WeddingFestivities({
                         style={
                           isActive
                             ? {
-                                background:
-                                  "linear-gradient(270deg, rgba(255, 212, 202, 0) 0.33%, rgb(255, 212, 202) 51.67%, rgba(255, 212, 202, 0) 100%)",
-                                borderImage:
-                                  "linear-gradient(to right, rgba(69, 68, 63, 0), rgb(173, 139, 58), rgba(69, 68, 63, 0)) 1 0 / 1 / 0 stretch",
-                                borderStyle: "solid",
-                                borderWidth: "1px 0",
-                              }
+                              background:
+                                "linear-gradient(270deg, rgba(255, 212, 202, 0) 0.33%, rgb(255, 212, 202) 51.67%, rgba(255, 212, 202, 0) 100%)",
+                              borderImage:
+                                "linear-gradient(to right, rgba(69, 68, 63, 0), rgb(173, 139, 58), rgba(69, 68, 63, 0)) 1 0 / 1 / 0 stretch",
+                              borderStyle: "solid",
+                              borderWidth: "1px 0",
+                            }
                             : {}
                         }
                         type="button"
                       >
                         <span
-                          className={`block font-serif w-full whitespace-normal text-[10px] uppercase tracking-[0.1em] md:text-xs lg:text-sm leading-tight ${
-                            isActive
+                          className={`block font-serif w-full whitespace-normal text-[10px] uppercase tracking-[0.1em] md:text-xs lg:text-sm leading-tight ${isActive
                               ? "font-medium text-gray-900"
                               : "font-normal text-gray-500"
-                          }`}
+                            }`}
                         >
                           {item.label}
                         </span>
@@ -273,11 +271,10 @@ export default function WeddingFestivities({
             >
               <Image
                 alt={activeItem?.label || ""}
-                className={`object-cover transition-all duration-500 ease-in-out ${
-                  isAnimating
+                className={`object-cover transition-all duration-500 ease-in-out ${isAnimating
                     ? "scale-105 opacity-80 blur-sm"
                     : "scale-100 opacity-100 blur-0"
-                }`}
+                  }`}
                 fill
                 key={activeItem?.id}
                 priority
@@ -290,11 +287,10 @@ export default function WeddingFestivities({
           {/* Text Content - Right Side */}
           <div className="flex flex-col justify-center  px-8 py-10 md:px-12 md:py-16 lg:px-16">
             <div
-              className={`transition-all duration-500 ease-in-out ${
-                isAnimating
+              className={`transition-all duration-500 ease-in-out ${isAnimating
                   ? "translate-y-4 opacity-0"
                   : "translate-y-0 opacity-100"
-              }`}
+                }`}
             >
               <div className="mb-6 flex items-center gap-4">
                 <div className="h-px w-10 bg-gray-400" />
