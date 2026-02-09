@@ -10,6 +10,7 @@ WORKDIR /app
 COPY package.json yarn.lock ./
 COPY turbo.json ./
 
+#
 # Copy all package.json files for workspace resolution
 COPY apps/client/package.json ./apps/client/
 # COPY apps/admin/package.json ./apps/admin/
