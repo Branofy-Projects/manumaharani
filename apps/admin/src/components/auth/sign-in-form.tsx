@@ -98,7 +98,7 @@ export function SignInForm() {
       </div>
 
       {/* Social Sign In */}
-      <div className="space-y-3">
+      {/* <div className="space-y-3">
         <Button
           className="w-full"
           disabled={isLoading}
@@ -119,7 +119,7 @@ export function SignInForm() {
           <Mail className="w-4 h-4 mr-2" />
           Continue with Google
         </Button>
-      </div>
+      </div> */}
 
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
