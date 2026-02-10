@@ -54,8 +54,11 @@ export default async function BlogsSection() {
                 </div>
             ))}
         </div>
-        <button className="border border-black px-6 md:px-8 py-2 md:py-3 text-black tracking-widest font-medium uppercase text-xs md:text-base hover:bg-black hover:text-white transition">
-            Discover More
-        </button>
+        <Link href="/blogs" passHref
+        >
+            <button className="border border-black px-6 md:px-8 py-2 md:py-3 text-black tracking-widest font-medium uppercase text-xs md:text-base hover:bg-black hover:text-white transition">
+                Discover More
+            </button>
+        </Link>
     </>
 }
