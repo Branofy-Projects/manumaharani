@@ -6,6 +6,8 @@ import React from "react";
 export default async function LatestOffers() {
   const { offers } = await getOffers({ limit: 2, status: 'active' });
 
+  console.log("offers", offers);
+
   return (
     <div className="w-full lg:w-1/2 flex flex-col mt-10 lg:mt-0">
       <div className="flex items-center justify-between mb-6 md:mb-8">

@@ -7,6 +7,7 @@ import React from "react";
 export default async function UpcomingEvents() {
   const { events } = await getEvents({ limit: 3, upcomingOnly: true });
 
+  console.log(events);
   return (
     <div className="w-full lg:w-1/2 flex flex-col">
       <div className="flex items-center justify-between mb-6 md:mb-8">

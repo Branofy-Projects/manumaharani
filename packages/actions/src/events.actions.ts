@@ -1,6 +1,6 @@
 "use server";
 
-import { and, count, desc, eq, gte, ilike } from "@repo/db";
+import { and, count, eq, gte, ilike } from "@repo/db";
 import { db, Events } from "@repo/db";
 import { revalidatePath } from "next/cache";
 
