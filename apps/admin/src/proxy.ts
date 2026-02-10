@@ -58,7 +58,6 @@ export default async function proxy(request: NextRequest) {
       const session = await auth.api.getSession({
         headers: request.headers,
       });
-      console.log("sessionsession", session);
 
       if (!session?.user) {
         return NextResponse.redirect(new URL("/sign-in", request.url));

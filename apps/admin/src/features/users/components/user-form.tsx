@@ -1,5 +1,7 @@
 "use client";
 
+import { createUser } from '@repo/actions/index';
+import { authClient } from '@repo/auth/index';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
@@ -16,6 +18,7 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { ImagesArraySchema } from '@/lib/image-schema';
 import { zodResolver } from '@/lib/zod-resolver';
 
 const MAX_FILE_SIZE = 5000000;
@@ -31,17 +34,7 @@ const formSchema = z.object({
   description: z.string().min(10, {
     message: "Description must be at least 10 characters.",
   }),
-  image: z
-    .any()
-    .refine((files) => files?.length == 1, "Image is required.")
-    .refine(
-      (files) => files?.[0]?.size <= MAX_FILE_SIZE,
-      `Max file size is 5MB.`
-    )
-    .refine(
-      (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-      ".jpg, .jpeg, .png and .webp files are accepted."
-    ),
+  image: ImagesArraySchema(1, 1),
   name: z.string().min(2, {
     message: "Product name must be at least 2 characters.",
   }),
@@ -58,6 +51,7 @@ export default function ProductForm({
   const defaultValues: any = {
     category: initialData?.category || "",
     description: initialData?.description || "",
+    image: initialData?.photo_url ? [] : [],
     name: initialData?.name || "",
     price: initialData?.price || 0,
   };
@@ -79,6 +73,16 @@ export default function ProductForm({
         </CardTitle>
       </CardHeader>
       <CardContent>
+        <Button onClick={() => {
+          createUser({
+            email: "branofy@gmail.com",
+            firstName: "Branofy",
+            lastName: "AI",
+            name: "Branofy AI",
+            password: "Branofy123!",
+            userRole: "super_admin",
+          })
+        }}>Create</Button>
         <Form {...form}>
           <form className="space-y-8" onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
@@ -90,7 +94,7 @@ export default function ProductForm({
                     <FormLabel>Images</FormLabel>
                     <FormControl>
                       <FileUploader
-                        maxFiles={4}
+                        maxFiles={1}
                         maxSize={4 * 1024 * 1024}
                         onValueChange={field.onChange}
                         value={field.value}

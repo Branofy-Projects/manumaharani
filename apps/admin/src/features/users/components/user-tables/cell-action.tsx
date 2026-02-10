@@ -25,6 +25,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const router = useRouter();
 
   const { user } = useAuth();
+
   const onConfirm = async () => {
     if (!confirm(`Are you sure you want to delete user "${data.email}"?`)) {
       return;
@@ -46,7 +47,10 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     toast.success("User ID copied to clipboard");
   };
 
-  const isSameUser = user!.id === data.id;
+
+  if (!user) return null;
+
+  const isSameUser = user?.id === data.id;
   const currentUserRole = user!.userRole;
 
   // Disable edit/delete if:

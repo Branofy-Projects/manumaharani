@@ -1,7 +1,7 @@
 "use client";
 
 import { authClient, authHelpers } from '@repo/auth';
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 export interface AuthSession {
@@ -96,6 +96,7 @@ export function useAuth(): UseAuthReturn {
     const initializeAuth = async () => {
       try {
         const sessionData = await authClient.getSession();
+
         if (sessionData?.data?.session && sessionData?.data?.user) {
           setSession(sessionData.data.session);
           setUser(sessionData.data.user as AuthUser);
