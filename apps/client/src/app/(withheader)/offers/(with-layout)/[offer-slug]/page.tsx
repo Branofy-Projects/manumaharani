@@ -103,7 +103,7 @@ export default async function OfferDetailPage({ params }: PageProps) {
         : 0;
 
     return (
-        <main className="min-h-screen bg-white pb-20 lg:pb-0">
+        <main className="min-h-screen bg-background pb-20 lg:pb-0">
             {/* Breadcrumb */}
             <div className="border-b border-b-gray-200 bg-gray-50">
                 <div className="mx-auto max-w-screen-xl px-4 py-3">

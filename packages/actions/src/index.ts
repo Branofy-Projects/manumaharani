@@ -1,6 +1,7 @@
 export * from "./blogs.actions";
 export * from "./bookings.actions";
 export * from "./contact-queries.actions";
+export * from "./dashboard.actions";
 export * from "./events.actions";
 export * from "./experiences.actions";
 export * from "./gallery.actions";

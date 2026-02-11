@@ -19,7 +19,7 @@ export const navItems: NavItem[] = [
     items: [],
     shortcut: ["d", "d"],
     title: "Dashboard",
-    url: "/overview",
+    url: "/",
   },
   {
     icon: "settings",

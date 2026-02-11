@@ -5,28 +5,11 @@ import { Suspense } from "react";
 
 import Footer from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { fontVariables } from "@/lib/fonts";
 
 import type { Metadata, Viewport } from "next";
 
-const geistMono = localFont({
-  src: "../fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-});
 
-const geistSans = localFont({
-  src: "../fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-});
-
-export const silkSerif = localFont({
-  src: "../fonts/Silk Serif Light.otf",
-  variable: "--font-silk-serif",
-});
-
-export const silkSerifItalic = localFont({
-  src: "../fonts/Silk Serif Light Italic.otf",
-  variable: "--font-silk-serif-italic",
-});
 
 export const viewport: Viewport = {
   initialScale: 1,
@@ -48,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${silkSerif.variable} ${silkSerifItalic.variable}`}
+        className={fontVariables}
       >
         <Suspense>
           <Header />
