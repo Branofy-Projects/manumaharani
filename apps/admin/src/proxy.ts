@@ -28,7 +28,6 @@ const adminRoutes = ["/user"];
 
 export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-
   
   // Skip middleware for static files and Next.js internals
   if (

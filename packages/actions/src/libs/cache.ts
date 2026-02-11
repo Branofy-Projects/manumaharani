@@ -96,3 +96,5 @@ export const getRelatedBlogsKey = (category: TBlogCategory, ignore: number[]) =>
 export const getBlogBySlugKey = (slug: string) => {
     return `blog:slug:${slug}`;
 };
+
+export const REELS_CACHE_KEY = 'reels';

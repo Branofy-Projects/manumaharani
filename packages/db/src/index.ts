@@ -82,9 +82,11 @@ export type {
 import { ContactQueries, contactQueryStatusEnum } from "./schema/contact-queries.schema";
 import { Experiences } from "./schema/experiences.schema";
 import { OfferBookings ,offerBookingStatusEnum} from "./schema/offer-bookings.schema";
+import { Reels, reelStatusEnum } from "./schema/reels.schema";
 
 export type { TContactQuery, TNewContactQuery } from "./schema/contact-queries.schema";
 export type { TExperience, TNewExperience } from "./schema/experiences.schema";
+export type { TReel, TNewReel } from "./schema/reels.schema";
 // Core Types
 export type {
   TAmenityBase,
@@ -184,6 +186,8 @@ export {
   paymentStatusEnum,
   Policies,
   policyKindEnum,
+  Reels,
+  reelStatusEnum,
   RoomImages,
   Rooms,
   roomStatusEnum,
@@ -226,6 +230,7 @@ export const schemaWithoutRelations = {
   Offers,
   PasswordResetTokens,
   Policies,
+  Reels,
   RoomImages,
   Rooms,
   RoomTypeAmenities,

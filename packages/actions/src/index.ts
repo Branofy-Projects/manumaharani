@@ -8,6 +8,7 @@ export * from "./gallery.actions";
 export * from "./images.actions";
 export * from "./offer-bookings.actions";
 export * from "./offers.actions";
+export * from "./reels.actions";
 export * from "./room-types.actions";
 export * from "./rooms.actions";
 export * from "./testimonials.actions";

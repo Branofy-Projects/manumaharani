@@ -148,6 +148,13 @@
       "when": 1770799658724,
       "tag": "0020_sleepy_betty_ross",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1770828733054,
+      "tag": "0021_unknown_white_tiger",
+      "breakpoints": true
     }
   ]
 }

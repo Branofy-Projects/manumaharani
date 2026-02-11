@@ -37,9 +37,10 @@ export async function deleteFilesFromGCS(urls: string[]): Promise<void> {
 
 export async function generateSignedUploadUrl(
   filename: string,
-  contentType: string
+  contentType: string,
+  suffix?: string
 ): Promise<{ publicUrl: string; signedUrl: string; }> {
-  const objectName = `uploads/${Date.now()}-${filename}`;
+  const objectName = `uploads/${suffix ? `${suffix}/` : ''}${Date.now()}-${filename}`;
   const file = bucket.file(objectName);
 
   const [signedUrl] = await file.getSignedUrl({
@@ -49,6 +50,8 @@ export async function generateSignedUploadUrl(
     version: "v4",
   });
 
+  console.log("bucketName",bucketName);
+  
   const publicUrl = `https://storage.googleapis.com/${bucketName}/${objectName}`;
 
   return { publicUrl, signedUrl };
