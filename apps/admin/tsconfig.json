@@ -10,7 +10,6 @@
   "paths": {
    "@/*": ["./src/*"],
    "@repo/actions/*": ["../../packages/actions/src/*"],
-   "@repo/auth/*": ["../../packages/auth/src/*"],
    "@repo/db/*": ["../../packages/db/src/*"]
   }
  },

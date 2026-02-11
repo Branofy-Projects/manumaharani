@@ -2,14 +2,12 @@ import { Mail, MapPin, Phone } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import ContactForm from "./ContactForm";
 
 import type { Metadata } from "next";
 
-export const dynamic = 'force-static';
-export const revalidate = false;
+// export const dynamic = 'force-static';
+// export const revalidate = false;
 
 export const metadata: Metadata = {
   description: "We'd love to hear from you! Reach out to us for any inquiries or assistance.",
@@ -96,67 +94,7 @@ export default function ContactUsPage() {
           </div>
 
           {/* Right: Contact Form */}
-          <div className="rounded-xl bg-white p-8 shadow-sm border border-gray-100">
-            <h3 className="mb-6 font-serif text-2xl font-light text-[#2b2b2b]">Send us a Message</h3>
-            <form className="space-y-6">
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700" htmlFor="name">Name</label>
-                  <Input
-                    className="rounded-lg border-gray-200 bg-[#faf6f1]/30 focus:border-[#a88b4d] focus:ring-[#a88b4d]"
-                    id="name"
-                    placeholder="Your Name"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700" htmlFor="phone">Phone</label>
-                  <Input
-                    className="rounded-lg border-gray-200 bg-[#faf6f1]/30 focus:border-[#a88b4d] focus:ring-[#a88b4d]"
-                    id="phone"
-                    placeholder="Your Phone Number"
-                    type="tel"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700" htmlFor="email">Email</label>
-                <Input
-                  className="rounded-lg border-gray-200 bg-[#faf6f1]/30 focus:border-[#a88b4d] focus:ring-[#a88b4d]"
-                  id="email"
-                  placeholder="Your Email"
-                  type="email"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700" htmlFor="subject">Subject</label>
-                <Input
-                  className="rounded-lg border-gray-200 bg-[#faf6f1]/30 focus:border-[#a88b4d] focus:ring-[#a88b4d]"
-                  id="subject"
-                  placeholder="Subject"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700" htmlFor="message">Message</label>
-                <Textarea
-                  className="rounded-lg border-gray-200 bg-[#faf6f1]/30 focus:border-[#a88b4d] focus:ring-[#a88b4d]"
-                  id="message"
-                  placeholder="Your Message"
-                  rows={6}
-                />
-              </div>
-
-              <Button
-                className="w-full bg-[#2b2b2b] py-6 text-sm font-bold uppercase tracking-[0.2em] text-white hover:bg-[#a88b4d]"
-                size="lg"
-                type="submit"
-              >
-                Send Message
-              </Button>
-            </form>
-          </div>
+          <ContactForm />
         </div>
       </section>
 

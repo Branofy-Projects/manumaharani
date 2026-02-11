@@ -17,32 +17,19 @@ export const HeaderWrapper = ({ children }: HeaderWrapperProps) => {
     href?: string;
     label: string;
   }> = [
-      { href: "#about", label: "About Us" },
-      { href: "#dining", label: "Fine Dining" },
+      { href: "/about-us", label: "About Us" },
+      { href: "/rooms", label: "Accommodation" },
+      { href: "/wedding", label: "Weddings" },
+      { href: "/fine-dining", label: "Dining" },
       {
-        children: [
-          { href: "#wedding-destination", label: "Destination Wedding" },
-          { href: "#events", label: "Events/Off-Sites" },
-        ],
-        label: "Wedding/Mice",
+        href: "/events",
+        label: "Mice",
       },
       {
-        children: [
-          { href: "#regal-experience", label: "Regal Experience" },
-          { href: "#book-safari", label: "Book A Safari" },
-        ],
-        label: "Experiences",
+        href: "/offers",
+        label: "Offers",
       },
-      {
-        children: [
-          { href: "#luxury-room", label: "Luxury Room" },
-          { href: "#luxury-cottages", label: "Luxury Cottages" },
-          { href: "#club-cottages", label: "Club Cottages" },
-          { href: "#family-room", label: "Family Room" },
-        ],
-        label: "Accomodation",
-      },
-      { href: "#contact", label: "Contact Us" },
+      { href: "/contact-us", label: "Contact Us" },
     ];
 
   const [activeIndex, setActiveIndex] = React.useState<number | undefined>(
@@ -171,7 +158,6 @@ export const HeaderWrapper = ({ children }: HeaderWrapperProps) => {
               <button
                 className="inline-flex items-center gap-1.5 text-sm text-[#2b2b2b] whitespace-nowrap"
                 onClick={() => {
-                  console.log("back");
                   setMobileSubmenuIndex(null);
                 }}
               >

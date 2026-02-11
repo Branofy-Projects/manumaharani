@@ -1,5 +1,5 @@
 "use client";
-import { createBlog, updateBlog } from "@repo/actions";
+import { createBlog, updateBlog } from "@repo/actions/blogs.actions";
 import { createImages } from "@repo/actions/images.actions";
 import { blogStatusEnum } from "@repo/db/schema/blogs.schema";
 import { Loader2 } from "lucide-react";

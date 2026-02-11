@@ -36,11 +36,6 @@ export const Blogs = pgTable(
     slug: text("slug").notNull().unique(),
     title: text("title").notNull(),
 
-    author_id: text("author_id").references(() => Users.id, {
-      onDelete: "set null",
-    }),
-    author_name: varchar("author_name", { length: 255 }),
-
     featured_image_id: integer("featured_image_id").references(
       () => Images.id,
       { onDelete: "set null" }
@@ -66,7 +61,6 @@ export const Blogs = pgTable(
   },
   (table) => [
     index("blogs_slug_idx").on(table.slug),
-    index("blogs_author_id_idx").on(table.author_id),
     index("blogs_category_idx").on(table.category),
     index("blogs_status_idx").on(table.status),
     index("blogs_published_at_idx").on(table.published_at),

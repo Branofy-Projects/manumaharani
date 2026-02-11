@@ -1,5 +1,7 @@
 import { redis } from "./redis";
 
+import type { TBlogCategory } from "@repo/db/schema/blogs.schema";
+
 type CacheOptions<T> = {
   deserialize?: (raw: string) => T;
   key: string;
@@ -43,10 +45,8 @@ export async function getOrSet<T>(
   }
 
   const data = await compute();
-  console.log("data",data);
   
   const serialized = serialize(data);
-  console.log("serialized",serialized, !!data);
   
   if (ttlSeconds && ttlSeconds > 0) {
     await redis.set(key, serialized, { ex: ttlSeconds });
@@ -69,3 +69,30 @@ export async function setJSON<T>(key: string, val: T, ttlSeconds?: number) {
     await redis.set(key, raw);
   }
 }
+
+export const EVENTS_CACHE_KEY = 'events';
+export const UPCOMMING_EVENTS_CACHE_KEY = 'upcoming-events';
+
+export const OFFERS_CACHE_KEY = 'offers';
+export const LATEST_OFFERS_CACHE_KEY = `${OFFERS_CACHE_KEY}:latest`;
+
+export const getOfferBySlugKey = (slug: string) => {
+    return `offer:slug:${slug}`;
+};
+
+export const ROOM_TYPES_CACHE_KEY = 'room';
+export const ACTIVE_ROOM_TYPES_CACHE_KEY = `${ROOM_TYPES_CACHE_KEY}:active`;
+export const getRoomTypeBySlugKey = (slug: string) => {
+    return `${ROOM_TYPES_CACHE_KEY}:slug:${slug}`;
+};
+
+export const BLOGS_CACHE_KEY = 'blogs';
+export const LATEST_BLOGS_CACHE_KEY = `${BLOGS_CACHE_KEY}:latest`;
+
+export const getRelatedBlogsKey = (category: TBlogCategory, ignore: number[]) => {
+  return `${BLOGS_CACHE_KEY}:related:${category}:ignore:${ignore.join(',')}`;
+};
+
+export const getBlogBySlugKey = (slug: string) => {
+    return `blog:slug:${slug}`;
+};

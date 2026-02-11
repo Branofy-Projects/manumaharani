@@ -10,6 +10,7 @@ import type { TNewEvent } from "@repo/db/schema/events.schema";
 import type { TEvent } from "@repo/db/schema/types.schema";
 
 type TGetEventsFilters = {
+  fromDate?: string; // Add this optional field
   limit?: number;
   page?: number;
   search?: string;
@@ -24,7 +25,7 @@ export const getEvents = async (filters: TGetEventsFilters = {}) => {
   }
 
   if (filters.upcomingOnly) {
-    const today = new Date().toISOString().split("T")[0];
+    const today = filters.fromDate || new Date().toISOString().split("T")[0];
     conditions.push(gte(Events.startDate, today));
   }
 

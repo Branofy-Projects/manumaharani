@@ -79,7 +79,12 @@ export type {
   TUserRole,
   TVerification,
 } from "./schema/auth.schema";
+import { ContactQueries, contactQueryStatusEnum } from "./schema/contact-queries.schema";
+import { Experiences } from "./schema/experiences.schema";
+import { OfferBookings ,offerBookingStatusEnum} from "./schema/offer-bookings.schema";
 
+export type { TContactQuery, TNewContactQuery } from "./schema/contact-queries.schema";
+export type { TExperience, TNewExperience } from "./schema/experiences.schema";
 // Core Types
 export type {
   TAmenityBase,
@@ -156,6 +161,8 @@ export {
   BookingPayments,
   Bookings,
   bookingStatusEnum,
+  ContactQueries,
+  contactQueryStatusEnum,
   EmailVerificationTokens,
   Events,
   Faqs,
@@ -164,6 +171,8 @@ export {
   galleryTypeEnum,
   highlightTypeEnum,
   Images,
+  OfferBookings,
+  offerBookingStatusEnum,
   offerCategoryEnum,
   OfferFaqs,
   OfferHighlights,
@@ -192,7 +201,7 @@ export {
   UserPreferences,
   userRoles,
   Users,
-  Verifications,
+  Verifications
 };
 
 export const schemaWithoutRelations = {
@@ -202,11 +211,14 @@ export const schemaWithoutRelations = {
   Blogs,
   BookingPayments,
   Bookings,
+  ContactQueries,
   EmailVerificationTokens,
   Events,
+  Experiences,
   Faqs,
   Gallery,
   Images,
+  OfferBookings,
   OfferFaqs,
   OfferHighlights,
   OfferImages,
@@ -227,7 +239,7 @@ export const schemaWithoutRelations = {
   UserAuditLog,
   UserPreferences,
   Users,
-  Verifications,
+  Verifications
 };
 
 export const schema = {

@@ -1,5 +1,3 @@
-import { ClockIcon } from "@heroicons/react/24/outline";
-import Image from "next/image";
 import React, { Suspense } from "react";
 
 import BlogsLoadingSection from "./blogs-loading-section";

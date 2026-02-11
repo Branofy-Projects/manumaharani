@@ -69,6 +69,12 @@ export const navItems: NavItem[] = [
         title: "Testimonials",
         url: "/testimonials",
       },
+      {
+        icon: "kanban",
+        shortcut: ["e", "x"],
+        title: "Experiences",
+        url: "/experiences",
+      },
     ],
     title: "Content",
     url: "#",
@@ -91,6 +97,26 @@ export const navItems: NavItem[] = [
       },
     ],
     title: "Marketing",
+    url: "#",
+  },
+  {
+    icon: "billing",
+    isActive: true,
+    items: [
+      {
+        icon: "billing",
+        shortcut: ["o", "b"],
+        title: "Offer Bookings",
+        url: "/offer-bookings",
+      },
+      {
+        icon: "help",
+        shortcut: ["c", "q"],
+        title: "Contact Queries",
+        url: "/contact-queries",
+      },
+    ],
+    title: "Queries & Bookings",
     url: "#",
   },
   {

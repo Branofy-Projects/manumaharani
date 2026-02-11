@@ -1,54 +1,12 @@
-import { getOffers } from "@repo/actions/offers.actions";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
+import { getOffersCache } from "@/lib/cache/offer.cache";
 
-const OFFERS = [
-  {
-    category: "Hotel",
-    description:
-      "Semi-Annual Sale savings are here! Enjoy up to 30% off room rates. Join us for a memorable stay.",
-    id: 1,
-    image:
-      "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80",
-    subtitle: "Manu Maharani Resorts",
-    title: "Save Up to 30% Off Room Rates",
-  },
-  {
-    category: "Hotel",
-    description:
-      "Semi-Annual Sale savings are here! Save More. Play More. Enjoy up to 45% off room rates.",
-    id: 2,
-    image:
-      "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=600&q=80",
-    subtitle: "Manu Maharani Resorts",
-    title: "Save Up to 45% Off Room Rates",
-  },
-  {
-    category: "Hotel",
-    description:
-      "Treat yourself with $75 in food and beverage credit, per night. Indulge in our fine dining experiences.",
-    id: 3,
-    image:
-      "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=600&q=80",
-    subtitle: "Manu Maharani Resorts",
-    title: "Daily F&B Credit",
-  },
-  {
-    category: "Hotel",
-    description:
-      "Save up to 10% when you stay 4 or more nights booked at least 60 days in advance.",
-    id: 4,
-    image:
-      "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80",
-    subtitle: "Manu Maharani Resorts",
-    title: "Stay Longer, Save More",
-  },
-];
 
 export default async function OffersPage() {
-  const { offers } = await getOffers({ status: 'active' });
+  const offers = await getOffersCache()
   return (
     <div className="grid grid-cols-1 max-w-screen-xl w-full mx-auto md:grid-cols-2 lg:grid-cols-4 gap-6 px-4 xl:px-0">
       {offers.map((offer) => (

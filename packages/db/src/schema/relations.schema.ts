@@ -8,6 +8,7 @@ import { Events } from './events.schema';
 import { Faqs } from './faqs.schema';
 import { Gallery } from './gallery.schema';
 import { Images } from './images.schema';
+import { OfferBookings } from './offer-bookings.schema';
 import { OfferFaqs, OfferHighlights, OfferImages, OfferItinerary, Offers } from './offers.schema';
 import { Policies } from './policies.schema';
 import {
@@ -123,10 +124,6 @@ export const bookingPaymentsRelations = relations(
 );
 
 export const blogRelations = relations(Blogs, ({ many, one }) => ({
-  author: one(Users, {
-    fields: [Blogs.author_id],
-    references: [Users.id],
-  }),
   featuredImage: one(Images, {
     fields: [Blogs.featured_image_id],
     references: [Images.id],
@@ -229,6 +226,14 @@ export const offerFaqsRelations = relations(OfferFaqs, ({ one }) => ({
   }),
   offer: one(Offers, {
     fields: [OfferFaqs.offer_id],
+    references: [Offers.id],
+  }),
+}));
+
+
+export const offerBookingRelations = relations(OfferBookings, ({ one }) => ({
+  offer: one(Offers, {
+    fields: [OfferBookings.offer_id],
     references: [Offers.id],
   }),
 }));

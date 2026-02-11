@@ -1,6 +1,8 @@
 import { Accounts, db, Sessions, Users, Verifications } from '@repo/db';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
+import { nextCookies } from 'better-auth/next-js';
+import { bearer } from 'better-auth/plugins';
 
 // Simple email sending function placeholder
 async function sendEmail({
@@ -25,6 +27,7 @@ async function sendEmail({
 
 // Better Auth configuration
 export const auth = betterAuth({
+  baseURL: process.env.NEXT_PUBLIC_AUTH_URL || "http://localhost:3001",
   secret: process.env.BETTER_AUTH_SECRET || "",
   // Database configuration with Drizzle adapter
   database: drizzleAdapter(db, {
@@ -36,6 +39,11 @@ export const auth = betterAuth({
       verification: Verifications,
     },
   }),
+
+  plugins: [
+    nextCookies(),
+    bearer(),
+  ],
 
   // Email and password configuration
   emailAndPassword: {
@@ -78,6 +86,8 @@ export const auth = betterAuth({
         to: user.email,
       });
     },
+    
+    
   },
 
   // Social providers configuration (optional)

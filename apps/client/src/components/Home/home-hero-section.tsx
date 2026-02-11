@@ -1,4 +1,3 @@
-import { HomeHeroBookingBar } from "./HomeHeroBookingBar";
 
 export const HomeHeroSection = () => {
   return (
@@ -30,7 +29,7 @@ export const HomeHeroSection = () => {
                 Manu Maharani Resort & Spa
               </span>
               <span className="text-2xl md:text-4xl font-thin tracking-[0.2em] md:tracking-[0.3em] uppercase text-white leading-tight pt-2 pb-4 md:pb-6">
-                An Iconic Riverside Sanctuary
+                Luxury Riverside Resort
                 <br />
                 in Jim Corbett
               </span>
@@ -38,8 +37,8 @@ export const HomeHeroSection = () => {
             <div>
               <div className="space-y-2 mb-2 text-base md:text-lg tracking-wider">
                 <p className="text-white/90 text-xs md:text-sm">
-                  Prime Riverside Address: Village Dhikuli, Ramnagar – Jim
-                  Corbett National Park, Uttarakhand, India.
+                  Best Stay, Breathtaking Views, Infinity Swimming Pool, on-site choice of Restaurants & Roof Top Bar,
+                  Vyom
                 </p>
               </div>
               {/* <div className="flex gap-2 md:gap-4 flex-wrap">
@@ -55,7 +54,7 @@ export const HomeHeroSection = () => {
       </div>
 
       {/* Booking Form in 5-part grid below divider */}
-      <HomeHeroBookingBar />
+      {/* <HomeHeroBookingBar /> */}
     </section >
   );
 };

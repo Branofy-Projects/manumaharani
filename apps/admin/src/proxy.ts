@@ -12,12 +12,24 @@ const publicRoutes = [
   "/api/auth",
 ];
 
+const allowedOrigins = [
+  "http://localhost:3000",
+  process.env.NEXT_PUBLIC_CLIENT_URL,
+];
+
+const corsOptions = {
+  "Access-Control-Allow-Headers":
+    "Content-Type, Authorization, x-webhook-signature",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+};
+
 // Admin only routes - using regex patterns
 const adminRoutes = ["/user"];
 
 export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  
   // Skip middleware for static files and Next.js internals
   if (
     pathname.startsWith("/_next") ||
@@ -26,6 +38,25 @@ export default async function proxy(request: NextRequest) {
     pathname === "/favicon.ico"
   ) {
     return NextResponse.next();
+  }
+
+  if (pathname.startsWith("/api")) {
+    const origin = request.headers.get("origin") ?? "";
+    const isAllowedOrigin = allowedOrigins.includes(origin);
+
+    // Handle preflighted requests
+    const isPreflight = request.method === "OPTIONS";
+
+    if (isPreflight) {
+      const preflightHeaders = {
+        ...(isAllowedOrigin && { "Access-Control-Allow-Origin": origin }),
+        ...corsOptions,
+      };
+      return NextResponse.json({}, { headers: preflightHeaders });
+    }
+
+    // Continue with other middleware logic, but we'll need to attach CORS headers to the final response
+    // We'll do this by modifying the response returned at the end
   }
 
   // Check if route is public

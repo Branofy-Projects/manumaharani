@@ -208,6 +208,43 @@ export const addBookingPayment = async (data: TNewBookingPayment) => {
   return payment;
 };
 
+export const updateBookingStatus = async (
+  id: number,
+  status: "cancelled" | "checked_in" | "checked_out" | "confirmed" | "no_show" | "pending",
+  reason?: string
+) => {
+  try {
+    if (!db) throw new Error("Database connection not available");
+
+    const updateData: Record<string, any> = {
+      booking_status: status,
+      updated_at: new Date(),
+    };
+
+    if (status === "checked_in") {
+      updateData.check_in_time = new Date();
+    } else if (status === "checked_out") {
+      updateData.check_out_time = new Date();
+    } else if (status === "cancelled") {
+      updateData.cancelled_at = new Date();
+      if (reason) {
+        updateData.cancellation_reason = reason;
+      }
+    }
+
+    const [updated] = await db
+      .update(Bookings)
+      .set(updateData)
+      .where(eq(Bookings.id, id))
+      .returning();
+
+    return updated;
+  } catch (error) {
+    console.error("Error updating booking status:", error);
+    throw error;
+  }
+};
+
 export const cancelBooking = async (id: number, reason?: string) => {
   if (!db) throw new Error("Database connection not available");
 

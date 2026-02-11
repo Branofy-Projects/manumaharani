@@ -1,261 +1,132 @@
-import { PropertyActivities } from "@/components/PropertyActivities";
-import { PropertyAmenities } from "@/components/PropertyAmenities";
-import { PropertyBedrooms } from "@/components/PropertyBedrooms";
-import { PropertyBreadcrumb } from "@/components/PropertyBreadcrumb";
-import { PropertyCancellationPolicy } from "@/components/PropertyCancellationPolicy";
-import { PropertyEnquiryForm } from "@/components/PropertyEnquiryForm";
-import { PropertyFAQ } from "@/components/PropertyFAQ";
-import { PropertyHeroGallery } from "@/components/PropertyHeroGallery";
-import { PropertyHouseRules } from "@/components/PropertyHouseRules";
-import { PropertyInfo } from "@/components/PropertyInfo";
-import { PropertyMeals } from "@/components/PropertyMeals";
-import { PropertyQuickNotes } from "@/components/PropertyQuickNotes";
-import { PropertyRealMoments } from "@/components/PropertyRealMoments";
-import { PropertyStickyNav } from "@/components/PropertyStickyNav";
+import { BedDouble, ChevronRight, Maximize, Users } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
-export default function Page() {
-  const breadcrumbItems = [
-    { href: "/", label: "Home" },
-    { href: "/lonavala", label: "Lonavala" },
-    { label: "Maison Bellevue" },
-  ];
+import { getRoomTypesCache } from "@/lib/cache/rooms.cache";
 
-  const navItems = [
-    { href: "#overview", label: "Overview" },
-    { href: "#meals", label: "Meals" },
-    { href: "#amenities", label: "Amenities" },
-    { href: "#real-moments", label: "Real Moments" },
-    { href: "#cancellation-policy", label: "Cancellation Policy" },
-    { href: "#house-rules", label: "House Rules" },
-    { href: "#reviews", label: "Reviews" },
-  ];
+import type { Metadata } from "next";
 
-  const heroImage =
-    "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000";
-  const heroVideo =
-    "https://ik.imagekit.io/teggaadfo/manu%20-%201080WebShareName.mov/ik-video.mp4?updatedAt=1760112353814";
-  const heroVideoPoster =
-    "https://www.fourseasons.com/alt/img-opt/~70.1530.0,0000-0,0000-1536,0000-864,0000/publish/content/dam/fourseasons/images/web/BSA/BSA_1200x800.jpg";
+export const metadata: Metadata = {
+  description: "Explore our collection of rooms and cottages at Manu Maharani Resort & Spa, nestled in the heart of Jim Corbett National Park.",
+  title: "Accommodation | Manu Maharani Resort & Spa",
+};
 
-  const galleryImages = [
-    "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
-    "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
-    "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
-    "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
-  ];
-
-  const propertyAmenities = [
-    { icon: "👥", label: "Guests", value: "12" },
-    { icon: "🛏️", label: "Bedrooms", value: "6" },
-    { icon: "🛁", label: "Bathrooms", value: "6" },
-    { icon: "🏊", label: "Pool", value: "1" },
-  ];
-
-  const bedrooms = [
-    {
-      id: 1,
-      image:
-        "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
-      name: "Bedroom 1",
-    },
-    {
-      id: 2,
-      image:
-        "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
-      name: "Bedroom 2",
-    },
-    {
-      id: 3,
-      image:
-        "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
-      name: "Bedroom 3",
-    },
-    {
-      id: 4,
-      image:
-        "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
-      name: "Bedroom 4",
-    },
-    {
-      id: 5,
-      image:
-        "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
-      name: "Bedroom 5",
-    },
-    {
-      id: 6,
-      image:
-        "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
-      name: "Bedroom 6",
-    },
-  ];
-
-  const amenitiesList = [
-    { icon: "🛏️", name: "Ensuite Bedroom" },
-    { icon: "🚗", name: "Car Parking" },
-    { icon: "👤", name: "Care Taker on Site" },
-    { icon: "🔊", name: "Bluetooth speaker" },
-    { icon: "🐾", name: "Pet Friendly" },
-    { icon: "📶", name: "WIFI" },
-    { icon: "🏊", name: "Private Pool" },
-  ];
-
-  const realMoments = [
-    {
-      alt: "Real Moment 1",
-      id: "1",
-      image:
-        "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
-    },
-    {
-      alt: "Real Moment 2",
-      id: "2",
-      image:
-        "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
-    },
-    {
-      alt: "Real Moment 3",
-      id: "3",
-      image:
-        "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
-    },
-    {
-      alt: "Real Moment 4",
-      id: "4",
-      image:
-        "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
-    },
-  ];
-
-  const activitiesList = [
-    {
-      description:
-        "Children, elders, and pets are welcome at this lovely holiday home. Take a nice break from the routine with your loved ones and enjoy fine hospitality with us.",
-      id: "1",
-      image:
-        "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
-      imagePosition: "left" as const,
-      title: "Host family getaways",
-    },
-    {
-      description:
-        "With themed interiors, wallpapers, vibrant colours and stylish corners, this villa in Lonavala makes a stunning backdrop for photoshoots.",
-      id: "2",
-      image:
-        "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
-      imagePosition: "left" as const,
-      title: "Plan Your Photoshoots",
-    },
-    {
-      description:
-        "Savour smoky barbecue grills (both veg and non-veg) served fresh on the lawns. Pair them with your favourite cocktails or mocktails and enjoy a laid-back evening under the stars.",
-      id: "3",
-      image:
-        "https://plus.unsplash.com/premium_photo-1661877303180-19a028c21048?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXRpZnVsJTIwcm9vbXxlbnwwfHwwfHx8MA%3D%3D&fm=jpg&q=60&w=3000",
-      imagePosition: "left" as const,
-      title: "Have BBQ Nights",
-    },
-  ];
-
-  const faqsList = [
-    {
-      answer:
-        "Yes, Maison Bellevue is a pet-friendly holiday home. However, pet parents are requested not to allow pets in the bathrooms or on beds. Please carry pets' beds for their comfort and safety.",
-      id: "1",
-      question: "Is this a pet-friendly villa in Lonavala?",
-    },
-    {
-      answer: "Yes, parking is available on site for guests.",
-      id: "2",
-      question: "Is there parking available on site?",
-    },
-    {
-      answer:
-        "Yes, a caretaker is available throughout your stay to assist you.",
-      id: "3",
-      question: "Is there a caretaker available throughout our stay?",
-    },
-    {
-      answer:
-        "Yes, the villa comes with an in-house chef to prepare delicious meals for you.",
-      id: "4",
-      question: "Does the villa in Lonavala come with an in-house chef?",
-    },
-    {
-      answer:
-        "No, outside food is not allowed. However, our in-house chef can prepare a variety of meals for you.",
-      id: "5",
-      question: "Can guests order meals from outside?",
-    },
-    {
-      answer:
-        "You can book this villa by contacting us through our website or by calling our booking team.",
-      id: "6",
-      question: "How can I book this private pool villa near me?",
-    },
-  ];
+export default async function RoomsPage() {
+  const { roomTypes } = await getRoomTypesCache()
 
   return (
-    <main className="bg-[#f3eee7] pt-[72px] md:pt-[88px]">
-      <PropertyBreadcrumb items={breadcrumbItems} />
-      <PropertyHeroGallery
-        galleryImages={galleryImages}
-        heroImage={heroImage}
-        heroVideo={heroVideo}
-        heroVideoPoster={heroVideoPoster}
-      />
-      <PropertyStickyNav items={navItems} />
-
-      {/* Main Content */}
-      <section className="py-10">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-            {/* Left Column - Property Details */}
-            <div className="lg:col-span-2">
-              <PropertyInfo
-                amenities={propertyAmenities}
-                checkIn="1 PM"
-                checkOut="11 AM"
-                description="Bring along your furry friends for a comfortable getaway at this pet-friendly villa in Lonavala. Maison Bellevue has 6 bedrooms, each designed in a distinct style, cohesively coming together to form a beautiful holiday..."
-                location="Lonavala, Maharashtra"
-                maxCapacity={22}
-                title="Maison Bellevue"
-              />
-              <PropertyBedrooms bedrooms={bedrooms} />
-
-              <PropertyMeals />
-
-              <PropertyAmenities amenities={amenitiesList} />
-
-              <PropertyRealMoments moments={realMoments} />
-
-              <PropertyCancellationPolicy policyText="Stayscape offers flexible refunds: 90% or full travel credit for cancellations 40+ days prior, 50% refund for 26–40 days, and no refunds within 25 days or peak dates." />
-
-              <PropertyHouseRules rulesText="Stayscape ensures safe, hassle-free stays with fixed check-in/out, refundable security deposit, ID verification, no outside food or parties, restricted visitors, and strict rules on smoking, noise, and illegal activities." />
-
-              <PropertyQuickNotes notesText="To ensure a smooth and enjoyable experience, we've listed a few key notes about the property. Please review them before your stay." />
-
-              {/* <PropertyDirection
-                address="QG72+FCG Shilatne, Maharashtra"
-                coordinates="18°45'49.3&quot;N 73°30'03.9&quot;E"
-                directions={directionsList}
-              /> */}
-
-              <PropertyActivities activities={activitiesList} />
-
-              <PropertyFAQ faqs={faqsList} />
-            </div>
-
-            {/* Right Column - Enquiry Form */}
-            <aside className="lg:col-span-1">
-              <PropertyEnquiryForm
-                gstIncludedPrice="₹70,800"
-                perNightPrice="₹60,000"
-                securityDeposit="₹15,000"
-              />
-            </aside>
-          </div>
+    <main className="min-h-screen bg-white">
+      {/* Hero Section */}
+      <section className="relative flex min-h-[50vh] items-end overflow-hidden md:min-h-[60vh]">
+        <Image
+          alt="Manu Maharani Resort & Spa Accommodation"
+          className="object-cover object-center"
+          fill
+          priority
+          src="https://www.manumaharaniresorts.com/wp-content/uploads/2025/01/mm-executive-room.webp"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+        <div className="relative z-10 mx-auto w-full max-w-screen-xl px-4 pb-16 md:pb-20 xl:px-0">
+          <nav className="mb-6 flex items-center gap-2 text-sm text-white/70">
+            <Link className="hover:text-white transition" href="/">Home</Link>
+            <ChevronRight className="h-4 w-4" />
+            <span className="text-white">Accommodation</span>
+          </nav>
+          <h1 className="font-thin tracking-[0.2em] text-3xl uppercase text-white md:text-5xl">
+            Accommodation
+          </h1>
+          <p className="mt-4 max-w-2xl font-serif text-base text-white/80 md:text-lg">
+            From spacious executive rooms to private cottages surrounded by green lawns, find the perfect space to unwind after a day exploring Jim Corbett.
+          </p>
         </div>
+      </section>
+
+      {/* Rooms Grid Section */}
+      <section className="mx-auto w-full max-w-screen-xl px-4 py-16 md:py-24 xl:px-0">
+        <div className="mb-12 text-center md:mb-16">
+          <h2 className="font-thin tracking-widest text-2xl uppercase text-[#2b2b2b] md:text-4xl">
+            Rooms & Cottages
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl font-serif text-base text-[#5a5a5a] md:text-lg">
+            Each room is thoughtfully designed to blend comfort with the natural beauty of the Corbett landscape.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {roomTypes.map((room) => {
+            const firstImage = room.images?.[0]?.image?.original_url;
+            return (
+              <Link
+                className="group flex flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-sm transition-shadow duration-300 hover:shadow-xl"
+                href={`/rooms/${room.slug}`}
+                key={room.id}
+              >
+                {/* Image */}
+                <div className="relative aspect-[4/3] w-full overflow-hidden">
+                  {firstImage ? (
+                    <Image
+                      alt={room.name}
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      fill
+                      src={firstImage}
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center bg-gray-100">
+                      <span className="text-sm text-gray-400">No image</span>
+                    </div>
+                  )}
+                  {room.base_price && Number(room.base_price) > 0 && (
+                    <div className="absolute bottom-3 right-3 rounded-full bg-white/90 px-4 py-1.5 text-sm font-semibold text-[#2b2b2b] backdrop-blur-sm">
+                      From ₹{Number(room.base_price).toLocaleString("en-IN")}
+                    </div>
+                  )}
+                </div>
+
+                {/* Content */}
+                <div className="flex flex-1 flex-col p-6 md:p-8">
+                  <h3 className="font-thin tracking-widest text-lg uppercase text-[#2b2b2b] md:text-xl">
+                    {room.name}
+                  </h3>
+
+                  {/* Quick Info */}
+                  <div className="mt-3 flex flex-wrap gap-4 text-sm text-[#5a5a5a]">
+                    <div className="flex items-center gap-1.5">
+                      <Users className="h-4 w-4" />
+                      <span>Up to {room.max_occupancy}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <Maximize className="h-4 w-4" />
+                      <span>{room.size_sqft} sq ft</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <BedDouble className="h-4 w-4" />
+                      <span className="capitalize">{room.bed_type}</span>
+                    </div>
+                  </div>
+
+                  <p className="mt-4 font-serif text-sm leading-relaxed text-[#5a5a5a] line-clamp-3 md:text-base">
+                    {room.description}
+                  </p>
+
+                  <div className="mt-auto pt-6">
+                    <span className="inline-flex items-center gap-1 text-xs font-semibold tracking-[0.15em] uppercase text-[#b68833] transition group-hover:gap-2">
+                      View Details
+                      <ChevronRight className="h-4 w-4" />
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+
+        {roomTypes.length === 0 && (
+          <div className="py-20 text-center">
+            <p className="font-serif text-lg text-[#5a5a5a]">
+              Room information is being updated. Please check back soon.
+            </p>
+          </div>
+        )}
       </section>
     </main>
   );

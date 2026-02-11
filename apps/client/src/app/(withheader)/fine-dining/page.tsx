@@ -54,7 +54,7 @@ export default function FineDiningPage() {
   const [activeRestaurant, setActiveRestaurant] = React.useState(0);
 
   return (
-    <main className="w-full bg-white">
+    <main className="w-full bg-white pt-[72px] md:pt-[88px]">
       {/* Hero Section */}
       <section className="relative h-[100vh] min-h-[500px] w-full overflow-hidden">
         <Image

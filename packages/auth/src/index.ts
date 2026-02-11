@@ -19,8 +19,7 @@ export type {
 
 // Auth client configuration for frontend
 export const authClient = createAuthClient({
-  baseURL: process.env.NEXT_PUBLIC_AUTH_URL || "http://localhost:3001",
-  credentials: "include",
+  baseURL: process.env.NEXT_PUBLIC_ADMIN_URL || "http://localhost:3001",
 });
 
 // Helper functions for common auth operations

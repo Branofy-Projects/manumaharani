@@ -15,7 +15,7 @@ export function handleDatabaseError(
   const isTableMissing =
     errorString.includes("does not exist") ||
     errorString.includes("relation") ||
-    errorString.includes("failed query") ||
+    (errorString.includes("failed query") && !errorString.includes("abort")) ||
     errorString.includes(`"${tableName}"`) ||
     errorString.includes(`'${tableName}'`);
 

@@ -193,14 +193,16 @@ export default function AccommodationsCarousel() {
                     transform: isCenter ? "scale(1.05)" : "scale(1)",
                   }}
                 >
-                  <Image
+                  {card.image ? <Image
                     alt={card.title}
                     className={`w-full object-cover ${isCenter ? "h-48" : "h-60"
                       }`}
                     height={300}
                     src={card.image}
                     width={400}
-                  />
+                  /> : <div
+                    className={`w-full object-cover ${isCenter ? "h-48" : "h-60"
+                      }`} />}
                   <div className="flex flex-col items-center px-6 py-6 w-full">
                     <h3
                       className={`text-center font-semibold tracking-widest text-black mb-2 ${isCenter ? "text-lg" : "text-base"

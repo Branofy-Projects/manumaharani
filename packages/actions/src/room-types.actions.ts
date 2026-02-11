@@ -15,6 +15,18 @@ type TGetRoomTypesFilters = {
   status?: "active" | "inactive";
 };
 
+export const getActiveRoomTypes = async () => {
+  return db.query.RoomTypes.findMany({
+    where: eq(RoomTypes.status, "active"),
+    with: {
+      images: {
+        orderBy: (images, { asc }) => [asc(images.order)],
+        with: { image: true },
+      },
+    },
+  });
+}
+
 export const getRoomTypes = async (filters: TGetRoomTypesFilters = {}) => {
   if (!db || !process.env.DATABASE_URL) {
     return { roomTypes: [], total: 0 };

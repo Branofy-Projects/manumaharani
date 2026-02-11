@@ -3,6 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 
+import { getRelatedPostsCache } from "@/lib/cache/blogs.cache";
+
 import { RelatedPostsSkeleton } from "./RelatedPostsSkeleton";
 
 import type { TBlogCategory } from "@repo/db/schema/blogs.schema";
@@ -14,12 +16,7 @@ export async function RelatedPosts({
   category: TBlogCategory;
   ignore: number[];
 }) {
-  const { blogs: relatedPosts } = await getBlogs({
-    category,
-    ignore,
-    limit: 3,
-    status: "published",
-  });
+  const relatedPosts = await getRelatedPostsCache(category, ignore);
 
   return (
     <section className="border-t border-gray-200 bg-gray-50 py-16">

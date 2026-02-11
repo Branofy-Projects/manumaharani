@@ -1,6 +1,7 @@
 import "../globals.css";
 
 import localFont from "next/font/local";
+import { Suspense } from "react";
 
 import Footer from "@/components/Footer";
 import { Header } from "@/components/Header";
@@ -49,7 +50,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${silkSerif.variable} ${silkSerifItalic.variable}`}
       >
-        <Header />
+        <Suspense>
+          <Header />
+        </Suspense>
         {children}
         <Footer />
       </body>

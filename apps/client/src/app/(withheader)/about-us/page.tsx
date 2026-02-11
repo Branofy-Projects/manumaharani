@@ -52,8 +52,8 @@ const amenities = [
   }
 ];
 
-export const dynamic = 'force-static';
-export const revalidate = false;
+// export const dynamic = 'force-static';
+// export const revalidate = false;
 
 export const metadata: Metadata = {
   description: "Discover the oasis of tranquility in the lap of wilderness",

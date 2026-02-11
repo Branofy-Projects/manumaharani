@@ -80,17 +80,6 @@ export const RoomTypeForm = (props: TRoomTypeFormProps) => {
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/(^-|-$)/g, "");
 
-      console.log("Creating room type with data:", {
-        base_price: data.base_price,
-        bed_type: data.bed_type,
-        description: data.description,
-        max_occupancy: data.max_occupancy,
-        name: data.name,
-        number_of_beds: data.number_of_beds,
-        size_sqft: data.size_sqft,
-        slug,
-      });
-
       // Create or update room type
       if (props.roomTypeId) {
         await updateRoomType(parseInt(props.roomTypeId, 10), {
@@ -117,7 +106,6 @@ export const RoomTypeForm = (props: TRoomTypeFormProps) => {
           slug,
           status: "active",
         });
-        console.log("Room type created successfully:", result);
         toast.success("Room type created successfully!");
       }
 

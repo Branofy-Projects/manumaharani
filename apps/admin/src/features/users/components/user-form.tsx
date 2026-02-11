@@ -1,7 +1,6 @@
 "use client";
 
 import { createUser } from '@repo/actions/index';
-import { authClient } from '@repo/auth/index';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
