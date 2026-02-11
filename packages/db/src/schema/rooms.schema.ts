@@ -21,8 +21,8 @@ export const Rooms = pgTable(
       .references(() => RoomTypes.id, { onDelete: "cascade" })
       .notNull(),
 
-    title: varchar("title", { length: 255 }).notNull(),
     description: text("description"),
+    title: varchar("title", { length: 255 }).notNull(),
 
     floor: integer("floor").notNull(),
     room_number: varchar("room_number", { length: 50 }).notNull().unique(),
@@ -45,13 +45,13 @@ export const Rooms = pgTable(
 
 export const RoomImages = pgTable("room_images", {
   id: serial("id").primaryKey(),
-  room_id: integer("room_id")
-    .references(() => Rooms.id, { onDelete: "cascade" })
-    .notNull(),
   image_id: integer("image_id")
     .references(() => Images.id, { onDelete: "cascade" })
     .notNull(),
   order: integer("order").notNull().default(0),
+  room_id: integer("room_id")
+    .references(() => Rooms.id, { onDelete: "cascade" })
+    .notNull(),
 });
 
 export const insertRoomSchema = createInsertSchema(Rooms, {
@@ -64,7 +64,7 @@ export const insertRoomSchema = createInsertSchema(Rooms, {
 export const selectRoomSchema = createSelectSchema(Rooms);
 
 export type TNewRoom = typeof Rooms.$inferInsert;
-export type TRoomBase = typeof Rooms.$inferSelect;
-export type TRoomStatus = (typeof roomStatusEnum.enumValues)[number];
 export type TNewRoomImage = typeof RoomImages.$inferInsert;
+export type TRoomBase = typeof Rooms.$inferSelect;
 export type TRoomImageBase = typeof RoomImages.$inferSelect;
+export type TRoomStatus = (typeof roomStatusEnum.enumValues)[number];

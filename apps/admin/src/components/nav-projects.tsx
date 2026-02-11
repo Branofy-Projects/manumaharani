@@ -1,15 +1,16 @@
 "use client";
 
-import {
-    DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
-import {
-    SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuAction, SidebarMenuButton,
-    SidebarMenuItem, useSidebar
-} from '@/components/ui/sidebar';
 import { IconDots, IconFolder, IconShare, IconTrash } from '@tabler/icons-react';
 
 import type { Icon } from "@/components/icons";
+
+import {
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
+import {
+  SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuAction, SidebarMenuButton,
+  SidebarMenuItem, useSidebar
+} from '@/components/ui/sidebar';
 
 export function NavProjects({
   projects,

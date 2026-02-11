@@ -1,7 +1,7 @@
 "use client";
 
+import { Bed, Calendar, CheckCircle, DollarSign, Edit, FileText, Ruler, Tag, Users, XCircle } from "lucide-react";
 import Link from "next/link";
-import { Edit, Calendar, Bed, Users, Ruler, DollarSign, Tag, FileText, CheckCircle, XCircle } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,19 +11,19 @@ import { Separator } from "@/components/ui/separator";
 import type { TRoomType } from "@repo/db";
 
 interface RoomTypeDetailsViewProps {
-  roomType: TRoomType & {
-    images?: Array<{ image: any; order: number }>;
+  roomType: {
     amenities?: Array<{ amenity: any; order: number }>;
-    policies?: Array<{ policy: any; order: number }>;
     faqs?: Array<{ faq: any; order: number }>;
-  };
+    images?: Array<{ image: any; order: number }>;
+    policies?: Array<{ order: number; policy: any; }>;
+  } & TRoomType;
 }
 
 const bedTypeLabels: Record<string, string> = {
-  single: "Single",
   double: "Double",
-  queen: "Queen",
   king: "King",
+  queen: "Queen",
+  single: "Single",
   twin: "Twin",
 };
 
@@ -71,11 +71,11 @@ export default function RoomTypeDetailsView({ roomType }: RoomTypeDetailsViewPro
               <CardContent>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {roomType.images.map((item, index) => (
-                    <div key={index} className="relative aspect-video w-full overflow-hidden rounded-lg">
+                    <div className="relative aspect-video w-full overflow-hidden rounded-lg" key={index}>
                       <img
-                        src={item.image.large_url || item.image.original_url}
                         alt={item.image.alt_text || roomType.name}
                         className="h-full w-full object-cover"
+                        src={item.image.large_url || item.image.original_url}
                       />
                     </div>
                   ))}
@@ -194,10 +194,10 @@ export default function RoomTypeDetailsView({ roomType }: RoomTypeDetailsViewPro
                 <p className="mt-1 text-sm text-muted-foreground">
                   {new Date(roomType.created_at).toLocaleDateString("en-US", {
                     day: "numeric",
-                    month: "long",
-                    year: "numeric",
                     hour: "2-digit",
                     minute: "2-digit",
+                    month: "long",
+                    year: "numeric",
                   })}
                 </p>
               </div>
@@ -213,10 +213,10 @@ export default function RoomTypeDetailsView({ roomType }: RoomTypeDetailsViewPro
                     <p className="mt-1 text-sm text-muted-foreground">
                       {new Date(roomType.updated_at).toLocaleDateString("en-US", {
                         day: "numeric",
-                        month: "long",
-                        year: "numeric",
                         hour: "2-digit",
                         minute: "2-digit",
+                        month: "long",
+                        year: "numeric",
                       })}
                     </p>
                   </div>

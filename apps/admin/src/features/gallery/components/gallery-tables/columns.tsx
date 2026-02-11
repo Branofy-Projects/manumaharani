@@ -18,8 +18,8 @@ export const columns: ColumnDef<TGallery>[] = [
       return (
         <div className="flex flex-col">
           <Link
-            href={`/gallery/${item.id}`}
             className="font-medium hover:underline cursor-pointer"
+            href={`/gallery/${item.id}`}
           >
             {item.title || "Untitled"}
           </Link>

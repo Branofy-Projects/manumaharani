@@ -1,7 +1,7 @@
 "use client";
 
+import { Calendar, Edit, FileText, Image as ImageIcon, Tag, Video } from "lucide-react";
 import Link from "next/link";
-import { Edit, Calendar, Image as ImageIcon, Video, Tag, FileText } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,21 +11,21 @@ import { Separator } from "@/components/ui/separator";
 import type { TGallery } from "@repo/db";
 
 interface GalleryDetailsViewProps {
-  gallery: TGallery & {
+  gallery: {
     image?: any;
     videoThumbnail?: any;
-  };
+  } & TGallery;
 }
 
 const categoryLabels: Record<string, string> = {
-  rooms: "Rooms",
-  dining: "Dining",
-  spa: "Spa",
   activities: "Activities",
-  facilities: "Facilities",
+  dining: "Dining",
   events: "Events",
-  surroundings: "Surroundings",
+  facilities: "Facilities",
   general: "General",
+  rooms: "Rooms",
+  spa: "Spa",
+  surroundings: "Surroundings",
 };
 
 export default function GalleryDetailsView({ gallery }: GalleryDetailsViewProps) {
@@ -77,9 +77,9 @@ export default function GalleryDetailsView({ gallery }: GalleryDetailsViewProps)
                   {gallery.videoThumbnail && (
                     <div className="relative aspect-video w-full overflow-hidden rounded-lg">
                       <img
-                        src={gallery.videoThumbnail.large_url || gallery.videoThumbnail.original_url}
                         alt={gallery.videoThumbnail.alt_text || gallery.title || "Video thumbnail"}
                         className="h-full w-full object-cover"
+                        src={gallery.videoThumbnail.large_url || gallery.videoThumbnail.original_url}
                       />
                     </div>
                   )}
@@ -87,10 +87,10 @@ export default function GalleryDetailsView({ gallery }: GalleryDetailsViewProps)
                     <div>
                       <label className="text-sm font-medium text-muted-foreground">Video URL</label>
                       <a
-                        href={gallery.video_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
                         className="block mt-1 text-blue-600 hover:underline break-all"
+                        href={gallery.video_url}
+                        rel="noopener noreferrer"
+                        target="_blank"
                       >
                         {gallery.video_url}
                       </a>
@@ -101,9 +101,9 @@ export default function GalleryDetailsView({ gallery }: GalleryDetailsViewProps)
                 gallery.image && (
                   <div className="relative aspect-video w-full overflow-hidden rounded-lg">
                     <img
-                      src={gallery.image.large_url || gallery.image.original_url}
                       alt={gallery.image.alt_text || gallery.title || "Gallery image"}
                       className="h-full w-full object-cover"
+                      src={gallery.image.large_url || gallery.image.original_url}
                     />
                   </div>
                 )
@@ -161,10 +161,10 @@ export default function GalleryDetailsView({ gallery }: GalleryDetailsViewProps)
                 <p className="mt-1 text-sm text-muted-foreground">
                   {new Date(gallery.created_at).toLocaleDateString("en-US", {
                     day: "numeric",
-                    month: "long",
-                    year: "numeric",
                     hour: "2-digit",
                     minute: "2-digit",
+                    month: "long",
+                    year: "numeric",
                   })}
                 </p>
               </div>
@@ -180,10 +180,10 @@ export default function GalleryDetailsView({ gallery }: GalleryDetailsViewProps)
                     <p className="mt-1 text-sm text-muted-foreground">
                       {new Date(gallery.updated_at).toLocaleDateString("en-US", {
                         day: "numeric",
-                        month: "long",
-                        year: "numeric",
                         hour: "2-digit",
                         minute: "2-digit",
+                        month: "long",
+                        year: "numeric",
                       })}
                     </p>
                   </div>

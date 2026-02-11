@@ -4,7 +4,6 @@ import BlogsLoadingSection from "./blogs-loading-section";
 import BlogsSection from "./blogs-section";
 
 
-
 export default function DiscoverManuMaharani() {
   return (
     <section className="w-full flex flex-col items-center py-10 md:py-20">
@@ -21,6 +20,7 @@ export default function DiscoverManuMaharani() {
       <Suspense fallback={<BlogsLoadingSection />}>
         <BlogsSection />
       </Suspense>
+
     </section>
   );
 }

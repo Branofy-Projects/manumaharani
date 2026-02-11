@@ -1,18 +1,31 @@
 "use server";
 import { and, count, eq, ilike, inArray } from "@repo/db";
-import { db, RoomTypes, RoomTypeImages, Images } from "@repo/db";
-import type { TNewRoomType, TRoomType } from "@repo/db";
+import { db, Images, RoomTypeImages, RoomTypes } from "@repo/db";
 
-import { getOrSet, bumpVersion } from "./libs/cache";
+import { bumpVersion, getOrSet } from "./libs/cache";
 import { roomTypeBySlugKey, roomTypesListKey } from "./libs/keys";
 import { safeDbQuery } from "./utils/db-error-handler";
 
+import type { TNewRoomType, TRoomType } from "@repo/db";
+
 type TGetRoomTypesFilters = {
-  search?: string;
-  page?: number;
   limit?: number;
+  page?: number;
+  search?: string;
   status?: "active" | "inactive";
 };
+
+export const getActiveRoomTypes = async () => {
+  return db.query.RoomTypes.findMany({
+    where: eq(RoomTypes.status, "active"),
+    with: {
+      images: {
+        orderBy: (images, { asc }) => [asc(images.order)],
+        with: { image: true },
+      },
+    },
+  });
+}
 
 export const getRoomTypes = async (filters: TGetRoomTypesFilters = {}) => {
   if (!db || !process.env.DATABASE_URL) {
@@ -55,28 +68,28 @@ export const getRoomTypes = async (filters: TGetRoomTypesFilters = {}) => {
   const roomTypes = await safeDbQuery(
     async () => {
       return await db.query.RoomTypes.findMany({
-        where,
         limit,
         offset,
+        orderBy: (roomTypes, { asc }) => [asc(roomTypes.order)],
+        where,
         with: {
-          images: {
-            with: { image: true },
-            orderBy: (images, { asc }) => [asc(images.order)],
-          },
           amenities: {
-            with: { amenity: true },
             orderBy: (amenities, { asc }) => [asc(amenities.order)],
-          },
-          policies: {
-            with: { policy: true },
-            orderBy: (policies, { asc }) => [asc(policies.order)],
+            with: { amenity: true },
           },
           faqs: {
-            with: { faq: true },
             orderBy: (faqs, { asc }) => [asc(faqs.order)],
+            with: { faq: true },
+          },
+          images: {
+            orderBy: (images, { asc }) => [asc(images.order)],
+            with: { image: true },
+          },
+          policies: {
+            orderBy: (policies, { asc }) => [asc(policies.order)],
+            with: { policy: true },
           },
         },
-        orderBy: (roomTypes, { asc }) => [asc(roomTypes.order)],
       });
     },
     [],
@@ -98,21 +111,21 @@ export const getRoomTypeBySlug = async (slug: string) => {
       db!.query.RoomTypes.findFirst({
         where: eq(RoomTypes.slug, slug),
         with: {
-          images: {
-            with: { image: true },
-            orderBy: (images, { asc }) => [asc(images.order)],
-          },
           amenities: {
-            with: { amenity: true },
             orderBy: (amenities, { asc }) => [asc(amenities.order)],
-          },
-          policies: {
-            with: { policy: true },
-            orderBy: (policies, { asc }) => [asc(policies.order)],
+            with: { amenity: true },
           },
           faqs: {
-            with: { faq: true },
             orderBy: (faqs, { asc }) => [asc(faqs.order)],
+            with: { faq: true },
+          },
+          images: {
+            orderBy: (images, { asc }) => [asc(images.order)],
+            with: { image: true },
+          },
+          policies: {
+            orderBy: (policies, { asc }) => [asc(policies.order)],
+            with: { policy: true },
           },
         },
       }),
@@ -216,21 +229,21 @@ export const getRoomTypeById = async (id: number) => {
   return db.query.RoomTypes.findFirst({
     where: eq(RoomTypes.id, id),
     with: {
-      images: {
-        with: { image: true },
-        orderBy: (images, { asc }) => [asc(images.order)],
-      },
       amenities: {
-        with: { amenity: true },
         orderBy: (amenities, { asc }) => [asc(amenities.order)],
-      },
-      policies: {
-        with: { policy: true },
-        orderBy: (policies, { asc }) => [asc(policies.order)],
+        with: { amenity: true },
       },
       faqs: {
-        with: { faq: true },
         orderBy: (faqs, { asc }) => [asc(faqs.order)],
+        with: { faq: true },
+      },
+      images: {
+        orderBy: (images, { asc }) => [asc(images.order)],
+        with: { image: true },
+      },
+      policies: {
+        orderBy: (policies, { asc }) => [asc(policies.order)],
+        with: { policy: true },
       },
     },
   });
@@ -247,9 +260,9 @@ export const deleteRoomType = async (id: number) => {
 export const updateRoomTypeImages = async (
   roomTypeId: number,
   imageUpdates: Array<{
+    alt_text?: string;
     image_id: number;
     order: number;
-    alt_text?: string;
   }>
 ) => {
   if (!db) throw new Error("Database connection not available");
@@ -295,9 +308,9 @@ export const updateRoomTypeImages = async (
   // Create new images
   if (imagesToCreate.length > 0) {
     const newImages = imagesToCreate.map((update) => ({
-      room_type_id: roomTypeId,
       image_id: update.image_id,
       order: update.order,
+      room_type_id: roomTypeId,
     }));
     operations.push(db.insert(RoomTypeImages).values(newImages));
   }

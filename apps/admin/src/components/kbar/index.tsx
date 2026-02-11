@@ -23,14 +23,14 @@ export default function KBar({ children }: { children: React.ReactNode }) {
       const baseAction =
         navItem.url !== "#"
           ? {
-              id: `${navItem.title.toLowerCase()}Action`,
-              keywords: navItem.title.toLowerCase(),
-              name: navItem.title,
-              perform: () => navigateTo(navItem.url),
-              section: "Navigation",
-              shortcut: navItem.shortcut,
-              subtitle: `Go to ${navItem.title}`,
-            }
+            id: `${navItem.title.toLowerCase()}Action`,
+            keywords: navItem.title.toLowerCase(),
+            name: navItem.title,
+            perform: () => navigateTo(navItem.url),
+            section: "Navigation",
+            shortcut: navItem.shortcut,
+            subtitle: `Go to ${navItem.title}`,
+          }
           : null;
 
       // Map child items into actions

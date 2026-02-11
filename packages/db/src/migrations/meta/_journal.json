@@ -82,8 +82,78 @@
     {
       "idx": 11,
       "version": "7",
-      "when": 1769350000000,
-      "tag": "0011_add_attractions_distance",
+      "when": 1770738924771,
+      "tag": "0011_wet_hobgoblin",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1770739905531,
+      "tag": "0012_smart_true_believers",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1770740049058,
+      "tag": "0013_hard_sebastian_shaw",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1770740109440,
+      "tag": "0014_far_lucky_pierre",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1770740956557,
+      "tag": "0015_nappy_luminals",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1770742503127,
+      "tag": "0016_fast_wong",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1770742537345,
+      "tag": "0017_acoustic_multiple_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1770747176062,
+      "tag": "0018_supreme_shen",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1770793330288,
+      "tag": "0019_white_black_panther",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1770799658724,
+      "tag": "0020_sleepy_betty_ross",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1770828733054,
+      "tag": "0021_unknown_white_tiger",
       "breakpoints": true
     }
   ]

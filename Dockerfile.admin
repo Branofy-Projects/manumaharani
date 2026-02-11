@@ -56,6 +56,9 @@ COPY --from=deps /app/node_modules ./node_modules
 # Copy all source code
 COPY . .
 
+ARG NEXT_PUBLIC_AUTH_URL
+ENV NEXT_PUBLIC_AUTH_URL=$NEXT_PUBLIC_AUTH_URL
+
 # Build the admin app specifically
 RUN yarn turbo build --filter=admin
 
@@ -99,7 +102,7 @@ USER nextjs
 
 EXPOSE 3000
 
-ENV PORT 3000
+ENV PORT=3000
 
 CMD ["node", "apps/admin/server.js"]
 

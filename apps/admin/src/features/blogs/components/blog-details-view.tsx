@@ -1,7 +1,7 @@
 "use client";
 
+import { Calendar, Edit, Eye, FileText, Tag, User } from "lucide-react";
 import Link from "next/link";
-import { Edit, Calendar, Eye, FileText, Tag, User } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,17 +11,17 @@ import { Separator } from "@/components/ui/separator";
 import type { TBlog } from "@repo/db";
 
 interface BlogDetailsViewProps {
-  blog: TBlog & {
+  blog: {
     author?: any;
     featuredImage?: any;
     images?: Array<{ image: any; order: number }>;
-  };
+  } & TBlog;
 }
 
-const statusMap: Record<string, { label: string; variant: "default" | "secondary" | "destructive" | "outline" }> = {
+const statusMap: Record<string, { label: string; variant: "default" | "destructive" | "outline" | "secondary" }> = {
+  archived: { label: "Archived", variant: "outline" },
   draft: { label: "Draft", variant: "secondary" },
   published: { label: "Published", variant: "default" },
-  archived: { label: "Archived", variant: "outline" },
 };
 
 export default function BlogDetailsView({ blog }: BlogDetailsViewProps) {
@@ -62,9 +62,9 @@ export default function BlogDetailsView({ blog }: BlogDetailsViewProps) {
               <CardContent>
                 <div className="relative aspect-video w-full overflow-hidden rounded-lg">
                   <img
-                    src={blog.featuredImage.large_url || blog.featuredImage.original_url}
                     alt={blog.featuredImage.alt_text || blog.title}
                     className="h-full w-full object-cover"
+                    src={blog.featuredImage.large_url || blog.featuredImage.original_url}
                   />
                 </div>
                 {blog.featuredImage.alt_text && (
@@ -152,10 +152,10 @@ export default function BlogDetailsView({ blog }: BlogDetailsViewProps) {
                 <p className="mt-1 text-sm text-muted-foreground">
                   {new Date(blog.created_at).toLocaleDateString("en-US", {
                     day: "numeric",
-                    month: "long",
-                    year: "numeric",
                     hour: "2-digit",
                     minute: "2-digit",
+                    month: "long",
+                    year: "numeric",
                   })}
                 </p>
               </div>
@@ -171,10 +171,10 @@ export default function BlogDetailsView({ blog }: BlogDetailsViewProps) {
                     <p className="mt-1 text-sm text-muted-foreground">
                       {new Date(blog.updated_at).toLocaleDateString("en-US", {
                         day: "numeric",
-                        month: "long",
-                        year: "numeric",
                         hour: "2-digit",
                         minute: "2-digit",
+                        month: "long",
+                        year: "numeric",
                       })}
                     </p>
                   </div>

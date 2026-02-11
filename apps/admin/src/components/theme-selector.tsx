@@ -1,11 +1,12 @@
 "use client";
 
 import * as React from 'react';
+
 import { useThemeConfig } from '@/components/active-theme';
 import { Label } from '@/components/ui/label';
 import {
-    Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger,
-    SelectValue
+  Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger,
+  SelectValue
 } from '@/components/ui/select';
 
 const DEFAULT_THEMES = [

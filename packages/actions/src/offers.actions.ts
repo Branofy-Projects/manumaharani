@@ -4,6 +4,8 @@ import { and, asc, count, eq, ilike } from "@repo/db";
 import { db, OfferFaqs, OfferHighlights, OfferImages, OfferItinerary, Offers } from "@repo/db";
 import { revalidatePath } from "next/cache";
 
+import { revalidateTags } from "./client.actions";
+import { getOfferBySlugKey, LATEST_OFFERS_CACHE_KEY, OFFERS_CACHE_KEY } from "./libs/cache";
 import { safeDbQuery } from "./utils/db-error-handler";
 
 import type {
@@ -23,6 +25,43 @@ type TGetOffersFilters = {
   status?: "active" | "inactive" | TOfferStatus;
 };
 
+export const getOffersOnly = async(filters: TGetOffersFilters = {}) => {
+    const conditions = [];
+  
+    if (filters.search) {
+      conditions.push(ilike(Offers.name, `%${filters.search}%`));
+    }
+  
+    if (filters.status) {
+      // Support both boolean active status and enum status
+      if (filters.status === "active" || filters.status === "inactive") {
+        conditions.push(eq(Offers.active, filters.status === "active"));
+      } else {
+        conditions.push(eq(Offers.status, filters.status));
+      }
+    }
+  
+    if (filters.category) {
+      conditions.push(eq(Offers.category, filters.category));
+    }
+  
+    const where = conditions.length > 0 ? and(...conditions) : undefined;
+  
+    const page = Math.max(1, filters.page || 1);
+    const limit = Math.max(1, filters.limit || 10);
+    const offset = (page - 1) * limit;
+
+    return db.query.Offers.findMany({
+      limit,
+      offset,
+      orderBy: (offers, { desc }) => [desc(offers.created_at)],
+      where,
+      with: {
+        image: true,
+      },
+    });
+  
+}
 export const getOffers = async (filters: TGetOffersFilters = {}) => {
   const conditions = [];
 
@@ -66,7 +105,7 @@ export const getOffers = async (filters: TGetOffersFilters = {}) => {
 
   const offers = await safeDbQuery(
     async () => {
-      return await db.query.Offers.findMany({
+      return db.query.Offers.findMany({
         limit,
         offset,
         orderBy: (offers, { desc }) => [desc(offers.created_at)],
@@ -96,7 +135,7 @@ export const getOfferById = async (id: string): Promise<TOffer | undefined> => {
   }) as Promise<TOffer | undefined>;
 };
 
-export const getOfferByIdWithDetails = async (id: string): Promise<TOfferWithDetails | null> => {
+export const getOfferByIdWithDetails = async (id: string): Promise<null | TOfferWithDetails> => {
   const result = await safeDbQuery(
     async () => {
       return await db.query.Offers.findFirst({
@@ -129,10 +168,10 @@ export const getOfferByIdWithDetails = async (id: string): Promise<TOfferWithDet
     "findByIdWithDetails query"
   );
 
-  return result as TOfferWithDetails | null;
+  return result as null | TOfferWithDetails;
 };
 
-export const getOfferBySlug = async (slug: string): Promise<TOfferWithDetails | null> => {
+export const getOfferBySlug = async (slug: string): Promise<null | TOfferWithDetails> => {
   const result = await safeDbQuery(
     async () => {
       return await db.query.Offers.findFirst({
@@ -165,7 +204,7 @@ export const getOfferBySlug = async (slug: string): Promise<TOfferWithDetails | 
     "findBySlug query"
   );
 
-  return result as TOfferWithDetails | null;
+  return result as null | TOfferWithDetails;
 };
 
 export const getRelatedOffers = async (
@@ -206,6 +245,7 @@ export const getRelatedOffers = async (
 export const createOffer = async (data: TNewOffer) => {
   const [offer] = await db.insert(Offers).values(data).returning();
   revalidatePath("/offers");
+  revalidateTags([OFFERS_CACHE_KEY, getOfferBySlugKey(offer.slug), LATEST_OFFERS_CACHE_KEY])
   return offer;
 };
 
@@ -217,11 +257,13 @@ export const updateOffer = async (id: string, data: Partial<TNewOffer>) => {
     .returning();
   revalidatePath("/offers");
   revalidatePath(`/offers/${updated?.slug}`);
+  revalidateTags([OFFERS_CACHE_KEY, getOfferBySlugKey(updated.slug), LATEST_OFFERS_CACHE_KEY])
   return updated;
 };
 
 export const deleteOffer = async (id: string) => {
   await db.delete(Offers).where(eq(Offers.id, id));
+  revalidateTags([OFFERS_CACHE_KEY, LATEST_OFFERS_CACHE_KEY])
   revalidatePath("/offers");
 };
 
@@ -231,6 +273,11 @@ export const syncOfferHighlights = async (
   offerId: string,
   highlights: Array<Omit<TNewOfferHighlight, "offer_id">>
 ) => {
+
+  const offer = await getOfferById(offerId);
+  if (!offer) {
+    throw new Error("Offer not found");
+  }
   // Delete existing highlights
   await db.delete(OfferHighlights).where(eq(OfferHighlights.offer_id, offerId));
 
@@ -247,6 +294,7 @@ export const syncOfferHighlights = async (
 
   revalidatePath("/offers");
   revalidatePath(`/offers/${offerId}`);
+  revalidateTags([OFFERS_CACHE_KEY, getOfferBySlugKey(offer.slug), LATEST_OFFERS_CACHE_KEY])
 };
 
 // ==================== Itinerary ====================
@@ -255,6 +303,10 @@ export const syncOfferItinerary = async (
   offerId: string,
   itinerary: Array<Omit<TNewOfferItinerary, "offer_id">>
 ) => {
+  const offer = await getOfferById(offerId);
+  if (!offer) {
+    throw new Error("Offer not found");
+  }
   // Delete existing itinerary items
   await db.delete(OfferItinerary).where(eq(OfferItinerary.offer_id, offerId));
 
@@ -271,6 +323,7 @@ export const syncOfferItinerary = async (
 
   revalidatePath("/offers");
   revalidatePath(`/offers/${offerId}`);
+  revalidateTags([OFFERS_CACHE_KEY, getOfferBySlugKey(offer.slug), LATEST_OFFERS_CACHE_KEY])
 };
 
 // ==================== Gallery Images ====================
@@ -279,6 +332,10 @@ export const syncOfferImages = async (
   offerId: string,
   images: Array<{ caption?: string; image_id: number; order?: number }>
 ) => {
+  const offer = await getOfferById(offerId);
+  if (!offer) {
+    throw new Error("Offer not found");
+  }
   // Delete existing gallery images
   await db.delete(OfferImages).where(eq(OfferImages.offer_id, offerId));
 
@@ -295,6 +352,7 @@ export const syncOfferImages = async (
 
   revalidatePath("/offers");
   revalidatePath(`/offers/${offerId}`);
+  revalidateTags([OFFERS_CACHE_KEY, getOfferBySlugKey(offer.slug), LATEST_OFFERS_CACHE_KEY])
 };
 
 // ==================== FAQs ====================
@@ -303,6 +361,10 @@ export const syncOfferFaqs = async (
   offerId: string,
   faqIds: number[]
 ) => {
+  const offer = await getOfferById(offerId);
+  if (!offer) {
+    throw new Error("Offer not found");
+  }
   // Delete existing FAQ links
   await db.delete(OfferFaqs).where(eq(OfferFaqs.offer_id, offerId));
 
@@ -319,4 +381,5 @@ export const syncOfferFaqs = async (
 
   revalidatePath("/offers");
   revalidatePath(`/offers/${offerId}`);
+  revalidateTags([OFFERS_CACHE_KEY, getOfferBySlugKey(offer.slug), LATEST_OFFERS_CACHE_KEY])
 };

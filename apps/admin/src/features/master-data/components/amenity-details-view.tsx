@@ -1,7 +1,7 @@
 "use client";
 
+import { Edit, Tag } from "lucide-react";
 import Link from "next/link";
-import { Edit, Calendar, Tag } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

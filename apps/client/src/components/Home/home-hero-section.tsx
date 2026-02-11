@@ -1,4 +1,3 @@
-import { HomeHeroBookingBar } from "./HomeHeroBookingBar";
 
 export const HomeHeroSection = () => {
   return (
@@ -30,9 +29,9 @@ export const HomeHeroSection = () => {
                 Manu Maharani Resort & Spa
               </span>
               <span className="text-2xl md:text-4xl font-thin tracking-[0.2em] md:tracking-[0.3em] uppercase text-white leading-tight pt-2 pb-4 md:pb-6">
-                Luxury Riverside Resort in
+                Luxury Riverside Resort
                 <br />
-                Jim Corbett
+                in Jim Corbett
               </span>
             </h1>
             <div>
@@ -46,14 +45,16 @@ export const HomeHeroSection = () => {
                 <button className="text-white text-xs font-bold h-5 tracking-widest hover:text-white/50 transition border-b-1 border-white">
                   +91 – 9971889911
                 </button>
-              </div> */}
+                {/* <button className="text-white text-xs font-bold h-5 tracking-widest hover:text-white/50 transition border-b-1 border-white">
+                  Book Now
+                </button> */}
             </div>
           </div>
         </div>
       </div>
 
       {/* Booking Form in 5-part grid below divider */}
-      <HomeHeroBookingBar />
-    </section>
+      {/* <HomeHeroBookingBar /> */}
+    </section >
   );
 };

@@ -1,7 +1,8 @@
 "use server";
 import { db, Images } from "@repo/db";
-import type { TNewImage } from "@repo/db";
 import { eq, inArray } from "@repo/db";
+
+import type { TNewImage } from "@repo/db";
 
 export const createImages = async (images: TNewImage[]) => {
   if (!db) throw new Error("Database connection not available");

@@ -67,22 +67,22 @@ export type TGallery = {
   videoThumbnail: null | TImage;
 } & TGalleryBase;
 
-// Offer Types with Relations
-export type TOfferImage = {
-  image: TImage;
-} & TOfferImageBase;
-
-export type TOfferHighlight = TOfferHighlightBase;
-
-export type TOfferItinerary = TOfferItineraryBase;
+export type TOffer = {
+  image: null | TImage;
+} & TOfferBase;
 
 export type TOfferFaq = {
   faq: TFaqBase;
 } & TOfferFaqBase;
 
-export type TOffer = {
-  image: null | TImage;
-} & TOfferBase;
+export type TOfferHighlight = TOfferHighlightBase;
+
+// Offer Types with Relations
+export type TOfferImage = {
+  image: TImage;
+} & TOfferImageBase;
+
+export type TOfferItinerary = TOfferItineraryBase;
 
 export type TOfferWithDetails = {
   faqs: TOfferFaq[];

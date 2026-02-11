@@ -91,7 +91,6 @@ function renderNode(node: LexicalNode, index: number): React.ReactNode {
       // It usually doesn't have children but has src/alt props directly
       const { altText, height, maxWidth, src, width } = element;
 
-      console.log(JSON.stringify(element, null, 2));
 
       return (
         <span

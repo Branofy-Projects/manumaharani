@@ -1,7 +1,8 @@
-import { delay } from '@/constants/mock-api';
-import { RecentSales } from '@/features/overview/components/recent-sales';
+import { getRecentEnquiries } from '@repo/actions';
+
+import { RecentActivity } from '@/features/overview/components/recent-activity';
 
 export default async function Sales() {
-  await delay(3000);
-  return <RecentSales />;
+  const { contactQueries, offerBookings } = await getRecentEnquiries(5);
+  return <RecentActivity contactQueries={contactQueries} offerBookings={offerBookings} />;
 }

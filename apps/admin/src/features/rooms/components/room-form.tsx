@@ -1,10 +1,16 @@
 "use client";
+import { createRoom, updateRoom, updateRoomImages } from "@repo/actions";
+import { createImages } from "@repo/actions/images.actions";
+import { getRoomTypes } from "@repo/actions/room-types.actions";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+
+import type { FormImage as FileUploaderFormImage } from "@/components/file-uploader";
+import type { FormImage, NewFormImage } from "@/lib/image-schema";
 
 import { FileUploader, hasValidImages } from "@/components/file-uploader";
 import PageContainer from "@/components/layout/page-container";
@@ -31,34 +37,29 @@ import { Textarea } from "@/components/ui/textarea";
 import { ImagesArraySchema } from "@/lib/image-schema";
 import { uploadFilesWithProgress } from "@/lib/upload-files";
 import { zodResolver } from "@/lib/zod-resolver";
-import { createImages } from "@repo/actions/images.actions";
-import { createRoom, updateRoom, updateRoomImages } from "@repo/actions";
-import { getRoomTypes } from "@repo/actions/room-types.actions";
+
 import type { TRoom } from "@repo/db";
 
-import type { NewFormImage, FormImage } from "@/lib/image-schema";
-import type { FormImage as FileUploaderFormImage } from "@/components/file-uploader";
-
 const ROOM_STATUS_OPTIONS = [
-  { value: "available", label: "Available" },
-  { value: "occupied", label: "Occupied" },
-  { value: "maintenance", label: "Maintenance" },
-  { value: "blocked", label: "Blocked" },
+  { label: "Available", value: "available" },
+  { label: "Occupied", value: "occupied" },
+  { label: "Maintenance", value: "maintenance" },
+  { label: "Blocked", value: "blocked" },
 ] as const;
 
 const formSchema = z.object({
-  title: z.string().min(1, "Title is required.").max(255),
-  room_type_id: z.string().min(1, "Room type is required."),
   description: z.string().optional(),
-  images: ImagesArraySchema(0, 8),
   floor: z.coerce.number().min(0, "Floor must be 0 or greater"),
-  room_number: z.string().min(1, "Room number is required.").max(50),
-  status: z.enum(["available", "occupied", "maintenance", "blocked"]),
+  images: ImagesArraySchema(0, 8),
   notes: z.string().optional(),
+  room_number: z.string().min(1, "Room number is required.").max(50),
+  room_type_id: z.string().min(1, "Room type is required."),
+  status: z.enum(["available", "occupied", "maintenance", "blocked"]),
+  title: z.string().min(1, "Title is required.").max(255),
 });
 
 type TRoomFormProps = {
-  initialData: (TRoom & { images?: any[] }) | null;
+  initialData: ({ images?: any[] } & TRoom) | null;
   pageTitle: string;
   roomId?: string;
 };
@@ -84,36 +85,36 @@ export const RoomForm = (props: TRoomFormProps) => {
 
   const defaultValues = useMemo(() => {
     return {
-      title: initialData?.title || "",
-      room_type_id: initialData?.room_type_id?.toString() || "",
       description: initialData?.description || "",
       floor: initialData?.floor || 0,
-      room_number: initialData?.room_number || "",
-      status:
-        (initialData?.status as
-          | "available"
-          | "occupied"
-          | "maintenance"
-          | "blocked") || "available",
-      notes: initialData?.notes || "",
       images: (initialData?.images ?? [])
         .sort((a: any, b: any) => a.order - b.order)
         .map((pi: any) => ({
           _type: "existing" as const,
-          image_id: pi.image_id || pi.image?.id,
-          order: pi.order,
-          small_url: pi.image?.small_url || "",
-          medium_url: pi.image?.medium_url || "",
-          large_url: pi.image?.large_url || "",
-          original_url: pi.image?.original_url || "",
           alt_text: pi.image?.alt_text || "",
+          image_id: pi.image_id || pi.image?.id,
+          large_url: pi.image?.large_url || "",
+          medium_url: pi.image?.medium_url || "",
+          order: pi.order,
+          original_url: pi.image?.original_url || "",
+          small_url: pi.image?.small_url || "",
         })),
+      notes: initialData?.notes || "",
+      room_number: initialData?.room_number || "",
+      room_type_id: initialData?.room_type_id?.toString() || "",
+      status:
+        (initialData?.status as
+          | "available"
+          | "blocked"
+          | "maintenance"
+          | "occupied") || "available",
+      title: initialData?.title || "",
     };
   }, [initialData]);
 
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
     defaultValues,
+    resolver: zodResolver(formSchema),
   });
 
   const [progresses, setProgresses] = useState<Record<string, number>>({});
@@ -137,7 +138,7 @@ export const RoomForm = (props: TRoomFormProps) => {
       setIsSubmitting(true);
 
       // Handle images if provided
-      let uploadedImageMap = new Map<string, number>();
+      const uploadedImageMap = new Map<string, number>();
 
       if (data.images && data.images.length > 0) {
         const newImages = data.images.filter(
@@ -157,11 +158,11 @@ export const RoomForm = (props: TRoomFormProps) => {
           );
 
           const imageData = uploadResults.map((result, index) => ({
-            small_url: result.image.small_url,
-            medium_url: result.image.medium_url,
-            large_url: result.image.large_url,
-            original_url: result.image.original_url,
             alt_text: newImages[index]!.alt_text,
+            large_url: result.image.large_url,
+            medium_url: result.image.medium_url,
+            original_url: result.image.original_url,
+            small_url: result.image.small_url,
           }));
 
           const createdImages = await createImages(imageData);
@@ -179,9 +180,9 @@ export const RoomForm = (props: TRoomFormProps) => {
         const final = data.images.map((img, idx) => {
           if (img._type === "existing") {
             return {
+              alt_text: img.alt_text,
               image_id: img.image_id,
               order: idx,
-              alt_text: img.alt_text,
             };
           } else {
             const actualImageId = uploadedImageMap.get(img._tmpId);
@@ -191,9 +192,9 @@ export const RoomForm = (props: TRoomFormProps) => {
               );
             }
             return {
+              alt_text: img.alt_text,
               image_id: actualImageId,
               order: idx,
-              alt_text: img.alt_text,
             };
           }
         });
@@ -202,26 +203,26 @@ export const RoomForm = (props: TRoomFormProps) => {
         let room;
         if (props.roomId) {
           room = await updateRoom(parseInt(props.roomId, 10), {
-            title: data.title,
             description: data.description || null,
-            room_type_id: parseInt(data.room_type_id),
             floor: data.floor,
-            room_number: data.room_number,
-            status: data.status,
             notes: data.notes || null,
+            room_number: data.room_number,
+            room_type_id: parseInt(data.room_type_id),
+            status: data.status,
+            title: data.title,
           });
           // Update images
           await updateRoomImages(parseInt(props.roomId, 10), final);
           toast.success("Room updated successfully!");
         } else {
           room = await createRoom({
-            title: data.title,
             description: data.description || null,
-            room_type_id: parseInt(data.room_type_id),
             floor: data.floor,
-            room_number: data.room_number,
-            status: data.status,
             notes: data.notes || null,
+            room_number: data.room_number,
+            room_type_id: parseInt(data.room_type_id),
+            status: data.status,
+            title: data.title,
           });
           // Then update images
           await updateRoomImages(room.id, final);
@@ -244,24 +245,24 @@ export const RoomForm = (props: TRoomFormProps) => {
         // Create or update room without images
         if (props.roomId) {
           await updateRoom(parseInt(props.roomId, 10), {
-            title: data.title,
             description: data.description || null,
-            room_type_id: parseInt(data.room_type_id),
             floor: data.floor,
-            room_number: data.room_number,
-            status: data.status,
             notes: data.notes || null,
+            room_number: data.room_number,
+            room_type_id: parseInt(data.room_type_id),
+            status: data.status,
+            title: data.title,
           });
           toast.success("Room updated successfully!");
         } else {
           await createRoom({
-            title: data.title,
             description: data.description || null,
-            room_type_id: parseInt(data.room_type_id),
             floor: data.floor,
-            room_number: data.room_number,
-            status: data.status,
             notes: data.notes || null,
+            room_number: data.room_number,
+            room_type_id: parseInt(data.room_type_id),
+            status: data.status,
+            title: data.title,
           });
           toast.success("Room created successfully!");
         }
@@ -323,8 +324,8 @@ export const RoomForm = (props: TRoomFormProps) => {
           <CardContent>
             <Form {...form}>
               <form
-                onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-4"
+                onSubmit={form.handleSubmit(onSubmit)}
               >
                 <FormField
                   control={form.control}
@@ -363,7 +364,7 @@ export const RoomForm = (props: TRoomFormProps) => {
                         </FormControl>
                         <SelectContent>
                           {loadingRoomTypes ? (
-                            <SelectItem value="loading" disabled>
+                            <SelectItem disabled value="loading">
                               Loading...
                             </SelectItem>
                           ) : (
@@ -392,12 +393,12 @@ export const RoomForm = (props: TRoomFormProps) => {
                         <FormLabel>Floor</FormLabel>
                         <FormControl>
                           <Input
-                            type="number"
-                            placeholder="0"
-                            value={field.value || ""}
                             onChange={(e) =>
                               field.onChange(parseInt(e.target.value) || 0)
                             }
+                            placeholder="0"
+                            type="number"
+                            value={field.value || ""}
                           />
                         </FormControl>
                         <FormDescription className="text-xs">
@@ -468,8 +469,8 @@ export const RoomForm = (props: TRoomFormProps) => {
                       <FormLabel>Description</FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Describe the room..."
                           className="min-h-[100px]"
+                          placeholder="Describe the room..."
                           {...field}
                         />
                       </FormControl>
@@ -489,8 +490,8 @@ export const RoomForm = (props: TRoomFormProps) => {
                       <FormLabel>Notes</FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Internal notes about this room..."
                           className="min-h-[80px]"
+                          placeholder="Internal notes about this room..."
                           {...field}
                         />
                       </FormControl>
@@ -510,13 +511,13 @@ export const RoomForm = (props: TRoomFormProps) => {
                       <FormLabel>Images</FormLabel>
                       <FormControl>
                         <FileUploader
-                          value={field.value || []}
-                          onValueChange={field.onChange}
-                          maxFiles={8}
-                          progresses={progresses}
                           disabled={isImagesUploading || isSubmitting}
-                          showValidation={hasAttemptedSubmit}
                           id="room-images"
+                          maxFiles={8}
+                          onValueChange={field.onChange}
+                          progresses={progresses}
+                          showValidation={hasAttemptedSubmit}
+                          value={field.value || []}
                         />
                       </FormControl>
                       <FormDescription className="text-xs">
@@ -529,16 +530,16 @@ export const RoomForm = (props: TRoomFormProps) => {
 
                 <div className="flex justify-end gap-3 pt-2">
                   <Button
+                    disabled={isSubmitting || isImagesUploading}
+                    onClick={() => router.back()}
                     type="button"
                     variant="outline"
-                    onClick={() => router.back()}
-                    disabled={isSubmitting || isImagesUploading}
                   >
                     Cancel
                   </Button>
                   <Button
-                    type="submit"
                     disabled={isSubmitting || isImagesUploading}
+                    type="submit"
                   >
                     {isSubmitting || isImagesUploading ? (
                       <>

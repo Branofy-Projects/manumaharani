@@ -1,11 +1,12 @@
-import type { AuthUser } from "@/hooks/use-auth";
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+
+import type { BetterAuthUser } from '@repo/auth';
 
 interface UserAvatarProfileProps {
   className?: string;
   showInfo?: boolean;
-  user: AuthUser;
+  user: BetterAuthUser;
 }
 
 export function UserAvatarProfile({

@@ -1,4 +1,5 @@
 "use client";
+import { createAmenity, updateAmenity } from '@repo/actions/master-data.actions';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
@@ -9,39 +10,39 @@ import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
-    Form, FormControl, FormField, FormItem, FormLabel, FormMessage
+  Form, FormControl, FormField, FormItem, FormLabel, FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@/lib/zod-resolver';
-import { createAmenity, updateAmenity } from '@repo/actions';
+
 import type { TAmenity } from "@repo/db";
 
 const formSchema = z.object({
-  label: z.string().min(1, "Label is required.").max(255),
   icon: z.string().min(1, "Icon is required.").max(255),
+  label: z.string().min(1, "Label is required.").max(255),
 });
 
 type TAmenityFormProps = {
-  initialData: TAmenity | null;
-  pageTitle: string;
   amenityId?: string;
+  initialData: null | TAmenity;
+  pageTitle: string;
 };
 
 const AmenityForm = (props: TAmenityFormProps) => {
-  const { initialData, pageTitle, amenityId } = props;
+  const { amenityId, initialData, pageTitle } = props;
 
   const router = useRouter();
 
   const defaultValues = useMemo(() => {
     return {
-      label: initialData?.label || "",
       icon: initialData?.icon || "",
+      label: initialData?.label || "",
     };
   }, [initialData]);
 
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
     defaultValues,
+    resolver: zodResolver(formSchema),
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -118,19 +119,19 @@ const AmenityForm = (props: TAmenityFormProps) => {
 
             <div className="flex items-center gap-4">
               <Button
-                type="submit"
-                disabled={isSubmitting}
                 className="w-full sm:w-auto"
+                disabled={isSubmitting}
+                type="submit"
               >
                 {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {amenityId ? "Update Amenity" : "Create Amenity"}
               </Button>
               <Button
+                className="w-full sm:w-auto"
+                disabled={isSubmitting}
+                onClick={() => router.push("/amenities")}
                 type="button"
                 variant="outline"
-                onClick={() => router.push("/amenities")}
-                disabled={isSubmitting}
-                className="w-full sm:w-auto"
               >
                 Cancel
               </Button>

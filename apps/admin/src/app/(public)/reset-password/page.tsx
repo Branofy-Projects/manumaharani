@@ -9,6 +9,6 @@ export default function ResetPasswordPage() {
 }
 
 export const metadata = {
-  title: "Reset Password",
   description: "Set your new password",
+  title: "Reset Password",
 };

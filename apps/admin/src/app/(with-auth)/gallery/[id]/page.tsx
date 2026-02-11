@@ -1,10 +1,10 @@
+import { getGalleryById } from "@repo/actions";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import FormCardSkeleton from "@/components/form-card-skeleton";
 import PageContainer from "@/components/layout/page-container";
 import GalleryDetailsView from "@/features/gallery/components/gallery-details-view";
-import { getGalleryById } from "@repo/actions";
 
 export const metadata = {
   title: "Dashboard: Gallery Details",

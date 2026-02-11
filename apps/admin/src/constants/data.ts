@@ -19,7 +19,7 @@ export const navItems: NavItem[] = [
     items: [],
     shortcut: ["d", "d"],
     title: "Dashboard",
-    url: "/overview",
+    url: "/",
   },
   {
     icon: "settings",
@@ -97,6 +97,26 @@ export const navItems: NavItem[] = [
       },
     ],
     title: "Marketing",
+    url: "#",
+  },
+  {
+    icon: "billing",
+    isActive: true,
+    items: [
+      {
+        icon: "billing",
+        shortcut: ["o", "b"],
+        title: "Offer Bookings",
+        url: "/offer-bookings",
+      },
+      {
+        icon: "help",
+        shortcut: ["c", "q"],
+        title: "Contact Queries",
+        url: "/contact-queries",
+      },
+    ],
+    title: "Queries & Bookings",
     url: "#",
   },
   {

@@ -167,9 +167,8 @@ export function PropertyHeroGallery({
             {allImages.map((_, idx) => (
               <button
                 aria-label={`Go to image ${idx + 1}`}
-                className={`h-2 w-2 rounded-full transition ${
-                  idx === currentIndex ? "bg-black" : "bg-gray-300"
-                }`}
+                className={`h-2 w-2 rounded-full transition ${idx === currentIndex ? "bg-black" : "bg-gray-300"
+                  }`}
                 key={idx}
                 onClick={() => setCurrentIndex(idx)}
               />

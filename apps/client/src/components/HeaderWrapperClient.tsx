@@ -17,33 +17,20 @@ export const HeaderWrapper = ({ children }: HeaderWrapperProps) => {
     href?: string;
     label: string;
   }> = [
-    { href: "#about", label: "About Us" },
-    { href: "#dining", label: "Fine Dining" },
-    {
-      children: [
-        { href: "#wedding-destination", label: "Destination Wedding" },
-        { href: "#events", label: "Events/Off-Sites" },
-      ],
-      label: "Wedding/Mice",
-    },
-    {
-      children: [
-        { href: "#regal-experience", label: "Regal Experience" },
-        { href: "#book-safari", label: "Book A Safari" },
-      ],
-      label: "Experiences",
-    },
-    {
-      children: [
-        { href: "#luxury-room", label: "Luxury Room" },
-        { href: "#luxury-cottages", label: "Luxury Cottages" },
-        { href: "#club-cottages", label: "Club Cottages" },
-        { href: "#family-room", label: "Family Room" },
-      ],
-      label: "Accomodation",
-    },
-    { href: "#contact", label: "Contact Us" },
-  ];
+      { href: "/about-us", label: "About Us" },
+      { href: "/rooms", label: "Accommodation" },
+      { href: "/wedding", label: "Weddings" },
+      { href: "/fine-dining", label: "Dining" },
+      {
+        href: "/events",
+        label: "Mice",
+      },
+      {
+        href: "/offers",
+        label: "Offers",
+      },
+      { href: "/contact-us", label: "Contact Us" },
+    ];
 
   const [activeIndex, setActiveIndex] = React.useState<number | undefined>(
     undefined
@@ -112,8 +99,8 @@ export const HeaderWrapper = ({ children }: HeaderWrapperProps) => {
                         "block text-xl hover:opacity-70 font-thin cursor-pointer",
                         activeIndex !== undefined
                           ? pathname !== item.href &&
-                              activeIndex !== idx &&
-                              "opacity-50"
+                          activeIndex !== idx &&
+                          "opacity-50"
                           : null
                       )}
                       href={item.href || "#"}
@@ -171,7 +158,6 @@ export const HeaderWrapper = ({ children }: HeaderWrapperProps) => {
               <button
                 className="inline-flex items-center gap-1.5 text-sm text-[#2b2b2b] whitespace-nowrap"
                 onClick={() => {
-                  console.log("back");
                   setMobileSubmenuIndex(null);
                 }}
               >

@@ -12,8 +12,8 @@ export function BarGraphSkeleton() {
         <div className='flex'>
           {[1, 2].map((i) => (
             <div
-              key={i}
               className='relative flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l sm:border-t-0 sm:border-l sm:px-8 sm:py-6'
+              key={i}
             >
               <Skeleton className='h-3 w-[80px]' />
               <Skeleton className='h-8 w-[100px] sm:h-10' />
@@ -26,8 +26,8 @@ export function BarGraphSkeleton() {
         <div className='flex aspect-auto h-[280px] w-full items-end justify-around gap-2 pt-8'>
           {Array.from({ length: 12 }).map((_, i) => (
             <Skeleton
-              key={i}
               className='w-full'
+              key={i}
               style={{
                 height: `${Math.max(20, Math.random() * 100)}%`
               }}

@@ -18,8 +18,8 @@ export const Header = () => {
 
   return (
     <HeaderWrapper>
-      {/* Left: menu trigger and search */}
-      <div className="flex items-center gap-6">
+      {/* Left: menu trigger */}
+      <div className="flex flex-1 items-center gap-6">
         <label
           className="flex items-center gap-2 cursor-pointer text-[#2b2b2b]"
           htmlFor="mobile-menu-toggle"
@@ -27,11 +27,10 @@ export const Header = () => {
           <Bars3Icon className="w-6 h-6" />
           <span className="hidden sm:inline text-sm">Menu</span>
         </label>
-        {/* <MagnifyingGlassIcon className="w-5 h-5 text-[#2b2b2b]" /> */}
       </div>
 
       {/* Center: brand wordmark */}
-      <div className="flex-1 flex justify-center">
+      <div className="flex items-center justify-center">
         <Link
           className={`transition-all duration-300 ${isScrolled ? "h-7 sm:h-8" : "h-10 sm:h-14"} aspect-1820/1268 relative`}
           href="/"
@@ -40,17 +39,14 @@ export const Header = () => {
         </Link>
       </div>
 
-      {/* Right: language + reserve */}
-      <div className="flex items-center gap-6">
-        {/* <button className="text-[#2b2b2b] text-sm border-b border-[#2b2b2b] leading-none pb-0.5">
-          English
-        </button> */}
-        <a
+      {/* Right: reserve */}
+      <div className="flex flex-1 items-center justify-end gap-6">
+        {/* <a
           className="bg-[#2b2b2b] text-[#f4efe8] px-5 py-2 text-sm tracking-wide"
           href="#reserve"
         >
           Reserve
-        </a>
+        </a> */}
       </div>
     </HeaderWrapper>
   );

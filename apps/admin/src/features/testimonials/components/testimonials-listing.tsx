@@ -8,10 +8,10 @@ import { TestimonialsTable } from "./testimonials-tables";
 import { columns } from "./testimonials-tables/columns";
 
 type TGetTestimonialsFilters = {
-  search?: string;
-  page?: number;
   limit?: number;
-  status?: "pending" | "approved" | "rejected";
+  page?: number;
+  search?: string;
+  status?: "approved" | "pending" | "rejected";
 };
 
 export default async function TestimonialsListingPage() {
@@ -24,7 +24,7 @@ export default async function TestimonialsListingPage() {
     limit: pageLimit,
     page,
     ...(search && { search }),
-    ...(status && { status: status as "pending" | "approved" | "rejected" }),
+    ...(status && { status: status as "approved" | "pending" | "rejected" }),
   };
 
   const user = await getCurrentUser();
@@ -33,7 +33,7 @@ export default async function TestimonialsListingPage() {
     return redirect("/sign-in");
   }
 
-  const { total, testimonials } = await getTestimonials(filters);
+  const { testimonials, total } = await getTestimonials(filters);
 
   return <TestimonialsTable columns={columns} data={testimonials} totalItems={total} />;
 }

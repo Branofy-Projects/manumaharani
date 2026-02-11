@@ -9,6 +9,6 @@ export default function SignInPage() {
 }
 
 export const metadata = {
-  title: "Sign In",
   description: "Sign in to your account",
+  title: "Sign In",
 };

@@ -1,11 +1,13 @@
-import { getEvents } from "@repo/actions/events.actions";
+
 import { MapPinIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
+import { getUpcomingEventsCache } from "@/lib/cache/events.cache";
+
 export default async function UpcomingEvents() {
-  const { events } = await getEvents({ limit: 3, upcomingOnly: true });
+  const { events } = await getUpcomingEventsCache();
 
   return (
     <div className="w-full lg:w-1/2 flex flex-col">

@@ -1,21 +1,22 @@
 "use client";
 
-import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+
 import { useAuth } from "./auth-provider";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  requiredRole?: "user" | "admin" | "super_admin";
   fallback?: React.ReactNode;
+  requiredRole?: "admin" | "super_admin" | "user";
 }
 
-export function ProtectedRoute({ 
-  children, 
-  requiredRole,
-  fallback 
+export function ProtectedRoute({
+  children,
+  fallback,
+  requiredRole
 }: ProtectedRouteProps) {
-  const { user, isLoading } = useAuth();
+  const { isLoading, user } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -49,10 +50,10 @@ export function ProtectedRoute({
   if (requiredRole) {
     const hasRequiredRole = () => {
       switch (requiredRole) {
-        case "super_admin":
-          return user.userRole === "super_admin";
         case "admin":
           return user.userRole === "admin" || user.userRole === "super_admin";
+        case "super_admin":
+          return user.userRole === "super_admin";
         case "user":
           return true; // All authenticated users have user access
         default:

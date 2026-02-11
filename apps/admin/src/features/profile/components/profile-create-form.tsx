@@ -1,28 +1,28 @@
 "use client";
+import { IconAlertTriangle, IconTrash } from '@tabler/icons-react';
 import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
 import {
-    Accordion, AccordionContent, AccordionItem, AccordionTrigger
+  Accordion, AccordionContent, AccordionItem, AccordionTrigger
 } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import {
-    Form, FormControl, FormField, FormItem, FormLabel, FormMessage
+  Form, FormControl, FormField, FormItem, FormLabel, FormMessage
 } from '@/components/ui/form';
 import { Heading } from '@/components/ui/heading';
 import { Input } from '@/components/ui/input';
 import {
-    Select, SelectContent, SelectItem, SelectTrigger, SelectValue
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@/lib/zod-resolver';
-import { IconAlertTriangle, IconTrash } from '@tabler/icons-react';
-
-import { profileSchema } from '../utils/form-schema';
 
 import type { ProfileFormValues } from "../utils/form-schema";
+
+import { profileSchema } from '../utils/form-schema';
 
 import type { SubmitHandler } from "react-hook-form";
 interface ProfileFormType {

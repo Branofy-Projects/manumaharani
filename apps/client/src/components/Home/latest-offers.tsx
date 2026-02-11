@@ -1,10 +1,11 @@
-import { getOffers } from "@repo/actions/offers.actions";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
+import { getLatestOffersCache } from "@/lib/cache/offer.cache";
+
 export default async function LatestOffers() {
-  const { offers } = await getOffers({ limit: 2, status: 'active' });
+  const offers = await getLatestOffersCache()
 
   return (
     <div className="w-full lg:w-1/2 flex flex-col mt-10 lg:mt-0">
@@ -27,16 +28,19 @@ export default async function LatestOffers() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {offers.map((offer, idx) => (
-          <div
+          <Link
             className="relative h-[400px] overflow-hidden rounded-lg group cursor-pointer"
+            href={`/offers/${offer.slug}`}
             key={idx}
           >
-            <Image
+            {offer.image ? <Image
               alt={offer.name}
               className="object-cover transition-transform duration-700 group-hover:scale-105"
               fill
-              src={offer.image.original_url}
-            />
+              src={offer.image?.original_url}
+            /> : <div
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
+            />}
             {/* Overlay Gradient */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
@@ -52,7 +56,7 @@ export default async function LatestOffers() {
                 {offer.link}
               </div> */}
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

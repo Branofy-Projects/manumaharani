@@ -15,21 +15,21 @@ interface Accommodation {
 const accommodations: Accommodation[] = [
   {
     description:
-      "Experience the ultimate in luxury and comfort at Manu Maharani. Our Signature Stays offer a blend of modern amenities and traditional charm, perfect for couples and families alike.",
+      "Plan guided safaris to the Bijrani and Dhikala zones with assistance from the resort team, who help with timings, permits, and briefings.",
     image: "",
-    title: "Signature Stays",
+    title: "Jungle Safaris & Wildlife",
   },
   {
     description:
-      "Transform your special day into a magical experience at Manu Maharani. Our wedding venues offer a blend of traditional charm and modern elegance, perfect for your big day.",
+      "Enjoy peaceful walks along the Kosi and cosy evenings with bonfires on select days, depending on season and weather.",
     image: "",
-    title: "Weddings",
+    title: "Riverside Walks & Bonfires",
   },
   {
     description:
-      "Indulge in the finest culinary experiences at Manu Maharani. Our fine dining options offer a blend of traditional Indian cuisine and modern international flavors, perfect for your taste buds.",
+      "Use the wide open spaces for informal games, picnics, or simply lounging together between activities.",
     image: "",
-    title: "Fine Dining",
+    title: "Family Time on the Lawns",
   },
   {
     description:
@@ -152,10 +152,11 @@ export default function AccommodationsCarousel() {
           className="text-3xl md:text-4xl font-thin tracking-widest uppercase mb-4 text-center px-4 xl:px-0"
           style={{ color: "#000000" }}
         >
-          Moments at Manu Maharani
+          Rooms & Experiences
         </h2>
         <p className="text-gray-700 text-base font-serif mb-8 md:mb-12 text-center px-4 xl:px-0">
-          Discover the perfect blend of comfort and adventure at Manu Maharani. Whether you’re seeking a romantic escape, a family getaway, or a corporate retreat, we offer a range of accommodations to suit your needs.
+          Stay close to the river, explore the forest, or simply slow down on
+          the lawns—your time here can be as active or as easy as you like.
         </p>
         {/* Carousel Row */}
         <div
@@ -192,14 +193,16 @@ export default function AccommodationsCarousel() {
                     transform: isCenter ? "scale(1.05)" : "scale(1)",
                   }}
                 >
-                  <Image
+                  {card.image ? <Image
                     alt={card.title}
                     className={`w-full object-cover ${isCenter ? "h-48" : "h-60"
                       }`}
                     height={300}
                     src={card.image}
                     width={400}
-                  />
+                  /> : <div
+                    className={`w-full object-cover ${isCenter ? "h-48" : "h-60"
+                      }`} />}
                   <div className="flex flex-col items-center px-6 py-6 w-full">
                     <h3
                       className={`text-center font-semibold tracking-widest text-black mb-2 ${isCenter ? "text-lg" : "text-base"

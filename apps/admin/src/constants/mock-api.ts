@@ -10,13 +10,13 @@ export const delay = (ms: number) =>
 
 // Define the shape of Product data
 export type Product = {
-  photo_url: string;
-  name: string;
-  description: string;
-  created_at: string;
-  price: number;
-  id: number;
   category: string;
+  created_at: string;
+  description: string;
+  id: number;
+  name: string;
+  photo_url: string;
+  price: number;
   updated_at: string;
 };
 
@@ -40,15 +40,15 @@ export const fakeProducts = {
       ];
 
       return {
-        id,
-        name: faker.commerce.productName(),
-        description: faker.commerce.productDescription(),
+        category: faker.helpers.arrayElement(categories),
         created_at: faker.date
           .between({ from: '2022-01-01', to: '2023-12-31' })
           .toISOString(),
-        price: parseFloat(faker.commerce.price({ min: 5, max: 500, dec: 2 })),
+        description: faker.commerce.productDescription(),
+        id,
+        name: faker.commerce.productName(),
         photo_url: `https://api.slingacademy.com/public/sample-products/${id}.png`,
-        category: faker.helpers.arrayElement(categories),
+        price: parseFloat(faker.commerce.price({ dec: 2, max: 500, min: 5 })),
         updated_at: faker.date.recent().toISOString()
       };
     }
@@ -90,14 +90,14 @@ export const fakeProducts = {
 
   // Get paginated results with optional category filtering and search
   async getProducts({
-    page = 1,
-    limit = 10,
     categories,
+    limit = 10,
+    page = 1,
     search
   }: {
-    page?: number;
-    limit?: number;
     categories?: string;
+    limit?: number;
+    page?: number;
     search?: string;
   }) {
     await delay(1000);
@@ -117,13 +117,13 @@ export const fakeProducts = {
 
     // Return paginated response
     return {
+      limit,
+      message: 'Sample data for testing and learning purposes',
+      offset,
+      products: paginatedProducts,
       success: true,
       time: currentTime,
-      message: 'Sample data for testing and learning purposes',
-      total_products: totalProducts,
-      offset,
-      limit,
-      products: paginatedProducts
+      total_products: totalProducts
     };
   },
 
@@ -136,8 +136,8 @@ export const fakeProducts = {
 
     if (!product) {
       return {
-        success: false,
-        message: `Product with ID ${id} not found`
+        message: `Product with ID ${id} not found`,
+        success: false
       };
     }
 
@@ -145,10 +145,10 @@ export const fakeProducts = {
     const currentTime = new Date().toISOString();
 
     return {
-      success: true,
-      time: currentTime,
       message: `Product with ID ${id} found`,
-      product
+      product,
+      success: true,
+      time: currentTime
     };
   }
 };

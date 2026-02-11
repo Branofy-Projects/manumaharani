@@ -44,11 +44,10 @@ export function PropertyFAQ({ faqs }: PropertyFAQProps) {
               </span>
             </button>
             <div
-              className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                expandedFAQ === faq.id
+              className={`overflow-hidden transition-all duration-300 ease-in-out ${expandedFAQ === faq.id
                   ? "max-h-96 opacity-100"
                   : "max-h-0 opacity-0"
-              }`}
+                }`}
             >
               <div className="bg-white px-4 pb-4 text-gray-700">
                 {faq.answer}

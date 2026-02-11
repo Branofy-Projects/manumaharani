@@ -1,19 +1,15 @@
-import { getBlogs } from "@repo/actions/blogs.actions";
 import { ClockIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
+import { getLatestBlogsCache } from "@/lib/cache/blogs.cache";
 import { calculateReadTime } from "@/lib/utils";
 
 export default async function BlogsSection() {
-    const { blogs } = await getBlogs({
-        limit: 3,
-        status: 'published'
-    }, {
-        published_at: 'desc'
-    })
+    const blogs = await getLatestBlogsCache()
+
     return <>
-        <div className="w-full max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 mb-8 md:mb-12 px-4 md:px-0">
+        <div className="w-full max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 mb-8 md:mb-12 px-4 xl:px-0">
             {blogs.map((exp, idx) => (
                 <div className="flex flex-col items-start " key={idx}>
                     <div className="w-full aspect-[4/5] overflow-hidden mb-6">
@@ -54,8 +50,11 @@ export default async function BlogsSection() {
                 </div>
             ))}
         </div>
-        <button className="border border-black px-6 md:px-8 py-2 md:py-3 text-black tracking-widest font-medium uppercase text-xs md:text-base hover:bg-black hover:text-white transition">
-            Discover More
-        </button>
+        <Link href="/blogs" passHref
+        >
+            <button className="border border-black px-6 md:px-8 py-2 md:py-3 text-black tracking-widest font-medium uppercase text-xs md:text-base hover:bg-black hover:text-white transition">
+                Discover More
+            </button>
+        </Link>
     </>
 }

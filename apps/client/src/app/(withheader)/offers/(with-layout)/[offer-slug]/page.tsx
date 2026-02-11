@@ -1,4 +1,4 @@
-import { getOfferBySlug, getOffers, getRelatedOffers } from "@repo/actions/offers.actions";
+import { getRelatedOffers } from "@repo/actions/offers.actions";
 import {
     Check,
     ChevronDown,
@@ -17,13 +17,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { LexicalRenderer } from "@/components/lexical-renderer";
+import { getOfferBySlugCache, getOffersCache } from "@/lib/cache/offer.cache";
+
+import { MobileBookingBar } from "./components/MobileBookingBar";
 import { OfferBookingCard } from "./components/OfferBookingCard";
 import { OfferGallery } from "./components/OfferGallery";
 import { OfferItinerarySection } from "./components/OfferItinerarySection";
 
-export const dynamicParams = true;
-export const dynamic = "force-static";
-export const revalidate = false;
 
 type PageProps = {
     params: Promise<{ "offer-slug": string }>;
@@ -31,7 +32,7 @@ type PageProps = {
 
 export async function generateMetadata({ params }: PageProps) {
     const { "offer-slug": offerSlug } = await params;
-    const offer = await getOfferBySlug(offerSlug);
+    const offer = await getOfferBySlugCache(offerSlug);
 
     if (!offer) {
         return {
@@ -51,7 +52,7 @@ export async function generateMetadata({ params }: PageProps) {
 }
 
 export async function generateStaticParams() {
-    const { offers } = await getOffers({ status: "active" });
+    const offers = await getOffersCache()
 
     return offers
         .filter((offer) => offer.slug)
@@ -62,7 +63,7 @@ export async function generateStaticParams() {
 
 export default async function OfferDetailPage({ params }: PageProps) {
     const { "offer-slug": offerSlug } = await params;
-    const offer = await getOfferBySlug(offerSlug);
+    const offer = await getOfferBySlugCache(offerSlug);
 
     if (!offer) {
         notFound();
@@ -102,20 +103,20 @@ export default async function OfferDetailPage({ params }: PageProps) {
         : 0;
 
     return (
-        <main className="min-h-screen bg-white">
+        <main className="min-h-screen bg-background pb-20 lg:pb-0">
             {/* Breadcrumb */}
             <div className="border-b border-b-gray-200 bg-gray-50">
                 <div className="mx-auto max-w-screen-xl px-4 py-3">
                     <nav className="flex items-center gap-2 text-sm">
-                        <Link className="font-serif text-sm text-[#5a5a5a] hover:text-[#2b2b2b] hover:underline" href="/">
+                        <Link className="font-sans font-light text-sm text-[#5a5a5a] hover:text-[#2b2b2b] hover:underline" href="/">
                             Home
                         </Link>
                         <ChevronRight className="h-4 w-4 text-[#5a5a5a]" />
-                        <Link className="font-serif text-sm text-[#5a5a5a] hover:text-[#2b2b2b] hover:underline" href="/offers">
+                        <Link className="font-sans font-light text-sm text-[#5a5a5a] hover:text-[#2b2b2b] hover:underline" href="/offers">
                             Experiences
                         </Link>
                         <ChevronRight className="h-4 w-4 text-[#5a5a5a]" />
-                        <span className="font-serif text-sm text-[#2b2b2b] font-medium line-clamp-1">{offer.name}</span>
+                        <span className="font-sans font-light text-sm text-[#2b2b2b] line-clamp-1">{offer.name}</span>
                     </nav>
                 </div>
             </div>
@@ -192,9 +193,10 @@ export default async function OfferDetailPage({ params }: PageProps) {
                                 About this experience
                             </h2>
                             <div className="prose prose-gray max-w-none">
-                                <p className="font-serif text-base  leading-relaxed text-[#5a5a5a] whitespace-pre-line md:text-lg">
+                                <LexicalRenderer content={offer.description} />
+                                {/* <p className="font-serif text-base  leading-relaxed text-[#5a5a5a] whitespace-pre-line md:text-lg">
                                     {offer.description}
-                                </p>
+                                </p> */}
                             </div>
                         </section>
 
@@ -210,10 +212,10 @@ export default async function OfferDetailPage({ params }: PageProps) {
                                             <ul className="space-y-3">
                                                 {includedHighlights.map((highlight) => (
                                                     <li className="flex items-start gap-3" key={highlight.id}>
-                                                        <div className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-green-100">
+                                                        <div className="mt-1 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-green-100">
                                                             <Check className="h-3 w-3 text-green-600" />
                                                         </div>
-                                                        <span className="font-serif text-base text-[#5a5a5a] md:text-lg">{highlight.text}</span>
+                                                        <span className="font-sans text-lg font-thin leading-relaxed p-0">{highlight.text}</span>
                                                     </li>
                                                 ))}
                                             </ul>
@@ -224,10 +226,10 @@ export default async function OfferDetailPage({ params }: PageProps) {
                                             <ul className="space-y-3">
                                                 {excludedHighlights.map((highlight) => (
                                                     <li className="flex items-start gap-3" key={highlight.id}>
-                                                        <div className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-red-100">
+                                                        <div className="mt-1 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-red-100">
                                                             <X className="h-3 w-3 text-red-600" />
                                                         </div>
-                                                        <span className="font-serif text-base text-[#5a5a5a] md:text-lg">{highlight.text}</span>
+                                                        <span className="font-sans text-lg font-thin leading-relaxed p-0">{highlight.text}</span>
                                                     </li>
                                                 ))}
                                             </ul>
@@ -255,10 +257,10 @@ export default async function OfferDetailPage({ params }: PageProps) {
                                 {offer.booking_notice && (
                                     <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4">
                                         <div className="flex gap-3">
-                                            <Info className="h-5 w-5 flex-shrink-0 text-amber-600" />
+                                            <Info className="h-5 w-5 flex-shrink-0 text-amber-700" />
                                             <div>
-                                                <p className="font-serif font-medium text-amber-800">Important information</p>
-                                                <p className="mt-1 font-serif text-sm text-amber-700 md:text-base">{offer.booking_notice}</p>
+                                                <p className="font-sans font-light text-amber-700">Important information</p>
+                                                <p className="mt-1 font-sans font-thin text-sm text-amber-700 md:text-base">{offer.booking_notice}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -270,8 +272,8 @@ export default async function OfferDetailPage({ params }: PageProps) {
                                         <div className="flex gap-3">
                                             <Ticket className="h-5 w-5 flex-shrink-0 text-gray-600" />
                                             <div>
-                                                <p className="font-serif font-medium text-[#2b2b2b]">Cancellation policy</p>
-                                                <p className="mt-1 font-serif text-sm text-[#5a5a5a] whitespace-pre-line md:text-base">
+                                                <p className="font-sans font-light text-[#2b2b2b]">Cancellation policy</p>
+                                                <p className="mt-1 font-sans font-thin text-sm text-[#5a5a5a] whitespace-pre-line md:text-base">
                                                     {offer.cancellation_policy}
                                                 </p>
                                             </div>
@@ -291,11 +293,11 @@ export default async function OfferDetailPage({ params }: PageProps) {
                                     {offer.faqs.map((offerFaq) => (
                                         <details className="group" key={offerFaq.id}>
                                             <summary className="flex cursor-pointer items-center justify-between p-4 hover:bg-gray-50">
-                                                <span className="font-serif font-bold text-black pr-4">{offerFaq.faq.question}</span>
+                                                <span className="font-sans font-light text-black pr-4">{offerFaq.faq.question}</span>
                                                 <ChevronDown className="h-5 w-5 flex-shrink-0 text-[#5a5a5a] transition-transform group-open:rotate-180" />
                                             </summary>
                                             <div className="px-4 pb-4">
-                                                <p className="font-serif text-sm text-[#5a5a5a] md:text-base">{offerFaq.faq.answer}</p>
+                                                <p className="font-sans text-sm font-thin leading-relaxed text-[#5a5a5a] md:text-base">{offerFaq.faq.answer}</p>
                                             </div>
                                         </details>
                                     ))}
@@ -304,14 +306,14 @@ export default async function OfferDetailPage({ params }: PageProps) {
                         )}
                     </div>
 
-                    {/* Right Column - Booking Card */}
-                    <div className="lg:col-span-1">
+                    {/* Right Column - Booking Card (Desktop only) */}
+                    <div className="hidden lg:col-span-1 lg:block">
                         <OfferBookingCard
-                            bookingLink={offer.link}
                             discountedPrice={offer.discounted_price}
                             discountPercentage={discountPercentage}
                             duration={offer.duration}
                             freeCancellation={offer.free_cancellation || false}
+                            offerId={offer.id}
                             originalPrice={offer.original_price}
                             pricePer={offer.price_per || "person"}
                             rating={offer.rating}
@@ -402,6 +404,17 @@ export default async function OfferDetailPage({ params }: PageProps) {
                     </section>
                 )}
             </div>
+
+            {/* Mobile Sticky Booking Bar */}
+            <MobileBookingBar
+                discountedPrice={offer.discounted_price}
+                discountPercentage={discountPercentage}
+                offerId={offer.id}
+                originalPrice={offer.original_price}
+                pricePer={offer.price_per || "person"}
+                rating={offer.rating}
+                reviewCount={offer.review_count}
+            />
         </main>
     );
 }

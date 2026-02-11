@@ -1,10 +1,10 @@
+import { getGalleryById } from "@repo/actions";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import FormCardSkeleton from "@/components/form-card-skeleton";
 import PageContainer from "@/components/layout/page-container";
 import GalleryForm from "@/features/gallery/components/gallery-form";
-import { getGalleryById } from "@repo/actions";
 
 export const metadata = {
   title: "Dashboard: Edit Gallery Item",
@@ -33,9 +33,9 @@ export default async function GalleryEditPage(props: PageProps) {
       <div className="flex-1 space-y-4">
         <Suspense fallback={<FormCardSkeleton />}>
           <GalleryForm
+            galleryId={params.id}
             initialData={gallery as any}
             pageTitle="Edit Gallery Item"
-            galleryId={params.id}
           />
         </Suspense>
       </div>

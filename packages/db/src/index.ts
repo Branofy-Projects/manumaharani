@@ -80,7 +80,14 @@ export type {
   TUserRole,
   TVerification,
 } from "./schema/auth.schema";
+import { ContactQueries, contactQueryStatusEnum } from "./schema/contact-queries.schema";
+import { Experiences } from "./schema/experiences.schema";
+import { OfferBookings ,offerBookingStatusEnum} from "./schema/offer-bookings.schema";
+import { Reels, reelStatusEnum } from "./schema/reels.schema";
 
+export type { TContactQuery, TNewContactQuery } from "./schema/contact-queries.schema";
+export type { TExperience, TNewExperience } from "./schema/experiences.schema";
+export type { TReel, TNewReel } from "./schema/reels.schema";
 // Core Types
 export type {
   TAmenityBase,
@@ -163,6 +170,8 @@ export {
   BookingPayments,
   Bookings,
   bookingStatusEnum,
+  ContactQueries,
+  contactQueryStatusEnum,
   EmailVerificationTokens,
   Events,
   Faqs,
@@ -171,6 +180,8 @@ export {
   galleryTypeEnum,
   highlightTypeEnum,
   Images,
+  OfferBookings,
+  offerBookingStatusEnum,
   offerCategoryEnum,
   OfferFaqs,
   OfferHighlights,
@@ -182,6 +193,8 @@ export {
   paymentStatusEnum,
   Policies,
   policyKindEnum,
+  Reels,
+  reelStatusEnum,
   RoomImages,
   Rooms,
   roomStatusEnum,
@@ -199,7 +212,7 @@ export {
   UserPreferences,
   userRoles,
   Users,
-  Verifications,
+  Verifications
 };
 
 export const schemaWithoutRelations = {
@@ -210,11 +223,14 @@ export const schemaWithoutRelations = {
   Blogs,
   BookingPayments,
   Bookings,
+  ContactQueries,
   EmailVerificationTokens,
   Events,
+  Experiences,
   Faqs,
   Gallery,
   Images,
+  OfferBookings,
   OfferFaqs,
   OfferHighlights,
   OfferImages,
@@ -222,6 +238,7 @@ export const schemaWithoutRelations = {
   Offers,
   PasswordResetTokens,
   Policies,
+  Reels,
   RoomImages,
   Rooms,
   RoomTypeAmenities,
@@ -235,7 +252,7 @@ export const schemaWithoutRelations = {
   UserAuditLog,
   UserPreferences,
   Users,
-  Verifications,
+  Verifications
 };
 
 export const schema = {
@@ -253,6 +270,7 @@ if (
   try {
     config({ path: "../../.env" });
   } catch (error) {
+    console.error("Error loading .env file:", error);
     // Silently fail if .env file doesn't exist or in Edge Runtime
     // This is expected when running in Edge Runtime or when .env is not present
   }

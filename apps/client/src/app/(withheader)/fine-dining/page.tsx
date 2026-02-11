@@ -1,60 +1,49 @@
-"use client";
 import Image from 'next/image';
-import React from 'react';
+
+import { RestaurantCarousel } from './restaurant-carousel';
+
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  description: "Experience the pinnacle of fine dining at Manu Maharani",
+  title: "Best Fine Dining & Bar in Jim Corbett | Riverside Restaurant | Manu Maharani Resorts & Spa",
+};
+
+
+const categories = [
+  {
+    blurb:
+      "High-definition photos of the restaurant at 'Golden Hour' (sunset), candlelight setups by the Kosi River, and the architectural details of the dining hall.",
+    image:
+      "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?q=80&w=1600&auto=format&fit=crop",
+    title: "The 'Vibe' Shots",
+  },
+  {
+    blurb:
+      "Include 'chef in action' shots—plating a delicate dish or a mixologist crafting a signature mocktail. This adds a human element of craftsmanship.",
+    image:
+      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1600&auto=format&fit=crop",
+    title: "Action & Artistry",
+  },
+  {
+    blurb:
+      "Integrate 5-10 second 'Cinemagraphs' (photos with slight movement, like a flickering candle or a flowing river in the background) to make the page feel premium and modern.",
+    image:
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1600&auto=format&fit=crop",
+    title: "The 2026 Trend",
+  },
+  {
+    blurb:
+      "Close-ups of fine linen, branded cutlery, and the 'Riverside Romance' setup to sell the experience to couples.",
+    image:
+      "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80",
+    title: "The Table Setting",
+  },
+];
 
 export default function FineDiningPage() {
-  const categories = [
-    {
-      blurb:
-        "A distinguished roster of world-class talent that embodies culinary excellence with passion and innovation.",
-      image:
-        "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?q=80&w=1600&auto=format&fit=crop",
-      title: "Celebrated Chefs",
-    },
-    {
-      blurb:
-        "A collection of restaurants recognised for unparalleled dining experiences, authentic flavours and impeccable service.",
-      image:
-        "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1600&auto=format&fit=crop",
-      title: "Legendary Restaurants",
-    },
-    {
-      blurb:
-        "Each a testament to our culinary passion and honed over years of dedication. These recipes define our legacy.",
-      image:
-        "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1600&auto=format&fit=crop",
-      title: "Signature Recipes",
-    },
-  ];
-
-  const restaurants = [
-    {
-      description:
-        "LOYA takes its diners on a gastronomic journey through North India's diverse landscape, blending flavours from the Himalayan foothills to the vibrant streets of Delhi.",
-      image:
-        "https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=1600&auto=format&fit=crop",
-      name: "LOYA",
-    },
-    {
-      description:
-        "From its first location at The Taj Mahal Palace, Mumbai, Golden Dragon has introduced guests to rarefied, divine experiences that transcend mere dining.",
-      image:
-        "https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=1600&auto=format&fit=crop",
-      name: "Golden Dragon",
-    },
-    {
-      description:
-        "Experience the artistry of Japanese cuisine with the finest ingredients, masterful techniques and an unwavering commitment to authenticity.",
-      image:
-        "https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?q=80&w=1600&auto=format&fit=crop",
-      name: "Wasabi by Morimoto",
-    },
-  ];
-
-  const [activeRestaurant, setActiveRestaurant] = React.useState(0);
-
   return (
-    <main className="w-full bg-white">
+    <main className="w-full bg-white pt-[72px] md:pt-[88px]">
       {/* Hero Section */}
       <section className="relative h-[100vh] min-h-[500px] w-full overflow-hidden">
         <Image
@@ -70,7 +59,7 @@ export default function FineDiningPage() {
             <div className="flex items-center justify-center gap-4">
               <div className="h-[1px] w-16 bg-white/60" />
               <h1 className="font-serif text-5xl font-light tracking-[0.15em] md:text-6xl lg:text-7xl">
-                FINE DINING AT TAJ RESTAURANTS
+                A Culinary Journey by the Kosi: Riverside Fine Dining & Bar at Manu Maharani
               </h1>
               <div className="h-[1px] w-16 bg-white/60" />
             </div>
@@ -84,7 +73,7 @@ export default function FineDiningPage() {
           <div className="mb-8 flex items-center justify-center gap-4">
             <div className="h-[1px] w-16 bg-[#2b2b2b]" />
             <h2 className="font-serif text-3xl font-light tracking-[0.15em] uppercase text-[#2b2b2b] md:text-4xl lg:text-5xl">
-              FINE DINING AT TAJ RESTAURANTS
+              Al-Fresco Dining & Bar by the Kosi River
             </h2>
             <div className="h-[1px] w-16 bg-[#2b2b2b]" />
           </div>
@@ -99,7 +88,7 @@ export default function FineDiningPage() {
       {/* Three Categories Section */}
       <section className="w-full bg-[#f8f8f8] py-16 md:py-24">
         <div className="mx-auto max-w-screen-xl px-4 xl:px-0">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-12">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12">
             {categories.map((category, idx) => (
               <div
                 className="group cursor-pointer transition-all duration-300"
@@ -119,9 +108,9 @@ export default function FineDiningPage() {
                     {category.title}
                   </h3>
                 </div>
-                <p className="font-serif text-sm leading-relaxed text-[#5a5a5a] md:text-base">
+                {/* <p className="font-serif text-sm leading-relaxed text-[#5a5a5a] md:text-base">
                   {category.blurb}
-                </p>
+                </p> */}
               </div>
             ))}
           </div>
@@ -142,77 +131,14 @@ export default function FineDiningPage() {
             </div>
             <div className="flex items-center">
               <p className="font-serif text-base leading-relaxed text-[#5a5a5a] md:text-lg">
-                Step into the realm of our culinary legends where a symphony of
-                flavours enchants your taste buds, ambience embraces you in a
-                tapestry of elegance and the genuine warmth of our service
-                leaves you feeling truly indulged.
+                In 2026, a high-converting luxury hotel website must treat its dining section as a standalone destination.
+                Dedicated galleries and social proof (testimonials) are essential to convince non-residents to visit and guests to
+                book a table before they even arrive.
               </p>
             </div>
           </div>
 
-          {/* Restaurant Carousel */}
-          <div className="relative">
-            <button
-              aria-label="Previous restaurant"
-              className="absolute left-2 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white text-xl text-[#2b2b2b] shadow-lg transition-all hover:bg-[#f8f8f8] md:left-0 md:h-12 md:w-12 md:text-2xl"
-              onClick={() =>
-                setActiveRestaurant(
-                  (activeRestaurant - 1 + restaurants.length) %
-                    restaurants.length
-                )
-              }
-            >
-              ‹
-            </button>
-            <button
-              aria-label="Next restaurant"
-              className="absolute right-2 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white text-xl text-[#2b2b2b] shadow-lg transition-all hover:bg-[#f8f8f8] md:right-0 md:h-12 md:w-12 md:text-2xl"
-              onClick={() =>
-                setActiveRestaurant((activeRestaurant + 1) % restaurants.length)
-              }
-            >
-              ›
-            </button>
-
-            <div className="overflow-hidden px-4 md:px-12">
-              <div
-                className="flex transition-transform duration-500 ease-in-out"
-                style={{
-                  transform: `translateX(-${activeRestaurant * 100}%)`,
-                }}
-              >
-                {restaurants.map((restaurant, idx) => (
-                  <div
-                    className="w-full flex-shrink-0 px-2 md:w-1/2 md:px-4"
-                    key={idx}
-                  >
-                    <div className="bg-white shadow-sm">
-                      <div className="relative h-[300px] overflow-hidden md:h-[400px]">
-                        <Image
-                          alt={restaurant.name}
-                          className="object-cover transition-transform duration-500 hover:scale-105"
-                          fill
-                          src={restaurant.image}
-                        />
-                      </div>
-                      <div className="p-6 md:p-8">
-                        <h3 className="mb-3 font-serif text-xl font-light tracking-[0.08em] uppercase text-[#2b2b2b] md:mb-4 md:text-2xl">
-                          {restaurant.name}
-                        </h3>
-                        <p className="mb-4 font-serif text-sm leading-relaxed text-[#5a5a5a] md:mb-6">
-                          {restaurant.description}
-                        </p>
-                        <button className="inline-flex items-center gap-2 font-serif text-sm tracking-[0.08em] uppercase text-[#c9a961] transition-all hover:gap-3">
-                          More
-                          <span className="text-lg">›</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+          <RestaurantCarousel />
         </div>
       </section>
 
@@ -233,8 +159,8 @@ export default function FineDiningPage() {
             </h2>
           </div>
           <p className="max-w-2xl font-serif text-base leading-relaxed text-white/90 md:text-lg">
-            For over a century, we have crafted unforgettable dining experiences
-            that celebrate tradition, innovation and the art of hospitality.
+            In 2026, luxury is visual and sensory. Your gallery should not just show "food on a plate," but the <b>entire
+              atmosphere.</b>
           </p>
         </div>
       </section>
@@ -249,7 +175,7 @@ export default function FineDiningPage() {
             Experience the pinnacle of fine dining at Manu Maharani
           </p>
           <button className="inline-block border border-[#c9a961] bg-transparent px-10 py-3 font-serif text-sm tracking-[0.08em] uppercase text-[#c9a961] transition-all hover:bg-[#c9a961] hover:text-white">
-            Book Now
+            Book Table
           </button>
         </div>
       </section>

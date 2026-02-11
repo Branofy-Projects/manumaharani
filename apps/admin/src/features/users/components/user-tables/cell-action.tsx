@@ -2,6 +2,8 @@
 
 import { deleteUser } from '@repo/actions/users/user-actions.client';
 import { AppResponseHandler } from '@repo/actions/utils/app-response-handler';
+import { deleteUser } from '@repo/actions/users/user-actions.client';
+import { AppResponseHandler } from '@repo/actions/utils/app-response-handler';
 import { Copy, Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
@@ -9,8 +11,8 @@ import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import {
-    DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator,
-    DropdownMenuTrigger
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator,
+  DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/hooks/use-auth';
 
@@ -25,6 +27,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const router = useRouter();
 
   const { user } = useAuth();
+
   const onConfirm = async () => {
     if (!confirm(`Are you sure you want to delete user "${data.email}"?`)) {
       return;

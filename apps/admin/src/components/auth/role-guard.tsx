@@ -6,20 +6,20 @@ import { useAuth } from './auth-provider';
 
 interface RoleGuardProps {
   children: React.ReactNode;
-  requiredRole?: "user" | "admin" | "super_admin";
-  requireAdmin?: boolean;
-  requireSuperAdmin?: boolean;
   fallback?: React.ReactNode;
+  requireAdmin?: boolean;
+  requiredRole?: "admin" | "super_admin" | "user";
+  requireSuperAdmin?: boolean;
 }
 
 export function RoleGuard({
   children,
-  requiredRole,
-  requireAdmin = false,
-  requireSuperAdmin = false,
   fallback = null,
+  requireAdmin = false,
+  requiredRole,
+  requireSuperAdmin = false,
 }: RoleGuardProps) {
-  const { user, isLoading } = useAuth();
+  const { isLoading, user } = useAuth();
 
   if (isLoading) {
     return <div>Loading...</div>;

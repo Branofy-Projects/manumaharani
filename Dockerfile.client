@@ -1,5 +1,5 @@
 FROM node:20-alpine AS base
-RUN corepack enable
+RUN corepack enable && corepack prepare yarn@4.6.0 --activate
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -10,27 +10,61 @@ WORKDIR /app
 COPY package.json yarn.lock ./
 COPY turbo.json ./
 
+#
 # Copy all package.json files for workspace resolution
 COPY apps/client/package.json ./apps/client/
 # COPY apps/admin/package.json ./apps/admin/
 COPY packages/actions/package.json ./packages/actions/
+COPY packages/auth/package.json ./packages/auth/
 COPY packages/db/package.json ./packages/db/
 COPY packages/eslint-config/package.json ./packages/eslint-config/
 COPY packages/typescript-config/package.json ./packages/typescript-config/
 
-# Install all dependencies (disable PnP for Docker compatibility)
-RUN yarn config set nodeLinker node-modules && \
-    yarn install
+# Copy yarn config for node-modules linker
+COPY .yarnrc.yml ./
+
+# Install all dependencies
+RUN yarn install
 
 # Build dependencies first
 FROM base AS builder
 WORKDIR /app
 
-# Copy dependencies
-COPY --from=deps /app/node_modules ./node_modules
+# Ensure node_modules binaries (next, turbo, etc.) are in PATH
+ENV PATH="/app/node_modules/.bin:$PATH"
 
-# Copy all source code
+# Copy installed dependencies from deps stage (root + workspace node_modules)
+COPY --from=deps /app ./
+
+# Copy all source code (overlays on top, node_modules preserved via .dockerignore)
 COPY . .
+
+
+ARG NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+ARG CLERK_SECRET_KEY
+ARG DATABASE_URL
+ARG GCP_PROJECT_ID
+ARG GCP_CLIENT_EMAIL
+ARG GCP_PRIVATE_KEY
+ARG GCP_BUCKET_NAME
+ARG UPSTASH_REDIS_REST_URL
+ARG UPSTASH_REDIS_REST_TOKEN
+ARG REVALIDATION_SECRET
+ARG BETTER_AUTH_SECRET
+ARG NEXT_PUBLIC_AUTH_URL
+
+ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+ENV CLERK_SECRET_KEY=$CLERK_SECRET_KEY
+ENV DATABASE_URL=$DATABASE_URL
+ENV GCP_PROJECT_ID=$GCP_PROJECT_ID
+ENV GCP_CLIENT_EMAIL=$GCP_CLIENT_EMAIL
+ENV GCP_PRIVATE_KEY=$GCP_PRIVATE_KEY
+ENV GCP_BUCKET_NAME=$GCP_BUCKET_NAME
+ENV UPSTASH_REDIS_REST_URL=$UPSTASH_REDIS_REST_URL
+ENV UPSTASH_REDIS_REST_TOKEN=$UPSTASH_REDIS_REST_TOKEN
+ENV REVALIDATION_SECRET=$REVALIDATION_SECRET
+ENV BETTER_AUTH_SECRET=$BETTER_AUTH_SECRET
+ENV NEXT_PUBLIC_AUTH_URL=$NEXT_PUBLIC_AUTH_URL
 
 # Build the client app specifically
 RUN yarn turbo build --filter=client
@@ -39,7 +73,7 @@ RUN yarn turbo build --filter=client
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
@@ -53,6 +87,6 @@ USER nextjs
 
 EXPOSE 3000
 
-ENV PORT 3000
+ENV PORT=3000
 
 CMD ["node", "apps/client/server.js"]

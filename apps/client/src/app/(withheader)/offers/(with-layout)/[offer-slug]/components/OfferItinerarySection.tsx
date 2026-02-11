@@ -35,7 +35,7 @@ export function OfferItinerarySection({ itinerary }: OfferItinerarySectionProps)
     return (
         <div>
             <div className="mb-6 flex items-center justify-between">
-                <h2 className="text-xl font-thin uppercase lg:text-2xl text-gray-900">What to expect</h2>
+                <h2 className="text-xl lg:text-2xl font-thin uppercase text-[#2b2b2b]">What to expect</h2>
                 <div className="flex gap-3 text-sm">
                     <button
                         className="text-blue-600 hover:text-blue-700 hover:underline"
@@ -142,6 +142,6 @@ export function OfferItinerarySection({ itinerary }: OfferItinerarySectionProps)
                     })}
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
