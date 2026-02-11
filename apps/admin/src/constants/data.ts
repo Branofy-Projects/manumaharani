@@ -69,6 +69,12 @@ export const navItems: NavItem[] = [
         title: "Testimonials",
         url: "/testimonials",
       },
+      {
+        icon: "media",
+        shortcut: ["n", "a"],
+        title: "Nearby Attractions",
+        url: "/nearby-attractions",
+      },
     ],
     title: "Content",
     url: "#",

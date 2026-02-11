@@ -15,6 +15,7 @@ import { RoomImages, Rooms } from './rooms.schema';
 import { Testimonials } from './testimonials.schema';
 import { Events } from './events.schema';
 import { OfferFaqs, OfferHighlights, OfferImages, OfferItinerary, Offers } from './offers.schema';
+import { Attractions } from './attractions.schema';
 
 
 export const roomTypeRelations = relations(RoomTypes, ({ many }) => ({
@@ -230,5 +231,12 @@ export const offerFaqsRelations = relations(OfferFaqs, ({ one }) => ({
   faq: one(Faqs, {
     fields: [OfferFaqs.faq_id],
     references: [Faqs.id],
+  }),
+}));
+
+export const attractionRelations = relations(Attractions, ({ one }) => ({
+  image: one(Images, {
+    fields: [Attractions.image],
+    references: [Images.id],
   }),
 }));

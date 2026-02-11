@@ -1,4 +1,5 @@
 import type { TAmenityBase } from "./amenities.schema";
+import type { TAttractionBase } from "./attractions.schema";
 import type { TUser } from "./auth.schema";
 import type { TBlogBase, TBlogImageBase } from "./blogs.schema";
 import type { TBookingBase, TBookingPaymentBase } from "./bookings.schema";
@@ -17,6 +18,9 @@ import type { TPolicyBase } from "./policies.schema";
 
 // Simple types without relations
 export type TAmenity = TAmenityBase;
+export type TAttraction = {
+  image: null | TImage;
+} & TAttractionBase;
 export type TBlog = {
   author: null | TUser;
   featuredImage: null | TImage;

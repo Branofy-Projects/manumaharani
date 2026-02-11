@@ -1,3 +1,4 @@
+export * from "./attractions.actions";
 export * from "./blogs.actions";
 export * from "./bookings.actions";
 export * from "./events.actions";
