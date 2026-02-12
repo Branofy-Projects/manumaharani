@@ -64,7 +64,12 @@ import {
   roomTypeStatusEnum,
 } from "./schema/room-types.schema";
 // Rooms Schema
-import { RoomImages, Rooms, roomStatusEnum } from "./schema/rooms.schema";
+import {
+  RoomAmenities,
+  RoomImages,
+  Rooms,
+  roomStatusEnum,
+} from "./schema/rooms.schema";
 // Testimonials Schema
 import {
   Testimonials,
@@ -134,6 +139,8 @@ export type {
   TOfferWithDetails,
   TPolicy,
   TRoom,
+  TRoomAmenity,
+  TRoomImage,
   TRoomType,
   TRoomTypeAmenity,
   TRoomTypeFaq,
@@ -182,6 +189,7 @@ export {
   paymentStatusEnum,
   Policies,
   policyKindEnum,
+  RoomAmenities,
   RoomImages,
   Rooms,
   roomStatusEnum,
@@ -222,6 +230,7 @@ export const schemaWithoutRelations = {
   Offers,
   PasswordResetTokens,
   Policies,
+  RoomAmenities,
   RoomImages,
   Rooms,
   RoomTypeAmenities,

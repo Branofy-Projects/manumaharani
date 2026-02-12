@@ -27,21 +27,9 @@ export const navItems: NavItem[] = [
     items: [
       {
         icon: "product",
-        shortcut: ["r", "t"],
-        title: "Room Types",
-        url: "/room-types",
-      },
-      {
-        icon: "product",
         shortcut: ["r", "m"],
         title: "Rooms",
         url: "/rooms",
-      },
-      {
-        icon: "billing",
-        shortcut: ["b", "k"],
-        title: "Bookings",
-        url: "/bookings",
       },
     ],
     title: "Accommodations",
