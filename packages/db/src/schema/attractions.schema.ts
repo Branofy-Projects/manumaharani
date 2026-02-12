@@ -31,6 +31,11 @@ export const Attractions = pgTable(
     order: integer("order").notNull().default(0),
     distance: varchar("distance", { length: 100 }),
 
+    // Opening hours & FAQ
+    open_time: varchar("open_time", { length: 20 }),
+    close_time: varchar("close_time", { length: 20 }),
+    faq: text("faq"),
+
     // Timestamps
     created_at: timestamp("created_at", { precision: 0 }).defaultNow(),
     updated_at: timestamp("updated_at", { precision: 0 })

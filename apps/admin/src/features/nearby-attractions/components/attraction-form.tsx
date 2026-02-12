@@ -3,17 +3,18 @@
 import { zodResolver } from "@/lib/zod-resolver";
 import { createAttraction, updateAttraction } from "@repo/actions";
 import { createImages } from "@repo/actions/images.actions";
-import { Loader2 } from "lucide-react";
+import { Loader2, Plus, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
 import type { FormImage as FileUploaderFormImage } from "@/components/file-uploader";
 import { FileUploader, hasValidImages } from "@/components/file-uploader";
+import PageContainer from "@/components/layout/page-container";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -25,16 +26,26 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { ImagesArraySchema } from "@/lib/image-schema";
 import { uploadFilesWithProgress } from "@/lib/upload-files";
 
 import type { TAttraction } from "@repo/db";
 
+const faqItemSchema = z.object({
+  question: z.string().optional().default(""),
+  answer: z.string().optional().default(""),
+});
+
 const formSchema = z.object({
   title: z.string().min(1, "Title is required.").max(255),
   subtitle: z.string().min(1, "Subtitle is required."),
   link: z.string().default("#"),
+  distance: z.string().max(100).optional().default(""),
+  open_time: z.string().max(20).optional().default(""),
+  close_time: z.string().max(20).optional().default(""),
+  faqs: z.array(faqItemSchema).default([]),
   active: z.boolean().default(true),
   order: z.preprocess((val) => Number(val), z.number().int().default(0)),
   image: ImagesArraySchema(0, 1),
@@ -51,10 +62,28 @@ const AttractionForm = (props: TAttractionFormProps) => {
   const router = useRouter();
 
   const defaultValues = useMemo(() => {
+    let faqs: Array<{ question: string; answer: string }> = [];
+    if (initialData?.faq) {
+      try {
+        const parsed = JSON.parse(initialData.faq) as unknown;
+        faqs = Array.isArray(parsed)
+          ? parsed.map((item: { question?: string; answer?: string }) => ({
+              question: item?.question ?? "",
+              answer: item?.answer ?? "",
+            }))
+          : [];
+      } catch {
+        faqs = [];
+      }
+    }
     return {
       title: initialData?.title || "",
       subtitle: initialData?.subtitle || "",
       link: initialData?.link || "#",
+      distance: initialData?.distance ?? "",
+      open_time: initialData?.open_time ?? "",
+      close_time: initialData?.close_time ?? "",
+      faqs,
       active: initialData?.active ?? true,
       order: initialData?.order || 0,
       image: initialData?.image
@@ -79,6 +108,12 @@ const AttractionForm = (props: TAttractionFormProps) => {
     resolver: zodResolver(formSchema),
   });
 
+  const { append: appendFaq, fields: faqFields, remove: removeFaq } = useFieldArray({
+    control: form.control,
+    name: "faqs",
+  });
+
+  const [activeTab, setActiveTab] = useState("basic");
   const [progresses, setProgresses] = useState<Record<string, number>>({});
   const [isImageUploading, setIsImageUploading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -142,6 +177,13 @@ const AttractionForm = (props: TAttractionFormProps) => {
         title: data.title,
         subtitle: data.subtitle,
         link: data.link,
+        distance: data.distance || null,
+        open_time: data.open_time || null,
+        close_time: data.close_time || null,
+        faq: (() => {
+          const valid = data.faqs?.filter((f) => f.question?.trim() && f.answer?.trim()) ?? [];
+          return valid.length ? JSON.stringify(valid) : null;
+        })(),
         active: data.active,
         order: data.order,
         image: imageId,
@@ -168,145 +210,278 @@ const AttractionForm = (props: TAttractionFormProps) => {
     }
   };
 
+  const busy = isSubmitting || isImageUploading;
+
   return (
-    <Card className="mx-auto w-full max-w-4xl">
-      <CardHeader>
-        <CardTitle className="text-left text-2xl font-bold">
-          {pageTitle}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
+    <PageContainer scrollable={true}>
+      <div className="w-full">
         <Form {...form}>
-          <form className="space-y-8" onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Title</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter attraction title" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="order"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Display Order</FormLabel>
-                    <FormControl>
-                      <Input type="number" {...field} />
-                    </FormControl>
-                    <FormDescription>Lower numbers appear first</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+          <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="flex items-center justify-between">
+              <h1 className="text-2xl font-bold">{pageTitle}</h1>
+              <div className="flex gap-3">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => router.push("/nearby-attractions")}
+                  disabled={busy}
+                >
+                  Cancel
+                </Button>
+                <Button type="submit" disabled={busy}>
+                  {busy && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  {props.attractionId ? "Update Attraction" : "Create Attraction"}
+                </Button>
+              </div>
             </div>
 
-            <FormField
-              control={form.control}
-              name="subtitle"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Subtitle / Description</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Enter a brief description"
-                      className="min-h-[100px]"
-                      {...field}
+            <Tabs className="w-full" onValueChange={setActiveTab} value={activeTab}>
+              <TabsList className="grid sticky top-0 z-10 w-full grid-cols-3">
+                <TabsTrigger value="basic">Basic Info</TabsTrigger>
+                <TabsTrigger value="media">Media</TabsTrigger>
+                <TabsTrigger value="faq">FAQ</TabsTrigger>
+              </TabsList>
+
+              {/* Tab: Basic Info */}
+              <TabsContent className="space-y-6" value="basic">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Basic Information</CardTitle>
+                    <CardDescription>
+                      Title, description, image, hours, and status
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                      <FormField
+                        control={form.control}
+                        name="title"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Title</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter attraction title" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="order"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Display Order</FormLabel>
+                            <FormControl>
+                              <Input type="number" {...field} />
+                            </FormControl>
+                            <FormDescription className="text-xs">Lower numbers appear first</FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <FormField
+                      control={form.control}
+                      name="subtitle"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Subtitle / Description</FormLabel>
+                          <FormControl>
+                            <Textarea placeholder="Enter a brief description" className="min-h-[100px]" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
 
-            <FormField
-              control={form.control}
-              name="link"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>External Link (Optional)</FormLabel>
-                  <FormControl>
-                    <Input placeholder="#" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="image"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Attraction Image</FormLabel>
-                  <FormControl>
-                    <FileUploader
-                      disabled={isImageUploading || isSubmitting}
-                      id="attraction-image"
-                      maxFiles={1}
-                      onValueChange={field.onChange}
-                      progresses={progresses}
-                      showValidation={hasAttemptedSubmit}
-                      value={field.value || []}
+                    <FormField
+                      control={form.control}
+                      name="link"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>External Link (Optional)</FormLabel>
+                          <FormControl>
+                            <Input placeholder="#" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
 
-            <FormField
-              control={form.control}
-              name="active"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                  <div className="space-y-0.5">
-                    <FormLabel className="text-base">Active Status</FormLabel>
-                    <FormDescription>
-                      Inactive attractions will not be shown on the website.
-                    </FormDescription>
-                  </div>
-                  <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
+                    <FormField
+                      control={form.control}
+                      name="distance"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Distance (Optional)</FormLabel>
+                          <FormControl>
+                            <Input placeholder="e.g. 2.5 km, 10 min drive" {...field} />
+                          </FormControl>
+                          <FormDescription className="text-xs">Distance from the property</FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
 
-            <div className="flex items-center gap-4">
-              <Button
-                type="submit"
-                disabled={isSubmitting || isImageUploading}
-                className="w-full sm:w-auto"
-              >
-                {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {props.attractionId ? "Update Attraction" : "Create Attraction"}
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => router.push("/nearby-attractions")}
-                disabled={isSubmitting || isImageUploading}
-                className="w-full sm:w-auto"
-              >
-                Cancel
-              </Button>
-            </div>
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                      <FormField
+                        control={form.control}
+                        name="open_time"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Open time (Optional)</FormLabel>
+                            <FormControl>
+                              <Input placeholder="e.g. 09:00 or 9 AM" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="close_time"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Close time (Optional)</FormLabel>
+                            <FormControl>
+                              <Input placeholder="e.g. 18:00 or 6 PM" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <FormField
+                      control={form.control}
+                      name="active"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                          <div className="space-y-0.5">
+                            <FormLabel className="text-base">Active Status</FormLabel>
+                            <FormDescription>
+                              Inactive attractions will not be shown on the website.
+                            </FormDescription>
+                          </div>
+                          <FormControl>
+                            <Switch checked={field.value} onCheckedChange={field.onChange} />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              {/* Tab: Media */}
+              <TabsContent className="space-y-6" value="media">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Media</CardTitle>
+                    <CardDescription>
+                      Attraction image for listings and the website
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <FormField
+                      control={form.control}
+                      name="image"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Attraction Image</FormLabel>
+                          <FormControl>
+                            <FileUploader
+                              disabled={isImageUploading || isSubmitting}
+                              id="attraction-image"
+                              maxFiles={1}
+                              onValueChange={field.onChange}
+                              progresses={progresses}
+                              showValidation={hasAttemptedSubmit}
+                              value={field.value || []}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              {/* Tab: FAQ */}
+              <TabsContent className="space-y-6" value="faq">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>FAQ</CardTitle>
+                    <CardDescription>
+                      Add or remove frequently asked questions for this attraction
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex justify-end">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => appendFaq({ question: "", answer: "" })}
+                      >
+                        <Plus className="mr-2 h-4 w-4" />
+                        Add FAQ
+                      </Button>
+                    </div>
+                    {faqFields.map((field, index) => (
+                      <div key={field.id} className="rounded-lg border p-4 space-y-3">
+                        <div className="flex justify-end">
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => removeFaq(index)}
+                          >
+                            <Trash2 className="h-4 w-4 text-destructive" />
+                          </Button>
+                        </div>
+                        <FormField
+                          control={form.control}
+                          name={`faqs.${index}.question`}
+                          render={({ field: f }) => (
+                            <FormItem>
+                              <FormLabel>Question</FormLabel>
+                              <FormControl>
+                                <Input placeholder="e.g. What are the opening hours?" {...f} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name={`faqs.${index}.answer`}
+                          render={({ field: f }) => (
+                            <FormItem>
+                              <FormLabel>Answer</FormLabel>
+                              <FormControl>
+                                <Textarea placeholder="Answer..." className="min-h-[80px]" {...f} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    ))}
+                    {faqFields.length === 0 && (
+                      <p className="text-sm text-muted-foreground">No FAQs yet. Click &quot;Add FAQ&quot; to add one.</p>
+                    )}
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
           </form>
         </Form>
-      </CardContent>
-    </Card>
+      </div>
+    </PageContainer>
   );
 };
 

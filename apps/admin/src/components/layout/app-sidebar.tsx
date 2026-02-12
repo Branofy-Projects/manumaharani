@@ -1,7 +1,11 @@
 "use client";
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import * as React from 'react';
+
+const LOGO_URL =
+  'https://www.manumaharaniresorts.com/wp-content/uploads/2022/09/Final-Logo_Manu-Maharani-1536x1070.png';
 
 import { SignOutButton } from '@/components/auth/sign-out-button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
@@ -19,26 +23,11 @@ import { navItems } from '@/constants/data';
 import { useAuth } from '@/hooks/use-auth';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import {
-    IconBell, IconChevronRight, IconChevronsDown, IconCreditCard, IconLogout, IconPhotoUp,
+    IconBell, IconChevronRight, IconChevronsDown, IconCreditCard, IconLogout,
     IconUserCircle
 } from '@tabler/icons-react';
 
 import { Icons } from '../icons';
-import { OrgSwitcher } from '../org-switcher';
-
-import type { Tenant } from "../org-switcher";
-
-export const company = {
-  logo: IconPhotoUp,
-  name: "Acme Inc",
-  plan: "Enterprise",
-};
-
-const tenants: Tenant[] = [
-  { id: "1", name: "Acme Inc" },
-  { id: "2", name: "Beta Corp" },
-  { id: "3", name: "Gamma Ltd" },
-];
 
 export default function AppSidebar() {
   const pathname = usePathname();
@@ -46,12 +35,6 @@ export default function AppSidebar() {
   const { user } = useAuth();
   const router = useRouter();
   const [mounted, setMounted] = React.useState(false);
-
-  const handleSwitchTenant = (_tenantId: string) => {
-    // Tenant switching functionality would be implemented here
-  };
-
-  const activeTenant = tenants[0];
 
   React.useEffect(() => {
     setMounted(true);
@@ -77,11 +60,19 @@ export default function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader suppressHydrationWarning>
-        <OrgSwitcher
-          defaultTenant={activeTenant!}
-          onTenantSwitch={handleSwitchTenant}
-          tenants={tenants}
-        />
+        <Link
+          href="/dashboard"
+          className="flex items-center justify-center px-2 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md min-h-[3rem]"
+        >
+          <Image
+            src={LOGO_URL}
+            alt="Manu Maharani"
+            width={160}
+            height={112}
+            className="h-10 w-auto max-w-full object-contain group-data-[collapsible=icon]:h-8"
+            priority
+          />
+        </Link>
       </SidebarHeader>
       <SidebarContent className="overflow-x-hidden" suppressHydrationWarning>
         <SidebarGroup>

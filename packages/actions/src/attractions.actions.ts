@@ -59,12 +59,20 @@ export const createAttraction = async (data: TNewAttraction) => {
     active: data.active ?? true,
     order: Number(data.order) ?? 0,
     distance: data.distance ?? null,
+    open_time: data.open_time ?? null,
+    close_time: data.close_time ?? null,
+    faq: data.faq ?? null,
   };
-  const [attraction] = await db.insert(Attractions).values(values).returning();
-  revalidatePath("/attractions");
-  revalidatePath("/nearby-attractions");
-  revalidatePath("/");
-  return attraction;
+  try {
+    const [attraction] = await db.insert(Attractions).values(values).returning();
+    revalidatePath("/attractions");
+    revalidatePath("/nearby-attractions");
+    revalidatePath("/");
+    return attraction;
+  } catch (err) {
+    console.error("createAttraction failed:", err);
+    throw err;
+  }
 };
 
 /**
@@ -79,6 +87,9 @@ export const updateAttraction = async (id: string, data: Partial<TNewAttraction>
   if (data.active !== undefined) setValues.active = data.active;
   if (data.order !== undefined) setValues.order = Number(data.order);
   if (data.distance !== undefined) setValues.distance = data.distance ?? null;
+  if (data.open_time !== undefined) setValues.open_time = data.open_time ?? null;
+  if (data.close_time !== undefined) setValues.close_time = data.close_time ?? null;
+  if (data.faq !== undefined) setValues.faq = data.faq ?? null;
 
   const [updated] = await db
     .update(Attractions)

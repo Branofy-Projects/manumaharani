@@ -85,6 +85,20 @@
       "when": 1769350000000,
       "tag": "0011_add_attractions_distance",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1769350100000,
+      "tag": "0013_add_attractions_open_close_faq",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1770903863261,
+      "tag": "0013_wonderful_winter_soldier",
+      "breakpoints": true
     }
   ]
 }

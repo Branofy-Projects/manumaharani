@@ -57,6 +57,21 @@ export const columns: ColumnDef<TAttraction>[] = [
     cell: ({ row }) => <div className="max-w-[300px] truncate">{row.getValue("subtitle")}</div>,
   },
   {
+    accessorKey: "distance",
+    header: "Distance",
+    cell: ({ row }) => (row.original.distance ? String(row.original.distance) : "—"),
+  },
+  {
+    accessorKey: "open_time",
+    header: "Open",
+    cell: ({ row }) => (row.original.open_time ? String(row.original.open_time) : "—"),
+  },
+  {
+    accessorKey: "close_time",
+    header: "Close",
+    cell: ({ row }) => (row.original.close_time ? String(row.original.close_time) : "—"),
+  },
+  {
     accessorKey: "order",
     header: "Order",
   },
