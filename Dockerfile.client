@@ -66,6 +66,27 @@ ENV REVALIDATION_SECRET=$REVALIDATION_SECRET
 ENV BETTER_AUTH_SECRET=$BETTER_AUTH_SECRET
 ENV NEXT_PUBLIC_AUTH_URL=$NEXT_PUBLIC_AUTH_URL
 
+# Debug: Log build arguments and environment variables
+RUN echo "=== Build Environment Variables ===" && \
+    echo "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY" && \
+    echo "CLERK_SECRET_KEY=${CLERK_SECRET_KEY:0:5}..." && \
+    echo "DATABASE_URL=${DATABASE_URL:0:10}..." && \
+    echo "GCP_PROJECT_ID=$GCP_PROJECT_ID" && \
+    echo "BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET:0:5}..." && \
+        echo "NEXT_PUBLIC_AUTH_URL=$NEXT_PUBLIC_AUTH_URL" && \
+        echo "NODE_ENV=$NODE_ENV" && \
+        echo "NEXT_TELEMETRY_DISABLED=$NEXT_TELEMETRY_DISABLED" && \
+        echo "GCP_BUCKET_NAME=$GCP_BUCKET_NAME" && \
+        echo "UPSTASH_REDIS_REST_URL=$UPSTASH_REDIS_REST_URL" && \
+        echo "UPSTASH_REDIS_REST_TOKEN=$UPSTASH_REDIS_REST_TOKEN" && \
+        echo "REVALIDATION_SECRET=$REVALIDATION_SECRET" && \
+        echo "NEXT_PUBLIC_BASE_URL=$NEXT_PUBLIC_BASE_URL" && \
+        echo "ADMIN_WEBHOOK_SECRET=$ADMIN_WEBHOOK_SECRET" && \
+        echo "NEXT_PUBLIC_CLIENT_URL=$NEXT_PUBLIC_CLIENT_URL" && \
+        echo "NEXT_PUBLIC_ADMIN_URL=$NEXT_PUBLIC_ADMIN_URL" && \
+    printenv
+
+
 # Build the client app specifically
 RUN yarn turbo build --filter=client
 
