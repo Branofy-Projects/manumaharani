@@ -85,6 +85,14 @@ export const getEventById = async (id: string)=> {
   }) 
 };
 
+export const getAllEventsSlugs = async () => {
+  const date = new Date().toISOString().split("T")[0];
+  return db.query.Events.findMany({
+    columns: {created_at: true, slug: true, updated_at: true},
+    where: gte(Events.startDate, date),
+  });
+};
+
 export const getEventByIdWithDetails = async (id: string): Promise<TEventWithDetails | undefined> => {
   return db.query.Events.findFirst({
     where: eq(Events.id, id),

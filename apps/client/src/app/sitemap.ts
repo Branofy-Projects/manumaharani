@@ -1,4 +1,5 @@
 import { getAllBlogsSlugs } from '@repo/actions/blogs.actions';
+import { getAllEventsSlugs } from '@repo/actions/events.actions';
 import { getAllOffersSlugs } from '@repo/actions/offers.actions';
 import { getAllRoomTypesSlug } from '@repo/actions/room-types.actions';
 
@@ -90,5 +91,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Sitemap: failed to fetch offers', e);
   }
 
-  return [...staticRoutes, ...roomRoutes, ...offerRoutes, ...blogRoutes, ...legalRoutes];
+  // Dynamic routes - Events
+  let eventRoutes: MetadataRoute.Sitemap = [];
+  try {
+    const events = await getAllEventsSlugs();
+    eventRoutes = events
+      .filter((event) => event.slug)
+      .map((event) => ({
+        changeFrequency: 'daily' as const,
+        lastModified: new Date(event.updated_at || event.created_at || new Date()),
+        priority: 0.7,
+        url: `${BASE_URL}/events/${event.slug}`,
+      }));
+  } catch (e) {
+    console.error('Sitemap: failed to fetch events', e);
+  }
+
+  return [...staticRoutes, ...roomRoutes, ...offerRoutes, ...eventRoutes, ...blogRoutes, ...legalRoutes];
 }

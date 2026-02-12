@@ -1,4 +1,4 @@
-import { getRelatedEvents } from "@repo/actions/events.actions";
+import { getAllEventsSlugs, getRelatedEvents } from "@repo/actions/events.actions";
 import {
     Calendar,
     Check,
@@ -413,6 +413,15 @@ export async function generateMetadata({ params }: PageProps) {
     };
 }
 
+export async function generateStaticParams() {
+    const events = await getAllEventsSlugs();
+
+    return events
+        .filter((event) => event.slug)
+        .map((event) => ({
+            "event-slug": event.slug,
+        }));
+}
 
 function formatEventDate(startDate: string, endDate?: null | string) {
     const start = new Date(startDate + "T00:00:00");

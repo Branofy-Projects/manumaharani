@@ -2,7 +2,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 export default function OfferDetailLoading() {
     return (
-        <main className="min-h-screen bg-background">
+        <main className="min-h-screen bg-background pt-[72px] md:pt-[88px]">
             {/* Breadcrumb */}
             <div className="border-b border-b-gray-200 bg-gray-50">
                 <div className="mx-auto max-w-screen-xl px-4 py-3">

@@ -30,7 +30,7 @@ export const Header = () => {
       </div>
 
       {/* Center: brand wordmark */}
-      <div className="flex items-center justify-center">
+      <div className="flex flex-1 items-center justify-center">
         <Link
           className={`transition-all duration-300 ${isScrolled ? "h-7 sm:h-8" : "h-10 sm:h-14"} aspect-1820/1268 relative`}
           href="/"
