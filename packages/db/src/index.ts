@@ -31,7 +31,8 @@ import {
   bookingStatusEnum,
   paymentStatusEnum,
 } from "./schema/bookings.schema";
-import { Events } from "./schema/events.schema";
+import { EventBookings } from "./schema/event-bookings.schema";
+import { EventFaqs, EventHighlights, EventImages, EventItinerary, Events } from "./schema/events.schema";
 import { Faqs } from "./schema/faqs.schema";
 // Gallery Schema
 import {
@@ -85,7 +86,20 @@ import { Experiences } from "./schema/experiences.schema";
 import { OfferBookings ,offerBookingStatusEnum} from "./schema/offer-bookings.schema";
 import { Reels, reelStatusEnum } from "./schema/reels.schema";
 
+export type { TEventBooking, TNewEventBooking } from "./schema/event-bookings.schema";
 export type { TContactQuery, TNewContactQuery } from "./schema/contact-queries.schema";
+export type {
+  TEventBase,
+  TEventFaqBase,
+  TEventHighlightBase,
+  TEventImageBase,
+  TEventItineraryBase,
+  TNewEvent,
+  TNewEventFaq,
+  TNewEventHighlight,
+  TNewEventImage,
+  TNewEventItinerary,
+} from "./schema/events.schema";
 export type { TExperience, TNewExperience } from "./schema/experiences.schema";
 export type { TReel, TNewReel } from "./schema/reels.schema";
 // Core Types
@@ -131,6 +145,11 @@ export type {
   TBlogImage,
   TBooking,
   TBookingWithDetails,
+  TEventFaq,
+  TEventHighlight,
+  TEventImage,
+  TEventItinerary,
+  TEventWithDetails,
   TFaq,
   TGallery,
   TOffer,
@@ -173,6 +192,11 @@ export {
   ContactQueries,
   contactQueryStatusEnum,
   EmailVerificationTokens,
+  EventBookings,
+  EventFaqs,
+  EventHighlights,
+  EventImages,
+  EventItinerary,
   Events,
   Faqs,
   Gallery,
@@ -225,6 +249,11 @@ export const schemaWithoutRelations = {
   Bookings,
   ContactQueries,
   EmailVerificationTokens,
+  EventBookings,
+  EventFaqs,
+  EventHighlights,
+  EventImages,
+  EventItinerary,
   Events,
   Experiences,
   Faqs,

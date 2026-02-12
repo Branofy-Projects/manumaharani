@@ -110,6 +110,12 @@ export const navItems: NavItem[] = [
         url: "/offer-bookings",
       },
       {
+        icon: "calendar",
+        shortcut: ["e", "b"],
+        title: "Event Bookings",
+        url: "/event-bookings",
+      },
+      {
         icon: "help",
         shortcut: ["c", "q"],
         title: "Contact Queries",

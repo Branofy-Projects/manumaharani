@@ -8,12 +8,14 @@ import {
   updateEvent,
 } from "@repo/actions";
 import { createImages } from "@repo/actions/images.actions";
+import { format } from "date-fns";
 import {
   GripVertical,
   Loader2,
   Plus,
   Trash2,
 } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -26,6 +28,7 @@ import { FileUploader, hasValidImages } from "@/components/file-uploader";
 import PageContainer from "@/components/layout/page-container";
 import { RichTextEditor } from "@/components/rich-text-editor";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
@@ -37,6 +40,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -47,15 +51,12 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ImagesArraySchema } from "@/lib/image-schema";
 import { uploadFilesWithProgress } from "@/lib/upload-files";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@/lib/zod-resolver";
-import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
 
+import type { TNewEvent } from "@repo/db/index";
 import type { TEvent } from "@repo/db/schema/types.schema";
 
 const CATEGORIES = [
@@ -153,18 +154,20 @@ const formSchema = z.object({
     from: z.date(),
     to: z.date().optional(),
   }, { message: "Event date is required" }),
-  startTime: z.string().min(1, "Start time is required."),
   endTime: z.string().min(1, "End time is required."),
+  startTime: z.string().min(1, "Start time is required."),
 });
 
 type TEventFormProps = {
-  initialData: null | TEvent;
   eventId?: string;
+  initialData: null | TEvent;
   pageTitle: string;
 };
 
 const EventForm = (props: TEventFormProps) => {
   const { initialData, pageTitle } = props;
+
+
   const router = useRouter();
 
   const defaultValues = useMemo(() => {
@@ -258,8 +261,8 @@ const EventForm = (props: TEventFormProps) => {
           to: initialData.endDate ? new Date(initialData.endDate) : undefined,
         }
         : undefined,
-      startTime: initialData?.startTime || "08:00",
       endTime: initialData?.endTime || "16:00",
+      startTime: initialData?.startTime || "08:00",
     };
   }, [initialData]);
 
@@ -325,13 +328,13 @@ const EventForm = (props: TEventFormProps) => {
     // Create a minimal offer if it doesn't exist
     const formData = form.getValues();
 
-    // Validate required fields for creating an offer
-    if (!formData.name || !formData.slug || !formData.description || !formData.excerpt || !formData.link) {
-      toast.error("Please fill in required fields (Name, Slug, Description, Excerpt, Link) before saving individual sections.");
+    // Validate required fields for creating an event
+    if (!formData.name || !formData.slug || !formData.description || !formData.excerpt || !formData.link || !formData.date?.from) {
+      toast.error("Please fill in required fields (Name, Slug, Description, Excerpt, Link, Event Date) before saving individual sections.");
       return null;
     }
 
-    const minimalEventData = {
+    const minimalEventData: TNewEvent = {
       active: formData.active || false,
       booking_notice: formData.booking_notice || null,
       cancellation_deadline: formData.cancellation_deadline || null,
@@ -340,6 +343,8 @@ const EventForm = (props: TEventFormProps) => {
       description: formData.description,
       discounted_price: formData.discounted_price || null,
       duration: formData.duration || null,
+      endDate: formData.date?.to ? format(formData.date.to, "yyyy-MM-dd") : null,
+      endTime: formData.endTime || "16:00",
       excerpt: formData.excerpt,
       free_cancellation: formData.free_cancellation || false,
       image: null,
@@ -358,6 +363,8 @@ const EventForm = (props: TEventFormProps) => {
       rating: formData.rating || null,
       review_count: formData.review_count || 0,
       slug: formData.slug,
+      startDate: format(formData.date.from, "yyyy-MM-dd"),
+      startTime: formData.startTime || "08:00",
       status: formData.status || "draft",
     };
 
@@ -393,9 +400,10 @@ const EventForm = (props: TEventFormProps) => {
         description: data.description,
         discounted_price: data.discounted_price || null,
         duration: data.duration || null,
+        endDate: data.date?.to ? format(data.date.to, "yyyy-MM-dd") : null,
+        endTime: data.endTime,
         excerpt: data.excerpt,
         free_cancellation: data.free_cancellation || false,
-        image: null,
         languages: data.languages || null,
         link: data.link,
         location: data.location || null,
@@ -411,9 +419,12 @@ const EventForm = (props: TEventFormProps) => {
         rating: data.rating || null,
         review_count: data.review_count || 0,
         slug: data.slug,
+        startDate: data.date?.from ? format(data.date.from, "yyyy-MM-dd") : undefined,
+        startTime: data.startTime,
         status: data.status,
       });
       toast.success("Basic info saved successfully!");
+      router.refresh();
     } catch (error) {
       console.error("Error saving basic info:", error);
       toast.error(error instanceof Error ? error.message : "Failed to save basic info");
@@ -431,35 +442,24 @@ const EventForm = (props: TEventFormProps) => {
     try {
       setIsSubmitting(true);
       await updateEvent(eventId, {
-        active: data.active || false,
         booking_notice: data.booking_notice || null,
         cancellation_deadline: data.cancellation_deadline || null,
         cancellation_policy: data.cancellation_policy || null,
-        category: data.category || "experience",
-        description: data.description || "",
-        discounted_price: data.discounted_price || null,
         duration: data.duration || null,
-        excerpt: data.excerpt || "",
+        endDate: data.date?.to ? format(data.date.to, "yyyy-MM-dd") : null,
+        endTime: data.endTime,
         free_cancellation: data.free_cancellation || false,
-        image: null,
         languages: data.languages || null,
-        link: data.link || "#",
         location: data.location || null,
         max_group_size: data.max_group_size || null,
         meeting_point: data.meeting_point || null,
         meeting_point_details: data.meeting_point_details || null,
-        meta_description: data.meta_description || null,
-        meta_title: data.meta_title || null,
         min_group_size: data.min_group_size || 1,
-        name: data.name || "",
-        original_price: data.original_price || null,
-        price_per: data.price_per || "person",
-        rating: data.rating || null,
-        review_count: data.review_count || 0,
-        slug: data.slug || "",
-        status: data.status || "draft",
+        startDate: data.date?.from ? format(data.date.from, "yyyy-MM-dd") : undefined,
+        startTime: data.startTime,
       });
       toast.success("Details saved successfully!");
+      router.refresh();
     } catch (error) {
       console.error("Error saving details:", error);
       toast.error(error instanceof Error ? error.message : "Failed to save details");
@@ -477,35 +477,14 @@ const EventForm = (props: TEventFormProps) => {
     try {
       setIsSubmitting(true);
       await updateEvent(eventId, {
-        active: data.active || false,
-        booking_notice: data.booking_notice || null,
-        cancellation_deadline: data.cancellation_deadline || null,
-        cancellation_policy: data.cancellation_policy || null,
-        category: data.category || "experience",
-        description: data.description || "",
         discounted_price: data.discounted_price || null,
-        duration: data.duration || null,
-        excerpt: data.excerpt || "",
-        free_cancellation: data.free_cancellation || false,
-        image: null,
-        languages: data.languages || null,
-        link: data.link || "#",
-        location: data.location || null,
-        max_group_size: data.max_group_size || null,
-        meeting_point: data.meeting_point || null,
-        meeting_point_details: data.meeting_point_details || null,
-        meta_description: data.meta_description || null,
-        meta_title: data.meta_title || null,
-        min_group_size: data.min_group_size || 1,
-        name: data.name || "",
         original_price: data.original_price || null,
         price_per: data.price_per || "person",
         rating: data.rating || null,
         review_count: data.review_count || 0,
-        slug: data.slug || "",
-        status: data.status || "draft",
       });
       toast.success("Pricing saved successfully!");
+      router.refresh();
     } catch (error) {
       console.error("Error saving pricing:", error);
       toast.error(error instanceof Error ? error.message : "Failed to save pricing");
@@ -578,35 +557,9 @@ const EventForm = (props: TEventFormProps) => {
         }
       }
 
-      // Update offer with featured image
+      // Update event with featured image
       await updateEvent(eventId, {
-        active: data.active || false,
-        booking_notice: data.booking_notice || null,
-        cancellation_deadline: data.cancellation_deadline || null,
-        cancellation_policy: data.cancellation_policy || null,
-        category: data.category || "experience",
-        description: data.description || "",
-        discounted_price: data.discounted_price || null,
-        duration: data.duration || null,
-        excerpt: data.excerpt || "",
-        free_cancellation: data.free_cancellation || false,
         image: imageId,
-        languages: data.languages || null,
-        link: data.link || "#",
-        location: data.location || null,
-        max_group_size: data.max_group_size || null,
-        meeting_point: data.meeting_point || null,
-        meeting_point_details: data.meeting_point_details || null,
-        meta_description: data.meta_description || null,
-        meta_title: data.meta_title || null,
-        min_group_size: data.min_group_size || 1,
-        name: data.name || "",
-        original_price: data.original_price || null,
-        price_per: data.price_per || "person",
-        rating: data.rating || null,
-        review_count: data.review_count || 0,
-        slug: data.slug || "",
-        status: data.status || "draft",
       });
 
       // Handle gallery images upload
@@ -664,6 +617,7 @@ const EventForm = (props: TEventFormProps) => {
       }
 
       toast.success("Media saved successfully!");
+      router.refresh();
     } catch (error) {
       console.error("Error saving media:", error);
       toast.error(error instanceof Error ? error.message : "Failed to save media");
@@ -682,10 +636,9 @@ const EventForm = (props: TEventFormProps) => {
 
     try {
       setIsSubmitting(true);
-      if (data.highlights && data.highlights.length > 0) {
-        await syncEventHighlights(eventId, data.highlights);
-      }
+      await syncEventHighlights(eventId, data.highlights || []);
       toast.success("Highlights saved successfully!");
+      router.refresh();
     } catch (error) {
       console.error("Error saving highlights:", error);
       toast.error(error instanceof Error ? error.message : "Failed to save highlights");
@@ -702,10 +655,9 @@ const EventForm = (props: TEventFormProps) => {
 
     try {
       setIsSubmitting(true);
-      if (data.itinerary && data.itinerary.length > 0) {
-        await syncEventItinerary(eventId, data.itinerary);
-      }
+      await syncEventItinerary(eventId, data.itinerary || []);
       toast.success("Itinerary saved successfully!");
+      router.refresh();
     } catch (error) {
       console.error("Error saving itinerary:", error);
       toast.error(error instanceof Error ? error.message : "Failed to save itinerary");
@@ -836,6 +788,8 @@ const EventForm = (props: TEventFormProps) => {
         description: data.description,
         discounted_price: data.discounted_price || null,
         duration: data.duration || null,
+        endDate: data.date?.to ? format(data.date.to, "yyyy-MM-dd") : null,
+        endTime: data.endTime,
         excerpt: data.excerpt,
         free_cancellation: data.free_cancellation || false,
         image: imageId,
@@ -854,11 +808,9 @@ const EventForm = (props: TEventFormProps) => {
         rating: data.rating || null,
         review_count: data.review_count || 0,
         slug: data.slug,
-        status: data.status,
         startDate: data.date?.from ? format(data.date.from, "yyyy-MM-dd") : null,
-        endDate: data.date?.to ? format(data.date.to, "yyyy-MM-dd") : null,
         startTime: data.startTime,
-        endTime: data.endTime,
+        status: data.status,
       };
 
       let eventId = props.eventId;
@@ -874,19 +826,11 @@ const EventForm = (props: TEventFormProps) => {
         toast.success("Event created successfully!");
       }
 
-      // Sync gallery images if we have an offer ID
-      if (eventId && galleryImageIds.length > 0) {
+      // Sync gallery images, highlights, itinerary
+      if (eventId) {
         await syncEventImages(eventId, galleryImageIds);
-      }
-
-      // Sync highlights if we have an offer ID
-      if (eventId && data.highlights && data.highlights.length > 0) {
-        await syncEventHighlights(eventId, data.highlights);
-      }
-
-      // Sync itinerary if we have an offer ID
-      if (eventId && data.itinerary && data.itinerary.length > 0) {
-        await syncEventItinerary(eventId, data.itinerary);
+        await syncEventHighlights(eventId, data.highlights || []);
+        await syncEventItinerary(eventId, data.itinerary || []);
       }
 
       // Small delay to ensure toast is visible, then redirect

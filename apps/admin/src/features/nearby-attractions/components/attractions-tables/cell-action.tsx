@@ -1,6 +1,7 @@
 "use client";
 
-import { IconDots, IconEdit, IconTrash, IconEye } from "@tabler/icons-react";
+import { deleteAttraction } from "@repo/actions";
+import { IconDots, IconEdit, IconEye, IconTrash } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -14,7 +15,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { deleteAttraction } from "@repo/actions";
+
 import type { TAttraction } from "@repo/db";
 
 interface CellActionProps {
@@ -44,13 +45,13 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     <>
       <AlertModal
         isOpen={open}
+        loading={loading}
         onClose={() => setOpen(false)}
         onConfirm={onConfirm}
-        loading={loading}
       />
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-8 w-8 p-0">
+          <Button className="h-8 w-8 p-0" variant="ghost">
             <span className="sr-only">Open menu</span>
             <IconDots className="h-4 w-4" />
           </Button>

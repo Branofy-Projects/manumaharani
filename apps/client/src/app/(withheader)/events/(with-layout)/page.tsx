@@ -1,5 +1,6 @@
 import { Calendar, Clock, MapPin } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 import { getEventsCache } from "@/lib/cache/events.cache";
 
@@ -8,15 +9,16 @@ export default async function EventsPage() {
   const { events } = await getEventsCache();
 
   return (
-    <div className="grid grid-cols-1 max-w-screen-xl w-full mx-auto md:grid-cols-2 lg:grid-cols-4 gap-6 px-4 xl:px-0">
+    <div className="grid grid-cols-1 max-w-screen-xl w-full mx-auto md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 px-4 xl:px-0">
       {events.map((event) => {
         const startDate = new Date(event.startDate);
         const startDay = startDate.getDate();
         const startMonth = startDate.toLocaleString("default", { month: "short" });
 
         return (
-          <div
+          <Link
             className="bg-white rounded-lg overflow-hidden flex flex-col group cursor-pointer shadow-sm hover:shadow-md transition-shadow"
+            href={`/events/${event.slug}`}
             key={event.id}
           >
             <div className="relative w-full aspect-[4/3] overflow-hidden">
@@ -89,7 +91,7 @@ export default async function EventsPage() {
                 View details
               </button>
             </div>
-          </div>
+          </Link>
         );
       })}
     </div>

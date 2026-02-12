@@ -3,7 +3,13 @@ import type { TAttractionBase } from "./attractions.schema";
 import type { TUser } from "./auth.schema";
 import type { TBlogBase, TBlogImageBase } from "./blogs.schema";
 import type { TBookingBase, TBookingPaymentBase } from "./bookings.schema";
-import type { TEventBaser } from "./events.schema";
+import type {
+  TEventBase,
+  TEventFaqBase,
+  TEventHighlightBase,
+  TEventImageBase,
+  TEventItineraryBase,
+} from "./events.schema";
 import type { TFaqBase } from "./faqs.schema";
 import type { TGalleryBase } from "./gallery.schema";
 import type { TImage } from "./images.schema";
@@ -56,8 +62,31 @@ export type TBookingWithDetails = {
 } & TBookingBase;
 
 export type TEvent = {
+  highlights: TEventHighlight[];
   image: TImage;
-} & TEventBaser;
+  images: TEventImage[];
+  itinerary: TEventItinerary[];
+} & TEventBase;
+
+export type TEventFaq = {
+  faq: TFaqBase;
+} & TEventFaqBase;
+
+export type TEventHighlight = TEventHighlightBase;
+
+export type TEventImage = {
+  image: TImage;
+} & TEventImageBase;
+
+export type TEventItinerary = TEventItineraryBase;
+
+export type TEventWithDetails = {
+  faqs: TEventFaq[];
+  highlights: TEventHighlight[];
+  image: null | TImage;
+  images: TEventImage[];
+  itinerary: TEventItinerary[];
+} & TEventBase;
 
 export type TFaq = TFaqBase;
 

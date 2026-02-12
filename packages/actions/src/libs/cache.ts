@@ -72,6 +72,11 @@ export async function setJSON<T>(key: string, val: T, ttlSeconds?: number) {
 
 export const EVENTS_CACHE_KEY = 'events';
 export const UPCOMMING_EVENTS_CACHE_KEY = 'upcoming-events';
+export const LATEST_EVENTS_CACHE_KEY = `${EVENTS_CACHE_KEY}:latest`;
+
+export const getEventBySlugKey = (slug: string) => {
+    return `event:slug:${slug}`;
+};
 
 export const OFFERS_CACHE_KEY = 'offers';
 export const LATEST_OFFERS_CACHE_KEY = `${OFFERS_CACHE_KEY}:latest`;

@@ -1,12 +1,12 @@
 "use client";
 
-import { authClient, type BetterAuthSession, type BetterAuthUser, type User } from '@repo/auth';
+import { type BetterAuthSession, type BetterAuthUser, type User } from '@repo/auth';
+import { authClient } from '@repo/auth';
 import { createContext, useContext, useEffect, useState } from 'react';
-
 export interface AuthContextType {
   isLoading: boolean;
   resendVerificationEmail: () => Promise<any>;
-  resetPassword: (token: string, password: string) => Promise<any>;
+  resetPassword: (token: string, password?: string,) => Promise<any>;
   sendPasswordResetEmail: (email: string) => Promise<any>;
   session: any | null;
   signIn: (email: string, password: string) => Promise<any>;
@@ -137,11 +137,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const resetPassword = async (token: string, password: string) => {
+  const resetPassword = async (token: string, password?: string) => {
     try {
+      let tkn = !password ? token : null;
+
+      const pass = !password ? token : password;
+      if (!password) {
+        const session = await authClient.getSession();
+        tkn = session.data.session.token
+      }
+
       const result = await authClient.resetPassword({
-        newPassword: password,
-        token,
+        newPassword: pass,
+        token: tkn,
       });
       return result;
     } catch (error) {

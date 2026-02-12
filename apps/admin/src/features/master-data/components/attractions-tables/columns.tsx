@@ -1,51 +1,52 @@
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
-import Image from "next/image";
 import { Check, X } from "lucide-react";
+import Image from "next/image";
 
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import type { TAttraction } from "@repo/db";
 
 import { CellAction } from "./cell-action";
 
+import type { TAttraction } from "@repo/db";
+import type { ColumnDef } from "@tanstack/react-table";
+
 export const columns: ColumnDef<TAttraction>[] = [
   {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
     cell: ({ row }) => (
       <Checkbox
+        aria-label="Select row"
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
       />
     ),
-    enableSorting: false,
     enableHiding: false,
+    enableSorting: false,
+    header: ({ table }) => (
+      <Checkbox
+        aria-label="Select all"
+        checked={table.getIsAllPageRowsSelected()}
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+      />
+    ),
+    id: "select",
   },
   {
     accessorKey: "image",
-    header: "Image",
     cell: ({ row }) => {
       const image = row.original.image;
       return (
         <div className="relative h-10 w-10">
           <Image
-            src={image?.small_url || image?.original_url || "/placeholder.jpg"}
             alt={row.getValue("title")}
-            fill
             className="rounded-md object-cover"
+            fill
+            src={image?.small_url || image?.original_url || "/placeholder.jpg"}
           />
         </div>
       );
     },
+    header: "Image",
   },
   {
     accessorKey: "title",
@@ -53,8 +54,8 @@ export const columns: ColumnDef<TAttraction>[] = [
   },
   {
     accessorKey: "subtitle",
-    header: "Subtitle",
     cell: ({ row }) => <div className="max-w-[300px] truncate">{row.getValue("subtitle")}</div>,
+    header: "Subtitle",
   },
   {
     accessorKey: "order",
@@ -62,15 +63,14 @@ export const columns: ColumnDef<TAttraction>[] = [
   },
   {
     accessorKey: "distance",
-    header: "Distance",
     cell: ({ row }) => {
-      const distance = row.getValue("distance") as string | null | undefined;
+      const distance = row.getValue("distance") as null | string | undefined;
       return <span>{distance ?? "—"}</span>;
     },
+    header: "Distance",
   },
   {
     accessorKey: "active",
-    header: "Status",
     cell: ({ row }) => {
       const isActive = row.getValue("active") as boolean;
       return (
@@ -84,9 +84,10 @@ export const columns: ColumnDef<TAttraction>[] = [
         </Badge>
       );
     },
+    header: "Status",
   },
   {
-    id: "actions",
     cell: ({ row }) => <CellAction data={row.original} />,
+    id: "actions",
   },
 ];

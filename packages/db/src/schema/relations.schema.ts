@@ -5,7 +5,8 @@ import { Attractions } from './attractions.schema';
 import { Users } from './auth.schema';
 import { BlogImages, Blogs } from './blogs.schema';
 import { BookingPayments, Bookings } from './bookings.schema';
-import { Events } from './events.schema';
+import { EventBookings } from './event-bookings.schema';
+import { EventFaqs, EventHighlights, EventImages, EventItinerary, Events } from './events.schema';
 import { Faqs } from './faqs.schema';
 import { Gallery } from './gallery.schema';
 import { Images } from './images.schema';
@@ -174,13 +175,56 @@ export const policyRelations = relations(Policies, ({ many }) => ({
 }));
 
 export const faqRelations = relations(Faqs, ({ many }) => ({
+  events: many(EventFaqs),
+  offers: many(OfferFaqs),
   roomTypes: many(RoomTypeFaqs),
 }));
 
-export const eventRelations = relations(Events, ({ one }) => ({
+export const eventRelations = relations(Events, ({ many, one }) => ({
+  bookings: many(EventBookings),
+  faqs: many(EventFaqs),
+  highlights: many(EventHighlights),
   image: one(Images, {
     fields: [Events.image],
     references: [Images.id],
+  }),
+  images: many(EventImages),
+  itinerary: many(EventItinerary),
+}));
+
+export const eventImagesRelations = relations(EventImages, ({ one }) => ({
+  event: one(Events, {
+    fields: [EventImages.event_id],
+    references: [Events.id],
+  }),
+  image: one(Images, {
+    fields: [EventImages.image_id],
+    references: [Images.id],
+  }),
+}));
+
+export const eventHighlightsRelations = relations(EventHighlights, ({ one }) => ({
+  event: one(Events, {
+    fields: [EventHighlights.event_id],
+    references: [Events.id],
+  }),
+}));
+
+export const eventItineraryRelations = relations(EventItinerary, ({ one }) => ({
+  event: one(Events, {
+    fields: [EventItinerary.event_id],
+    references: [Events.id],
+  }),
+}));
+
+export const eventFaqsRelations = relations(EventFaqs, ({ one }) => ({
+  event: one(Events, {
+    fields: [EventFaqs.event_id],
+    references: [Events.id],
+  }),
+  faq: one(Faqs, {
+    fields: [EventFaqs.faq_id],
+    references: [Faqs.id],
   }),
 }));
 
@@ -235,6 +279,13 @@ export const attractionRelations = relations(Attractions, ({ one }) => ({
   image: one(Images, {
     fields: [Attractions.image],
     references: [Images.id],
+  }),
+}));
+
+export const eventBookingRelations = relations(EventBookings, ({ one }) => ({
+  event: one(Events, {
+    fields: [EventBookings.event_id],
+    references: [Events.id],
   }),
 }));
 

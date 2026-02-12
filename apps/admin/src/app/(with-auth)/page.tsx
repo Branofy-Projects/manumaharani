@@ -1,5 +1,5 @@
 import { getDashboardStats, getRecentEnquiries } from '@repo/actions';
-import { IconCalendarEvent, IconClockHour4, IconMail, IconMessageCircle } from '@tabler/icons-react';
+import { IconCalendarEvent, IconClockHour4, IconMail, IconMessageCircle, IconTicket, IconUsers } from '@tabler/icons-react';
 import React, { Suspense } from 'react';
 
 import PageContainer from '@/components/layout/page-container';
@@ -32,7 +32,7 @@ export default async function Dashboard() {
                     </h2>
                 </div>
 
-                <div className='*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs md:grid-cols-2 lg:grid-cols-4'>
+                <div className='*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs md:grid-cols-2 lg:grid-cols-3'>
                     <Card className='@container/card'>
                         <CardHeader>
                             <CardDescription>Today&apos;s Enquiries</CardDescription>
@@ -120,6 +120,50 @@ export default async function Dashboard() {
                             </div>
                         </CardFooter>
                     </Card>
+
+                    <Card className='@container/card'>
+                        <CardHeader>
+                            <CardDescription>Today&apos;s Event Bookings</CardDescription>
+                            <CardTitle className='text-2xl font-semibold tabular-nums @[250px]/card:text-3xl'>
+                                {stats.eventBookings.today}
+                            </CardTitle>
+                            <CardAction>
+                                <div className='bg-primary/10 text-primary rounded-full p-2'>
+                                    <IconTicket className='size-4' />
+                                </div>
+                            </CardAction>
+                        </CardHeader>
+                        <CardFooter className='flex-col items-start gap-1.5 text-sm'>
+                            <div className='line-clamp-1 flex gap-2 font-medium'>
+                                {stats.eventBookings.pending} pending
+                            </div>
+                            <div className='text-muted-foreground'>
+                                Event booking requests today
+                            </div>
+                        </CardFooter>
+                    </Card>
+
+                    <Card className='@container/card'>
+                        <CardHeader>
+                            <CardDescription>Total Event Bookings</CardDescription>
+                            <CardTitle className='text-2xl font-semibold tabular-nums @[250px]/card:text-3xl'>
+                                {stats.eventBookings.total}
+                            </CardTitle>
+                            <CardAction>
+                                <div className='bg-primary/10 text-primary rounded-full p-2'>
+                                    <IconUsers className='size-4' />
+                                </div>
+                            </CardAction>
+                        </CardHeader>
+                        <CardFooter className='flex-col items-start gap-1.5 text-sm'>
+                            <div className='line-clamp-1 flex gap-2 font-medium'>
+                                {stats.eventBookings.pending} awaiting action
+                            </div>
+                            <div className='text-muted-foreground'>
+                                All event booking requests
+                            </div>
+                        </CardFooter>
+                    </Card>
                 </div>
 
                 <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-7'>
@@ -150,6 +194,6 @@ export default async function Dashboard() {
 }
 
 async function RecentActivitySection() {
-    const { contactQueries, offerBookings } = await getRecentEnquiries(5);
-    return <RecentActivity contactQueries={contactQueries} offerBookings={offerBookings} />;
+    const { contactQueries, offerBookings, eventBookings } = await getRecentEnquiries(5);
+    return <RecentActivity contactQueries={contactQueries} eventBookings={eventBookings} offerBookings={offerBookings} />;
 }

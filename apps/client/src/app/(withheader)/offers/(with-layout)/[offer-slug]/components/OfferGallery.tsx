@@ -66,9 +66,9 @@ export function OfferGallery({ images, title }: OfferGalleryProps) {
 
     if (images.length === 0) {
         return (
-            <div className="bg-gray-50">
+            <div className="">
                 <div className="mx-auto max-w-screen-xl px-4 py-6">
-                    <div className="aspect-[16/9] w-full rounded-2xl bg-gray-100 flex items-center justify-center">
+                    <div className="aspect-[16/9] w-full rounded-2xl flex items-center justify-center">
                         <span className="text-sm text-gray-500">No images available</span>
                     </div>
                 </div>
@@ -78,7 +78,7 @@ export function OfferGallery({ images, title }: OfferGalleryProps) {
 
     return (
         <>
-            <div className="bg-gray-50">
+            <div className="">
                 <div className="mx-auto max-w-screen-xl px-4 py-4">
                     {images.length === 1 ? (
                         // Single image - full width
@@ -117,7 +117,10 @@ export function OfferGallery({ images, title }: OfferGalleryProps) {
                     ) : (
                         <>
                             {/* Mobile: Show only 1 image */}
-                            <div className="relative aspect-[16/9] max-h-[400px] w-full cursor-pointer overflow-hidden rounded-2xl md:hidden">
+                            <div
+                                className="relative aspect-[16/9] max-h-[400px] w-full cursor-pointer overflow-hidden rounded-2xl md:hidden"
+                                onClick={() => openLightbox(0)}
+                            >
                                 <Image
                                     alt={title}
                                     className="object-cover transition-transform hover:scale-[1.02]"

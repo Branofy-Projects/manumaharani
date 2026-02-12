@@ -1,8 +1,19 @@
-import { getEvents } from "@repo/actions/events.actions";
-import { cacheLife, cacheTag,  } from "next/cache";
+import { getEventBySlug, getEvents } from "@repo/actions/events.actions";
+import { cacheLife, cacheTag } from "next/cache";
 
 export const EVENTS_CACHE_KEY = 'events';
 export const UPCOMMING_EVENTS_CACHE_KEY = 'upcoming-events';
+
+export const getEventBySlugKey = (slug: string) => {
+    return `event:slug:${slug}`;
+};
+
+export const getEventBySlugCache = async (slug: string) => {
+    'use cache';
+    cacheTag(getEventBySlugKey(slug));
+    const cache = getEventBySlug(slug);
+    return cache;
+};
 
 export const getEventsCache = async () => {
     'use cache';
@@ -32,5 +43,6 @@ export const getUpcomingEventsCache = async () => {
         limit: 3, 
         upcomingOnly: true 
     });
+
     return cache;
 };

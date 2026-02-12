@@ -1,8 +1,9 @@
 "use client";
 
+import { getAttractions } from "@repo/actions";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { getAttractions } from "@repo/actions";
+
 import type { TAttraction } from "@repo/db";
 
 export default function NearbyAttractions() {
@@ -39,8 +40,8 @@ export default function NearbyAttractions() {
           <div className="h-10 w-48 bg-gray-200 mb-4 rounded" />
           <div className="h-6 w-96 bg-gray-200 mb-12 rounded" />
           <div className="flex gap-4 w-full max-w-screen-xl px-4">
-             <div className="w-1/2 h-[400px] bg-gray-200 rounded-lg" />
-             <div className="w-1/2 h-[400px] bg-gray-200 rounded-lg" />
+            <div className="w-1/2 h-[400px] bg-gray-200 rounded-lg" />
+            <div className="w-1/2 h-[400px] bg-gray-200 rounded-lg" />
           </div>
         </div>
       </section>
@@ -96,7 +97,7 @@ export default function NearbyAttractions() {
                     alt={attraction.title}
                     className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
                     fill
-                    src={attraction.image?.url || "/placeholder.jpg"}
+                    src={attraction.image?.original_url || "/placeholder.jpg"}
                   />
                   <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/80 to-transparent" />
                   <div className="relative z-20 flex flex-col gap-2 p-4">
@@ -127,7 +128,7 @@ export default function NearbyAttractions() {
               alt={attraction.title}
               className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
               fill
-              src={attraction.image?.url || "/placeholder.jpg"}
+              src={attraction.image?.original_url || "/placeholder.jpg"}
             />
             <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/80 to-transparent" />
             <div className="relative z-20 flex flex-col gap-2 p-3">

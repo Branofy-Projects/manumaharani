@@ -2,8 +2,6 @@
 
 import { deleteUser } from '@repo/actions/users/user-actions.client';
 import { AppResponseHandler } from '@repo/actions/utils/app-response-handler';
-import { deleteUser } from '@repo/actions/users/user-actions.client';
-import { AppResponseHandler } from '@repo/actions/utils/app-response-handler';
 import { Copy, Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
