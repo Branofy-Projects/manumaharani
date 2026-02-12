@@ -1,103 +1,68 @@
 "use client";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
+
+import { Button } from "../ui/button";
 
 interface Accommodation {
   description: string;
   image: string;
-  subtitle?: string;
   title: string;
 }
 
 const accommodations: Accommodation[] = [
   {
     description:
-      "Plan guided safaris to the Bijrani and Dhikala zones with assistance from the resort team, who help with timings, permits, and briefings.",
-    image: "",
-    title: "Jungle Safaris & Wildlife",
-  },
-  {
-    description:
-      "Enjoy peaceful walks along the Kosi and cosy evenings with bonfires on select days, depending on season and weather.",
-    image: "",
-    title: "Riverside Walks & Bonfires",
-  },
-  {
-    description:
-      "Use the wide open spaces for informal games, picnics, or simply lounging together between activities.",
-    image: "",
-    title: "Family Time on the Lawns",
-  },
-  {
-    description:
-      "Combine meetings or training sessions with team‑building activities, theme dinners, and downtime in nature, all supported by the resort’s events team.",
-    image: "",
-    title: "Corporate & Social Events",
-  },
-  {
-    description:
-      "Modern, spacious rooms ideal for couples or small families who want extra space to spread out. Large beds, elegant bathrooms, and soothing interiors create a comfortable base between safaris and pool time.",
+      "Drink in warm sunshine and fresh breezes from your private balcony, which looks out to the best backyard in Austin: our manicured lawns, verdant gardens and Lady Bird Lake.",
     image:
       "https://www.manumaharaniresorts.com/wp-content/uploads/2025/01/mm-executive-room.webp",
-    title: "Executive Room",
+    title: "Signature Stays",
   },
   {
     description:
-      "Add an indulgent touch to your stay with a private in‑room Jacuzzi after a long day in the forest. This category is perfect for couples and families who enjoy a little extra pampering.",
+      "Evenings spent on your expansive wraparound deck, with firepits lending a glow to the lake views, are experiences you'll remember for a lifetime.",
     image:
-      "https://www.manumaharaniresorts.com/wp-content/uploads/2025/01/mm-executive-room-jaccuzi.webp",
-    title: "Executive Room with Jacuzzi",
+      "https://www.manumaharaniresorts.com/wp-content/uploads/2024/04/romantic-getaway-1.webp",
+    title: "Weddings",
   },
   {
     description:
-      "Independent, cottage‑style units with a cosy layout and easy access to lawns and pathways. Ideal for couples or solo travellers who prefer a more private",
+      "This pied-à-terre is perfectly suited to city living, with views down buzzy San Jacinto Boulevard, Austin-inspired art around you and plenty of space to put your feet up.",
     image:
-      "https://www.manumaharaniresorts.com/wp-content/uploads/2022/04/MOK_9989.webp",
-    title: "Luxury Cottage",
+      "https://www.manumaharaniresorts.com/wp-content/uploads/2022/10/pexels-pixabay-533325-scaled-1024x654.jpg",
+    title: "Fine Dining",
   },
   {
     description:
-      "Larger cottage units with extra space and seating, well‑suited for small families or friends travelling together. Step out directly onto green spaces and enjoy quiet mornings with tea outdoors.",
+      "Your fully equipped residence, this suite provides space to spare, with balcony breezes filtering in and a service kitchen for hosting dinners or fixing midnight snacks.",
     image:
-      "https://www.manumaharaniresorts.com/wp-content/uploads/2022/10/DAP06598.webp",
-    title: "Club Cottage",
-  },
-
-  {
-    description:
-      "Generous multi‑bed rooms designed for big families and groups who want to stay together comfortably. Ample floor space and flexible bedding make these ideal for extended stays and celebrations.",
-    image:
-      "https://www.manumaharaniresorts.com/wp-content/uploads/2022/11/MOK_0024-HDR.webp",
-    title: "Family Room",
+      "https://www.manumaharaniresorts.com/wp-content/uploads/2022/09/DSC_9880-scaled-2048x1366.jpg",
+    title: "Corporate & MICE",
   },
   {
     description:
-      "A smart, value‑forward choice for couples and small families looking for a refined stay at a luxury resort in Jim Corbett without stretching the TbBuildingEstate.",
+      "Bring the kids or a group of friends: This flexible suite can sleep up to five people in perfect comfort, thanks to two full bathrooms and separate living and sleeping areas.",
     image:
-      "https://www.manumaharaniresorts.com/wp-content/uploads/2022/11/MOK_0024-HDR.webp",
-    title: "Deluxe Room",
+      "https://www.manumaharaniresorts.com/wp-content/uploads/2025/01/mm-executive-room.webp",
+    title: "Safari",
   },
 ];
 
-const VISIBLE_CARDS = 5;
-const CARD_WIDTH =
-  typeof window !== "undefined" && window.innerWidth < 640 ? 240 : 320;
-const GAP = 24;
+const CLONE_COUNT = 5;
 const ANIMATION_DURATION = 500;
 
 export default function AccommodationsCarousel() {
-  const [index, setIndex] = useState(accommodations.length); // Start at first real card
+  const [index, setIndex] = useState(accommodations.length);
   const [isAnimating, setIsAnimating] = useState(false);
   const [containerWidth, setContainerWidth] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const total = accommodations.length;
-  const clones = getClones(accommodations, VISIBLE_CARDS);
+  const clones = getClones(accommodations, CLONE_COUNT);
   const totalCards = clones.length;
 
-  // Update container width on mount and resize
   useEffect(() => {
     function updateWidth() {
       if (containerRef.current) {
@@ -109,156 +74,185 @@ export default function AccommodationsCarousel() {
     return () => window.removeEventListener("resize", updateWidth);
   }, []);
 
-  // Center the active card based on container width
-  const translateX =
-    containerWidth / 2 - CARD_WIDTH / 1.6 - index * (CARD_WIDTH + GAP);
+  const dims = useMemo(() => getCardDimensions(containerWidth), [containerWidth]);
 
-  // Navigation
+  // Center the active card in the container
+  const translateX =
+    containerWidth / 2 - dims.cardWidthActive / 2 - index * (dims.cardWidth + dims.gap);
+
   const goTo = (newIdx: number) => {
+    if (isAnimating) return;
     setIsAnimating(true);
     setIndex(newIdx);
   };
 
-  const goLeft = () => {
-    if (isAnimating) return;
-    goTo(index - 1);
-  };
-  const goRight = () => {
-    if (isAnimating) return;
-    goTo(index + 1);
-  };
+  const goLeft = () => goTo(index - 1);
+  const goRight = () => goTo(index + 1);
 
-  // Handle jump after animation for seamless infinite effect
+  // Seamless infinite loop: after animation, silently jump index back into the real range
   useEffect(() => {
     if (!isAnimating) return;
     const handle = setTimeout(() => {
       setIsAnimating(false);
-      if (index < VISIBLE_CARDS) {
+      if (index < CLONE_COUNT) {
         setIndex(total + index);
-      } else if (index >= total + VISIBLE_CARDS) {
+      } else if (index >= total + CLONE_COUNT) {
         setIndex(index - total);
       }
     }, ANIMATION_DURATION);
     return () => clearTimeout(handle);
   }, [isAnimating, index, total]);
 
-  // Calculate center index for display
-  const centerIdx = (((index - VISIBLE_CARDS) % total) + total) % total;
+  const centerIdx = (((index - CLONE_COUNT) % total) + total) % total;
 
   return (
-    <section className="w-full py-24">
-      <div className="max-w-screen-xl mx-auto">
-        <h2
-          className="text-3xl md:text-4xl font-thin tracking-widest uppercase mb-4 text-center px-4 xl:px-0"
-          style={{ color: "#000000" }}
-        >
-          Rooms & Experiences
-        </h2>
-        <p className="text-gray-700 text-base font-serif mb-8 md:mb-12 text-center px-4 xl:px-0">
-          Stay close to the river, explore the forest, or simply slow down on
-          the lawns—your time here can be as active or as easy as you like.
-        </p>
-        {/* Carousel Row */}
+    <section className="py-16 md:py-24 w-full bg-white">
+      <h2 className="text-2xl self-center w-full text-center md:text-3xl font-thin tracking-widest uppercase text-ceter mb-12 md:mb-16">
+        Accommodations
+      </h2>
+
+      {/* Carousel viewport */}
+      <div
+        className="w-full overflow-hidden"
+        ref={containerRef}
+        style={{ height: dims.cardHeightActive }}
+      >
         <div
-          className="overflow-hidden h-full w-full px-2 sm:px-4 md:px-12 "
-          ref={containerRef}
+          className="flex items-center"
+          style={{
+            gap: dims.gap,
+            height: dims.cardHeightActive,
+            transform: `translateX(${translateX}px)`,
+            transition: isAnimating
+              ? `transform ${ANIMATION_DURATION}ms cubic-bezier(0.4, 0, 0.2, 1)`
+              : "none",
+            width: totalCards * (dims.cardWidth + dims.gap),
+          }}
         >
-          <div
-            className="flex items-center"
-            style={{
-              columnGap: GAP,
-              transform: `translateX(${translateX}px)`,
-              transition: isAnimating
-                ? `transform ${ANIMATION_DURATION}ms cubic-bezier(0.4,0,0.2,1)`
-                : "none",
-              width: `${totalCards * (CARD_WIDTH + GAP)}px`,
-            }}
-          >
-            {clones.map((card, i) => {
-              const offset = i - index;
-              const isCenter = offset === 0;
-              return (
+          {clones.map((card, i) => {
+            const isActive = i === index;
+            const cardHeight = isActive
+              ? dims.cardHeightActive
+              : dims.cardHeightInactive;
+            const cardW = isActive ? dims.cardWidthActive : dims.cardWidth;
+
+            return (
+              <div
+                className="shrink-0 relative bg-white border border-gray-300"
+                key={i + card.title}
+                style={{
+                  height: cardHeight,
+                  transition: `height ${ANIMATION_DURATION}ms cubic-bezier(0.4, 0, 0.2, 1), width ${ANIMATION_DURATION}ms cubic-bezier(0.4, 0, 0.2, 1)`,
+                  width: cardW,
+                }}
+              >
+                {/* Background image fills the card */}
+                <div className="absolute inset-0">
+                  <Image
+                    alt={card.title}
+                    className="object-cover"
+                    fill
+                    sizes={`${dims.cardWidthActive}px`}
+                    src={card.image}
+                  />
+                </div>
+
+                {/* Content body at the bottom */}
                 <div
-                  className={`bg-white border border-gray-200 flex flex-col items-center justify-start
-                    ${isCenter ? "shadow-2xl z-20" : "opacity-80 z-10"}
-                  `}
-                  key={i + card.title}
+                  className="absolute bottom-0 left-0 right-0 bg-white flex flex-col items-center px-4 md:px-5"
                   style={{
-                    boxShadow: isCenter
-                      ? "0 8px 32px rgba(0,0,0,0.12)"
-                      : undefined,
-                    marginLeft: i === 0 ? 0 : 0,
-                    maxWidth: CARD_WIDTH,
-                    minWidth: CARD_WIDTH,
-                    transform: isCenter ? "scale(1.05)" : "scale(1)",
+                    paddingBottom: isActive ? 20 : 12,
+                    paddingTop: isActive ? 20 : 12,
+                    transition: `padding ${ANIMATION_DURATION}ms cubic-bezier(0.4, 0, 0.2, 1)`,
                   }}
                 >
-                  {card.image ? <Image
-                    alt={card.title}
-                    className={`w-full object-cover ${isCenter ? "h-48" : "h-60"
-                      }`}
-                    height={300}
-                    src={card.image}
-                    width={400}
-                  /> : <div
-                    className={`w-full object-cover ${isCenter ? "h-48" : "h-60"
-                      }`} />}
-                  <div className="flex flex-col items-center px-6 py-6 w-full">
-                    <h3
-                      className={`text-center font-semibold tracking-widest text-black mb-2 ${isCenter ? "text-lg" : "text-base"
-                        }`}
-                    >
-                      {card.title}
-                    </h3>
+                  {/* Title */}
+                  <h3 className="text-[10px] md:text-xs font-bold tracking-[0.2em] text-black uppercase text-center leading-tight">
+                    {card.title}
+                  </h3>
 
-                    <div
-                      className={cn(
-                        "transition-all duration-500",
-                        `${isCenter ? "opacity-100 h-auto" : "opacity-0 h-0"}`
-                      )}
-                    >
-                      <div className="w-12 border-t border-gray-300 my-3" />
-                      <p className="text-gray-600 text-sm text-center mb-6 min-h-[72px]">
-                        {card?.subtitle && card.subtitle}
-                        {card.subtitle && <br />}
-                        {card.description}
-                      </p>
+                  {/* Separator + Description + Buttons (animated height) */}
+                  <div
+                    className="w-full flex flex-col items-center overflow-hidden"
+                    style={{
+                      maxHeight: isActive ? 300 : 0,
+                      opacity: isActive ? 1 : 0,
+                      transition: `max-height ${ANIMATION_DURATION}ms cubic-bezier(0.4, 0, 0.2, 1), opacity ${ANIMATION_DURATION}ms cubic-bezier(0.4, 0, 0.2, 1)`,
+                    }}
+                  >
+                    <div className="w-10 border-t border-black mt-3 mb-3 md:mt-4 md:mb-4" />
+                    <p className="text-gray-600 text-xs md:text-sm text-center leading-relaxed mb-4 md:mb-6 px-1">
+                      {card.description}
+                    </p>
+                    <div className="flex gap-2 md:gap-3">
+                      <Button variant="reserve">
+                        Check Rates
+                      </Button>
+                      <Button variant="outline">
+                        Details
+                      </Button>
                     </div>
                   </div>
                 </div>
-              );
-            })}
-          </div>
+              </div>
+            );
+          })}
         </div>
       </div>
-      {/* Navigation Bar Below Carousel */}
-      <div className="flex items-center justify-center gap-4 md:gap-8 mt-4 md:mt-8 select-none">
+
+      {/* Navigation */}
+      <div className="flex items-center justify-center gap-6 mt-6 md:mt-8 select-none">
         <button
-          aria-label="Previous"
-          className="p-2 rounded-full transition-transform duration-200 hover:scale-125 hover:bg-gray-100"
+          aria-label="Previous slide"
+          className="p-1 hover:opacity-70 transition-opacity"
           onClick={goLeft}
         >
-          <ChevronLeftIcon className="w-8 h-8 text-black" />
+          <ChevronLeftIcon className="w-5 h-5 text-black" />
         </button>
-        <span className="text-xl font-semibold">
-          {centerIdx + 1} <span className="mx-1 text-lg font-normal">/</span>{" "}
+        <span className="text-xs font-bold tracking-[0.2em] uppercase">
+          {centerIdx + 1}
+          <span className="mx-2 font-normal">/</span>
           {total}
         </span>
         <button
-          aria-label="Next"
-          className="p-2 rounded-full transition-transform duration-200 hover:scale-125 hover:bg-gray-100"
+          aria-label="Next slide"
+          className="p-1 hover:opacity-70 transition-opacity"
           onClick={goRight}
         >
-          <ChevronRightIcon className="w-8 h-8 text-black" />
+          <ChevronRightIcon className="w-5 h-5 text-black" />
         </button>
       </div>
-      <button className="mx-auto block mt-8 border border-black px-6 md:px-8 py-2 md:py-3 text-black tracking-widest font-medium uppercase text-xs md:text-base hover:bg-black hover:text-white transition">
-        Explore All Rooms
-      </button>
-    </section>
+    </section >
   );
 }
 
-function getClones(list: Accommodation[], visible: number): Accommodation[] {
-  return [...list.slice(-visible), ...list, ...list.slice(0, visible)];
+/** Derive all card dimensions from the container width */
+function getCardDimensions(containerWidth: number) {
+  let cardWidth: number;
+  let gap: number;
+
+  if (containerWidth < 480) {
+    cardWidth = containerWidth * 0.6;
+    gap = 12;
+  } else if (containerWidth < 768) {
+    cardWidth = containerWidth * 0.45;
+    gap = 16;
+  } else if (containerWidth < 1024) {
+    cardWidth = containerWidth * 0.3;
+    gap = 18;
+  } else {
+    cardWidth = Math.min(containerWidth * 0.22, 320);
+    gap = 20;
+  }
+
+  cardWidth = Math.round(cardWidth);
+  const cardWidthActive = Math.round(cardWidth * 1.18);
+  const cardHeightInactive = Math.round(cardWidth * 1.39);
+  const cardHeightActive = Math.round(cardWidth * 1.76);
+
+  return { cardHeightActive, cardHeightInactive, cardWidth, cardWidthActive, gap };
+}
+
+function getClones(list: Accommodation[], count: number): Accommodation[] {
+  return [...list.slice(-count), ...list, ...list.slice(0, count)];
 }

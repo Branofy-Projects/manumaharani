@@ -56,7 +56,7 @@ export default function NearbyAttractions() {
         className="text-3xl md:text-4xl font-thin tracking-widest uppercase mb-4 text-center px-4 xl:px-0"
         style={{ color: "#000000" }}
       >
-        Nearby Attractions
+        Nearby
       </h2>
       <p className="text-gray-700 text-base font-serif mb-8 md:mb-12 text-center px-4 xl:px-0">
         Extend your stay to discover lakes, hill towns, temples, and viewpoints

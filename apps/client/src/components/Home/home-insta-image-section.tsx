@@ -15,7 +15,7 @@ const images = [
 export default function HomeInstaImageSection() {
   return (
     <section className="w-full py-24">
-      <div className="max-w-screen-xl mx-auto px-4">
+      <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-16">
           <p className="uppercase tracking-[0.3em] text-sm text-muted-foreground">
             Follow Us
@@ -25,20 +25,20 @@ export default function HomeInstaImageSection() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Intro card */}
-          <div className="bg-[#4a4a4a] text-white p-6 sm:p-8 flex flex-col justify-between min-h-[220px]">
+          <div className="bg-[#4a4a4a] aspect-square text-white p-6 sm:p-8 flex flex-col justify-between min-h-[220px]">
             <div>
-              <h3 className="text-xl sm:text-2xl tracking-wide">
+              <h3 className="text-base sm:text-xl md:text-2xl tracking-wide">
                 MANU MAHARANI RESORTS
               </h3>
-              <p className="mt-4 text-sm sm:text-base opacity-90">
+              <p className="mt-4 text-[0.5rem] md:text-sm sm:text-base opacity-90">
                 Catch glimpses of river mornings, festive evenings, and
                 behind‑the‑scenes life <b>@manumaharani_resorts</b>
               </p>
             </div>
             <Link className="mt-10" href="#">
-              <span className="inline-block text-sm tracking-wider">
+              <span className="inline-block text-[0.5rem] md:text-sm sm:text-base tracking-wider">
                 Follow Our Journey
               </span>
               <div className="h-px w-40 bg-white mt-1" />
@@ -60,8 +60,8 @@ export default function HomeInstaImageSection() {
               <div className="pointer-events-none absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               <div className="pointer-events-none absolute inset-0 flex items-end p-4">
                 <div className="text-white w-full translate-y-3 opacity-0 transition-all duration-500 ease-out group-hover:translate-y-0 group-hover:opacity-100">
-                  <p className="text-xs opacity-90">Share your memories with</p>
-                  <p className="text-sm font-medium">@manu_maharani</p>
+                  <p className="text-[0.5rem] md:text-xs opacity-90">Share your memories with</p>
+                  <p className="text-[0.5rem] md:text-sm font-medium">@manu_maharani</p>
                 </div>
               </div>
             </div>

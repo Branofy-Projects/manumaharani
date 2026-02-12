@@ -72,7 +72,7 @@ export const navItems: NavItem[] = [
       {
         icon: "media",
         shortcut: ["n", "a"],
-        title: "Nearby Attractions",
+        title: "Nearby",
         url: "/nearby-attractions",
       },
     ],
