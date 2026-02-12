@@ -6,7 +6,6 @@ import { Reels } from "@repo/db/schema/reels.schema";
 
 import { revalidateTags } from "./client.actions";
 import { bumpVersion } from "./libs/cache";
-import { generateSignedUploadUrl } from "./libs/gcs";
 import { safeDbQuery } from "./utils/db-error-handler";
 
 import type { TNewReel, TReel } from "@repo/db";
@@ -156,6 +155,7 @@ export const reorderReels = async (orderedIds: number[]) => {
 
 export const getVideoUploadUrl = async (filename: string, contentType: string) => {
   try {
+    const { generateSignedUploadUrl } = await import("./libs/gcs");
     const { publicUrl, signedUrl } = await generateSignedUploadUrl(filename, contentType, 'reels');
     return { publicUrl, signedUrl };
   } catch (error) {
