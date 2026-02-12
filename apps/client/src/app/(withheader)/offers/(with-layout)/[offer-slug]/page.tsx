@@ -1,4 +1,4 @@
-import { getRelatedOffers } from "@repo/actions/offers.actions";
+import { getAllOffersSlugs, getRelatedOffers } from "@repo/actions/offers.actions";
 import {
     Check,
     ChevronDown,
@@ -18,7 +18,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { LexicalRenderer } from "@/components/lexical-renderer";
-import { getOfferBySlugCache, getOffersCache } from "@/lib/cache/offer.cache";
+import { getOfferBySlugCache, getOffersCache, getRelatedOffersCache } from "@/lib/cache/offer.cache";
 
 import { MobileBookingBar } from "./components/MobileBookingBar";
 import { OfferBookingCard } from "./components/OfferBookingCard";
@@ -52,7 +52,7 @@ export async function generateMetadata({ params }: PageProps) {
 }
 
 export async function generateStaticParams() {
-    const offers = await getOffersCache()
+    const offers = await getAllOffersSlugs({ status: 'active' })
 
     return offers
         .filter((offer) => offer.slug)
@@ -69,7 +69,7 @@ export default async function OfferDetailPage({ params }: PageProps) {
         notFound();
     }
 
-    const relatedOffers = await getRelatedOffers(offer.id, offer.category, 4);
+    const relatedOffers = await getRelatedOffersCache(offer.id, offer.category, 4);
 
     // Parse languages if stored as JSON
     let languages: string[] = [];

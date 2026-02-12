@@ -126,6 +126,37 @@ export const getBlogs = async (
  };
 };
 
+export const getAllBlogsSlugs = async (filters: TGetBlogsFilters = {}) => {
+  const conditions = [];
+ 
+  if (filters.search) {
+   conditions.push(ilike(Blogs.title, `%${filters.search}%`));
+  }
+ 
+  if (filters.status) {
+   conditions.push(eq(Blogs.status, filters.status));
+  }
+ 
+  if (filters.category) {
+   conditions.push(eq(Blogs.category, filters.category as any));
+  }
+ 
+  if (filters.is_featured !== undefined) {
+   conditions.push(eq(Blogs.is_featured, filters.is_featured ? 1 : 0));
+  }
+ 
+  if (filters.ignore && filters.ignore.length > 0) {
+   conditions.push(notInArray(Blogs.id, filters.ignore));
+  }
+ 
+  const where = conditions.length > 0 ? and(...conditions) : undefined;
+ 
+  return db.query.Blogs.findMany({
+   columns: { created_at: true, slug: true, updated_at: true },
+   where,
+  });
+ };
+ 
 export const getBlogsOnly = async (
  filters: TGetBlogsFilters = {},
  orderBy: TGetBlogsOrderBy = {}

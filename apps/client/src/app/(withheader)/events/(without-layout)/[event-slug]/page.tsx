@@ -413,15 +413,6 @@ export async function generateMetadata({ params }: PageProps) {
     };
 }
 
-export async function generateStaticParams() {
-    const { events } = await getEventsCache();
-
-    return events
-        .filter((event) => event.slug)
-        .map((event) => ({
-            "event-slug": event.slug,
-        }));
-}
 
 function formatEventDate(startDate: string, endDate?: null | string) {
     const start = new Date(startDate + "T00:00:00");

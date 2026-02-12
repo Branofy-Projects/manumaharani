@@ -103,6 +103,28 @@ export const getRoomTypes = async (filters: TGetRoomTypesFilters = {}) => {
   };
 };
 
+export const getAllRoomTypesSlug = async (filters: TGetRoomTypesFilters = {}) => {
+  if (!db) return [];
+
+  const conditions = [];
+
+  if (filters.search) {
+    conditions.push(ilike(RoomTypes.name, `%${filters.search}%`));
+  }
+
+  if (filters.status) {
+    conditions.push(eq(RoomTypes.status, filters.status));
+  }
+
+  const where = conditions.length > 0 ? and(...conditions) : undefined;
+
+
+  return db.query.RoomTypes.findMany({
+    columns: {created_at: true, slug: true, updated_at: true},
+    where
+  });
+};
+
 export const getRoomTypeBySlug = async (slug: string) => {
   if (!db) return null;
 

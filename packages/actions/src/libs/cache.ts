@@ -1,6 +1,7 @@
 import { redis } from "./redis";
 
 import type { TBlogCategory } from "@repo/db/schema/blogs.schema";
+import type { TOfferCategory } from "@repo/db/schema/offers.schema";
 
 type CacheOptions<T> = {
   deserialize?: (raw: string) => T;
@@ -83,6 +84,12 @@ export const LATEST_OFFERS_CACHE_KEY = `${OFFERS_CACHE_KEY}:latest`;
 
 export const getOfferBySlugKey = (slug: string) => {
     return `offer:slug:${slug}`;
+};
+
+export const RELATED_OFFERS_CACHE_KEY = 'offers:related';
+
+export const getRelatedOffersKey = (offerId: string, category?: TOfferCategory) => {
+  return `offer:related:${offerId}:${category}`;
 };
 
 export const ROOM_TYPES_CACHE_KEY = 'room';
