@@ -2,7 +2,7 @@
 
 import { deleteUser } from '@repo/actions/users/user-actions.client';
 import { AppResponseHandler } from '@repo/actions/utils/app-response-handler';
-import { Copy, Edit, MoreHorizontal, Trash } from 'lucide-react';
+import { Copy, Edit, Eye, MoreHorizontal, Trash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { toast } from 'sonner';
@@ -77,9 +77,12 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         <DropdownMenuItem onClick={() => onCopy(data.id)}>
           <Copy className="mr-2 h-4 w-4" /> Copy User ID
         </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => router.push(`/user/${data.id}`)}>
+          <Eye className="mr-2 h-4 w-4" /> View details
+        </DropdownMenuItem>
 
         {!shouldDisableActions && (
-          <DropdownMenuItem onClick={() => router.push(`/users/${data.id}`)}>
+          <DropdownMenuItem onClick={() => router.push(`/user/${data.id}/edit`)}>
             <Edit className="mr-2 h-4 w-4" /> Edit User
           </DropdownMenuItem>
         )}

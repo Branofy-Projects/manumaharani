@@ -1,6 +1,6 @@
 "use server";
 import { auth } from "@repo/auth/auth.config";
-import { and, count, db, eq, like, or, Users } from "@repo/db";
+import { and, count, db, eq, ilike, or, Users } from "@repo/db";
 import { headers } from "next/headers";
 import { unauthorized } from "next/navigation";
 
@@ -235,10 +235,10 @@ export const getUsers = async (filters: TGetUsersFilters) => {
   if (search) {
     conditions.push(
       or(
-        like(Users.name, `%${search}%`),
-        like(Users.email, `%${search}%`),
-        like(Users.firstName, `%${search}%`),
-        like(Users.lastName, `%${search}%`)
+        ilike(Users.name, `%${search}%`),
+        ilike(Users.email, `%${search}%`),
+        ilike(Users.firstName, `%${search}%`),
+        ilike(Users.lastName, `%${search}%`)
       )
     );
   }
