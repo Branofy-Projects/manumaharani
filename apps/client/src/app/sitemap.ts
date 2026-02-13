@@ -1,3 +1,4 @@
+import { getAttractions } from '@repo/actions/attractions.actions';
 import { getAllBlogsSlugs } from '@repo/actions/blogs.actions';
 import { getAllEventsSlugs } from '@repo/actions/events.actions';
 import { getAllOffersSlugs } from '@repo/actions/offers.actions';
@@ -23,6 +24,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { priority: 0.8, route: '/blogs' },
     { priority: 0.7, route: '/contact-us' },
     { priority: 0.7, route: '/junglesafari/book-safari' },
+    { priority: 0.7, route: '/gallery' },
+    { priority: 0.7, route: '/nearby-attractions' },
   ].map(({ priority, route }) => ({
     changeFrequency: 'weekly' as const,
     lastModified: new Date(),
@@ -107,5 +110,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Sitemap: failed to fetch events', e);
   }
 
-  return [...staticRoutes, ...roomRoutes, ...offerRoutes, ...eventRoutes, ...blogRoutes, ...legalRoutes];
+  // Dynamic routes - Attractions
+  let attractionRoutes: MetadataRoute.Sitemap = [];
+  try {
+    const attractions = await getAttractions(true);
+    attractionRoutes = attractions
+      .filter((attraction) => attraction.slug)
+      .map((attraction) => ({
+        changeFrequency: 'weekly' as const,
+        lastModified: new Date(attraction.updated_at || attraction.created_at || new Date()),
+        priority: 0.6,
+        url: `${BASE_URL}/nearby-attractions/${attraction.slug}`,
+      }));
+  } catch (e) {
+    console.error('Sitemap: failed to fetch attractions', e);
+  }
+
+  return [...staticRoutes, ...roomRoutes, ...offerRoutes, ...eventRoutes, ...attractionRoutes, ...blogRoutes, ...legalRoutes];
 }

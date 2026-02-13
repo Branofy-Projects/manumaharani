@@ -25,9 +25,6 @@ async function sendEmail({
   return { success: true };
 }
 
-console.log("process.env.NEXT_PUBLIC_AUTH_URL",process.env.NEXT_PUBLIC_AUTH_URL);
-console.log("process.env.BETTER_AUTH_SECRET",process.env.BETTER_AUTH_SECRET);
-
 // Better Auth configuration
 export const auth = betterAuth({
   baseURL: process.env.NEXT_PUBLIC_AUTH_URL || "http://localhost:3001",

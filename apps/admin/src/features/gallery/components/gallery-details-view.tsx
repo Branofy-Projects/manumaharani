@@ -18,18 +18,14 @@ interface GalleryDetailsViewProps {
 }
 
 const categoryLabels: Record<string, string> = {
-  activities: "Activities",
   dining: "Dining",
-  events: "Events",
-  facilities: "Facilities",
-  general: "General",
-  rooms: "Rooms",
-  spa: "Spa",
-  surroundings: "Surroundings",
+  overview: "Overview",
+  room: "Room",
+  wedding: "Wedding",
 };
 
 export default function GalleryDetailsView({ gallery }: GalleryDetailsViewProps) {
-  const categoryLabel = categoryLabels[gallery.category || "general"] || gallery.category || "General";
+  const categoryLabel = categoryLabels[gallery.category || "overview"] || gallery.category || "Overview";
 
   return (
     <div className="w-full space-y-6">

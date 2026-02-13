@@ -29,14 +29,10 @@ import { zodResolver } from '@/lib/zod-resolver';
 import type { TGallery } from "@repo/db";
 
 const GALLERY_CATEGORIES = [
-  { label: "Rooms", value: "rooms" },
+  { label: "Room", value: "room" },
+  { label: "Overview", value: "overview" },
   { label: "Dining", value: "dining" },
-  { label: "Spa", value: "spa" },
-  { label: "Activities", value: "activities" },
-  { label: "Facilities", value: "facilities" },
-  { label: "Events", value: "events" },
-  { label: "Surroundings", value: "surroundings" },
-  { label: "General", value: "general" },
+  { label: "Wedding", value: "wedding" },
 ] as const;
 
 const GALLERY_TYPES = [
@@ -45,7 +41,7 @@ const GALLERY_TYPES = [
 ] as const;
 
 const formSchema = z.object({
-  category: z.enum(["rooms", "dining", "spa", "activities", "facilities", "events", "surroundings", "general"]),
+  category: z.enum(["room", "overview", "dining", "wedding"]),
   description: z.string().optional(),
   image: ImagesArraySchema(1, 1),
   title: z.string().min(1, "Title is required.").max(255),
@@ -74,7 +70,7 @@ const GalleryForm = (props: TGalleryFormProps) => {
 
   const defaultValues = useMemo(() => {
     return {
-      category: (initialData?.category as typeof GALLERY_CATEGORIES[number]["value"]) || "general",
+      category: (initialData?.category as typeof GALLERY_CATEGORIES[number]["value"]) || "overview",
       description: initialData?.description || "",
       image: initialData?.image
         ? [

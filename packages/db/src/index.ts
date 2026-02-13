@@ -133,7 +133,7 @@ export type { TFaqBase, TInsertFaq, TNewFaq } from "./schema/faqs.schema";
 
 export type { TImage, TNewImage } from "./schema/images.schema";
 
-export type { TNewGallery } from "./schema/gallery.schema";
+export type { TGalleryBase, TGalleryCategory, TNewGallery } from "./schema/gallery.schema";
 
 export type {
   TNewRoomType,

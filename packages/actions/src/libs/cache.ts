@@ -109,6 +109,8 @@ export const getBlogBySlugKey = (slug: string) => {
     return `blog:slug:${slug}`;
 };
 
+export const GALLERY_CACHE_KEY = 'gallery';
+
 export const REELS_CACHE_KEY = 'reels';
 
 export const ATTRACTIONS_CACHE_KEY = 'attractions';

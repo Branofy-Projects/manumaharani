@@ -190,6 +190,13 @@
       "when": 1770984223797,
       "tag": "0026_round_raider",
       "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1771021888784,
+      "tag": "0027_yellow_gwen_stacy",
+      "breakpoints": true
     }
   ]
 }

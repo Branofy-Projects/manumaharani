@@ -1,19 +1,15 @@
 import {
   BuildingLibraryIcon,
   BuildingStorefrontIcon,
-  MapPinIcon,
   PhotoIcon,
-  SparklesIcon,
-  Squares2X2Icon,
 } from "@heroicons/react/24/outline";
-import { GemIcon, PhoneIcon, UtensilsIcon } from "lucide-react";
+import { GemIcon, PhoneIcon } from "lucide-react";
 import Link from "next/link";
 import React from "react";
-import { MdCelebration } from "react-icons/md";
 
 const shortcuts = [
   {
-    href: "/photos-videos",
+    href: "/gallery",
     icon: PhotoIcon,
     label: "PHOTOS & VIDEOS",
   },
