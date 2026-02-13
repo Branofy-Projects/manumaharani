@@ -3,10 +3,6 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
-import { cn } from "@/lib/utils";
-
-import { Button } from "../ui/button";
-
 interface Accommodation {
   description: string;
   image: string;
@@ -184,14 +180,14 @@ export default function AccommodationsCarousel() {
                     <p className="text-gray-600 text-xs md:text-sm text-center leading-relaxed mb-4 md:mb-6 px-1">
                       {card.description}
                     </p>
-                    <div className="flex gap-2 md:gap-3">
+                    {/* <div className="flex gap-2 md:gap-3">
                       <Button variant="reserve">
                         Check Rates
                       </Button>
                       <Button variant="outline">
                         Details
                       </Button>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
