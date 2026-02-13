@@ -3,6 +3,7 @@ import {
   index,
   integer,
   pgTable,
+  serial,
   text,
   timestamp,
   uuid,
@@ -19,7 +20,9 @@ export const Attractions = pgTable(
     id: uuid("id").primaryKey().defaultRandom(),
 
     // Content
+    description: text("description"),
     link: text("link").default("#"),
+    slug: varchar("slug", { length: 255 }).notNull().unique(),
     subtitle: text("subtitle").notNull(),
     title: varchar("title", { length: 255 }).notNull(),
 
@@ -44,16 +47,31 @@ export const Attractions = pgTable(
   (table) => [
     index("attractions_order_idx").on(table.order),
     index("attractions_active_idx").on(table.active),
+    index("attractions_slug_idx").on(table.slug),
   ]
 );
+
+// Attraction Images Junction Table (gallery)
+export const AttractionImages = pgTable("attraction_images", {
+  attraction_id: uuid("attraction_id")
+    .references(() => Attractions.id, { onDelete: "cascade" })
+    .notNull(),
+  id: serial("id").primaryKey(),
+  image_id: integer("image_id")
+    .references(() => Images.id, { onDelete: "cascade" })
+    .notNull(),
+  order: integer("order").notNull().default(0),
+});
 
 // Zod Schemas
 export const insertAttractionSchema = createInsertSchema(Attractions, {
   subtitle: (subtitle) => subtitle.min(1, "Subtitle is required"),
   title: (title) => title.min(1, "Attraction title is required").max(255),
 });
+
 export const selectAttractionSchema = createSelectSchema(Attractions);
 
 // Types
 export type TAttractionBase = typeof Attractions.$inferSelect;
+export type TAttractionImageBase = typeof AttractionImages.$inferSelect;
 export type TNewAttraction = typeof Attractions.$inferInsert;

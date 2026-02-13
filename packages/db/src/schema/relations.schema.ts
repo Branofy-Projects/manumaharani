@@ -1,7 +1,8 @@
 import { relations } from 'drizzle-orm';
 
 import { Amenities } from './amenities.schema';
-import { Attractions } from './attractions.schema';
+import { AttractionBookings } from './attraction-bookings.schema';
+import { AttractionImages, Attractions } from './attractions.schema';
 import { Users } from './auth.schema';
 import { BlogImages, Blogs } from './blogs.schema';
 import { BookingPayments, Bookings } from './bookings.schema';
@@ -288,10 +289,30 @@ export const offerFaqsRelations = relations(OfferFaqs, ({ one }) => ({
   }),
 }));
 
-export const attractionRelations = relations(Attractions, ({ one }) => ({
+export const attractionRelations = relations(Attractions, ({ many, one }) => ({
+  bookings: many(AttractionBookings),
   image: one(Images, {
     fields: [Attractions.image],
     references: [Images.id],
+  }),
+  images: many(AttractionImages),
+}));
+
+export const attractionImageRelations = relations(AttractionImages, ({ one }) => ({
+  attraction: one(Attractions, {
+    fields: [AttractionImages.attraction_id],
+    references: [Attractions.id],
+  }),
+  image: one(Images, {
+    fields: [AttractionImages.image_id],
+    references: [Images.id],
+  }),
+}));
+
+export const attractionBookingRelations = relations(AttractionBookings, ({ one }) => ({
+  attraction: one(Attractions, {
+    fields: [AttractionBookings.attraction_id],
+    references: [Attractions.id],
   }),
 }));
 

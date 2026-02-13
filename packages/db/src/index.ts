@@ -3,7 +3,8 @@ import { drizzle } from "drizzle-orm/neon-http";
 
 // Core Schemas
 import { Amenities } from "./schema/amenities.schema";
-import { Attractions } from "./schema/attractions.schema";
+import { AttractionBookings } from "./schema/attraction-bookings.schema";
+import { AttractionImages, Attractions } from "./schema/attractions.schema";
 // Auth Schema
 import {
   Accounts,
@@ -115,8 +116,10 @@ export type {
   TInsertAmenity,
   TNewAmenity,
 } from "./schema/amenities.schema";
+export type { TAttractionBooking, TNewAttractionBooking } from "./schema/attraction-bookings.schema";
 export type {
   TAttractionBase,
+  TAttractionImageBase,
   TNewAttraction,
 } from "./schema/attractions.schema";
 
@@ -148,6 +151,7 @@ export type {
 export type {
   TAmenity,
   TAttraction,
+  TAttractionImage,
   TBlog,
   TBlogImage,
   TBooking,
@@ -187,6 +191,8 @@ export {
   // Auth
   Accounts,
   Amenities,
+  AttractionBookings,
+  AttractionImages,
   Attractions,
   bedTypeEnum,
   blogCategoryEnum,
@@ -251,6 +257,8 @@ export {
 export const schemaWithoutRelations = {
   Accounts,
   Amenities,
+  AttractionBookings,
+  AttractionImages,
   Attractions,
   BlogImages,
   Blogs,

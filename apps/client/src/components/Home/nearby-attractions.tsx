@@ -2,6 +2,7 @@
 
 import { getAttractions } from "@repo/actions";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 import type { TAttraction } from "@repo/db";
@@ -92,7 +93,7 @@ export default function NearbyAttractions() {
           >
             {attractions.map((attraction, idx) => (
               <div className="w-1/2 flex-shrink-0 px-2" key={idx}>
-                <div className="group relative flex min-h-[400px] flex-col justify-end overflow-hidden rounded-lg shadow-lg">
+                <Link className="group relative flex min-h-[400px] flex-col justify-end overflow-hidden rounded-lg shadow-lg" href={`/nearby-attractions/${attraction.slug}`}>
                   <Image
                     alt={attraction.title}
                     className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
@@ -146,7 +147,7 @@ export default function NearbyAttractions() {
                       );
                     })()}
                   </div>
-                </div>
+                </Link>
               </div>
             ))}
           </div>
@@ -156,8 +157,9 @@ export default function NearbyAttractions() {
       {/* Mobile: Grid layout */}
       <div className="mx-auto grid w-full max-w-screen-xl grid-cols-1 gap-4 px-4 sm:grid-cols-2 md:hidden xl:px-0">
         {attractions.map((attraction, idx) => (
-          <div
+          <Link
             className="group relative flex min-h-[260px] flex-col justify-end overflow-hidden rounded-lg shadow-lg"
+            href={`/nearby-attractions/${attraction.slug}`}
             key={idx}
           >
             <Image
@@ -212,16 +214,11 @@ export default function NearbyAttractions() {
                   </p>
                 );
               })()}
-              {attraction.link && attraction.link !== "#" && (
-                <a
-                  className="pb-1 text-xs font-semibold uppercase tracking-widest text-white transition-all hover:text-white/70"
-                  href={attraction.link}
-                >
-                  View Details
-                </a>
-              )}
+              <span className="pb-1 text-xs font-semibold uppercase tracking-widest text-white transition-all group-hover:text-white/70">
+                View Details
+              </span>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </section>

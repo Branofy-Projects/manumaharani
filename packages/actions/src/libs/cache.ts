@@ -110,3 +110,9 @@ export const getBlogBySlugKey = (slug: string) => {
 };
 
 export const REELS_CACHE_KEY = 'reels';
+
+export const ATTRACTIONS_CACHE_KEY = 'attractions';
+
+export const getAttractionBySlugKey = (slug: string) => {
+    return `attraction:slug:${slug}`;
+};

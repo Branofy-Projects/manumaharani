@@ -174,6 +174,13 @@ const AttractionForm = (props: TAttractionFormProps) => {
         }
       }
 
+      const slug = data.title
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\s-]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-");
+
       const attractionData = {
         active: data.active,
         close_time: data.close_time || null,
@@ -186,6 +193,7 @@ const AttractionForm = (props: TAttractionFormProps) => {
         link: data.link,
         open_time: data.open_time || null,
         order: data.order,
+        slug,
         subtitle: data.subtitle,
         title: data.title,
       };
@@ -202,9 +210,9 @@ const AttractionForm = (props: TAttractionFormProps) => {
         router.push("/nearby-attractions");
         router.refresh();
       }, 100);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error saving attraction:", error);
-      toast.error(error?.message || "Failed to save attraction");
+      toast.error(error instanceof Error ? error.message : "Failed to save attraction");
     } finally {
       setIsSubmitting(false);
       setIsImageUploading(false);

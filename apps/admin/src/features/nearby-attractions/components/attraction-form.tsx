@@ -1,6 +1,6 @@
 "use client";
 
-import { createAttraction, updateAttraction } from "@repo/actions";
+import { createAttraction, syncAttractionImages, updateAttraction } from "@repo/actions";
 import { createImages } from "@repo/actions/images.actions";
 import { Loader2, Plus, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -42,12 +42,15 @@ const faqItemSchema = z.object({
 const formSchema = z.object({
   active: z.boolean().default(true),
   close_time: z.string().max(20).optional().default(""),
+  description: z.string().optional().default(""),
   distance: z.string().max(100).optional().default(""),
   faqs: z.array(faqItemSchema).default([]),
   image: ImagesArraySchema(0, 1),
+  images: ImagesArraySchema(0, 20),
   link: z.string().default("#"),
   open_time: z.string().max(20).optional().default(""),
   order: z.preprocess((val) => Number(val), z.number().int().default(0)),
+  slug: z.string().min(1, "Slug is required.").max(255),
   subtitle: z.string().min(1, "Subtitle is required."),
   title: z.string().min(1, "Title is required.").max(255),
 });
@@ -80,6 +83,7 @@ const AttractionForm = (props: TAttractionFormProps) => {
     return {
       active: initialData?.active ?? true,
       close_time: initialData?.close_time ?? "",
+      description: initialData?.description ?? "",
       distance: initialData?.distance ?? "",
       faqs,
       image: initialData?.image
@@ -96,9 +100,20 @@ const AttractionForm = (props: TAttractionFormProps) => {
           },
         ]
         : [],
+      images: initialData?.images?.map((img, idx) => ({
+        _type: "existing" as const,
+        alt_text: img.image.alt_text || "",
+        image_id: img.image.id,
+        large_url: img.image.large_url || "",
+        medium_url: img.image.medium_url || "",
+        order: idx,
+        original_url: img.image.original_url || "",
+        small_url: img.image.small_url || "",
+      })) || [],
       link: initialData?.link || "#",
       open_time: initialData?.open_time ?? "",
       order: initialData?.order || 0,
+      slug: initialData?.slug || "",
       subtitle: initialData?.subtitle || "",
       title: initialData?.title || "",
     };
@@ -116,26 +131,38 @@ const AttractionForm = (props: TAttractionFormProps) => {
 
   const [activeTab, setActiveTab] = useState("basic");
   const [progresses, setProgresses] = useState<Record<string, number>>({});
+  const [galleryProgresses, setGalleryProgresses] = useState<Record<string, number>>({});
   const [isImageUploading, setIsImageUploading] = useState(false);
+  const [isGalleryUploading, setIsGalleryUploading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
 
   const image = form.watch("image");
+  const galleryImages = form.watch("images");
   const hasValidImage = useMemo(() => {
     return hasValidImages(image as FileUploaderFormImage[]);
   }, [image]);
+  const hasValidGallery = useMemo(
+    () => !galleryImages?.length || hasValidImages(galleryImages as FileUploaderFormImage[]),
+    [galleryImages]
+  );
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setHasAttemptedSubmit(true);
 
     if (data.image && data.image.length > 0 && !hasValidImage) {
-      toast.error("Please add alt text to the image");
+      toast.error("Please add alt text to the featured image");
+      return;
+    }
+    if (data.images && data.images.length > 0 && !hasValidGallery) {
+      toast.error("Please add alt text to all gallery images");
       return;
     }
 
     try {
       setIsSubmitting(true);
 
+      // 1) Featured image
       let imageId: null | number = null;
 
       if (data.image && data.image.length > 0) {
@@ -174,9 +201,40 @@ const AttractionForm = (props: TAttractionFormProps) => {
         }
       }
 
+      // 2) Gallery images (upload new, collect all ids + order)
+      const galleryPayload: Array<{ image_id: number; order: number }> = [];
+      if (data.images && data.images.length > 0) {
+        setIsGalleryUploading(true);
+        for (let i = 0; i < data.images.length; i++) {
+          const img = data.images[i]!;
+          if (img._type === "new") {
+            const [result] = await uploadFilesWithProgress(
+              [img.file],
+              (p) => setGalleryProgresses(p),
+              "/api/v1/upload-image"
+            );
+            const [created] = await createImages([
+              {
+                alt_text: img.alt_text,
+                large_url: result!.image.large_url,
+                medium_url: result!.image.medium_url,
+                original_url: result!.image.original_url,
+                small_url: result!.image.small_url,
+              },
+            ]);
+            if (Array.isArray(created) && created[0])
+              galleryPayload.push({ image_id: created[0].id, order: i });
+          } else {
+            galleryPayload.push({ image_id: img.image_id, order: i });
+          }
+        }
+        setIsGalleryUploading(false);
+      }
+
       const attractionData = {
         active: data.active,
         close_time: data.close_time || null,
+        description: data.description || null,
         distance: data.distance || null,
         faq: (() => {
           const valid = data.faqs?.filter((f) => f.question?.trim() && f.answer?.trim()) ?? [];
@@ -186,15 +244,20 @@ const AttractionForm = (props: TAttractionFormProps) => {
         link: data.link,
         open_time: data.open_time || null,
         order: data.order,
+        slug: data.slug,
         subtitle: data.subtitle,
         title: data.title,
       };
 
       if (props.attractionId) {
         await updateAttraction(props.attractionId, attractionData);
+        await syncAttractionImages(props.attractionId, galleryPayload);
         toast.success("Attraction updated successfully!");
       } else {
-        await createAttraction(attractionData);
+        const created = await createAttraction(attractionData);
+        if (created?.id) {
+          await syncAttractionImages(created.id, galleryPayload);
+        }
         toast.success("Attraction created successfully!");
       }
 
@@ -208,10 +271,11 @@ const AttractionForm = (props: TAttractionFormProps) => {
     } finally {
       setIsSubmitting(false);
       setIsImageUploading(false);
+      setIsGalleryUploading(false);
     }
   };
 
-  const busy = isSubmitting || isImageUploading;
+  const busy = isSubmitting || isImageUploading || isGalleryUploading;
 
   return (
     <PageContainer scrollable={true}>
@@ -261,7 +325,22 @@ const AttractionForm = (props: TAttractionFormProps) => {
                           <FormItem>
                             <FormLabel>Title</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter attraction title" {...field} />
+                              <Input
+                                placeholder="Enter attraction title"
+                                {...field}
+                                onChange={(e) => {
+                                  field.onChange(e);
+                                  if (!props.attractionId) {
+                                    const slug = e.target.value
+                                      .toLowerCase()
+                                      .replace(/[^a-z0-9\s-]/g, "")
+                                      .replace(/\s+/g, "-")
+                                      .replace(/-+/g, "-")
+                                      .trim();
+                                    form.setValue("slug", slug);
+                                  }
+                                }}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -269,14 +348,14 @@ const AttractionForm = (props: TAttractionFormProps) => {
                       />
                       <FormField
                         control={form.control}
-                        name="order"
+                        name="slug"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Display Order</FormLabel>
+                            <FormLabel>Slug</FormLabel>
                             <FormControl>
-                              <Input type="number" {...field} />
+                              <Input placeholder="auto-generated-from-title" {...field} />
                             </FormControl>
-                            <FormDescription className="text-xs">Lower numbers appear first</FormDescription>
+                            <FormDescription className="text-xs">URL-friendly identifier (auto-generated from title)</FormDescription>
                             <FormMessage />
                           </FormItem>
                         )}
@@ -288,10 +367,40 @@ const AttractionForm = (props: TAttractionFormProps) => {
                       name="subtitle"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Subtitle / Description</FormLabel>
+                          <FormLabel>Subtitle</FormLabel>
                           <FormControl>
-                            <Textarea className="min-h-[100px]" placeholder="Enter a brief description" {...field} />
+                            <Input placeholder="Enter a brief subtitle" {...field} />
                           </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="description"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Description (Optional)</FormLabel>
+                          <FormControl>
+                            <Textarea className="min-h-[120px]" placeholder="Enter a detailed description for the detail page" {...field} />
+                          </FormControl>
+                          <FormDescription className="text-xs">Shown on the attraction detail page. Falls back to subtitle if empty.</FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="order"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Display Order</FormLabel>
+                          <FormControl>
+                            <Input type="number" {...field} />
+                          </FormControl>
+                          <FormDescription className="text-xs">Lower numbers appear first</FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -382,7 +491,7 @@ const AttractionForm = (props: TAttractionFormProps) => {
                   <CardHeader>
                     <CardTitle>Media</CardTitle>
                     <CardDescription>
-                      Attraction image for listings and the website
+                      Featured image and gallery photos
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
@@ -391,10 +500,10 @@ const AttractionForm = (props: TAttractionFormProps) => {
                       name="image"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Attraction Image</FormLabel>
+                          <FormLabel>Featured Image</FormLabel>
                           <FormControl>
                             <FileUploader
-                              disabled={isImageUploading || isSubmitting}
+                              disabled={busy}
                               id="attraction-image"
                               maxFiles={1}
                               onValueChange={field.onChange}
@@ -403,6 +512,29 @@ const AttractionForm = (props: TAttractionFormProps) => {
                               value={field.value || []}
                             />
                           </FormControl>
+                          <FormDescription className="text-xs">Main image shown on listing cards</FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="images"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Gallery Images</FormLabel>
+                          <FormControl>
+                            <FileUploader
+                              disabled={busy}
+                              id="attraction-gallery-images"
+                              maxFiles={20}
+                              onValueChange={field.onChange}
+                              progresses={galleryProgresses}
+                              showValidation={hasAttemptedSubmit}
+                              value={field.value || []}
+                            />
+                          </FormControl>
+                          <FormDescription className="text-xs">Additional photos shown on the detail page gallery (up to 20)</FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}

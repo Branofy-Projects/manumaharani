@@ -63,6 +63,12 @@ export const navItems: NavItem[] = [
         title: "Offer Bookings",
         url: "/offer-bookings",
       },
+      {
+        icon: "billing",
+        shortcut: ["a", "b"],
+        title: "Attraction Bookings",
+        url: "/attraction-bookings",
+      },
     ],
     title: "Queries",
     url: "#",

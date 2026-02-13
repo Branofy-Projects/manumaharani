@@ -1,5 +1,5 @@
 import type { TAmenityBase } from "./amenities.schema";
-import type { TAttractionBase } from "./attractions.schema";
+import type { TAttractionBase, TAttractionImageBase } from "./attractions.schema";
 import type { TUser } from "./auth.schema";
 import type { TBlogBase, TBlogImageBase } from "./blogs.schema";
 import type { TBookingBase, TBookingPaymentBase } from "./bookings.schema";
@@ -26,7 +26,11 @@ import type { TPolicyBase } from "./policies.schema";
 export type TAmenity = TAmenityBase;
 export type TAttraction = {
   image: null | TImage;
+  images: TAttractionImage[];
 } & TAttractionBase;
+export type TAttractionImage = {
+  image: TImage;
+} & TAttractionImageBase;
 export type TBlog = {
   author: null | TUser;
   featuredImage: null | TImage;
