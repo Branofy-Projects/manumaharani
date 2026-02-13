@@ -8,7 +8,6 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
 
 import { RenderIcon } from "@/components/render-icon";
 import { getActiveRoomsCache, getRoomBySlugCache } from "@/lib/cache/rooms.cache";
@@ -54,6 +53,8 @@ export default async function RoomDetailPage({ params }: PageProps<"/rooms/[room
 
     // Get all gallery images
     const galleryImages = room.images?.map((img: { image: { original_url: string } }) => img.image.original_url) || [];
+
+    const bookingUrl = process.env.BOOKING_URL || "#";
 
     // Get other rooms for "Other accommodations" section
     const allRooms = await getActiveRoomsCache();
@@ -196,16 +197,14 @@ export default async function RoomDetailPage({ params }: PageProps<"/rooms/[room
 
                     {/* Right Column - Booking Card (Desktop Only) */}
                     <div className="hidden lg:col-span-1 lg:block">
-                        <Suspense>
-                            <RoomBookingCard
-                                basePrice={room.base_price}
-                                bedType={room.bed_type}
-                                maxOccupancy={room.max_occupancy}
-                                numberOfBeds={room.number_of_beds}
-                                roomId={room.id}
-                                sizeSqft={room.size_sqft}
-                            />
-                        </Suspense>
+                        <RoomBookingCard
+                            basePrice={room.base_price}
+                            bedType={room.bed_type}
+                            bookingUrl={bookingUrl}
+                            maxOccupancy={room.max_occupancy}
+                            numberOfBeds={room.number_of_beds}
+                            sizeSqft={room.size_sqft}
+                        />
                     </div>
                 </div>
 
@@ -267,12 +266,10 @@ export default async function RoomDetailPage({ params }: PageProps<"/rooms/[room
             </div>
 
             {/* Mobile Booking Bar */}
-            <Suspense>
-                <MobileBookingBar
-                    basePrice={room.base_price}
-                    roomId={room.id}
-                />
-            </Suspense>
+            <MobileBookingBar
+                basePrice={room.base_price}
+                bookingUrl={bookingUrl}
+            />
         </main>
     );
 }

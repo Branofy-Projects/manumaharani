@@ -18,7 +18,8 @@
   "UPSTASH_REDIS_REST_TOKEN",
   "REVALIDATION_SECRET",
   "BETTER_AUTH_SECRET",
-  "ADMIN_WEBHOOK_SECRET"
+  "ADMIN_WEBHOOK_SECRET",
+  "BOOKING_URL"
  ],
  "globalDependencies": [".env"],
  "tasks": {
