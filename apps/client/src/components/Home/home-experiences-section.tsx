@@ -31,7 +31,7 @@ export const HomeExperiencesSection = async () => {
     >
       <div className="pointer-events-none absolute inset-0 z-0 bg-black/70" />
       <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <h2 className="text-center font-thin leading-tight tracking-wide text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl">
+        <h2 className="text-center  leading-tight tracking-wide text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl">
           Experience Manu
           <br />
           Maharani As

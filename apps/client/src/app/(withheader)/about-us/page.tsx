@@ -75,12 +75,12 @@ export default function AboutUsPage() {
         />
         <div className="absolute inset-0 bg-black/40" />
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white">
-          <h1 className="text-4xl font-thin uppercase tracking-[0.2em] md:text-6xl">
-            About Us
+          <h1 className="text-4xl  uppercase tracking-[0.2em] md:text-6xl">
+            The Soul of Corbett, Reimagined
           </h1>
           <div className="mt-4 h-px w-24 bg-white/80" />
           <p className="mt-4 max-w-2xl px-4 font-serif text-lg italic text-white/90 md:text-xl">
-            Discover the oasis of tranquility in the lap of wilderness
+            A Legacy of Riverside Luxury, Powered by the Vision of Mahaveer Multicreation.
           </p>
         </div>
       </section>
@@ -121,13 +121,49 @@ export default function AboutUsPage() {
             </h2>
             <div className="mb-8 h-px w-16 bg-[#a88b4d]" />
 
-            <div className="space-y-6 text-base leading-relaxed text-gray-600 md:text-lg">
-              <p>
-                Tucked away in the peaceful village of Dhikuli, between Jim Corbett’s iconic Bijrani and Dhikala safari gates, Manu Maharani Resort & Spa is a place where nature welcomes you like an old friend. Each morning begins with the gentle music of the gurgling Kosi River, mist rising over the Shivalik hills, and birdsong floating through the air. Surrounded by the lush forests of Corbett, the resort feels wonderfully secluded, yet remains an easy, comfortable drive from Delhi, Jaipur, and Rishikesh.
-              </p>
-              <p>
-                Spread across 11 acres of serene riverside landscape, the resort brings together refined comfort and warm, intuitive hospitality. It is a space thoughtfully designed for families to slow down and reconnect, for couples to unwind by the river’s edge, and for corporate teams to find clarity and inspiration amid nature. Spacious rooms and charming cottages, each opening onto manicured lawns and accompanied by a wholesome breakfast, create a sense of effortless ease. With inviting amenities such as an outdoor swimming pool and a dedicated kids’ play area, Manu Maharani ensures that every guest—young or old—finds their own moment of joy and relaxation.
-              </p>
+            <div className="space-y-8 text-base leading-relaxed text-gray-600 md:text-lg">
+              <div>
+                <h3 className="mb-3 font-serif text-xl font-semibold text-[#2b2b2b]">A Heritage Reborn</h3>
+                <p>
+                  Manu Maharani has long been a landmark of tranquility in Jim Corbett. For years, we have served as the silent witness to the Kosi River&apos;s flow and the Shivalik&apos;s majesty. Today, that legacy enters its most exciting chapter. Under the stewardship of Mahaveer Multicreation, Manu Maharani has transitioned from a renowned name into a dynamic, homegrown hospitality powerhouse.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="mb-3 font-serif text-xl font-semibold text-[#2b2b2b]">The Power of Independence</h3>
+                <p>
+                  While others chase the rigid constraints of global chain SOPs, we believe in the luxury of flexibility. As a flagship of Mahaveer Multicreation, we have discarded the &ldquo;cookie-cutter&rdquo; approach to hospitality. Our independence is our greatest strength&mdash;it allows us to pivot instantly to our guests&apos; needs, curating experiences that are as unique as the wilderness surrounding us.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="mb-3 font-serif text-xl font-semibold text-[#2b2b2b]">Homegrown Heart, Global Standards</h3>
+                <p>
+                  We are a &ldquo;Homegrown Global Brand.&rdquo; This means we pair the warmth of Indian Atithi Devo Bhava with international standards of service, design, and sustainability. We don&apos;t just follow trends; we set them. By blending local Kumaoni soul with world-class infrastructure, we provide an experience that is authentic to Corbett but sophisticated enough for the global traveler.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="mb-3 font-serif text-xl font-semibold text-[#2b2b2b]">Our Core Philosophy</h3>
+                <ul className="space-y-4">
+                  <li>
+                    <span className="font-semibold text-[#2b2b2b]">Agility Over Bureaucracy:</span> We prioritize the guest experience over corporate handbooks. If a guest desires a midnight feast by the river or a bespoke safari itinerary, we make it happen&mdash;no layers of approval required.
+                  </li>
+                  <li>
+                    <span className="font-semibold text-[#2b2b2b]">The &ldquo;Sensory Sanctuary&rdquo; Vibe:</span> Every corner of our 11-acre estate is designed to be a standalone masterpiece. From the architecture that breathes with the forest to the culinary stories told at Dasos, we are a destination within ourselves.
+                  </li>
+                  <li>
+                    <span className="font-semibold text-[#2b2b2b]">Rooted Growth:</span> Mahaveer Multicreation&apos;s vision is to take the essence of Indian hospitality to the world stage, starting right here on the banks of the Kosi.
+                  </li>
+                </ul>
+              </div>
+
+              <blockquote className="border-l-4 border-[#a88b4d] pl-6 font-serif text-lg italic text-[#2b2b2b]">
+                &ldquo;We don&apos;t manage rooms; we curate memories. Our brand is built on the freedom to be extraordinary.&rdquo;
+                <footer className="mt-2 text-sm font-normal not-italic text-gray-500">
+                  &mdash; Leadership Team, Mahaveer Multicreation
+                </footer>
+              </blockquote>
             </div>
 
             {/* <div className="mt-8 font-serif text-2xl italic text-[#a88b4d]">

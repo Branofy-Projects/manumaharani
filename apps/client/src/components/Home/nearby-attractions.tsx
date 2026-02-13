@@ -54,7 +54,7 @@ export default function NearbyAttractions() {
   return (
     <section className="flex w-full flex-col items-center py-10 md:py-20">
       <h2
-        className="text-3xl md:text-4xl font-thin tracking-widest uppercase mb-4 text-center px-4 xl:px-0"
+        className="text-3xl md:text-4xl  tracking-widest uppercase mb-4 text-center px-4 xl:px-0"
         style={{ color: "#000000" }}
       >
         Nearby
@@ -153,15 +153,15 @@ export default function NearbyAttractions() {
                   {attraction.subtitle}
                 </p>
               )}
-              {(attraction.open_time || attraction.close_time) && (
+              {/* {(attraction.open_time || attraction.close_time) && (
                 <p className="text-xs text-white/90">
                   {[attraction.open_time, attraction.close_time].filter(Boolean).join(" – ")}
                 </p>
               )}
               {attraction.distance && (
                 <p className="text-xs text-white/80">{attraction.distance}</p>
-              )}
-              {attraction.faq && (() => {
+              )} */}
+              {/* {attraction.faq && (() => {
                 try {
                   const faqs = JSON.parse(attraction.faq) as Array<{ answer?: string; question?: string; }>;
                   if (Array.isArray(faqs) && faqs.length > 0) {
@@ -180,17 +180,17 @@ export default function NearbyAttractions() {
                     );
                   }
                 } catch {
-                  /* fallback to plain text */
+
                 }
                 return (
                   <p className="mt-1 text-xs text-white/70 line-clamp-2 whitespace-pre-line">
                     {attraction.faq}
                   </p>
                 );
-              })()}
-              <span className="pb-1 text-xs font-semibold uppercase tracking-widest text-white transition-all group-hover:text-white/70">
+              })()} */}
+              {/* <span className="pb-1 text-xs font-semibold uppercase tracking-widest text-white transition-all group-hover:text-white/70">
                 View Details
-              </span>
+              </span> */}
             </div>
           </Link>
         ))}

@@ -288,7 +288,7 @@ export function AttractionBookingCard({
                         </div>
 
                         <Button
-                            className="w-full rounded-lg bg-[#b68833] py-6 text-lg font-semibold text-white hover:bg-[#a07728]"
+                            className="w-full"
                             disabled={status === "submitting"}
                             type="submit"
                         >

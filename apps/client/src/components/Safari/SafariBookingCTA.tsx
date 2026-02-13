@@ -14,7 +14,7 @@ export default function SafariBookingCTA() {
         <div className="absolute inset-0 bg-black/60" />
       </div>
       <div className="relative z-10 mx-auto max-w-4xl px-4 text-center text-white">
-        <h2 className="mb-6 text-2xl font-thin tracking-[0.08em] uppercase md:text-4xl">
+        <h2 className="mb-6 text-2xl  tracking-[0.08em] uppercase md:text-4xl">
           Ready for Your Adventure?
         </h2>
         <p className="mb-8 text-base leading-relaxed md:text-lg">

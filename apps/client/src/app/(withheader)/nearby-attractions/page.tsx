@@ -33,7 +33,7 @@ export default async function NearbyAttractionsPage() {
                         <ChevronRight className="h-4 w-4" />
                         <span className="text-white">Nearby Attractions</span>
                     </nav>
-                    <h1 className="font-thin tracking-[0.2em] text-3xl uppercase text-white md:text-5xl">
+                    <h1 className=" tracking-[0.2em] text-3xl uppercase text-white md:text-5xl">
                         Nearby Attractions
                     </h1>
                     <p className="mt-4 max-w-2xl font-serif text-base text-white/80 md:text-lg">
@@ -46,7 +46,7 @@ export default async function NearbyAttractionsPage() {
             {/* Attractions Grid */}
             <section className="mx-auto w-full max-w-screen-xl px-4 py-16 md:py-24 xl:px-0">
                 <div className="mb-12 text-center md:mb-16">
-                    <h2 className="font-thin tracking-widest text-2xl uppercase text-[#2b2b2b] md:text-4xl">
+                    <h2 className=" tracking-widest text-2xl uppercase text-[#2b2b2b] md:text-4xl">
                         Places to Explore
                     </h2>
                     <p className="mx-auto mt-4 max-w-2xl font-serif text-base text-[#5a5a5a] md:text-lg">
@@ -87,7 +87,7 @@ export default async function NearbyAttractionsPage() {
 
                                 {/* Content */}
                                 <div className="flex flex-1 flex-col p-6 md:p-8">
-                                    <h3 className="font-thin tracking-widest text-lg uppercase text-[#2b2b2b] md:text-xl">
+                                    <h3 className=" tracking-widest text-lg uppercase text-[#2b2b2b] md:text-xl">
                                         {attraction.title}
                                     </h3>
 

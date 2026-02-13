@@ -6,7 +6,7 @@ export default function JimCorbett() {
       <div className="max-w-screen-xl mx-auto w-full flex flex-col md:flex-row items-center justify-between px-6 gap-12">
         {/* Left: Text */}
         <div className="flex-1 flex flex-col justify-center items-start max-w-xl">
-          <h2 className="text-3xl md:text-4xl font-thin tracking-widest text-[#b68833] mb-8">
+          <h2 className="text-3xl md:text-4xl  tracking-widest text-[#b68833] mb-8">
             Beyond the Safari: The Modern Utility of Jim Corbett
           </h2>
           <p className="text-lg mb-8 font-serif text-gray-200 leading-relaxed">
@@ -16,7 +16,7 @@ export default function JimCorbett() {
             Bengal Tiger; it is a classroom for conservation and a sanctuary for
             mental well-being
           </p>
-          <h3 className="text-xl md:text-2xl font-thin tracking-widest text-[#b68833] mb-4">
+          <h3 className="text-xl md:text-2xl  tracking-widest text-[#b68833] mb-4">
             Takeaway Experiences:
           </h3>
           <ul className="font-serif text-gray-200 leading-relaxed list-disc list-inside space-y-2">

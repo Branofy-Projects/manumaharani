@@ -121,7 +121,7 @@ export function MobileBookingBar({
                         <p className="text-xs text-gray-500">Plan your visit</p>
                     </div>
                     <Button
-                        className="shrink-0 rounded-lg bg-[#b68833] px-6 py-5 text-sm font-semibold text-white hover:bg-[#a07728]"
+                        className="lg:w-full"
                         onClick={() => setSheetOpen(true)}
                     >
                         Book Now

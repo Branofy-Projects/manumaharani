@@ -19,8 +19,6 @@ const bookingFormSchema = z.object({
     phone: z.string().min(1, "Phone is required").min(10, "Phone must be at least 10 digits"),
 });
 
-type FormErrors = Partial<Record<keyof z.infer<typeof bookingFormSchema>, string>>;
-
 interface EventBookingCardProps {
     discountedPrice?: null | string;
     discountPercentage?: number;
@@ -37,15 +35,7 @@ interface EventBookingCardProps {
     startTime: string;
 }
 
-function formatEventDate(startDate: string, endDate?: null | string) {
-    const start = new Date(startDate + "T00:00:00");
-    const opts: Intl.DateTimeFormatOptions = { day: "numeric", month: "short", year: "numeric" };
-    if (endDate && endDate !== startDate) {
-        const end = new Date(endDate + "T00:00:00");
-        return `${start.toLocaleDateString("en-US", opts)} - ${end.toLocaleDateString("en-US", opts)}`;
-    }
-    return start.toLocaleDateString("en-US", opts);
-}
+type FormErrors = Partial<Record<keyof z.infer<typeof bookingFormSchema>, string>>;
 
 export function EventBookingCard({
     discountedPrice,
@@ -314,7 +304,7 @@ export function EventBookingCard({
                         </div>
 
                         <Button
-                            className="w-full rounded-lg bg-blue-600 py-6 text-lg font-semibold text-white hover:bg-blue-700"
+                            className="w-full"
                             disabled={status === "submitting"}
                             type="submit"
                         >
@@ -347,4 +337,14 @@ export function EventBookingCard({
             </div>
         </div>
     );
+}
+
+function formatEventDate(startDate: string, endDate?: null | string) {
+    const start = new Date(startDate + "T00:00:00");
+    const opts: Intl.DateTimeFormatOptions = { day: "numeric", month: "short", year: "numeric" };
+    if (endDate && endDate !== startDate) {
+        const end = new Date(endDate + "T00:00:00");
+        return `${start.toLocaleDateString("en-US", opts)} - ${end.toLocaleDateString("en-US", opts)}`;
+    }
+    return start.toLocaleDateString("en-US", opts);
 }

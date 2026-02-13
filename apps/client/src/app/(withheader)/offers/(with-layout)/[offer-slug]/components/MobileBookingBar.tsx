@@ -170,7 +170,6 @@ export function MobileBookingBar({
                         )}
                     </div>
                     <Button
-                        className="shrink-0 rounded-lg bg-blue-600 px-6 py-5 text-sm font-semibold text-white hover:bg-blue-700"
                         onClick={() => setSheetOpen(true)}
                     >
                         Book Now
@@ -391,7 +390,7 @@ export function MobileBookingBar({
                                     </div>
 
                                     <Button
-                                        className="w-full rounded-lg bg-blue-600 py-6 text-lg font-semibold text-white hover:bg-blue-700"
+                                        className="w-full"
                                         disabled={status === "submitting"}
                                         type="submit"
                                     >

@@ -131,7 +131,7 @@ export default async function OfferDetailPage({ params }: PageProps) {
                     <div className="lg:col-span-2">
                         {/* Title Section */}
                         <div className="mb-6">
-                            <h1 className="mb-3 font-thin tracking-widest text-2xl leading-tight text-[#2b2b2b] md:text-4xl lg:text-4xl">
+                            <h1 className="mb-3  tracking-widest text-2xl leading-tight text-[#2b2b2b] md:text-4xl lg:text-4xl">
                                 {offer.name.toUpperCase()}
                             </h1>
 
@@ -162,34 +162,34 @@ export default async function OfferDetailPage({ params }: PageProps) {
                         {/* Key Info Pills */}
                         <div className="mb-8 flex flex-wrap gap-3">
                             {offer.free_cancellation && (
-                                <div className="flex items-center gap-2 rounded-full border border-green-200 bg-green-50 px-4 py-2">
-                                    <Shield className="h-4 w-4 text-green-600" />
-                                    <span className="font-serif text-sm font-medium text-green-700">Free cancellation</span>
+                                <div className="flex items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-4 py-2">
+                                    <Shield className="h-4 w-4 text-[#5a5a5a]" />
+                                    <span className="font-sans text-sm text-[#5a5a5a]">Free cancellation</span>
                                 </div>
                             )}
                             {offer.duration && (
                                 <div className="flex items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-4 py-2">
                                     <Clock className="h-4 w-4 text-[#5a5a5a]" />
-                                    <span className="font-serif text-sm text-[#5a5a5a]">{offer.duration}</span>
+                                    <span className="font-sans text-sm text-[#5a5a5a]">{offer.duration}</span>
                                 </div>
                             )}
                             {offer.max_group_size && (
                                 <div className="flex items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-4 py-2">
                                     <Users className="h-4 w-4 text-[#5a5a5a]" />
-                                    <span className="font-serif text-sm text-[#5a5a5a]">Max {offer.max_group_size} people</span>
+                                    <span className="font-sans text-sm text-[#5a5a5a]">Max {offer.max_group_size} people</span>
                                 </div>
                             )}
                             {languages.length > 0 && (
                                 <div className="flex items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-4 py-2">
                                     <Globe className="h-4 w-4 text-[#5a5a5a]" />
-                                    <span className="font-serif text-sm text-[#5a5a5a]">{languages.join(", ")}</span>
+                                    <span className="font-sans text-sm text-[#5a5a5a]">{languages.join(", ")}</span>
                                 </div>
                             )}
                         </div>
 
                         {/* About This Experience */}
                         <section className="mb-10 border-t pt-8" id="about">
-                            <h2 className="mb-4 font-thin tracking-widest text-xl uppercase text-[#2b2b2b] md:text-2xl">
+                            <h2 className="mb-4  tracking-widest text-xl uppercase text-[#2b2b2b] md:text-2xl">
                                 About this experience
                             </h2>
                             <div className="prose prose-gray max-w-none">
@@ -203,7 +203,7 @@ export default async function OfferDetailPage({ params }: PageProps) {
                         {/* What's Included Section */}
                         {(includedHighlights.length > 0 || excludedHighlights.length > 0) && (
                             <section className="mb-10 border-t pt-8" id="whats-included">
-                                <h2 className="mb-6 text-2xl font-thin uppercase text-[#2b2b2b] md:text-2xl">
+                                <h2 className="mb-6 text-2xl  uppercase text-[#2b2b2b] md:text-2xl">
                                     What&apos;s included
                                 </h2>
                                 <div className="grid gap-8 md:grid-cols-2">
@@ -215,7 +215,7 @@ export default async function OfferDetailPage({ params }: PageProps) {
                                                         <div className="mt-1 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-green-100">
                                                             <Check className="h-3 w-3 text-green-600" />
                                                         </div>
-                                                        <span className="font-sans text-lg font-thin leading-relaxed p-0">{highlight.text}</span>
+                                                        <span className="font-sans text-lg  leading-relaxed p-0">{highlight.text}</span>
                                                     </li>
                                                 ))}
                                             </ul>
@@ -229,7 +229,7 @@ export default async function OfferDetailPage({ params }: PageProps) {
                                                         <div className="mt-1 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-red-100">
                                                             <X className="h-3 w-3 text-red-600" />
                                                         </div>
-                                                        <span className="font-sans text-lg font-thin leading-relaxed p-0">{highlight.text}</span>
+                                                        <span className="font-sans text-lg  leading-relaxed p-0">{highlight.text}</span>
                                                     </li>
                                                 ))}
                                             </ul>
@@ -249,7 +249,7 @@ export default async function OfferDetailPage({ params }: PageProps) {
                         {/* Additional Info Section */}
                         {(offer.booking_notice || offer.cancellation_policy) && (
                             <section className="mb-10 border-t pt-8" id="additional-info">
-                                <h2 className="mb-6 text-xl font-thin uppercase text-[#2b2b2b] md:text-2xl">
+                                <h2 className="mb-6 text-xl  uppercase text-[#2b2b2b] md:text-2xl">
                                     Additional information
                                 </h2>
 
@@ -260,7 +260,7 @@ export default async function OfferDetailPage({ params }: PageProps) {
                                             <Info className="h-5 w-5 flex-shrink-0 text-amber-700" />
                                             <div>
                                                 <p className="font-sans font-light text-amber-700">Important information</p>
-                                                <p className="mt-1 font-sans font-thin text-sm text-amber-700 md:text-base">{offer.booking_notice}</p>
+                                                <p className="mt-1 font-sans  text-sm text-amber-700 md:text-base">{offer.booking_notice}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -273,7 +273,7 @@ export default async function OfferDetailPage({ params }: PageProps) {
                                             <Ticket className="h-5 w-5 flex-shrink-0 text-gray-600" />
                                             <div>
                                                 <p className="font-sans font-light text-[#2b2b2b]">Cancellation policy</p>
-                                                <p className="mt-1 font-sans font-thin text-sm text-[#5a5a5a] whitespace-pre-line md:text-base">
+                                                <p className="mt-1 font-sans  text-sm text-[#5a5a5a] whitespace-pre-line md:text-base">
                                                     {offer.cancellation_policy}
                                                 </p>
                                             </div>
@@ -286,7 +286,7 @@ export default async function OfferDetailPage({ params }: PageProps) {
                         {/* FAQs Section */}
                         {offer.faqs && offer.faqs.length > 0 && (
                             <section className="mb-10 border-t pt-8" id="faqs">
-                                <h2 className="mb-6 text-xl font-thin uppercase text-[#2b2b2b] md:text-2xl">
+                                <h2 className="mb-6 text-xl  uppercase text-[#2b2b2b] md:text-2xl">
                                     Frequently asked questions
                                 </h2>
                                 <div className="divide-y divide-gray-200 rounded-lg border border-gray-200">
@@ -297,7 +297,7 @@ export default async function OfferDetailPage({ params }: PageProps) {
                                                 <ChevronDown className="h-5 w-5 flex-shrink-0 text-[#5a5a5a] transition-transform group-open:rotate-180" />
                                             </summary>
                                             <div className="px-4 pb-4">
-                                                <p className="font-sans text-sm font-thin leading-relaxed text-[#5a5a5a] md:text-base">{offerFaq.faq.answer}</p>
+                                                <p className="font-sans text-sm  leading-relaxed text-[#5a5a5a] md:text-base">{offerFaq.faq.answer}</p>
                                             </div>
                                         </details>
                                     ))}

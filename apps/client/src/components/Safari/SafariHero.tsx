@@ -13,7 +13,7 @@ export default function SafariHero() {
       />
       <div className="absolute inset-0 bg-black/50" />
       <div className="relative z-10 mx-auto w-full max-w-7xl px-4 text-center text-white sm:px-6 lg:px-8">
-        <h1 className="mb-6 text-3xl font-thin tracking-[0.15em] uppercase md:text-5xl lg:text-6xl">
+        <h1 className="mb-6 text-3xl  tracking-[0.15em] uppercase md:text-5xl lg:text-6xl">
           Jungle Safari
         </h1>
         <p className="mx-auto max-w-3xl text-base font-light leading-relaxed md:text-lg lg:text-xl">

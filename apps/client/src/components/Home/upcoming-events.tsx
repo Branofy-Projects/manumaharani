@@ -14,7 +14,7 @@ export default async function UpcomingEvents() {
     <div className="w-full lg:w-1/2 flex flex-col">
       <div className="flex items-center justify-between mb-6 md:mb-8">
         <h2
-          className="text-2xl md:text-3xl font-thin tracking-widest uppercase"
+          className="text-2xl md:text-3xl  tracking-widest uppercase"
           style={{ color: "#000000" }}
         >
           Upcoming Events

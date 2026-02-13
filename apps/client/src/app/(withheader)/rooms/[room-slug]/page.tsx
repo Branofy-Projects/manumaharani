@@ -89,12 +89,12 @@ export default async function RoomDetailPage({ params }: PageProps<"/rooms/[room
                     <div className="lg:col-span-2">
                         {/* Title Section */}
                         <div className="mb-6">
-                            <h1 className="mb-3 font-thin tracking-widest text-2xl leading-tight text-[#2b2b2b] md:text-4xl lg:text-4xl">
+                            <h1 className="mb-3  tracking-widest text-2xl leading-tight text-[#2b2b2b] md:text-4xl lg:text-4xl">
                                 {room.title.toUpperCase()}
                             </h1>
 
                             {/* Location */}
-                            <p className="font-serif text-sm text-[#5a5a5a] md:text-base">
+                            <p className="font-sans text-sm text-[#5a5a5a] md:text-base">
                                 Manu Maharani Resort & Spa, Jim Corbett
                             </p>
                         </div>
@@ -103,15 +103,15 @@ export default async function RoomDetailPage({ params }: PageProps<"/rooms/[room
                         <div className="mb-8 flex flex-wrap gap-3">
                             <div className="flex items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-4 py-2">
                                 <Users className="h-4 w-4 text-[#5a5a5a]" />
-                                <span className="font-serif text-sm text-[#5a5a5a]">Up to {room.max_occupancy} guests</span>
+                                <span className="font-sans text-sm text-[#5a5a5a]">Up to {room.max_occupancy} guests</span>
                             </div>
                             <div className="flex items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-4 py-2">
                                 <Maximize className="h-4 w-4 text-[#5a5a5a]" />
-                                <span className="font-serif text-sm text-[#5a5a5a]">{room.size_sqft} sq ft</span>
+                                <span className="font-sans text-sm text-[#5a5a5a]">{room.size_sqft} sq ft</span>
                             </div>
                             <div className="flex items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-4 py-2">
                                 <BedDouble className="h-4 w-4 text-[#5a5a5a]" />
-                                <span className="font-serif text-sm capitalize text-[#5a5a5a]">
+                                <span className="font-sans text-sm capitalize text-[#5a5a5a]">
                                     {room.number_of_beds} {room.bed_type} {room.number_of_beds > 1 ? "beds" : "bed"}
                                 </span>
                             </div>
@@ -119,7 +119,7 @@ export default async function RoomDetailPage({ params }: PageProps<"/rooms/[room
 
                         {/* About This Room */}
                         <section className="mb-10 border-t pt-8" id="about">
-                            <h2 className="mb-4 font-thin tracking-widest text-xl uppercase text-[#2b2b2b] md:text-2xl">
+                            <h2 className="mb-4  tracking-widest text-xl uppercase text-[#2b2b2b] md:text-2xl">
                                 About this room
                             </h2>
                             <div className="prose prose-gray max-w-none">
@@ -132,7 +132,7 @@ export default async function RoomDetailPage({ params }: PageProps<"/rooms/[room
                         {/* Amenities Section */}
                         {room.amenities && room.amenities.length > 0 && (
                             <section className="mb-10 border-t pt-8" id="amenities">
-                                <h2 className="mb-6 font-thin tracking-widest text-xl uppercase text-[#2b2b2b] md:text-2xl">
+                                <h2 className="mb-6  tracking-widest text-xl uppercase text-[#2b2b2b] md:text-2xl">
                                     Amenities
                                 </h2>
                                 <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
@@ -158,7 +158,7 @@ export default async function RoomDetailPage({ params }: PageProps<"/rooms/[room
                         {/* Policies Section - Check-in/out, children, extra beds */}
                         {(room.check_in_time || room.check_out_time || room.children_policy || room.extra_beds) && (
                             <section className="mb-10 border-t pt-8" id="policies">
-                                <h2 className="mb-6 font-thin tracking-widest text-xl uppercase text-[#2b2b2b] md:text-2xl">
+                                <h2 className="mb-6  tracking-widest text-xl uppercase text-[#2b2b2b] md:text-2xl">
                                     Room policies
                                 </h2>
                                 <div className="space-y-4">

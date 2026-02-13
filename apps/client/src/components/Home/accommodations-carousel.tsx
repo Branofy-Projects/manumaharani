@@ -99,17 +99,39 @@ export default function AccommodationsCarousel() {
     return () => clearTimeout(handle);
   }, [isAnimating, index, total]);
 
+  // Touch swipe support
+  const touchRef = useRef<{ startX: number; startY: number }>({ startX: 0, startY: 0 });
+
+  const SWIPE_THRESHOLD = 40;
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    touchRef.current = { startX: touch.clientX, startY: touch.clientY };
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const touch = e.changedTouches[0];
+    const dx = touch.clientX - touchRef.current.startX;
+    const dy = Math.abs(touch.clientY - touchRef.current.startY);
+    if (Math.abs(dx) > SWIPE_THRESHOLD && Math.abs(dx) > dy) {
+      if (dx < 0) goRight();
+      else goLeft();
+    }
+  };
+
   const centerIdx = (((index - CLONE_COUNT) % total) + total) % total;
 
   return (
     <section className="py-16 md:py-24 w-full bg-white">
-      <h2 className="text-2xl self-center w-full text-center md:text-3xl font-thin tracking-widest uppercase text-ceter mb-12 md:mb-16">
+      <h2 className="text-2xl self-center w-full text-center md:text-3xl  tracking-widest uppercase text-ceter mb-12 md:mb-16">
         Moments at Manumaharani
       </h2>
 
       {/* Carousel viewport */}
       <div
         className="w-full overflow-hidden"
+        onTouchEnd={handleTouchEnd}
+        onTouchStart={handleTouchStart}
         ref={containerRef}
         style={{ height: dims.cardHeightActive }}
       >

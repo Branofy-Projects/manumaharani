@@ -124,7 +124,7 @@ export default function Page() {
             <p className="text-white/90 font-serif italic text-sm md:text-base">
               The Wedding Destination in Jim Corbett
             </p>
-            <h1 className="mt-2 text-white text-3xl md:text-5xl font-thin tracking-[0.2em] md:tracking-[0.3em] uppercase leading-tight">
+            <h1 className="mt-2 text-white text-3xl md:text-5xl  tracking-[0.2em] md:tracking-[0.3em] uppercase leading-tight">
               Riverside Weddings
             </h1>
             <p className="mt-4 max-w-2xl text-white/90 text-sm md:text-base">
@@ -151,7 +151,7 @@ export default function Page() {
           <div className="mb-8 md:mb-12 grid grid-cols-1 lg:grid-cols-[auto_1fr] items-start gap-6">
             <div className="flex items-center gap-4">
               <div className="h-px bg-black/20 w-16" />
-              <h2 className="text-2xl md:text-4xl font-thin tracking-[0.08em] uppercase">
+              <h2 className="text-2xl md:text-4xl  tracking-[0.08em] uppercase">
                 Corbett Wedding Venues
               </h2>
             </div>
@@ -165,7 +165,7 @@ export default function Page() {
         </div>
 
         {/* Full-bleed carousel: only center slides; sides show titles */}
-      <WeddingVenue destinations={destinations} />
+        <WeddingVenue destinations={destinations} />
       </section>
 
       {/* Wedding Festivities */}
@@ -179,7 +179,7 @@ export default function Page() {
         <div className="max-w-screen-xl mx-auto px-4 xl:px-0">
           <div className="bg-[#000000] text-[#b68833] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
-              <h3 className="text-xl md:text-2xl tracking-widest uppercase font-thin">
+              <h3 className="text-xl md:text-2xl tracking-widest uppercase ">
                 Plan Your Corbett Wedding
               </h3>
               <p className="mt-2 text-xs md:text-sm font-serif text-white/80">

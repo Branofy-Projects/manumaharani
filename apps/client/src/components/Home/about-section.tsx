@@ -11,7 +11,7 @@ export default function AboutSection() {
       >
         <div className="absolute inset-0 bg-black opacity-80 z-0"></div>
         <div className="text-center px-16 relative z-10">
-          <h2 className="text-2xl md:text-4xl font-thin tracking-[0.08em] uppercase mb-10 leading-snug text-white">
+          <h2 className="text-2xl md:text-4xl  tracking-[0.08em] uppercase mb-10 leading-snug text-white">
             Luxury Grounded in Tradition: A Warm Indian Welcome
           </h2>
           <p className="text-sm md:text-base font-serif text-gray-200 leading-relaxed">

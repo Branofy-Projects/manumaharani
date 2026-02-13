@@ -20,7 +20,7 @@ export default function HomeInstaImageSection() {
           <p className="uppercase tracking-[0.3em] text-sm text-muted-foreground">
             Follow Us
           </p>
-          <h2 className="text-3xl md:text-4xl font-thin tracking-widest text-center mb-12 uppercase">
+          <h2 className="text-3xl md:text-4xl  tracking-widest text-center mb-12 uppercase">
             In Touch With Manu Maharani
           </h2>
         </div>

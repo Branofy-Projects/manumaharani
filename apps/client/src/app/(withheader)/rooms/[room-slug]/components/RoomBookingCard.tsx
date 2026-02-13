@@ -1,6 +1,8 @@
 import { BedDouble, ExternalLink, Maximize, Users } from "lucide-react";
 import Link from "next/link";
 
+import { Button } from "@/components/ui/button";
+
 interface RoomBookingCardProps {
     basePrice: string;
     bedType: string;
@@ -86,15 +88,16 @@ export function RoomBookingCard({
                 )}
 
                 {/* Book Now Button */}
-                <a
-                    className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#b68833] py-4 text-lg font-semibold text-white transition-colors hover:bg-[#a07628]"
-                    href={bookingUrl}
+                <Link href={bookingUrl} passHref
                     rel="noopener noreferrer"
-                    target="_blank"
-                >
-                    Book Now
-                    <ExternalLink className="h-4 w-4" />
-                </a>
+                    target="_blank">
+                    <Button
+                        className="w-full"
+
+                    >
+                        Book Now
+                        <ExternalLink className="h-4 w-4" />
+                    </Button></Link>
 
                 <p className="mt-3 text-center text-sm text-gray-500">
                     Best rate guaranteed when you book directly

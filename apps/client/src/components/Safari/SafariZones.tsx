@@ -131,7 +131,7 @@ export default function SafariZones() {
     <section className="py-16 md:py-24">
       <div className="container mx-auto px-4">
         <div className="mb-12 text-center">
-          <h2 className="mb-4 text-2xl font-thin tracking-[0.08em] uppercase md:text-4xl">
+          <h2 className="mb-4 text-2xl  tracking-[0.08em] uppercase md:text-4xl">
             Safari Zones
           </h2>
           <p className="mx-auto max-w-2xl font-serif text-base text-gray-600 md:text-lg">

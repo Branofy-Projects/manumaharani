@@ -20,7 +20,7 @@ export default function BlogsLayout({
         <div className="absolute inset-0 pt-[80px] flex items-center justify-center">
           <div className="text-center">
             <h1
-              className={`mb-4 text-4xl px-16 font-thin tracking-[0.2em] md:tracking-[0.3em] uppercase text-white md:text-5xl lg:text-6xl`}
+              className={`mb-4 text-4xl px-16  tracking-[0.2em] md:tracking-[0.3em] uppercase text-white md:text-5xl lg:text-6xl`}
             >
               Lakeside Stories
             </h1>

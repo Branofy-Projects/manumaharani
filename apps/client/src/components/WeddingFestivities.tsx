@@ -110,7 +110,7 @@ export default function WeddingFestivities({
         <div className="mb-10 max-w-[1400px] px-4 mx-auto text-center md:mb-14">
           <div className="mb-6 flex items-center justify-center gap-4">
             <div className="h-px w-12 bg-gray-500 md:w-16" />
-            <h2 className=" text-2xl font-thin uppercase tracking-[0.2em] text-gray-800 md:text-4xl lg:text-5xl">
+            <h2 className=" text-2xl  uppercase tracking-[0.2em] text-gray-800 md:text-4xl lg:text-5xl">
               Corbett Wedding Celebrations
             </h2>
             <div className="h-px w-12 bg-gray-500 md:w-16" />
@@ -156,8 +156,8 @@ export default function WeddingFestivities({
                 {items.map((item, index) => (
                   <button
                     className={`py-4 text-left px-8 uppercase tracking-[0.1em] text-sm border-b border-[#dcdcdc] ${index === activeIndex
-                        ? "text-[#a88b4d] font-medium"
-                        : "text-[#8c8c8c]"
+                      ? "text-[#a88b4d] font-medium"
+                      : "text-[#8c8c8c]"
                       }`}
                     key={item.id}
                     onClick={() => {
@@ -231,8 +231,8 @@ export default function WeddingFestivities({
                       >
                         <span
                           className={`block font-serif w-full whitespace-normal text-[10px] uppercase tracking-[0.1em] md:text-xs lg:text-sm leading-tight ${isActive
-                              ? "font-medium text-gray-900"
-                              : "font-normal text-gray-500"
+                            ? "font-medium text-gray-900"
+                            : "font-normal text-gray-500"
                             }`}
                         >
                           {item.label}
@@ -272,8 +272,8 @@ export default function WeddingFestivities({
               <Image
                 alt={activeItem?.label || ""}
                 className={`object-cover transition-all duration-500 ease-in-out ${isAnimating
-                    ? "scale-105 opacity-80 blur-sm"
-                    : "scale-100 opacity-100 blur-0"
+                  ? "scale-105 opacity-80 blur-sm"
+                  : "scale-100 opacity-100 blur-0"
                   }`}
                 fill
                 key={activeItem?.id}
@@ -288,13 +288,13 @@ export default function WeddingFestivities({
           <div className="flex flex-col justify-center  px-8 py-10 md:px-12 md:py-16 lg:px-16">
             <div
               className={`transition-all duration-500 ease-in-out ${isAnimating
-                  ? "translate-y-4 opacity-0"
-                  : "translate-y-0 opacity-100"
+                ? "translate-y-4 opacity-0"
+                : "translate-y-0 opacity-100"
                 }`}
             >
               <div className="mb-6 flex items-center gap-4">
                 <div className="h-px w-10 bg-gray-400" />
-                <h3 className="font-thin text-2xl font-light uppercase tracking-[0.15em] text-gray-800 md:text-3xl lg:text-4xl">
+                <h3 className=" text-2xl font-light uppercase tracking-[0.15em] text-gray-800 md:text-3xl lg:text-4xl">
                   {activeItem?.label || ""}
                 </h3>
               </div>

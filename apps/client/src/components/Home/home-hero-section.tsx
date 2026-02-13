@@ -28,7 +28,7 @@ export const HomeHeroSection = () => {
               <span className="text-base md:text-lg font-serif p-0 italic text-white/90">
                 Manu Maharani Resort & Spa
               </span>
-              <span className="text-2xl md:text-4xl font-thin tracking-[0.2em] md:tracking-[0.3em] uppercase text-white leading-tight pt-2 pb-4 md:pb-6">
+              <span className="text-2xl md:text-4xl  tracking-[0.2em] md:tracking-[0.3em] uppercase text-white leading-tight pt-2 pb-4 md:pb-6">
                 Luxury Riverside Resort
                 <br />
                 in Jim Corbett

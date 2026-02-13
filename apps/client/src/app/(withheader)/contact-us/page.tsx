@@ -29,7 +29,7 @@ export default function ContactUsPage() {
         />
         <div className="absolute inset-0 bg-black/40" />
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white">
-          <h1 className="text-4xl font-thin uppercase tracking-[0.2em] md:text-6xl">
+          <h1 className="text-4xl  uppercase tracking-[0.2em] md:text-6xl">
             Contact Us
           </h1>
           <div className="mt-4 h-px w-24 bg-white/80" />

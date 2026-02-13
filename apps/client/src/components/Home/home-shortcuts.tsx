@@ -18,7 +18,7 @@ const shortcuts = [
     label: "PHOTOS & VIDEOS",
   },
   {
-    href: "/accommodations",
+    href: "/rooms",
     icon: BuildingLibraryIcon,
     label: "ACCOMMODATIONS",
   },

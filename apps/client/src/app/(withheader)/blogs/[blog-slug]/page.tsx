@@ -73,7 +73,7 @@ export default async function BlogPost({
 
                 {/* Title */}
                 <h1
-                    className={`mb-6 text-4xl font-thin leading-tight text-gray-900 md:text-5xl lg:text-6xl`}
+                    className={`mb-6 text-4xl  leading-tight text-gray-900 md:text-5xl lg:text-6xl`}
                 >
                     {post.title}
                 </h1>
@@ -135,11 +135,11 @@ export default async function BlogPost({
                 {/* CTA Section */}
                 <div className="mt-16 rounded-lg bg-gray-50 p-8 text-center md:p-12">
                     <h3
-                        className={`mb-4 text-3xl font-thin tracking-wider text-gray-900`}
+                        className={`mb-4 text-3xl  tracking-wider text-gray-900`}
                     >
                         Ready to Plan Your Dream Wedding?
                     </h3>
-                    <p className={`mb-8 text-lg font-thin text-gray-600`}>
+                    <p className={`mb-8 text-lg  text-gray-600`}>
                         Let our expert team help you create an unforgettable celebration at
                         Manu Maharani.
                     </p>

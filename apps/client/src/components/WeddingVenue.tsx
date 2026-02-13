@@ -112,7 +112,7 @@ export default function WeddingVenue({ destinations }: { destinations: Destinati
                         )}
                     </div>
                     <div className="p-6 md:p-8 text-center">
-                        <h3 className="tracking-widest uppercase font-thin text-base md:text-lg">
+                        <h3 className="tracking-widest uppercase  text-base md:text-lg">
                             {destinations[index]!.title}
                         </h3>
                         <p

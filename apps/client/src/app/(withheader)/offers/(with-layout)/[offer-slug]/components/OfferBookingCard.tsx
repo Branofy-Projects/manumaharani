@@ -337,7 +337,7 @@ export function OfferBookingCard({
                         </div>
 
                         <Button
-                            className="w-full rounded-lg bg-blue-600 py-6 text-lg font-semibold text-white hover:bg-blue-700"
+                            className="w-full"
                             disabled={status === "submitting"}
                             type="submit"
                         >

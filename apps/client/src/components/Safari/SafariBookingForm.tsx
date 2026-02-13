@@ -69,7 +69,7 @@ export default function SafariBookingForm({ zone }: { zone: string }) {
         <div className="mx-auto max-w-4xl">
           {/* Header */}
           <div className="mb-12 text-center">
-            <h1 className="mb-4 text-3xl font-thin uppercase tracking-[0.08em] md:text-5xl">
+            <h1 className="mb-4 text-3xl  uppercase tracking-[0.08em] md:text-5xl">
               Book Your Safari
             </h1>
             <p className="mx-auto max-w-2xl font-serif text-base text-gray-600 md:text-lg">

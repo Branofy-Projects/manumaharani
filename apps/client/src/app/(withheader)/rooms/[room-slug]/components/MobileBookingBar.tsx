@@ -1,4 +1,7 @@
 import { ExternalLink } from "lucide-react";
+import Link from "next/link";
+
+import { Button } from "@/components/ui/button";
 
 interface MobileBookingBarProps {
     basePrice: string;
@@ -24,15 +27,17 @@ export function MobileBookingBar({
                         </div>
                     )}
                 </div>
-                <a
-                    className="flex shrink-0 items-center gap-2 rounded-lg bg-[#b68833] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#a07628]"
+                <Link
                     href={bookingUrl}
+                    passHref
                     rel="noopener noreferrer"
                     target="_blank"
                 >
-                    Book Now
-                    <ExternalLink className="h-3.5 w-3.5" />
-                </a>
+                    <Button>
+                        Book Now
+                        <ExternalLink className="h-3.5 w-3.5" />
+                    </Button>
+                </Link>
             </div>
         </div>
     );

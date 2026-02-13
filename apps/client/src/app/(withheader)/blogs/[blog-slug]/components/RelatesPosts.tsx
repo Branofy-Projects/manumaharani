@@ -22,7 +22,7 @@ export async function RelatedPosts({
     <section className="border-t border-gray-200 bg-gray-50 py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <h2
-          className={`mb-12 text-center text-3xl font-thin tracking-widest text-gray-900`}
+          className={`mb-12 text-center text-3xl  tracking-widest text-gray-900`}
         >
           Related Articles
         </h2>
