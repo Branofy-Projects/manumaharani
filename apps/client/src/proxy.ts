@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 const allowedOrigins = [
   "http://localhost:3001",
   process.env.NEXT_PUBLIC_ADMIN_URL,
+  process.env.NEXT_PUBLIC_AUTH_URL,
+  process.env.NEXT_PUBLIC_CLIENT_URL,
 ];
 
 const corsOptions = {

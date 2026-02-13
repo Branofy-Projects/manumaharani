@@ -129,7 +129,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const sendPasswordResetEmail = async (email: string) => {
     try {
-      const result = await authClient.requestPasswordReset({ email, redirectTo: `${process.env.NEXT_PUBLIC_ADMIN_URL}/reset-password` });
+      const result = await authClient.requestPasswordReset({ email, redirectTo: `${process.env.NEXT_PUBLIC_AUTH_URL}/reset-password` });
       return result;
     } catch (error) {
       console.error("Password reset error:", error);
