@@ -38,6 +38,7 @@ export async function RelatedPosts({
                   alt={relatedPost.featuredImage?.alt_text || relatedPost.title}
                   className="object-cover object-center transition-transform duration-500 group-hover:scale-110"
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   src={
                     relatedPost.featuredImage?.original_url ||
                     "/path/to/placeholder-image.jpg"

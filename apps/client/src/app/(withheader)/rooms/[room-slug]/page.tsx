@@ -1,29 +1,26 @@
-import { getRoomTypes } from "@repo/actions/room-types.actions";
+import { getActiveRooms } from "@repo/actions/rooms.actions";
 import {
     BedDouble,
-    Check,
-    ChevronDown,
     ChevronRight,
     Maximize,
     Users,
-    X,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
-import { getActiveRoomTypesCache, getRoomTypeBySlugCache, getRoomTypesCache } from "@/lib/cache/rooms.cache";
+import { RenderIcon } from "@/components/render-icon";
+import { getActiveRoomsCache, getRoomBySlugCache } from "@/lib/cache/rooms.cache";
 
-import { RoomEnquiryCard } from "./components/RoomEnquiryCard";
+import { MobileBookingBar } from "./components/MobileBookingBar";
+import { RoomBookingCard } from "./components/RoomBookingCard";
 import { RoomGallery } from "./components/RoomGallery";
 
-type PageProps = {
-    params: Promise<{ "room-slug": string }>;
-};
 
-export async function generateMetadata({ params }: PageProps) {
+export async function generateMetadata({ params }: PageProps<"/rooms/[room-slug]">) {
     const { "room-slug": roomSlug } = await params;
-    const room = await getRoomTypeBySlugCache(roomSlug);
+    const room = await getRoomBySlugCache(roomSlug);
 
     if (!room) {
         return {
@@ -33,43 +30,39 @@ export async function generateMetadata({ params }: PageProps) {
 
     return {
         description: room.description?.slice(0, 160),
-        title: `${room.name} | Manu Maharani Resort & Spa`,
+        title: `${room.title} | Manu Maharani Resort & Spa`,
     };
 }
 
 export async function generateStaticParams() {
-    const { roomTypes } = await getRoomTypes({ status: "active" });
+    const rooms = await getActiveRooms();
 
-    return roomTypes
+    return rooms
         .filter((room) => room.slug)
         .map((room) => ({
             "room-slug": room.slug,
         }));
 }
 
-export default async function RoomDetailPage({ params }: PageProps) {
+export default async function RoomDetailPage({ params }: PageProps<"/rooms/[room-slug]">) {
     const { "room-slug": roomSlug } = await params;
-    const room = await getRoomTypeBySlugCache(roomSlug);
+    const room = await getRoomBySlugCache(roomSlug);
 
     if (!room) {
         notFound();
     }
 
     // Get all gallery images
-    const galleryImages = room.images?.map((img) => img.image.original_url) || [];
-
-    // Separate include/exclude policies
-    const includePolicies = room.policies?.filter((p) => p.policy.kind === "include") || [];
-    const excludePolicies = room.policies?.filter((p) => p.policy.kind === "exclude") || [];
+    const galleryImages = room.images?.map((img: { image: { original_url: string } }) => img.image.original_url) || [];
 
     // Get other rooms for "Other accommodations" section
-    const allRooms = await getActiveRoomTypesCache();
+    const allRooms = await getActiveRoomsCache();
     const otherRooms = allRooms.filter((r) => r.id !== room.id).slice(0, 4);
 
     return (
-        <main className="min-h-screen bg-white">
+        <main className="min-h-screen bg-background pb-20 pt-[72px] md:pt-[88px] lg:pb-0">
             {/* Breadcrumb */}
-            <div className="border-b border-b-gray-200 bg-gray-50">
+            <div className="border-b border-b-gray-200 ">
                 <div className="mx-auto max-w-screen-xl px-4 py-3">
                     <nav className="flex items-center gap-2 text-sm">
                         <Link className="font-serif text-sm text-[#5a5a5a] hover:text-[#2b2b2b] hover:underline" href="/">
@@ -80,13 +73,13 @@ export default async function RoomDetailPage({ params }: PageProps) {
                             Accommodation
                         </Link>
                         <ChevronRight className="h-4 w-4 text-[#5a5a5a]" />
-                        <span className="line-clamp-1 font-serif text-sm font-medium text-[#2b2b2b]">{room.name}</span>
+                        <span className="line-clamp-1 font-serif text-sm font-medium text-[#2b2b2b]">{room.title}</span>
                     </nav>
                 </div>
             </div>
 
             {/* Gallery Section */}
-            <RoomGallery images={galleryImages} title={room.name} />
+            <RoomGallery images={galleryImages} title={room.title} />
 
             {/* Main Content */}
             <div className="mx-auto max-w-screen-xl px-4 py-8">
@@ -96,7 +89,7 @@ export default async function RoomDetailPage({ params }: PageProps) {
                         {/* Title Section */}
                         <div className="mb-6">
                             <h1 className="mb-3 font-thin tracking-widest text-2xl leading-tight text-[#2b2b2b] md:text-4xl lg:text-4xl">
-                                {room.name.toUpperCase()}
+                                {room.title.toUpperCase()}
                             </h1>
 
                             {/* Location */}
@@ -142,9 +135,9 @@ export default async function RoomDetailPage({ params }: PageProps) {
                                     Amenities
                                 </h2>
                                 <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-                                    {room.amenities.map((roomAmenity) => (
+                                    {room.amenities.map((roomAmenity: { amenity: { description?: null | string; icon: string; label: string }; id: number }) => (
                                         <div className="flex items-center gap-3 rounded-lg border border-gray-100 bg-gray-50 p-3" key={roomAmenity.id}>
-                                            <span className="text-xl">{roomAmenity.amenity.icon}</span>
+                                            <RenderIcon className="text-[#5a5a5a]" name={roomAmenity.amenity.icon} size={20} />
                                             <div>
                                                 <span className="font-serif text-sm font-medium text-[#2b2b2b]">
                                                     {roomAmenity.amenity.label}
@@ -161,89 +154,58 @@ export default async function RoomDetailPage({ params }: PageProps) {
                             </section>
                         )}
 
-                        {/* Policies Section */}
-                        {(includePolicies.length > 0 || excludePolicies.length > 0) && (
+                        {/* Policies Section - Check-in/out, children, extra beds */}
+                        {(room.check_in_time || room.check_out_time || room.children_policy || room.extra_beds) && (
                             <section className="mb-10 border-t pt-8" id="policies">
                                 <h2 className="mb-6 font-thin tracking-widest text-xl uppercase text-[#2b2b2b] md:text-2xl">
                                     Room policies
                                 </h2>
-                                <div className="grid gap-8 md:grid-cols-2">
-                                    {includePolicies.length > 0 && (
-                                        <div>
-                                            <ul className="space-y-3">
-                                                {includePolicies.map((roomPolicy) => (
-                                                    <li className="flex items-start gap-3" key={roomPolicy.id}>
-                                                        <div className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-green-100">
-                                                            <Check className="h-3 w-3 text-green-600" />
-                                                        </div>
-                                                        <div>
-                                                            <span className="font-serif text-base text-[#2b2b2b] md:text-lg">{roomPolicy.policy.label}</span>
-                                                            {roomPolicy.policy.description && (
-                                                                <p className="font-serif text-sm text-[#5a5a5a]">{roomPolicy.policy.description}</p>
-                                                            )}
-                                                        </div>
-                                                    </li>
-                                                ))}
-                                            </ul>
+                                <div className="space-y-4">
+                                    {(room.check_in_time || room.check_out_time) && (
+                                        <div className="flex flex-wrap gap-6">
+                                            {room.check_in_time && (
+                                                <div>
+                                                    <p className="text-xs font-semibold uppercase tracking-wider text-[#5a5a5a]">Check-in</p>
+                                                    <p className="font-serif text-base text-[#2b2b2b]">{room.check_in_time}</p>
+                                                </div>
+                                            )}
+                                            {room.check_out_time && (
+                                                <div>
+                                                    <p className="text-xs font-semibold uppercase tracking-wider text-[#5a5a5a]">Check-out</p>
+                                                    <p className="font-serif text-base text-[#2b2b2b]">{room.check_out_time}</p>
+                                                </div>
+                                            )}
                                         </div>
                                     )}
-                                    {excludePolicies.length > 0 && (
+                                    {room.children_policy && (
                                         <div>
-                                            <ul className="space-y-3">
-                                                {excludePolicies.map((roomPolicy) => (
-                                                    <li className="flex items-start gap-3" key={roomPolicy.id}>
-                                                        <div className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-red-100">
-                                                            <X className="h-3 w-3 text-red-600" />
-                                                        </div>
-                                                        <div>
-                                                            <span className="font-serif text-base text-[#2b2b2b] md:text-lg">{roomPolicy.policy.label}</span>
-                                                            {roomPolicy.policy.description && (
-                                                                <p className="font-serif text-sm text-[#5a5a5a]">{roomPolicy.policy.description}</p>
-                                                            )}
-                                                        </div>
-                                                    </li>
-                                                ))}
-                                            </ul>
+                                            <p className="text-xs font-semibold uppercase tracking-wider text-[#5a5a5a]">Children policy</p>
+                                            <p className="font-serif text-sm text-[#2b2b2b] md:text-base">{room.children_policy}</p>
                                         </div>
                                     )}
-                                </div>
-                            </section>
-                        )}
-
-                        {/* FAQs Section */}
-                        {room.faqs && room.faqs.length > 0 && (
-                            <section className="mb-10 border-t pt-8" id="faqs">
-                                <h2 className="mb-6 font-thin tracking-widest text-xl uppercase text-[#2b2b2b] md:text-2xl">
-                                    Frequently asked questions
-                                </h2>
-                                <div className="divide-y divide-gray-200 rounded-lg border border-gray-200">
-                                    {room.faqs.map((roomFaq) => (
-                                        <details className="group" key={roomFaq.id}>
-                                            <summary className="flex cursor-pointer items-center justify-between p-4 hover:bg-gray-50">
-                                                <span className="pr-4 font-serif font-bold text-black">{roomFaq.faq.question}</span>
-                                                <ChevronDown className="h-5 w-5 flex-shrink-0 text-[#5a5a5a] transition-transform group-open:rotate-180" />
-                                            </summary>
-                                            <div className="px-4 pb-4">
-                                                <p className="font-serif text-sm text-[#5a5a5a] md:text-base">{roomFaq.faq.answer}</p>
-                                            </div>
-                                        </details>
-                                    ))}
+                                    {room.extra_beds && (
+                                        <div>
+                                            <p className="text-xs font-semibold uppercase tracking-wider text-[#5a5a5a]">Extra beds</p>
+                                            <p className="font-serif text-sm text-[#2b2b2b] md:text-base">{room.extra_beds}</p>
+                                        </div>
+                                    )}
                                 </div>
                             </section>
                         )}
                     </div>
 
-                    {/* Right Column - Enquiry Card */}
-                    <div className="lg:col-span-1">
-                        <RoomEnquiryCard
-                            basePrice={room.base_price}
-                            bedType={room.bed_type}
-                            maxOccupancy={room.max_occupancy}
-                            numberOfBeds={room.number_of_beds}
-                            peakSeasonPrice={room.peak_season_price}
-                            sizeSqft={room.size_sqft}
-                            weekendPrice={room.weekend_price}
-                        />
+                    {/* Right Column - Booking Card (Desktop Only) */}
+                    <div className="hidden lg:col-span-1 lg:block">
+                        <Suspense>
+                            <RoomBookingCard
+                                basePrice={room.base_price}
+                                bedType={room.bed_type}
+                                maxOccupancy={room.max_occupancy}
+                                numberOfBeds={room.number_of_beds}
+                                roomId={room.id}
+                                sizeSqft={room.size_sqft}
+                            />
+                        </Suspense>
                     </div>
                 </div>
 
@@ -258,7 +220,9 @@ export default async function RoomDetailPage({ params }: PageProps) {
                         </p>
                         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
                             {otherRooms.map((otherRoom) => {
-                                const firstImage = otherRoom.images?.[0]?.image?.original_url;
+                                const featuredImage = otherRoom.image?.original_url;
+                                const firstGalleryImage = otherRoom.images?.[0]?.image?.original_url;
+                                const displayImage = featuredImage || firstGalleryImage;
                                 return (
                                     <Link
                                         className="group block"
@@ -266,12 +230,13 @@ export default async function RoomDetailPage({ params }: PageProps) {
                                         key={otherRoom.id}
                                     >
                                         <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
-                                            {firstImage ? (
+                                            {displayImage ? (
                                                 <Image
-                                                    alt={otherRoom.name}
+                                                    alt={otherRoom.title}
                                                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                                                     fill
-                                                    src={firstImage}
+                                                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                                                    src={displayImage}
                                                 />
                                             ) : (
                                                 <div className="flex h-full w-full items-center justify-center bg-gray-100">
@@ -286,7 +251,7 @@ export default async function RoomDetailPage({ params }: PageProps) {
                                         </div>
                                         <div className="mt-3">
                                             <h3 className="font-serif font-medium text-[#2b2b2b] line-clamp-2 group-hover:text-[#b68833] md:text-lg">
-                                                {otherRoom.name}
+                                                {otherRoom.title}
                                             </h3>
                                             <div className="mt-1 flex items-center gap-3 text-sm text-[#5a5a5a]">
                                                 <span>Up to {otherRoom.max_occupancy} guests</span>
@@ -300,6 +265,14 @@ export default async function RoomDetailPage({ params }: PageProps) {
                     </section>
                 )}
             </div>
+
+            {/* Mobile Booking Bar */}
+            <Suspense>
+                <MobileBookingBar
+                    basePrice={room.base_price}
+                    roomId={room.id}
+                />
+            </Suspense>
         </main>
     );
 }

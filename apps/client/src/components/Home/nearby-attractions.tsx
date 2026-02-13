@@ -97,7 +97,8 @@ export default function NearbyAttractions() {
                     alt={attraction.title}
                     className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
                     fill
-                    src={attraction.image?.original_url || "/placeholder.jpg"}
+                    sizes="50vw"
+                    src={attraction.image?.large_url || attraction.image?.original_url || "/placeholder.jpg"}
                   />
                   <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/80 to-transparent" />
                   <div className="relative z-20 flex flex-col gap-2 p-4">
@@ -109,6 +110,41 @@ export default function NearbyAttractions() {
                         {attraction.subtitle}
                       </p>
                     )}
+                    {(attraction.open_time || attraction.close_time) && (
+                      <p className="text-xs text-white/90">
+                        {[attraction.open_time, attraction.close_time].filter(Boolean).join(" – ")}
+                      </p>
+                    )}
+                    {attraction.distance && (
+                      <p className="text-xs text-white/80">{attraction.distance}</p>
+                    )}
+                    {attraction.faq && (() => {
+                      try {
+                        const faqs = JSON.parse(attraction.faq) as Array<{ answer?: string; question?: string; }>;
+                        if (Array.isArray(faqs) && faqs.length > 0) {
+                          return (
+                            <div className="mt-1 space-y-1">
+                              {faqs.slice(0, 2).map((item, i) => (
+                                <div className="text-xs text-white/80" key={i}>
+                                  <span className="font-medium text-white/90">{item.question}</span>
+                                  {item.answer && <span className="block text-white/70">{item.answer}</span>}
+                                </div>
+                              ))}
+                              {faqs.length > 2 && (
+                                <p className="text-xs text-white/60">+{faqs.length - 2} more</p>
+                              )}
+                            </div>
+                          );
+                        }
+                      } catch {
+                        /* fallback to plain text */
+                      }
+                      return (
+                        <p className="mt-1 text-xs text-white/70 line-clamp-2 whitespace-pre-line">
+                          {attraction.faq}
+                        </p>
+                      );
+                    })()}
                   </div>
                 </div>
               </div>
@@ -128,7 +164,8 @@ export default function NearbyAttractions() {
               alt={attraction.title}
               className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
               fill
-              src={attraction.image?.original_url || "/placeholder.jpg"}
+              sizes="(max-width: 640px) 100vw, 50vw"
+              src={attraction.image?.large_url || attraction.image?.original_url || "/placeholder.jpg"}
             />
             <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/80 to-transparent" />
             <div className="relative z-20 flex flex-col gap-2 p-3">
@@ -140,6 +177,41 @@ export default function NearbyAttractions() {
                   {attraction.subtitle}
                 </p>
               )}
+              {(attraction.open_time || attraction.close_time) && (
+                <p className="text-xs text-white/90">
+                  {[attraction.open_time, attraction.close_time].filter(Boolean).join(" – ")}
+                </p>
+              )}
+              {attraction.distance && (
+                <p className="text-xs text-white/80">{attraction.distance}</p>
+              )}
+              {attraction.faq && (() => {
+                try {
+                  const faqs = JSON.parse(attraction.faq) as Array<{ answer?: string; question?: string; }>;
+                  if (Array.isArray(faqs) && faqs.length > 0) {
+                    return (
+                      <div className="mt-1 space-y-1">
+                        {faqs.slice(0, 2).map((item, i) => (
+                          <div className="text-xs text-white/80" key={i}>
+                            <span className="font-medium text-white/90">{item.question}</span>
+                            {item.answer && <span className="block text-white/70">{item.answer}</span>}
+                          </div>
+                        ))}
+                        {faqs.length > 2 && (
+                          <p className="text-xs text-white/60">+{faqs.length - 2} more</p>
+                        )}
+                      </div>
+                    );
+                  }
+                } catch {
+                  /* fallback to plain text */
+                }
+                return (
+                  <p className="mt-1 text-xs text-white/70 line-clamp-2 whitespace-pre-line">
+                    {attraction.faq}
+                  </p>
+                );
+              })()}
               {attraction.link && attraction.link !== "#" && (
                 <a
                   className="pb-1 text-xs font-semibold uppercase tracking-widest text-white transition-all hover:text-white/70"

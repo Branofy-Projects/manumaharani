@@ -152,6 +152,7 @@ export default function SafariZones() {
                   alt={zone.name}
                   className="object-cover transition-transform duration-500 group-hover:scale-110"
                   fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   src={zone.image}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />

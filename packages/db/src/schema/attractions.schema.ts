@@ -19,18 +19,22 @@ export const Attractions = pgTable(
     id: uuid("id").primaryKey().defaultRandom(),
 
     // Content
-    title: varchar("title", { length: 255 }).notNull(),
-    subtitle: text("subtitle").notNull(),
     link: text("link").default("#"),
+    subtitle: text("subtitle").notNull(),
+    title: varchar("title", { length: 255 }).notNull(),
 
     // Media
     image: integer("image").references(() => Images.id, { onDelete: "set null" }),
 
     // Display
     active: boolean("active").notNull().default(true),
-    order: integer("order").notNull().default(0),
     distance: varchar("distance", { length: 100 }),
+    order: integer("order").notNull().default(0),
 
+    close_time: varchar("close_time", { length: 20 }),
+    faq: text("faq"),
+    open_time: varchar("open_time", { length: 20 }),
+    
     // Timestamps
     created_at: timestamp("created_at", { precision: 0 }).defaultNow(),
     updated_at: timestamp("updated_at", { precision: 0 })
@@ -45,8 +49,8 @@ export const Attractions = pgTable(
 
 // Zod Schemas
 export const insertAttractionSchema = createInsertSchema(Attractions, {
-  title: (title) => title.min(1, "Attraction title is required").max(255),
   subtitle: (subtitle) => subtitle.min(1, "Subtitle is required"),
+  title: (title) => title.min(1, "Attraction title is required").max(255),
 });
 export const selectAttractionSchema = createSelectSchema(Attractions);
 

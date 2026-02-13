@@ -70,6 +70,7 @@ export default function AboutUsPage() {
           className="object-cover"
           fill
           priority
+          sizes="100vw"
           src="/about-us/photo-1566073771259-6a8506099945.webp"
         />
         <div className="absolute inset-0 bg-black/40" />
@@ -94,6 +95,7 @@ export default function AboutUsPage() {
                 alt="Resort Exterior"
                 className="object-cover transition-transform duration-700 hover:scale-105"
                 fill
+                sizes="(max-width: 768px) 100vw, 50vw"
                 src="/about-us/photo-1582719508461-905c673771fd.webp"
               />
             </div>
@@ -102,6 +104,7 @@ export default function AboutUsPage() {
                 alt="Resort Interior"
                 className="object-cover transition-transform duration-700 hover:scale-105"
                 fill
+                sizes="(max-width: 768px) 100vw, 50vw"
                 src="/about-us/photo-1590490360182-c33d57733427.webp"
               />
             </div>
@@ -175,6 +178,7 @@ export default function AboutUsPage() {
             alt="Resort Pool"
             className="object-cover"
             fill
+            sizes="100vw"
             src="/about-us/photo-467463764734-c945839849384.webp"
           />
           <div className="absolute inset-0 bg-black/60" />

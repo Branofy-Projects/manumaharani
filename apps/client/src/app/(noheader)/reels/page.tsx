@@ -2,9 +2,9 @@ import { redirect } from "next/navigation";
 
 import { getActiveReelsCache } from "@/lib/cache/reels.cache";
 
-import ReelsPage from "./reel-page";
-
 import type { TReelBase } from "./reel-page";
+
+import ReelsPage from "./reel-page";
 
 export default async function _ReelsPage() {
   const dbReels = await getActiveReelsCache();

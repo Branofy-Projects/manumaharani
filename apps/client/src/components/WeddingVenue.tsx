@@ -76,6 +76,7 @@ export default function WeddingVenue({ destinations }: { destinations: Destinati
                                             alt={destinations[outIndex]!.title}
                                             className="object-cover"
                                             fill
+                                            sizes="100vw"
                                             src={destinations[outIndex]!.image}
                                         />
                                     </div>
@@ -92,6 +93,7 @@ export default function WeddingVenue({ destinations }: { destinations: Destinati
                                             alt={destinations[index]!.title}
                                             className="object-cover"
                                             fill
+                                            sizes="100vw"
                                             src={destinations[index]!.image}
                                         />
                                     </div>
@@ -103,6 +105,7 @@ export default function WeddingVenue({ destinations }: { destinations: Destinati
                                     alt={destinations[index]!.title}
                                     className="object-cover"
                                     fill
+                                    sizes="100vw"
                                     src={destinations[index]!.image}
                                 />
                             </div>

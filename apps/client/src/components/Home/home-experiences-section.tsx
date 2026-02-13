@@ -45,6 +45,7 @@ export const HomeExperiencesSection = async () => {
                   alt={item.alt}
                   className="object-cover object-center"
                   fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   src={item.image}
                 />
               </div>

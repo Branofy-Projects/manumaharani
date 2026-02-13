@@ -24,6 +24,7 @@ export default function OffersLayout({ children }: { children: React.ReactNode }
                             alt="Membership Benefits"
                             className="object-cover object-center"
                             fill
+                            sizes="100vw"
                             src="https://thelibrary.mgmresorts.com/transform/2sXDQHygCqH31gRb/TCO159308211.jpg"
                         />
                     </div>

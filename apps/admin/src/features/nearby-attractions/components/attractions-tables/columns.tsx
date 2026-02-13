@@ -58,6 +58,21 @@ export const columns: ColumnDef<TAttraction>[] = [
     header: "Subtitle",
   },
   {
+    accessorKey: "distance",
+    cell: ({ row }) => (row.original.distance ? String(row.original.distance) : "—"),
+    header: "Distance",
+  },
+  {
+    accessorKey: "open_time",
+    cell: ({ row }) => (row.original.open_time ? String(row.original.open_time) : "—"),
+    header: "Open",
+  },
+  {
+    accessorKey: "close_time",
+    cell: ({ row }) => (row.original.close_time ? String(row.original.close_time) : "—"),
+    header: "Close",
+  },
+  {
     accessorKey: "order",
     header: "Order",
   },

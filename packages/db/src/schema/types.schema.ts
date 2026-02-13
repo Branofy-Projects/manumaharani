@@ -43,7 +43,11 @@ import type {
   TRoomTypeImageBase,
   TRoomTypePolicyBase,
 } from "./room-types.schema";
-import type { TRoomBase } from "./rooms.schema";
+import type {
+  TRoomAmenityBase,
+  TRoomBase,
+  TRoomImageBase,
+} from "./rooms.schema";
 import type { TTestimonialBase } from "./testimonials.schema";
 
 // Booking Types with Relations
@@ -123,10 +127,20 @@ export type TOfferWithDetails = {
 
 export type TPolicy = TPolicyBase;
 
-// Room Types with Relations
 export type TRoom = {
-  roomType: TRoomType;
+  amenities: TRoomAmenity[];
+  image: null | TImage;
+  images: TRoomImage[];
 } & TRoomBase;
+
+export type TRoomAmenity = {
+  amenity: TAmenityBase;
+} & TRoomAmenityBase;
+
+// Room Types with Relations
+export type TRoomImage = {
+  image: TImage;
+} & TRoomImageBase;
 
 export type TRoomType = {
   amenities: TRoomTypeAmenity[];

@@ -22,6 +22,7 @@ export default function EventsLayout({ children }: { children: React.ReactNode }
                             alt="Events at Manu Maharani"
                             className="object-cover object-center"
                             fill
+                            sizes="100vw"
                             src="https://images.unsplash.com/photo-1514525253440-b393452e3383?auto=format&fit=crop&w=1200&q=80"
                         />
                     </div>

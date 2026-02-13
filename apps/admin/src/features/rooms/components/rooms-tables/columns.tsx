@@ -53,22 +53,22 @@ export const columns: ColumnDef<TRoom>[] = [
       variant: "text",
     },
   },
-  {
-    accessorKey: "roomType",
-    cell: ({ row }) => {
-      const roomType = row.original.roomType;
-      return (
-        <div className="flex flex-col">
-          <div className="font-medium">{roomType?.name || "N/A"}</div>
-          <div className="text-sm text-muted-foreground">
-            Max {roomType?.max_occupancy || 0} guests
-          </div>
-        </div>
-      );
-    },
-    header: "Room Type",
-    id: "room_type",
-  },
+  // {
+  //   accessorKey: "roomType",
+  //   cell: ({ row }) => {
+  //     const roomType = row.original.;
+  //     return (
+  //       <div className="flex flex-col">
+  //         <div className="font-medium">{roomType?.name || "N/A"}</div>
+  //         <div className="text-sm text-muted-foreground">
+  //           Max {roomType?.max_occupancy || 0} guests
+  //         </div>
+  //       </div>
+  //     );
+  //   },
+  //   header: "Room Type",
+  //   id: "room_type",
+  // },
   {
     accessorKey: "status",
     cell: ({ cell }) => {

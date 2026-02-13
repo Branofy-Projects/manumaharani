@@ -1,4 +1,4 @@
-import { getRoomTypes } from "@repo/actions";
+import { getRoomTypes } from "@repo/actions/room-types.actions";
 import { redirect } from "next/navigation";
 
 import { getCurrentUser } from "@/lib/auth-utils";

@@ -61,7 +61,6 @@ export async function safeDbQuery<T>(
   try {
     return await queryFn();
   } catch (error: any) {
-    console.log("error",error);
     
     const { isTableMissing, shouldReturn } = handleDatabaseError(
       error,

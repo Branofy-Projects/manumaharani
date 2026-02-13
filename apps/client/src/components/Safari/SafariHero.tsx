@@ -8,6 +8,7 @@ export default function SafariHero() {
         className="object-cover object-center"
         fill
         priority
+        sizes="100vw"
         src="https://images.unsplash.com/photo-1614027164847-1b28cfe1df60?q=80&w=2000&auto=format&fit=crop"
       />
       <div className="absolute inset-0 bg-black/50" />

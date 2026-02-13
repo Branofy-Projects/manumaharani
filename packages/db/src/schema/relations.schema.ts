@@ -13,10 +13,11 @@ import { Images } from './images.schema';
 import { OfferBookings } from './offer-bookings.schema';
 import { OfferFaqs, OfferHighlights, OfferImages, OfferItinerary, Offers } from './offers.schema';
 import { Policies } from './policies.schema';
+import { RoomBookings } from './room-bookings.schema';
 import {
     RoomTypeAmenities, RoomTypeFaqs, RoomTypeImages, RoomTypePolicies, RoomTypes
 } from './room-types.schema';
-import { RoomImages, Rooms } from './rooms.schema';
+import { RoomAmenities, RoomImages, Rooms } from './rooms.schema';
 import { Testimonials } from './testimonials.schema';
 
 
@@ -80,11 +81,23 @@ export const roomTypeFaqsRelations = relations(RoomTypeFaqs, ({ one }) => ({
 }));
 
 export const roomRelations = relations(Rooms, ({ many, one }) => ({
-  bookings: many(Bookings),
+  amenities: many(RoomAmenities),
+  bookings: many(RoomBookings),
+  image: one(Images, {
+    fields: [Rooms.image],
+    references: [Images.id],
+  }),
   images: many(RoomImages),
-  roomType: one(RoomTypes, {
-    fields: [Rooms.room_type_id],
-    references: [RoomTypes.id],
+}));
+
+export const roomAmenitiesRelations = relations(RoomAmenities, ({ one }) => ({
+  amenity: one(Amenities, {
+    fields: [RoomAmenities.amenity_id],
+    references: [Amenities.id],
+  }),
+  room: one(Rooms, {
+    fields: [RoomAmenities.room_id],
+    references: [Rooms.id],
   }),
 }));
 
@@ -293,5 +306,12 @@ export const offerBookingRelations = relations(OfferBookings, ({ one }) => ({
   offer: one(Offers, {
     fields: [OfferBookings.offer_id],
     references: [Offers.id],
+  }),
+}));
+
+export const roomBookingRelations = relations(RoomBookings, ({ one }) => ({
+  room: one(Rooms, {
+    fields: [RoomBookings.room_id],
+    references: [Rooms.id],
   }),
 }));

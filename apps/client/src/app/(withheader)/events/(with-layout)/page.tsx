@@ -26,6 +26,7 @@ export default async function EventsPage() {
                 alt={event.image?.alt_text || event.name}
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
                 fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 src={event.image?.original_url}
               />
 

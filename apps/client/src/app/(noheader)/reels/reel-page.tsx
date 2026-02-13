@@ -50,7 +50,7 @@ export default function ReelsPage({ reels }: { reels: TReelBase[] }) {
   };
 
   return (
-    <div className="bg-black h-[100dvh] max-w-md mx-auto relative">
+    <div className="bg-black h-dvh max-w-md mx-auto relative">
       {/* Reels Container */}
       <div
         className="h-full overflow-y-scroll no-scrollbar snap-y snap-mandatory"
@@ -58,7 +58,7 @@ export default function ReelsPage({ reels }: { reels: TReelBase[] }) {
         style={{ scrollBehavior: "smooth" }}
       >
         {reels.map((reel, index) => (
-          <div className="snap-start h-[100dvh]" key={reel.id}>
+          <div className="snap-start h-dvh" key={reel.id}>
             <ReelItem
               isActive={index === currentIndex}
               isMuted={globalIsMuted}
@@ -108,7 +108,7 @@ function ReelItem({ isActive, isMuted, onToggleMute, reel }: ReelItemProps) {
   };
 
   return (
-    <div className="relative w-full h-[100dvh] bg-black">
+    <div className="relative w-full h-dvh bg-black">
       {/* Video */}
       <video
         className="w-full h-full object-cover"

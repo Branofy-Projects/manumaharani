@@ -1313,6 +1313,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@lucide/lab@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "@lucide/lab@npm:0.1.2"
+  checksum: 10c0/daf4d1e6e6c9ba3ed3d4bb44153bf5f2227c200f65e95c1f3421f2b3d945bc8bda62d867d0b0cea36d1f2600bcbf43d0c0ddf0739556947f8554432ec2402ca2
+  languageName: node
+  linkType: hard
+
 "@napi-rs/wasm-runtime@npm:^1.1.0":
   version: 1.1.1
   resolution: "@napi-rs/wasm-runtime@npm:1.1.1"
@@ -3609,6 +3616,7 @@ __metadata:
     "@lexical/table": "npm:^0.38.2"
     "@lexical/text": "npm:^0.38.2"
     "@lexical/utils": "npm:^0.38.2"
+    "@lucide/lab": "npm:^0.1.2"
     "@radix-ui/react-accordion": "npm:^1.2.12"
     "@radix-ui/react-alert-dialog": "npm:^1.1.15"
     "@radix-ui/react-avatar": "npm:^1.1.10"

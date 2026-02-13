@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
+import { IconSelectButton } from '@/components/icon-select';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -110,7 +111,10 @@ const AmenityForm = (props: TAmenityFormProps) => {
                 <FormItem>
                   <FormLabel>Icon</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter icon name or class" {...field} />
+                    <IconSelectButton
+                      onIconSelect={field.onChange}
+                      selectedIcon={field.value || undefined}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

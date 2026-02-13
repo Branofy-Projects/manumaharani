@@ -39,6 +39,7 @@ export function PropertyActivities({ activities }: PropertyActivitiesProps) {
                     alt={activity.title}
                     className="object-cover"
                     fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
                     src={activity.image}
                   />
                 </div>

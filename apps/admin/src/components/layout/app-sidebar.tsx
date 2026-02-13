@@ -1,4 +1,9 @@
 "use client";
+import {
+  IconBell, IconChevronRight, IconChevronsDown, IconCreditCard, IconLogout, IconPhotoUp,
+  IconUserCircle
+} from '@tabler/icons-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import * as React from 'react';
@@ -6,27 +11,23 @@ import * as React from 'react';
 import { SignOutButton } from '@/components/auth/sign-out-button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
-    DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel,
-    DropdownMenuSeparator, DropdownMenuTrigger
+  DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel,
+  DropdownMenuSeparator, DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import {
-    Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupLabel, SidebarHeader,
-    SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton,
-    SidebarMenuSubItem, SidebarRail
+  Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupLabel, SidebarHeader,
+  SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton,
+  SidebarMenuSubItem, SidebarRail
 } from '@/components/ui/sidebar';
 import { UserAvatarProfile } from '@/components/user-avatar-profile';
 import { navItems } from '@/constants/data';
 import { useAuth } from '@/hooks/use-auth';
 import { useMediaQuery } from '@/hooks/use-media-query';
-import {
-    IconBell, IconChevronRight, IconChevronsDown, IconCreditCard, IconLogout, IconPhotoUp,
-    IconUserCircle
-} from '@tabler/icons-react';
+
+import type { Tenant } from "../org-switcher";
 
 import { Icons } from '../icons';
 import { OrgSwitcher } from '../org-switcher';
-
-import type { Tenant } from "../org-switcher";
 
 export const company = {
   logo: IconPhotoUp,
@@ -77,11 +78,19 @@ export default function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader suppressHydrationWarning>
-        <OrgSwitcher
-          defaultTenant={activeTenant!}
-          onTenantSwitch={handleSwitchTenant}
-          tenants={tenants}
-        />
+        <Link
+          className="flex items-center justify-center px-2 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md min-h-[3rem]"
+          href="/dashboard"
+        >
+          <Image
+            alt="Manu Maharani"
+            className="h-10 w-auto max-w-full object-contain group-data-[collapsible=icon]:h-8"
+            height={112}
+            priority
+            src="/logo.webp"
+            width={160}
+          />
+        </Link>
       </SidebarHeader>
       <SidebarContent className="overflow-x-hidden" suppressHydrationWarning>
         <SidebarGroup>

@@ -64,8 +64,13 @@ import {
   RoomTypes,
   roomTypeStatusEnum,
 } from "./schema/room-types.schema";
+import {
+  RoomAmenities,
+  RoomImages,
+  Rooms,
+  roomStatusEnum,
+} from "./schema/rooms.schema";
 // Rooms Schema
-import { RoomImages, Rooms, roomStatusEnum } from "./schema/rooms.schema";
 // Testimonials Schema
 import {
   Testimonials,
@@ -85,6 +90,7 @@ import { ContactQueries, contactQueryStatusEnum } from "./schema/contact-queries
 import { Experiences } from "./schema/experiences.schema";
 import { OfferBookings ,offerBookingStatusEnum} from "./schema/offer-bookings.schema";
 import { Reels, reelStatusEnum } from "./schema/reels.schema";
+import { RoomBookings } from "./schema/room-bookings.schema";
 
 export type { TEventBooking, TNewEventBooking } from "./schema/event-bookings.schema";
 export type { TContactQuery, TNewContactQuery } from "./schema/contact-queries.schema";
@@ -101,7 +107,8 @@ export type {
   TNewEventItinerary,
 } from "./schema/events.schema";
 export type { TExperience, TNewExperience } from "./schema/experiences.schema";
-export type { TReel, TNewReel } from "./schema/reels.schema";
+export type { TNewReel, TReel } from "./schema/reels.schema";
+export type { TNewRoomBooking, TRoomBooking } from "./schema/room-bookings.schema";
 // Core Types
 export type {
   TAmenityBase,
@@ -219,6 +226,8 @@ export {
   policyKindEnum,
   Reels,
   reelStatusEnum,
+  RoomAmenities,
+  RoomBookings,
   RoomImages,
   Rooms,
   roomStatusEnum,
@@ -268,6 +277,8 @@ export const schemaWithoutRelations = {
   PasswordResetTokens,
   Policies,
   Reels,
+  RoomAmenities,
+  RoomBookings,
   RoomImages,
   Rooms,
   RoomTypeAmenities,

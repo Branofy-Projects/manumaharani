@@ -124,6 +124,7 @@ export function RestaurantCarousel() {
                     alt={restaurant.name}
                     className="object-cover transition-transform duration-500 hover:scale-105"
                     fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
                     src={restaurant.image}
                   />
                 </div>

@@ -30,12 +30,6 @@ export default async function BookingsListingPage() {
     ...(paymentStatus && { payment_status: paymentStatus }),
   };
 
-  const user = await getCurrentUser();
-
-  if (!user) {
-    return redirect("/sign-in");
-  }
-
   const { bookings, total } = await getBookings(filters);
 
   return <BookingsTable columns={columns} data={bookings} totalItems={total} />;

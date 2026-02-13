@@ -1,7 +1,7 @@
 import { getAllBlogsSlugs } from '@repo/actions/blogs.actions';
 import { getAllEventsSlugs } from '@repo/actions/events.actions';
 import { getAllOffersSlugs } from '@repo/actions/offers.actions';
-import { getAllRoomTypesSlug } from '@repo/actions/room-types.actions';
+import { getAllRoomSlugs } from '@repo/actions/rooms.actions';
 
 import type { MetadataRoute } from 'next';
 
@@ -62,8 +62,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Dynamic routes - Rooms
   let roomRoutes: MetadataRoute.Sitemap = [];
   try {
-  const roomTypes= await getAllRoomTypesSlug({ status: 'active' });
-    roomRoutes = roomTypes
+  const rooms = await getAllRoomSlugs();
+    roomRoutes = rooms
       .filter((room) => room.slug)
       .map((room) => ({
         changeFrequency: 'weekly' as const,

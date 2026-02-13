@@ -176,6 +176,13 @@
       "when": 1770845035485,
       "tag": "0024_giant_power_man",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1770930445392,
+      "tag": "0025_many_texas_twister",
+      "breakpoints": true
     }
   ]
 }

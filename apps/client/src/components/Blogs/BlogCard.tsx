@@ -16,6 +16,7 @@ export function BlogCard({ post }: { post: TBlog }) {
                     alt={post.featuredImage?.alt_text || post.title}
                     className="object-cover object-center transition-transform duration-500 group-hover:scale-110"
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     src={post.featuredImage?.small_url}
                 />
                 <div className="absolute left-4 top-4 rounded-full bg-white px-4 py-1 text-xs font-semibold uppercase tracking-wide text-gray-900">

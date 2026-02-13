@@ -64,7 +64,7 @@ export function RoomGallery({ images, title }: RoomGalleryProps) {
 
     if (images.length === 0) {
         return (
-            <div className="bg-gray-50">
+            <div className="">
                 <div className="mx-auto max-w-screen-xl px-4 py-6">
                     <div className="flex aspect-[16/9] w-full items-center justify-center rounded-2xl bg-gray-100">
                         <span className="text-sm text-gray-500">No images available</span>
@@ -76,7 +76,7 @@ export function RoomGallery({ images, title }: RoomGalleryProps) {
 
     return (
         <>
-            <div className="bg-gray-50">
+            <div className="x">
                 <div className="mx-auto max-w-screen-xl px-4 py-4">
                     {images.length === 1 ? (
                         <div
@@ -88,6 +88,7 @@ export function RoomGallery({ images, title }: RoomGalleryProps) {
                                 className="object-cover transition-transform hover:scale-[1.02]"
                                 fill
                                 priority
+                                sizes="100vw"
                                 src={images[0]}
                             />
                         </div>
@@ -104,6 +105,7 @@ export function RoomGallery({ images, title }: RoomGalleryProps) {
                                         className="object-cover transition-transform hover:scale-[1.02]"
                                         fill
                                         priority={idx === 0}
+                                        sizes="50vw"
                                         src={img}
                                     />
                                 </div>
@@ -118,6 +120,7 @@ export function RoomGallery({ images, title }: RoomGalleryProps) {
                                     className="object-cover transition-transform hover:scale-[1.02]"
                                     fill
                                     priority
+                                    sizes="100vw"
                                     src={images[0]}
                                 />
                                 {images.length > 1 && (
@@ -141,6 +144,7 @@ export function RoomGallery({ images, title }: RoomGalleryProps) {
                                         className="object-cover transition-transform hover:scale-[1.02]"
                                         fill
                                         priority
+                                        sizes="66vw"
                                         src={images[0]}
                                     />
                                 </div>
@@ -152,6 +156,7 @@ export function RoomGallery({ images, title }: RoomGalleryProps) {
                                         alt={`${title} - Image 2`}
                                         className="object-cover transition-transform hover:scale-[1.02]"
                                         fill
+                                        sizes="33vw"
                                         src={images[1]}
                                     />
                                 </div>
@@ -163,6 +168,7 @@ export function RoomGallery({ images, title }: RoomGalleryProps) {
                                         alt={`${title} - Image 3`}
                                         className="object-cover transition-transform hover:scale-[1.02]"
                                         fill
+                                        sizes="33vw"
                                         src={images[2]}
                                     />
                                     {images.length > 3 && (
@@ -189,6 +195,7 @@ export function RoomGallery({ images, title }: RoomGalleryProps) {
                                         className="object-cover transition-transform hover:scale-[1.02]"
                                         fill
                                         priority
+                                        sizes="50vw"
                                         src={images[0]}
                                     />
                                 </div>
@@ -202,6 +209,7 @@ export function RoomGallery({ images, title }: RoomGalleryProps) {
                                             alt={`${title} - Image ${idx + 2}`}
                                             className="object-cover transition-transform hover:scale-[1.02]"
                                             fill
+                                            sizes="25vw"
                                             src={img}
                                         />
                                     </div>
@@ -216,6 +224,7 @@ export function RoomGallery({ images, title }: RoomGalleryProps) {
                                             alt={`${title} - Image ${idx + 4}`}
                                             className="object-cover transition-transform hover:scale-[1.02]"
                                             fill
+                                            sizes="25vw"
                                             src={img}
                                         />
                                         {idx === 1 && images.length > 5 && (
@@ -268,6 +277,7 @@ export function RoomGallery({ images, title }: RoomGalleryProps) {
                             className="object-contain"
                             fill
                             priority
+                            sizes="90vw"
                             src={images[currentIndex]}
                         />
                     </div>
@@ -296,6 +306,7 @@ export function RoomGallery({ images, title }: RoomGalleryProps) {
                                     alt={`Thumbnail ${idx + 1}`}
                                     className="object-cover"
                                     fill
+                                    sizes="80px"
                                     src={img}
                                 />
                             </button>

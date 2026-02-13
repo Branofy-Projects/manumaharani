@@ -63,6 +63,7 @@ export function PropertyHeroGallery({
                   className="object-cover"
                   fill
                   priority
+                  sizes="100vw"
                   src={heroImage}
                 />
               </div>
@@ -78,6 +79,7 @@ export function PropertyHeroGallery({
                   alt={`Gallery ${idx + 1}`}
                   className="object-cover"
                   fill
+                  sizes="25vw"
                   src={img}
                 />
               </div>
@@ -109,6 +111,7 @@ export function PropertyHeroGallery({
               className="object-cover"
               fill
               priority
+              sizes="100vw"
               src={allImages[currentIndex] || heroImage}
             />
 

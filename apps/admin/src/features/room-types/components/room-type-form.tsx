@@ -1,5 +1,5 @@
 "use client";
-import { createRoomType, updateRoomType } from '@repo/actions';
+import { createRoomType, updateRoomType } from '@repo/actions/room-types.actions';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';

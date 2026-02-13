@@ -41,6 +41,7 @@ export default async function BlogPost({
                     className="object-cover object-center"
                     fill
                     priority
+                    sizes="100vw"
                     src={post.featuredImage.original_url}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />

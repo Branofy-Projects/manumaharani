@@ -51,6 +51,7 @@ export default function FineDiningPage() {
           className="object-cover"
           fill
           priority
+          sizes="100vw"
           src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=2000&auto=format&fit=crop"
         />
         <div className="absolute inset-0 bg-black/30" />
@@ -99,6 +100,7 @@ export default function FineDiningPage() {
                     alt={category.title}
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                     fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
                     src={category.image}
                   />
                 </div>
@@ -148,6 +150,7 @@ export default function FineDiningPage() {
           alt="A Culinary Legacy"
           className="object-cover"
           fill
+          sizes="100vw"
           src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=2000&auto=format&fit=crop"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />

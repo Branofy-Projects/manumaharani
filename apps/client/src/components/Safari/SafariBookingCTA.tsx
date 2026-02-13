@@ -8,6 +8,7 @@ export default function SafariBookingCTA() {
           alt="Book Your Safari"
           className="object-cover"
           fill
+          sizes="100vw"
           src="https://images.unsplash.com/photo-1549366021-9f761d450615?q=80&w=2000&auto=format&fit=crop"
         />
         <div className="absolute inset-0 bg-black/60" />

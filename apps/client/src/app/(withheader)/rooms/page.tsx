@@ -2,7 +2,7 @@ import { BedDouble, ChevronRight, Maximize, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { getRoomTypesCache } from "@/lib/cache/rooms.cache";
+import { getActiveRoomsCache } from "@/lib/cache/rooms.cache";
 
 import type { Metadata } from "next";
 
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default async function RoomsPage() {
-  const { roomTypes } = await getRoomTypesCache()
+  const rooms = await getActiveRoomsCache();
 
   return (
     <main className="min-h-screen bg-white">
@@ -23,6 +23,7 @@ export default async function RoomsPage() {
           className="object-cover object-center"
           fill
           priority
+          sizes="100vw"
           src="https://www.manumaharaniresorts.com/wp-content/uploads/2025/01/mm-executive-room.webp"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
@@ -53,8 +54,10 @@ export default async function RoomsPage() {
         </div>
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {roomTypes.map((room) => {
-            const firstImage = room.images?.[0]?.image?.original_url;
+          {rooms.map((room) => {
+            const featuredImage = room.image?.original_url;
+            const firstGalleryImage = room.images?.[0]?.image?.original_url;
+            const displayImage = featuredImage || firstGalleryImage;
             return (
               <Link
                 className="group flex flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-sm transition-shadow duration-300 hover:shadow-xl"
@@ -63,12 +66,13 @@ export default async function RoomsPage() {
               >
                 {/* Image */}
                 <div className="relative aspect-[4/3] w-full overflow-hidden">
-                  {firstImage ? (
+                  {displayImage ? (
                     <Image
-                      alt={room.name}
+                      alt={room.title}
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
                       fill
-                      src={firstImage}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      src={displayImage}
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center bg-gray-100">
@@ -85,7 +89,7 @@ export default async function RoomsPage() {
                 {/* Content */}
                 <div className="flex flex-1 flex-col p-6 md:p-8">
                   <h3 className="font-thin tracking-widest text-lg uppercase text-[#2b2b2b] md:text-xl">
-                    {room.name}
+                    {room.title}
                   </h3>
 
                   {/* Quick Info */}
@@ -120,7 +124,7 @@ export default async function RoomsPage() {
           })}
         </div>
 
-        {roomTypes.length === 0 && (
+        {rooms.length === 0 && (
           <div className="py-20 text-center">
             <p className="font-serif text-lg text-[#5a5a5a]">
               Room information is being updated. Please check back soon.

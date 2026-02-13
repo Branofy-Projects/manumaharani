@@ -91,6 +91,7 @@ export function OfferGallery({ images, title }: OfferGalleryProps) {
                                 className="object-cover transition-transform hover:scale-[1.02]"
                                 fill
                                 priority
+                                sizes="100vw"
                                 src={images[0]}
                             />
                         </div>
@@ -109,6 +110,7 @@ export function OfferGallery({ images, title }: OfferGalleryProps) {
                                         className="object-cover transition-transform hover:scale-[1.02]"
                                         fill
                                         priority={idx === 0}
+                                        sizes="50vw"
                                         src={img}
                                     />
                                 </div>
@@ -126,6 +128,7 @@ export function OfferGallery({ images, title }: OfferGalleryProps) {
                                     className="object-cover transition-transform hover:scale-[1.02]"
                                     fill
                                     priority
+                                    sizes="100vw"
                                     src={images[0]}
                                 />
                                 {images.length > 1 && (
@@ -150,6 +153,7 @@ export function OfferGallery({ images, title }: OfferGalleryProps) {
                                         className="object-cover transition-transform hover:scale-[1.02]"
                                         fill
                                         priority
+                                        sizes="66vw"
                                         src={images[0]}
                                     />
                                 </div>
@@ -163,6 +167,7 @@ export function OfferGallery({ images, title }: OfferGalleryProps) {
                                         alt={`${title} - Image 2`}
                                         className="object-cover transition-transform hover:scale-[1.02]"
                                         fill
+                                        sizes="33vw"
                                         src={images[1]}
                                     />
                                 </div>
@@ -176,6 +181,7 @@ export function OfferGallery({ images, title }: OfferGalleryProps) {
                                         alt={`${title} - Image 3`}
                                         className="object-cover transition-transform hover:scale-[1.02]"
                                         fill
+                                        sizes="33vw"
                                         src={images[2]}
                                     />
                                     {/* Show "See all photos" overlay on last visible image */}
@@ -204,6 +210,7 @@ export function OfferGallery({ images, title }: OfferGalleryProps) {
                                         className="object-cover transition-transform hover:scale-[1.02]"
                                         fill
                                         priority
+                                        sizes="50vw"
                                         src={images[0]}
                                     />
                                 </div>
@@ -220,6 +227,7 @@ export function OfferGallery({ images, title }: OfferGalleryProps) {
                                             alt={`${title} - Image ${idx + 2}`}
                                             className="object-cover transition-transform hover:scale-[1.02]"
                                             fill
+                                            sizes="25vw"
                                             src={img}
                                         />
                                     </div>
@@ -237,6 +245,7 @@ export function OfferGallery({ images, title }: OfferGalleryProps) {
                                             alt={`${title} - Image ${idx + 4}`}
                                             className="object-cover transition-transform hover:scale-[1.02]"
                                             fill
+                                            sizes="25vw"
                                             src={img}
                                         />
                                         {/* Show "See all photos" overlay on last visible image */}
@@ -305,6 +314,7 @@ export function OfferGallery({ images, title }: OfferGalleryProps) {
                             className="object-contain"
                             fill
                             priority
+                            sizes="90vw"
                             src={images[currentIndex]}
                         />
                     </div>
@@ -335,6 +345,7 @@ export function OfferGallery({ images, title }: OfferGalleryProps) {
                                     alt={`Thumbnail ${idx + 1}`}
                                     className="object-cover"
                                     fill
+                                    sizes="80px"
                                     src={img}
                                 />
                             </button>

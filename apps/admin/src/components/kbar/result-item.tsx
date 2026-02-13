@@ -1,5 +1,6 @@
-import type { ActionId, ActionImpl } from 'kbar';
 import * as React from 'react';
+
+import type { ActionId, ActionImpl } from 'kbar';
 
 const ResultItem = React.forwardRef(
   (
@@ -24,13 +25,13 @@ const ResultItem = React.forwardRef(
 
     return (
       <div
-        ref={ref}
         className={`relative z-10 flex cursor-pointer items-center justify-between px-4 py-3`}
+        ref={ref}
       >
         {active && (
           <div
-            id='kbar-result-item'
             className='border-primary bg-accent/50 absolute inset-0 z-[-1]! border-l-4'
+            id='kbar-result-item'
           ></div>
         )}
         <div className='relative z-10 flex items-center gap-2'>
@@ -59,8 +60,8 @@ const ResultItem = React.forwardRef(
           <div className='relative z-10 grid grid-flow-col gap-1'>
             {action.shortcut.map((sc, i) => (
               <kbd
-                key={sc + i}
                 className='bg-muted flex h-5 items-center gap-1 rounded-md border px-1.5 text-[10px] font-medium'
+                key={sc + i}
               >
                 {sc}
               </kbd>

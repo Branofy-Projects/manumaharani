@@ -101,6 +101,7 @@ function renderNode(node: LexicalNode, index: number): React.ReactNode {
             alt={altText}
             className="object-cover object-center"
             fill
+            sizes="100vw"
             src={src}
           />
         </span>

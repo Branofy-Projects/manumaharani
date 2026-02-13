@@ -28,6 +28,10 @@ const nextConfig = {
     hostname: 'thelibrary.mgmresorts.com',
     protocol: 'https',
    },
+   {
+    hostname: 'www.manumaharaniresorts.com',
+    protocol: 'https',
+   },
   ],
  },
  output: 'standalone',

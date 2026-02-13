@@ -24,6 +24,7 @@ export default function ContactUsPage() {
           className="object-cover"
           fill
           priority
+          sizes="100vw"
           src="/about-us/photo-1566073771259-6a8506099945.webp"
         />
         <div className="absolute inset-0 bg-black/40" />

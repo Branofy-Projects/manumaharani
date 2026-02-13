@@ -17,8 +17,8 @@ const geist = Geist({
 });
 
 export const metadata: Metadata = {
-  description: "junglexp Admin",
-  title: "Admin | junglexp.in",
+  description: "Manu Maharani Admin",
+  title: "Admin | Manu Maharani",
 };
 
 const fontVariables = geist.className;
