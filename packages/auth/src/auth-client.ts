@@ -43,6 +43,7 @@ export const authClient = betterAuth({
   trustedOrigins: [
     "http://localhost:3000",
     "http://localhost:3001",
+    process.env.NEXT_PUBLIC_CLIENT_URL || "http://localhost:3000",
     process.env.NEXT_PUBLIC_AUTH_URL || "http://localhost:3000",
   ],
 });
