@@ -104,7 +104,7 @@ export default function AccommodationsCarousel() {
   return (
     <section className="py-16 md:py-24 w-full bg-white">
       <h2 className="text-2xl self-center w-full text-center md:text-3xl font-thin tracking-widest uppercase text-ceter mb-12 md:mb-16">
-        Accommodations
+        Moments at Manumaharani
       </h2>
 
       {/* Carousel viewport */}

@@ -111,41 +111,15 @@ export default function NearbyAttractions() {
                         {attraction.subtitle}
                       </p>
                     )}
-                    {(attraction.open_time || attraction.close_time) && (
+                    {/* {(attraction.open_time || attraction.close_time) && (
                       <p className="text-xs text-white/90">
                         {[attraction.open_time, attraction.close_time].filter(Boolean).join(" – ")}
                       </p>
-                    )}
-                    {attraction.distance && (
+                    )} */}
+                    {/* {attraction.distance && (
                       <p className="text-xs text-white/80">{attraction.distance}</p>
-                    )}
-                    {attraction.faq && (() => {
-                      try {
-                        const faqs = JSON.parse(attraction.faq) as Array<{ answer?: string; question?: string; }>;
-                        if (Array.isArray(faqs) && faqs.length > 0) {
-                          return (
-                            <div className="mt-1 space-y-1">
-                              {faqs.slice(0, 2).map((item, i) => (
-                                <div className="text-xs text-white/80" key={i}>
-                                  <span className="font-medium text-white/90">{item.question}</span>
-                                  {item.answer && <span className="block text-white/70">{item.answer}</span>}
-                                </div>
-                              ))}
-                              {faqs.length > 2 && (
-                                <p className="text-xs text-white/60">+{faqs.length - 2} more</p>
-                              )}
-                            </div>
-                          );
-                        }
-                      } catch {
-                        /* fallback to plain text */
-                      }
-                      return (
-                        <p className="mt-1 text-xs text-white/70 line-clamp-2 whitespace-pre-line">
-                          {attraction.faq}
-                        </p>
-                      );
-                    })()}
+                    )} */}
+
                   </div>
                 </Link>
               </div>
