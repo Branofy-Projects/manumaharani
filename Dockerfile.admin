@@ -28,6 +28,8 @@ RUN yarn install
 FROM base AS builder
 WORKDIR /app
 
+ENV PATH="/app/node_modules/.bin:$PATH"
+
 # Copy dependencies
 COPY --from=deps /app/node_modules ./node_modules
 
