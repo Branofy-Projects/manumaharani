@@ -1,8 +1,9 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import { getAllGalleryCache } from "@/lib/cache/gallery.cache";
 
-import { GallerySection } from "./gallery-section";
+import { GalleryGrid } from "./gallery-grid";
 
 import type { Metadata } from "next";
 
@@ -11,6 +12,13 @@ export const metadata: Metadata = {
     "Explore the stunning gallery of Manu Maharani Resort & Spa — rooms, dining, weddings, and breathtaking views of Jim Corbett.",
   title: "Gallery | Manu Maharani Resort & Spa",
 };
+
+const CATEGORIES = [
+  { href: "/gallery/overview", label: "Overview" },
+  { href: "/gallery/room", label: "Rooms" },
+  { href: "/gallery/dining", label: "Dining" },
+  { href: "/gallery/wedding", label: "Weddings" },
+];
 
 export default async function GalleryPage() {
   const gallery = await getAllGalleryCache();
@@ -40,7 +48,30 @@ export default async function GalleryPage() {
         </div>
       </section>
 
-      <GallerySection gallery={gallery} />
+      {/* Category Navigation */}
+      <section className="sticky top-0 z-30 border-b border-gray-200 bg-background">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <nav className="flex items-center justify-center gap-1 sm:gap-2 py-4 overflow-x-auto">
+            <Link
+              className="inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-medium border transition-colors bg-primary text-primary-foreground border-primary"
+              href="/gallery"
+            >
+              All
+            </Link>
+            {CATEGORIES.map((cat) => (
+              <Link
+                className="inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-medium border transition-colors border-transparent hover:bg-accent"
+                href={cat.href}
+                key={cat.href}
+              >
+                {cat.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
+      </section>
+
+      <GalleryGrid gallery={gallery} />
     </main>
   );
 }

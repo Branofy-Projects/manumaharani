@@ -1,29 +1,27 @@
-import AccommodationsCarousel from "@/components/Home/accommodations-carousel";
-import DiscoverManuMaharani from "@/components/Home/discover-manu-maharani";
-import ExperienceButton from "@/components/Home/expreince-button";
+import dynamic from "next/dynamic";
+
 import FeaturedOffers from "@/components/Home/featured-offers";
 import { HomeHeroSection } from "@/components/Home/home-hero-section";
-import HomeInstaImageSection from "@/components/Home/home-insta-image-section";
 import SectionShortcuts from "@/components/Home/home-shortcuts";
-import JimCorbett from "@/components/Home/jim-corbett";
-import NearbyAttractions from "@/components/Home/nearby-attractions";
+
+const AccommodationsCarousel = dynamic(() => import("@/components/Home/accommodations-carousel"));
+const JimCorbett = dynamic(() => import("@/components/Home/jim-corbett"));
+const NearbyAttractions = dynamic(() => import("@/components/Home/nearby-attractions"));
+const HomeInstaImageSection = dynamic(() => import("@/components/Home/home-insta-image-section"));
+const DiscoverManuMaharani = dynamic(() => import("@/components/Home/discover-manu-maharani"));
+const ExperienceButton = dynamic(() => import("@/components/Home/expreince-button"));
 
 export default function Home() {
   return (
     <main>
       <HomeHeroSection />
       <SectionShortcuts />
-      {/* <AboutSection /> */}
       <FeaturedOffers />
       <AccommodationsCarousel />
-      {/* <FineDiningSection /> */}
-      {/* <HomeExperiencesSection /> */}
-      {/* <WeddingAiManuMaharani /> */}
       <JimCorbett />
       <NearbyAttractions />
       <HomeInstaImageSection />
       <DiscoverManuMaharani />
-
       <ExperienceButton />
     </main>
   );

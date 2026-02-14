@@ -1,3 +1,6 @@
+import Image from "next/image";
+
+import { HeroVideo } from "./hero-video";
 
 export const HomeHeroSection = () => {
   return (
@@ -7,16 +10,16 @@ export const HomeHeroSection = () => {
     >
       {/* Video Background */}
       <div className="absolute inset-0 z-0 overflow-hidden">
-        <video
-          autoPlay
-          className="w-full h-full object-cover object-center"
-          loop
-          muted
-          playsInline
-          poster="https://www.fourseasons.com/alt/img-opt/~70.1530.0,0000-0,0000-1536,0000-864,0000/publish/content/dam/fourseasons/images/web/BSA/BSA_1200x800.jpg"
-        >
-          <source src="https://ik.imagekit.io/teggaadfo/manu%20-%201080WebShareName.mov/ik-video.mp4?updatedAt=1760112353814" />
-        </video>
+        {/* Priority poster image for fast LCP */}
+        <Image
+          alt="Manu Maharani Resort aerial view"
+          className="object-cover object-center"
+          fill
+          priority
+          sizes="100vw"
+          src="https://ik.imagekit.io/teggaadfo/manu%20-%201080WebShareName.mov/ik-video.mp4/ik-thumbnail.jpg?updatedAt=1760112353814"
+        />
+        <HeroVideo />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80" />
       </div>
 

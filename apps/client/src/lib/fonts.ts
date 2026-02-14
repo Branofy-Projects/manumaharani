@@ -14,21 +14,21 @@ const geistSans = localFont({
 
 export const silkSerif = localFont({
  src: [
-  { path: '../fonts/Silk Serif Light.otf', style: 'normal', weight: '300' },
+  { path: '../fonts/Silk Serif Light.woff2', style: 'normal', weight: '300' },
   {
-   path: '../fonts/Silk Serif Light Italic.otf',
+   path: '../fonts/Silk Serif Light Italic.woff2',
    style: 'italic',
    weight: '300',
   },
-  { path: '../fonts/Silk Serif SemiBold.otf', style: 'normal', weight: '600' },
+  { path: '../fonts/Silk Serif SemiBold.woff2', style: 'normal', weight: '600' },
   {
-   path: '../fonts/Silk Serif SemiBold Italic.otf',
+   path: '../fonts/Silk Serif SemiBold Italic.woff2',
    style: 'italic',
    weight: '600',
   },
-  { path: '../fonts/Silk Serif Bold.otf', style: 'normal', weight: '700' },
+  { path: '../fonts/Silk Serif Bold.woff2', style: 'normal', weight: '700' },
   {
-   path: '../fonts/Silk Serif Bold Italic.otf',
+   path: '../fonts/Silk Serif Bold Italic.woff2',
    style: 'italic',
    weight: '700',
   },

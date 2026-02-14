@@ -25,6 +25,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { priority: 0.7, route: '/contact-us' },
     { priority: 0.7, route: '/junglesafari/book-safari' },
     { priority: 0.7, route: '/gallery' },
+    { priority: 0.6, route: '/gallery/overview' },
+    { priority: 0.6, route: '/gallery/room' },
+    { priority: 0.6, route: '/gallery/dining' },
+    { priority: 0.6, route: '/gallery/wedding' },
     { priority: 0.7, route: '/nearby-attractions' },
   ].map(({ priority, route }) => ({
     changeFrequency: 'weekly' as const,

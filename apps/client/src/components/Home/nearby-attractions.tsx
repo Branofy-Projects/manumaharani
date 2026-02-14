@@ -1,62 +1,17 @@
-"use client";
+import { Suspense } from "react";
 
-import { getAttractions } from "@repo/actions";
-import Image from "next/image";
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import { getAttractionsCache } from "@/lib/cache/attractions.cache";
 
-import type { TAttraction } from "@repo/db";
+import { NearbyAttractionsCarousel } from "./nearby-attractions-carousel";
 
-export default function NearbyAttractions() {
-  const [attractions, setAttractions] = useState<TAttraction[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  useEffect(() => {
-    const fetchAttractions = async () => {
-      try {
-        const data = await getAttractions(true); // Fetch active only
-        setAttractions(data);
-      } catch (error) {
-        console.error("Error fetching attractions:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchAttractions();
-  }, []);
-
-  const handlePrev = () => {
-    setCurrentIndex((prev) => (prev === 0 ? Math.max(0, attractions.length - 2) : prev - 1));
-  };
-
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev >= attractions.length - 2 ? 0 : prev + 1));
-  };
-
-  if (loading) {
-    return (
-      <section className="flex w-full flex-col items-center py-10 md:py-20 lg:min-h-[600px]">
-        <div className="animate-pulse flex flex-col items-center w-full">
-          <div className="h-10 w-48 bg-gray-200 mb-4 rounded" />
-          <div className="h-6 w-96 bg-gray-200 mb-12 rounded" />
-          <div className="flex gap-4 w-full max-w-screen-xl px-4">
-            <div className="w-1/2 h-[400px] bg-gray-200 rounded-lg" />
-            <div className="w-1/2 h-[400px] bg-gray-200 rounded-lg" />
-          </div>
-        </div>
-      </section>
-    );
-  }
+export default async function NearbyAttractions() {
+  const attractions = await getAttractionsCache(true);
 
   if (attractions.length === 0) return null;
 
   return (
     <section className="flex w-full flex-col items-center py-10 md:py-20">
-      <h2
-        className="text-3xl md:text-4xl  tracking-widest uppercase mb-4 text-center px-4 xl:px-0"
-        style={{ color: "#000000" }}
-      >
+      <h2 className="text-3xl md:text-4xl tracking-widest uppercase mb-4 text-center px-4 xl:px-0 text-black">
         Nearby
       </h2>
       <p className="text-gray-700 text-base font-serif mb-8 md:mb-12 text-center px-4 xl:px-0">
@@ -64,137 +19,9 @@ export default function NearbyAttractions() {
         around Corbett, all within comfortable driving distance from Manu
         Maharani.
       </p>
-
-      {/* Desktop: Scrollable carousel with 2 items */}
-      <div className="relative mx-auto hidden w-full max-w-screen-xl md:block px-4 xl:px-0">
-        <button
-          aria-label="Previous"
-          className="absolute left-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white text-2xl text-black shadow-lg transition-all hover:bg-gray-100"
-          onClick={handlePrev}
-          type="button"
-        >
-          ‹
-        </button>
-        <button
-          aria-label="Next"
-          className="absolute right-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white text-2xl text-black shadow-lg transition-all hover:bg-gray-100"
-          onClick={handleNext}
-          type="button"
-        >
-          ›
-        </button>
-
-        <div className="overflow-hidden">
-          <div
-            className="flex transition-transform duration-500 ease-in-out"
-            style={{
-              transform: `translateX(-${currentIndex * 50}%)`,
-            }}
-          >
-            {attractions.map((attraction, idx) => (
-              <div className="w-1/2 flex-shrink-0 px-2" key={idx}>
-                <Link className="group relative flex min-h-[400px] flex-col justify-end overflow-hidden rounded-lg shadow-lg" href={`/nearby-attractions/${attraction.slug}`}>
-                  <Image
-                    alt={attraction.title}
-                    className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                    fill
-                    sizes="50vw"
-                    src={attraction.image?.large_url || attraction.image?.original_url || "/placeholder.jpg"}
-                  />
-                  <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/80 to-transparent" />
-                  <div className="relative z-20 flex flex-col gap-2 p-4">
-                    <h3 className="mb-2 text-sm font-bold uppercase leading-tight tracking-widest text-white">
-                      {attraction.title}
-                    </h3>
-                    {attraction.subtitle && (
-                      <p className="mb-2 text-sm text-white/80 line-clamp-2">
-                        {attraction.subtitle}
-                      </p>
-                    )}
-                    {/* {(attraction.open_time || attraction.close_time) && (
-                      <p className="text-xs text-white/90">
-                        {[attraction.open_time, attraction.close_time].filter(Boolean).join(" – ")}
-                      </p>
-                    )} */}
-                    {/* {attraction.distance && (
-                      <p className="text-xs text-white/80">{attraction.distance}</p>
-                    )} */}
-
-                  </div>
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile: Grid layout */}
-      <div className="mx-auto grid w-full max-w-screen-xl grid-cols-1 gap-4 px-4 sm:grid-cols-2 md:hidden xl:px-0">
-        {attractions.map((attraction, idx) => (
-          <Link
-            className="group relative flex min-h-[260px] flex-col justify-end overflow-hidden rounded-lg shadow-lg"
-            href={`/nearby-attractions/${attraction.slug}`}
-            key={idx}
-          >
-            <Image
-              alt={attraction.title}
-              className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
-              fill
-              sizes="(max-width: 640px) 100vw, 50vw"
-              src={attraction.image?.large_url || attraction.image?.original_url || "/placeholder.jpg"}
-            />
-            <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/80 to-transparent" />
-            <div className="relative z-20 flex flex-col gap-2 p-3">
-              <h3 className="mb-2 text-base font-bold uppercase leading-tight tracking-widest text-white">
-                {attraction.title}
-              </h3>
-              {attraction.subtitle && (
-                <p className="mb-2 text-xs text-white/80 line-clamp-2">
-                  {attraction.subtitle}
-                </p>
-              )}
-              {/* {(attraction.open_time || attraction.close_time) && (
-                <p className="text-xs text-white/90">
-                  {[attraction.open_time, attraction.close_time].filter(Boolean).join(" – ")}
-                </p>
-              )}
-              {attraction.distance && (
-                <p className="text-xs text-white/80">{attraction.distance}</p>
-              )} */}
-              {/* {attraction.faq && (() => {
-                try {
-                  const faqs = JSON.parse(attraction.faq) as Array<{ answer?: string; question?: string; }>;
-                  if (Array.isArray(faqs) && faqs.length > 0) {
-                    return (
-                      <div className="mt-1 space-y-1">
-                        {faqs.slice(0, 2).map((item, i) => (
-                          <div className="text-xs text-white/80" key={i}>
-                            <span className="font-medium text-white/90">{item.question}</span>
-                            {item.answer && <span className="block text-white/70">{item.answer}</span>}
-                          </div>
-                        ))}
-                        {faqs.length > 2 && (
-                          <p className="text-xs text-white/60">+{faqs.length - 2} more</p>
-                        )}
-                      </div>
-                    );
-                  }
-                } catch {
-
-                }
-                return (
-                  <p className="mt-1 text-xs text-white/70 line-clamp-2 whitespace-pre-line">
-                    {attraction.faq}
-                  </p>
-                );
-              })()} */}
-              {/* <span className="pb-1 text-xs font-semibold uppercase tracking-widest text-white transition-all group-hover:text-white/70">
-                View Details
-              </span> */}
-            </div>
-          </Link>
-        ))}
-      </div>
+      <Suspense>
+        <NearbyAttractionsCarousel attractions={attractions} />
+      </Suspense>
     </section>
   );
 }

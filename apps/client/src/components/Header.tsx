@@ -35,7 +35,7 @@ export const Header = () => {
           className={`transition-all duration-300 ${isScrolled ? "h-7 sm:h-8" : "h-10 sm:h-14"} aspect-1820/1268 relative`}
           href="/"
         >
-          <Image alt="Manu Maharani" fill sizes="200px" src="/Logo-Manu-Maharani.png" />
+          <Image alt="Manu Maharani" fill priority sizes="200px" src="/Logo-Manu-Maharani.png" />
         </Link>
       </div>
 

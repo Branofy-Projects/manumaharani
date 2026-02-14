@@ -54,6 +54,7 @@ export default function HomeInstaImageSection() {
                 alt={`Gallery ${i + 1}`}
                 className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                 fill
+                loading="lazy"
                 sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
                 src={src}
               />

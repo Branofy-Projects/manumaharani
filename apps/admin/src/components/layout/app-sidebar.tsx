@@ -80,7 +80,7 @@ export default function AppSidebar() {
       <SidebarHeader suppressHydrationWarning>
         <Link
           className="flex items-center justify-center px-2 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md min-h-[3rem]"
-          href="/dashboard"
+          href="/"
         >
           <Image
             alt="Manu Maharani"
