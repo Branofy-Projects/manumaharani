@@ -34,7 +34,7 @@ export default function ExperienceButtonWrapper({ children }: { children: React.
         onClick={() => setIsChooserOpen(true)}
         type="button"
       >
-        Choose Your Experience
+        Curate Your Stay
       </button>
 
       {/* Fullscreen overlay and panel */}

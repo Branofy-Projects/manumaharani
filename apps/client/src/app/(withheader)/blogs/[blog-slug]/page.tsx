@@ -137,7 +137,7 @@ export default async function BlogPost({
                     <h3
                         className={`mb-4 text-3xl  tracking-wider text-gray-900`}
                     >
-                        Ready to Plan Your Dream Wedding?
+                        Plan Your Experience at Manu Maharani
                     </h3>
                     <p className={`mb-8 text-lg  text-gray-600`}>
                         Let our expert team help you create an unforgettable celebration at
@@ -145,9 +145,9 @@ export default async function BlogPost({
                     </p>
                     <Link
                         className={`inline-block rounded-lg bg-gray-900 px-8 py-4 text-sm font-semibold uppercase tracking-wide text-white transition-all hover:bg-gray-800`}
-                        href="/contact-us"
+                        href="/rooms"
                     >
-                        Contact Our Wedding Team
+                        Book Your Stay
                     </Link>
                 </div>
             </article>
