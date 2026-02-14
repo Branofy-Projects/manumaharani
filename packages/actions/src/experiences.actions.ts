@@ -102,7 +102,7 @@ export const updateExperience = async (id: number, data: Partial<TNewExperience>
       .where(eq(Experiences.id, id))
       .returning();
 
-    await bumpVersion("experiences");
+    // await bumpVersion("experiences");
     await revalidateTags(["experiences"]);
 
     return updated;

@@ -1,7 +1,15 @@
 "use client";
-import React, { Suspense } from "react";
+import React, { createContext, Suspense } from "react";
 
 import { cn } from "@/lib/utils";
+
+export const ExperienceContext = createContext<{
+  isChooserOpen: boolean
+  setIsChooserOpen: (data: boolean) => void
+}>({
+  isChooserOpen: false,
+  setIsChooserOpen: () => { }
+})
 
 export default function ExperienceButtonWrapper({ children }: { children: React.ReactNode }) {
   const [isChooserOpen, setIsChooserOpen] = React.useState(false);
@@ -20,7 +28,7 @@ export default function ExperienceButtonWrapper({ children }: { children: React.
   }, [isChooserOpen]);
 
   return (
-    <>
+    <ExperienceContext.Provider value={{ isChooserOpen, setIsChooserOpen }}>
       <button
         className="fixed bottom-6 left-1/2 z-40 -translate-x-1/2 rounded-full bg-black/80 px-6 py-3 text-base tracking-wide text-white shadow-lg transition-colors hover:bg-black sm:bottom-8 sm:px-8 sm:py-3.5"
         onClick={() => setIsChooserOpen(true)}
@@ -64,6 +72,6 @@ export default function ExperienceButtonWrapper({ children }: { children: React.
           </button>
         </aside>
       </div>
-    </>
+    </ExperienceContext.Provider>
   );
 }

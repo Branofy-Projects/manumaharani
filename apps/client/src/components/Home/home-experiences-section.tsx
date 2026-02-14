@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
+import { ExperienceLink } from "./experience-link";
+
 const getCachedExperiences = async () => {
   "use cache";
   cacheTag("experiences");
@@ -14,7 +16,6 @@ const getCachedExperiences = async () => {
 };
 
 export const HomeExperiencesSection = async () => {
-
   const experiences = await getCachedExperiences();
 
   return (
@@ -39,11 +40,11 @@ export const HomeExperiencesSection = async () => {
 
         <div className="mt-10 grid grid-cols-2 gap-6 place-items-center sm:mt-12 sm:gap-8 md:mt-20 md:gap-10 lg:grid-cols-4 lg:gap-12">
           {experiences.map((item, idx) => (
-            <Link className="flex flex-col items-center text-center" href={item.url} key={idx}>
+            <ExperienceLink href={item.url} key={idx}>
               <div className="relative h-32 w-32 overflow-hidden rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.35)] ring-4 ring-[#bde058] sm:h-40 sm:w-40 md:h-48 md:w-48 lg:h-56 lg:w-56">
                 <Image
                   alt={item.alt}
-                  className="object-cover object-center"
+                  className="object-center"
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
                   src={item.image}
@@ -52,7 +53,7 @@ export const HomeExperiencesSection = async () => {
               <p className="mt-4 font-light leading-tight text-white text-sm sm:text-base md:text-lg lg:text-xl">
                 {item.name}
               </p>
-            </Link>
+            </ExperienceLink>
           ))}
         </div>
       </div>
