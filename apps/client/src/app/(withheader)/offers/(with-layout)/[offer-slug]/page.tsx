@@ -1,4 +1,4 @@
-import { getAllOffersSlugs, getRelatedOffers } from "@repo/actions/offers.actions";
+import { getAllOffersSlugs } from "@repo/actions/offers.actions";
 import {
     Check,
     ChevronDown,
@@ -85,8 +85,8 @@ export default async function OfferDetailPage({ params }: PageProps) {
 
     // Get all gallery images
     const galleryImages = [
-        ...(offer.image ? [offer.image.original_url] : []),
-        ...(offer.images?.map((img) => img.image.original_url) || []),
+        ...(offer.image ? [offer.image.large_url || offer.image.original_url] : []),
+        ...(offer.images?.map((img) => img.image.large_url || img.image.original_url) || []),
     ];
 
     // Calculate discount percentage
@@ -345,7 +345,7 @@ export default async function OfferDetailPage({ params }: PageProps) {
                                                 className="object-cover transition-transform duration-300 group-hover:scale-105"
                                                 fill
                                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                                                src={relatedOffer.image.original_url}
+                                                src={relatedOffer.image.small_url || relatedOffer.image.original_url}
                                             />
                                         )}
                                         {relatedOffer.free_cancellation && (

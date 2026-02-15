@@ -51,8 +51,8 @@ export default async function EventDetailPage({ params }: PageProps) {
     const excludedHighlights = event.highlights?.filter((h) => h.type === "excluded") || [];
 
     const galleryImages = [
-        ...(event.image ? [event.image.original_url] : []),
-        ...(event.images?.map((img) => img.image.original_url) || []),
+        ...(event.image ? [event.image.large_url || event.image.original_url] : []),
+        ...(event.images?.map((img) => img.image.large_url || img.image.original_url) || []),
     ];
 
     const hasDiscount =
@@ -322,7 +322,7 @@ export default async function EventDetailPage({ params }: PageProps) {
                                                 className="object-cover transition-transform duration-300 group-hover:scale-105"
                                                 fill
                                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                                                src={relatedEvent.image.original_url}
+                                                src={relatedEvent.image.small_url || relatedEvent.image.original_url}
                                             />
                                         )}
                                         {/* Date badge */}

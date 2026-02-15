@@ -36,6 +36,8 @@ export default function RootLayout({
       <head>
         <link href="https://ik.imagekit.io" rel="preconnect" />
         <link href="https://ik.imagekit.io" rel="dns-prefetch" />
+        <link href="https://storage.googleapis.com" rel="preconnect" />
+        <link href="https://storage.googleapis.com" rel="dns-prefetch" />
       </head>
       <meta content="Manumaharani" name="apple-mobile-web-app-title" />
       <body

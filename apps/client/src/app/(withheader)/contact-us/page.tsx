@@ -3,11 +3,10 @@ import Image from "next/image";
 import React from "react";
 
 import ContactForm from "./ContactForm";
+import { LazyMap } from "./LazyMap";
 
 import type { Metadata } from "next";
 
-// export const dynamic = 'force-static';
-// export const revalidate = false;
 
 export const metadata: Metadata = {
   description: "We'd love to hear from you! Reach out to us for any inquiries or assistance.",
@@ -100,17 +99,7 @@ export default function ContactUsPage() {
       </section>
 
       {/* Map Section */}
-      <section className="h-[400px] w-full bg-gray-200">
-        <iframe
-          allowFullScreen
-          height="100%"
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3455.936669986666!2d79.1356783151129!3d29.4166669823029!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390a19f6f6f6f6f7%3A0x6f6f6f6f6f6f6f6f!2sManu%20Maharani%20Resort%20%26%20Spa!5e0!3m2!1sen!2sin!4v1620000000000!5m2!1sen!2sin"
-          style={{ border: 0 }}
-          width="100%"
-        />
-      </section>
+      <LazyMap />
     </main>
   );
 }
