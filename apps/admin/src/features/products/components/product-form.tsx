@@ -93,6 +93,7 @@ export default function ProductForm({
                       <FileUploader
                         maxFiles={4}
                         maxSize={4 * 1024 * 1024}
+                        minDimensions={{ width: 800, height: 800 }}
                         onValueChange={field.onChange}
                         value={field.value}
                         // disabled={loading}

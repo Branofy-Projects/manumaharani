@@ -506,6 +506,7 @@ const AttractionForm = (props: TAttractionFormProps) => {
                               disabled={busy}
                               id="attraction-image"
                               maxFiles={1}
+                              minDimensions={{ width: 1920, height: 1080 }}
                               onValueChange={field.onChange}
                               progresses={progresses}
                               showValidation={hasAttemptedSubmit}
@@ -528,6 +529,7 @@ const AttractionForm = (props: TAttractionFormProps) => {
                               disabled={busy}
                               id="attraction-gallery-images"
                               maxFiles={20}
+                              minDimensions={{ width: 1920, height: 1080 }}
                               onValueChange={field.onChange}
                               progresses={galleryProgresses}
                               showValidation={hasAttemptedSubmit}

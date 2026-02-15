@@ -90,10 +90,22 @@ export const navItems: NavItem[] = [
         url: "/gallery",
       },
       {
+        icon: 'video',
+        shortcut: ["r", "e"],
+        title: "Reels",
+        url: "/reels",
+      },
+      {
         icon: "help",
         shortcut: ["t", "s"],
         title: "Testimonials",
         url: "/testimonials",
+      },
+      {
+        icon: "post",
+        shortcut: ["e", "x"],
+        title: "Experiences",
+        url: "/experiences",
       },
       {
         icon: "media",

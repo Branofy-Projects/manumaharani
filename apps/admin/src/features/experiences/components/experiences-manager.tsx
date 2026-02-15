@@ -353,6 +353,7 @@ export default function ExperiencesManager({
                         disabled={isImageUploading || isSubmitting}
                         id="experience-image"
                         maxFiles={1}
+                        minDimensions={{ width: 1920, height: 1080 }}
                         onValueChange={field.onChange}
                         progresses={progresses}
                         showValidation={hasAttemptedSubmit}

@@ -347,6 +347,7 @@ const GalleryForm = (props: TGalleryFormProps) => {
                           disabled={isImageUploading || isSubmitting}
                           id="gallery-image"
                           maxFiles={1}
+                          minDimensions={{ width: 1920, height: 1080 }}
                           onValueChange={field.onChange}
                           progresses={progresses}
                           showValidation={hasAttemptedSubmit}

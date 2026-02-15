@@ -99,6 +99,7 @@ type Props = {
   id?: string;
   maxFiles?: number;
   maxSize?: number;
+  minDimensions?: { width: number; height: number };
   multiple?: boolean;
   onValueChange: (next: FormImage[]) => void;
   progresses?: Record<string, number>;
@@ -111,6 +112,7 @@ export const FileUploader: React.FC<Props> = ({
   id = "file-input-hidden",
   maxFiles = 8,
   maxSize = MAX_FILE_SIZE,
+  minDimensions,
   multiple = true,
   onValueChange,
   progresses = {},
@@ -121,13 +123,65 @@ export const FileUploader: React.FC<Props> = ({
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
   );
 
+  const [rejectedFiles, setRejectedFiles] = React.useState<
+    { name: string; reason: string }[]
+  >([]);
+
   const onFiles = useCallback(
-    (files: File[] | FileList) => {
+    async (files: File[] | FileList) => {
       const incoming = Array.from(files);
       const accept = new Set(ACCEPTED_IMAGE_TYPES);
-      const filtered = incoming.filter(
-        (f) => f.size <= maxSize && accept.has(f.type)
-      );
+      const rejected: { name: string; reason: string }[] = [];
+
+      // First pass: validate type and size
+      const typeAndSizeValid = incoming.filter((f) => {
+        if (!accept.has(f.type)) {
+          rejected.push({
+            name: f.name,
+            reason: "Unsupported format. Use JPG, PNG, WebP, or AVIF.",
+          });
+          return false;
+        }
+        if (f.size > maxSize) {
+          rejected.push({
+            name: f.name,
+            reason: `File is ${(f.size / (1024 * 1024)).toFixed(1)}MB. Max size is ${Math.round(maxSize / (1024 * 1024))}MB.`,
+          });
+          return false;
+        }
+        return true;
+      });
+
+      // Second pass: validate landscape orientation and dimensions
+      const filtered: File[] = [];
+      for (const f of typeAndSizeValid) {
+        try {
+          const bitmap = await createImageBitmap(f);
+          const { width, height } = bitmap;
+          bitmap.close();
+          if (height > width) {
+            rejected.push({
+              name: f.name,
+              reason: `Image is portrait (${width}x${height}). Only landscape images are allowed.`,
+            });
+          } else if (
+            minDimensions &&
+            (width < minDimensions.width || height < minDimensions.height)
+          ) {
+            rejected.push({
+              name: f.name,
+              reason: `Image is ${width}x${height}px. Minimum required is ${minDimensions.width}x${minDimensions.height}px.`,
+            });
+          } else {
+            filtered.push(f);
+          }
+        } catch {
+          filtered.push(f);
+        }
+      }
+
+      setRejectedFiles(rejected);
+
       if (filtered.length === 0) return;
 
       const remainingSlots = Math.max(0, maxFiles - value.length);
@@ -145,7 +199,7 @@ export const FileUploader: React.FC<Props> = ({
 
       onValueChange([...value, ...mapped]);
     },
-    [value, onValueChange, maxFiles, maxSize]
+    [value, onValueChange, maxFiles, maxSize, minDimensions]
   );
 
   const onInputChange = useCallback(
@@ -215,6 +269,11 @@ export const FileUploader: React.FC<Props> = ({
         }}
       >
         <p className="text-sm">Click or drag images here</p>
+        <p className="text-xs text-muted-foreground mt-1">
+          JPG, PNG, WebP, AVIF — Max {Math.round(maxSize / (1024 * 1024))}MB per
+          file — Landscape only
+          {minDimensions && ` — Min ${minDimensions.width}x${minDimensions.height}px`}
+        </p>
         <input
           accept={ACCEPTED_IMAGE_TYPES.join(",")}
           className="hidden"
@@ -225,6 +284,21 @@ export const FileUploader: React.FC<Props> = ({
           type="file"
         />
       </div>
+
+      {rejectedFiles.length > 0 && (
+        <div className="mt-2 p-3 bg-amber-50 border border-amber-200 rounded-md">
+          <p className="text-sm font-medium text-amber-800">
+            Some files were not added:
+          </p>
+          <ul className="mt-1 text-xs text-amber-700 list-disc list-inside">
+            {rejectedFiles.map((f, idx) => (
+              <li key={idx}>
+                <span className="font-medium">{f.name}</span> — {f.reason}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <DndContext
         collisionDetection={closestCenter}

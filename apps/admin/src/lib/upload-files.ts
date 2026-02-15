@@ -153,7 +153,11 @@ export async function uploadFilesWithProgress(
   onProgress?: (progressByFile: ProgressMap) => void,
   endpoint: string = DEFAULT_ENDPOINT
 ): Promise<UploadResultWithImage[]> {
-  const tasks = files.map(async (file) => {
+  // Compress images client-side before uploading
+  const { compressImage } = await import("./compress-image");
+  const compressed = await Promise.all(files.map((f) => compressImage(f)));
+
+  const tasks = compressed.map(async (file) => {
     const useChunked = file.size >= LARGE_FILE_THRESHOLD;
     try {
       if (useChunked) {

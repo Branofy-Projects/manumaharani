@@ -507,6 +507,7 @@ export const RoomForm = (props: TRoomFormProps) => {
                               disabled={busy}
                               id="room-featured-image"
                               maxFiles={1}
+                              minDimensions={{ width: 1920, height: 1080 }}
                               onValueChange={field.onChange}
                               progresses={progresses}
                               showValidation={hasAttemptedSubmit}
@@ -531,6 +532,7 @@ export const RoomForm = (props: TRoomFormProps) => {
                               disabled={busy}
                               id="room-gallery-images"
                               maxFiles={20}
+                              minDimensions={{ width: 1920, height: 1080 }}
                               onValueChange={field.onChange}
                               progresses={galleryProgresses}
                               showValidation={hasAttemptedSubmit}

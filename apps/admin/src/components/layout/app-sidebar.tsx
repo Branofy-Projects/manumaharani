@@ -27,7 +27,6 @@ import { useMediaQuery } from '@/hooks/use-media-query';
 import type { Tenant } from "../org-switcher";
 
 import { Icons } from '../icons';
-import { OrgSwitcher } from '../org-switcher';
 
 export const company = {
   logo: IconPhotoUp,
@@ -118,18 +117,20 @@ export default function AppSidebar() {
                     </CollapsibleTrigger>
                     <CollapsibleContent suppressHydrationWarning>
                       <SidebarMenuSub>
-                        {item.items?.map((subItem) => (
-                          <SidebarMenuSubItem key={subItem.title}>
+                        {item.items?.map((subItem) => {
+                          // const SubItemIcon = subItem.icon ? Icons[subItem.icon] : undefined
+                          return <SidebarMenuSubItem key={subItem.title}>
                             <SidebarMenuSubButton
                               asChild
                               isActive={pathname === subItem.url}
                             >
                               <Link href={subItem.url}>
+                                {/* {SubItemIcon && <SubItemIcon />} */}
                                 <span>{subItem.title}</span>
                               </Link>
                             </SidebarMenuSubButton>
                           </SidebarMenuSubItem>
-                        ))}
+                        })}
                       </SidebarMenuSub>
                     </CollapsibleContent>
                   </SidebarMenuItem>

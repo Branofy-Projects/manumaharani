@@ -31,7 +31,8 @@ import {
   IconUserCircle,
   IconUserEdit,
   IconUserX,
-  IconX,
+  IconVideo,
+  IconX
 } from "@tabler/icons-react";
 
 import type { IconProps } from "@tabler/icons-react";
@@ -71,5 +72,6 @@ export const Icons = {
   user: IconUser,
   user2: IconUserCircle,
   userPen: IconUserEdit,
+  video: IconVideo,
   warning: IconAlertTriangle,
 } as const;

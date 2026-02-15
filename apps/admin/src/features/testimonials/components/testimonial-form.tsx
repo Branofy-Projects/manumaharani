@@ -413,6 +413,7 @@ const TestimonialForm = (props: TTestimonialFormProps) => {
                           disabled={isAvatarUploading || isSubmitting}
                           id="testimonial-avatar"
                           maxFiles={1}
+                          minDimensions={{ width: 400, height: 400 }}
                           onValueChange={field.onChange}
                           progresses={progresses}
                           showValidation={hasAttemptedSubmit}

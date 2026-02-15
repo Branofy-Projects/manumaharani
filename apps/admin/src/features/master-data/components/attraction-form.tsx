@@ -400,6 +400,7 @@ const AttractionForm = (props: TAttractionFormProps) => {
                               disabled={isImageUploading || isSubmitting}
                               id="attraction-image"
                               maxFiles={1}
+                              minDimensions={{ width: 1920, height: 1080 }}
                               onValueChange={field.onChange}
                               progresses={progresses}
                               showValidation={hasAttemptedSubmit}
