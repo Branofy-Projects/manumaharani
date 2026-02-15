@@ -192,7 +192,7 @@ export default function AppSidebar() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
 
-                <DropdownMenuGroup>
+                {/* <DropdownMenuGroup>
                   <DropdownMenuItem
                     onClick={() => router.push("/dashboard/profile")}
                   >
@@ -207,8 +207,8 @@ export default function AppSidebar() {
                     <IconBell className="mr-2 h-4 w-4" />
                     Notifications
                   </DropdownMenuItem>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
+                </DropdownMenuGroup> */}
+                {/* <DropdownMenuSeparator /> */}
                 <DropdownMenuItem asChild>
                   <SignOutButton
                     className="w-full justify-start"

@@ -37,7 +37,7 @@ export const navItems: NavItem[] = [
   },
   {
     icon: "help",
-    isActive: true,
+    isActive: false,
     items: [
       {
         icon: "billing",
@@ -75,7 +75,7 @@ export const navItems: NavItem[] = [
   },
   {
     icon: "post",
-    isActive: true,
+    isActive: false,
     items: [
       {
         icon: "post",
@@ -119,7 +119,7 @@ export const navItems: NavItem[] = [
   },
   {
     icon: "kanban",
-    isActive: true,
+    isActive: false,
     items: [
       {
         icon: "tag",
@@ -139,7 +139,7 @@ export const navItems: NavItem[] = [
   },
   {
     icon: "settings",
-    isActive: true,
+    isActive: false,
     items: [
       {
         icon: "media",
@@ -165,7 +165,7 @@ export const navItems: NavItem[] = [
   },
   {
     icon: "user",
-    isActive: true,
+    isActive: false,
     items: [
       {
         icon: "user",
@@ -179,7 +179,7 @@ export const navItems: NavItem[] = [
   },
   {
     icon: "billing",
-    isActive: true,
+    isActive: false,
     items: [
       {
         icon: "userPen",

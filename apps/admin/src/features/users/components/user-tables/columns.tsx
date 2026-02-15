@@ -41,14 +41,16 @@ export const columns: ColumnDef<TUser>[] = [
     size: 40,
   },
   {
-    accessorKey: "first_name",
+    accessorKey: "name",
     cell: ({ row }) => {
       const user = row.original;
 
       return (
         <div className="flex flex-col">
           <div className={`font-medium flex items-center gap-2`}>
-            {user.firstName} {user.lastName}
+            {user.firstName && user.lastName
+              ? `${user.firstName} ${user.lastName}`
+              : user.name}
           </div>
         </div>
       );
@@ -89,7 +91,7 @@ export const columns: ColumnDef<TUser>[] = [
     },
   },
   {
-    accessorKey: "role",
+    accessorKey: "userRole",
     cell: ({ cell }) => {
       const roleValue = cell.row.original.userRole;
 
@@ -116,42 +118,42 @@ export const columns: ColumnDef<TUser>[] = [
     },
   },
   {
-    accessorKey: "created_at",
+    accessorKey: "createdAt",
     cell: ({ cell }) => {
       const date = cell.getValue<string>();
       return (
         <div className="text-sm text-muted-foreground">
-          {new Date(date).toLocaleDateString("en-US", {
+          {date ? new Date(date).toLocaleDateString("en-US", {
             day: "numeric",
             month: "short",
             year: "numeric",
-          })}
+          }) : "—"}
         </div>
       );
     },
     header: ({ column }: { column: Column<TUser, unknown> }) => (
       <DataTableColumnHeader column={column} title="Created" />
     ),
-    id: "created_at",
+    id: "createdAt",
   },
   {
-    accessorKey: "updated_at",
+    accessorKey: "updatedAt",
     cell: ({ cell }) => {
       const date = cell.getValue<string>();
       return (
         <div className="text-sm text-muted-foreground">
-          {new Date(date).toLocaleDateString("en-US", {
+          {date ? new Date(date).toLocaleDateString("en-US", {
             day: "numeric",
             month: "short",
             year: "numeric",
-          })}
+          }) : "—"}
         </div>
       );
     },
     header: ({ column }: { column: Column<TUser, unknown> }) => (
       <DataTableColumnHeader column={column} title="Updated" />
     ),
-    id: "updated_at",
+    id: "updatedAt",
   },
   {
     cell: ({ row }) => <CellAction data={row.original} />,

@@ -12,15 +12,19 @@ import type { TGetUsersFilters } from "@repo/actions/users/user-actions.types";
 export default async function UserListingPage() {
   // Showcasing the use of search params cache in nested RSCs
   const page = searchParamsCache.get("page");
-  const search = searchParamsCache.get("q");
   const pageLimit = searchParamsCache.get("perPage");
   const roles = searchParamsCache.get("roles");
+  // Table toolbar syncs filters to URL by column id (name, email); also support global "q"
+  const search =
+    searchParamsCache.get("name") ??
+    searchParamsCache.get("email") ??
+    searchParamsCache.get("q");
 
   const filters: TGetUsersFilters = {
     limit: pageLimit,
     page,
     ...(search && { search }),
-    ...(roles && { roles }),
+    ...(roles && roles.length > 0 && { roles }),
   };
 
   const user = await getCurrentUser();

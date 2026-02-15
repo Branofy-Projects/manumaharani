@@ -1,43 +1,42 @@
-import { getRoomById } from "@repo/actions";
+import { getUserById } from "@repo/actions";
+import { AppResponseHandler } from "@repo/actions/utils/app-response-handler";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import FormCardSkeleton from "@/components/form-card-skeleton";
 import PageContainer from "@/components/layout/page-container";
-import RoomDetailsView from "@/features/rooms/components/room-details-view";
+import UserDetailsView from "@/features/users/components/user-details-view";
 
 export const metadata = {
-  title: "Dashboard: Room Details",
+  title: "Dashboard: User Details",
 };
 
 type PageProps = {
-  params: Promise<{ id: string }>;
+  params: Promise<{ userId: string }>;
 };
 
-export default async function RoomDetailsPage(props: PageProps) {
+export default async function UserDetailPage(props: PageProps) {
   const params = await props.params;
-  const roomId = parseInt(params.id, 10);
 
-  if (isNaN(roomId)) {
+  if (!params.userId || params.userId === "new") {
     notFound();
   }
 
-  const room = await getRoomById(roomId);
+  const result = await getUserById(params.userId);
 
-  if (!room) {
+  if (AppResponseHandler.isError(result)) {
     notFound();
   }
+
+  const user = result;
 
   return (
     <PageContainer scrollable>
       <div className="flex-1 space-y-4">
         <Suspense fallback={<FormCardSkeleton />}>
-          <RoomDetailsView room={room as any} />
+          <UserDetailsView user={user} />
         </Suspense>
       </div>
     </PageContainer>
   );
 }
-
-
-

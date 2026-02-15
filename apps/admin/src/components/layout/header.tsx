@@ -5,7 +5,6 @@ import SearchInput from '../search-input';
 import { ThemeSelector } from '../theme-selector';
 import { Separator } from '../ui/separator';
 import { SidebarTrigger } from '../ui/sidebar';
-import CtaGithub from './cta-github';
 import { ModeToggle } from './theme-toggle/theme-toggle';
 import { UserNav } from './user-nav';
 
