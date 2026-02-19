@@ -41,6 +41,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const legalRoutes = [
     '/legal-notice',
     '/privacy-notice',
+    '/privacy-policy',
     '/cookie-preferences',
     '/do-not-sell',
     '/accessibility-policy',

@@ -113,6 +113,12 @@ export const navItems: NavItem[] = [
         title: "Nearby Attractions",
         url: "/nearby-attractions",
       },
+      {
+        icon: "media",
+        shortcut: ["s", "i"],
+        title: "Static Images",
+        url: "/static-images",
+      },
     ],
     title: "Content",
     url: "#",

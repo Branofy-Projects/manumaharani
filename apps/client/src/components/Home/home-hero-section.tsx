@@ -17,7 +17,7 @@ export const HomeHeroSection = () => {
           fill
           priority
           sizes="100vw"
-          src="https://ik.imagekit.io/teggaadfo/manu%20-%201080WebShareName.mov/ik-video.mp4/ik-thumbnail.jpg?updatedAt=1760112353814"
+          src="https://storage.googleapis.com/manumaharani-files-bucket/static/1771513678071-Safari__Home_page_.webp"
         />
         <HeroVideo />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80" />

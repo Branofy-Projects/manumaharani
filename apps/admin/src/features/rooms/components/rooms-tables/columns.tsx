@@ -25,6 +25,7 @@ const statusVariantMap = {
 } as const;
 
 export const columns: ColumnDef<TRoom>[] = [
+
   {
     accessorKey: "room_number",
     cell: ({ row }) => {
@@ -46,14 +47,35 @@ export const columns: ColumnDef<TRoom>[] = [
       <DataTableColumnHeader column={column} title="Room Number" />
     ),
     id: "room_number",
-    meta: {
-      icon: null,
-      label: "Room Number",
-      placeholder: "Search by room number...",
-      variant: "text",
-    },
+    // meta: {
+    //   icon: null,
+    //   label: "Room Number",
+    //   placeholder: "Search by room number...",
+    //   variant: "text",
+    // },
   },
-  // {
+  {
+    accessorKey: "title",
+    cell: ({ row }) => {
+      const room = row.original;
+      return (
+        <div className="flex flex-col">
+          <div className="font-medium">{room.title}</div>
+        </div>
+      );
+    },
+    header: ({ column }: { column: Column<TRoom, unknown> }) => (
+      <DataTableColumnHeader column={column} title="Title" />
+    ),
+    id: "title",
+    // meta: {
+    //   icon: null,
+    //   label: "Title",
+    //   placeholder: "Search by title...",
+    //   variant: "text",
+    // },
+  }
+  ,  // {
   //   accessorKey: "roomType",
   //   cell: ({ row }) => {
   //     const roomType = row.original.;

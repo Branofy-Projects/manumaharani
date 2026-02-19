@@ -14,7 +14,7 @@ const accommodations: Accommodation[] = [
     description:
       "Drink in warm sunshine and fresh breezes from your private balcony, which looks out to the best backyard in Austin: our manicured lawns, verdant gardens and Lady Bird Lake.",
     image:
-      "https://www.manumaharaniresorts.com/wp-content/uploads/2025/01/mm-executive-room.webp",
+      "https://storage.googleapis.com/manumaharani-files-bucket/static/1771514100268-NISH2049_-_Signature_Stays__Home_page__.webp",
     title: "Signature Stays",
   },
   {
@@ -28,14 +28,14 @@ const accommodations: Accommodation[] = [
     description:
       "This pied-à-terre is perfectly suited to city living, with views down buzzy San Jacinto Boulevard, Austin-inspired art around you and plenty of space to put your feet up.",
     image:
-      "https://www.manumaharaniresorts.com/wp-content/uploads/2022/10/pexels-pixabay-533325-scaled-1024x654.jpg",
+      "https://storage.googleapis.com/manumaharani-files-bucket/static/1771514132202-NISH1139__1__Fine_dining__home_page_.webp",
     title: "Fine Dining",
   },
   {
     description:
       "Your fully equipped residence, this suite provides space to spare, with balcony breezes filtering in and a service kitchen for hosting dinners or fixing midnight snacks.",
     image:
-      "https://www.manumaharaniresorts.com/wp-content/uploads/2022/09/DSC_9880-scaled-2048x1366.jpg",
+      "https://storage.googleapis.com/manumaharani-files-bucket/static/1771514157372-corporate_mice__Home_page_.webp",
     title: "Corporate & MICE",
   },
   {
