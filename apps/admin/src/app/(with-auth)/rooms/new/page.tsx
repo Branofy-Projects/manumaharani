@@ -1,11 +1,5 @@
-import { RoomForm } from "@/features/rooms/components/room-form";
+import { Suspense } from "react";
 
-<<<<<<< Updated upstream
-export default function NewRoomPage() {
-  return <RoomForm initialData={null} pageTitle="Create Room" />;
-}
-
-=======
 import FormCardSkeleton from "@/components/form-card-skeleton";
 import { RoomForm } from "@/features/rooms/components/room-form";
 
@@ -20,4 +14,3 @@ export default function NewRoomPage() {
     </Suspense>
   );
 }
->>>>>>> Stashed changes
