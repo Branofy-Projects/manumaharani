@@ -1,9 +1,9 @@
+import { GitHubLogoIcon } from '@radix-ui/react-icons';
+import { IconStar } from '@tabler/icons-react';
 import Link from 'next/link';
 
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { GitHubLogoIcon } from '@radix-ui/react-icons';
-import { IconStar } from '@tabler/icons-react';
 
 import type { Metadata } from "next";
 

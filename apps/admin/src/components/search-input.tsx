@@ -1,7 +1,6 @@
 "use client";
-import { useKBar } from 'kbar';
-
 import { IconSearch } from '@tabler/icons-react';
+import { useKBar } from 'kbar';
 
 import { Button } from './ui/button';
 

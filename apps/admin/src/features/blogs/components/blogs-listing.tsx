@@ -1,4 +1,4 @@
-import { getBlogs } from "@repo/actions";
+import { getBlogs, type TGetBlogsFilters } from "@repo/actions";
 import { redirect } from "next/navigation";
 
 import { getCurrentUser } from "@/lib/auth-utils";
@@ -7,13 +7,7 @@ import { searchParamsCache } from "@/lib/searchparams";
 import { BlogsTable } from "./blogs-tables";
 import { columns } from "./blogs-tables/columns";
 
-type TGetBlogsFilters = {
-  search?: string;
-  page?: number;
-  limit?: number;
-  status?: "draft" | "published" | "archived";
-  category?: string;
-};
+
 
 export default async function BlogsListingPage() {
   const page = searchParamsCache.get("page");
@@ -25,7 +19,7 @@ export default async function BlogsListingPage() {
     limit: pageLimit,
     page,
     ...(search && { search }),
-    ...(status && { status: status as "draft" | "published" | "archived" }),
+    ...(status && { status: status as "archived" | "draft" | "published" }),
   };
 
   const user = await getCurrentUser();
@@ -34,7 +28,7 @@ export default async function BlogsListingPage() {
     return redirect("/sign-in");
   }
 
-  const { total, blogs } = await getBlogs(filters);
+  const { blogs, total } = await getBlogs(filters);
 
   return <BlogsTable columns={columns} data={blogs} totalItems={total} />;
 }

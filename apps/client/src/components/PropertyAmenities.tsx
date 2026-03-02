@@ -1,3 +1,5 @@
+import { RenderIcon } from "@/components/render-icon";
+
 interface Amenity {
   icon: string;
   name: string;
@@ -20,7 +22,9 @@ export function PropertyAmenities({ amenities }: PropertyAmenitiesProps) {
             className="flex flex-col items-center text-center"
             key={amenity.name}
           >
-            <div className="mb-3 text-5xl">{amenity.icon}</div>
+            <div className="mb-3">
+              <RenderIcon className="text-[#5a5a5a]" name={amenity.icon} size={40} />
+            </div>
             <div className="text-base font-medium">{amenity.name}</div>
           </div>
         ))}

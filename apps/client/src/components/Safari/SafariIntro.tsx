@@ -3,7 +3,7 @@ export default function SafariIntro() {
     <section className="py-16 bg-white md:py-24">
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-4xl text-center">
-          <h2 className="mb-8 text-2xl font-thin tracking-[0.08em] uppercase md:text-4xl">
+          <h2 className="mb-8 text-2xl  tracking-[0.08em] uppercase md:text-4xl">
             Experience the Wild Heart of India
           </h2>
           <p className="mb-6 text-base leading-relaxed font-serif text-gray-700 md:text-lg">

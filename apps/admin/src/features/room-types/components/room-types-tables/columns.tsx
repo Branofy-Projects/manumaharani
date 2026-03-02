@@ -28,8 +28,8 @@ export const columns: ColumnDef<TRoomType>[] = [
       return (
         <div className="flex flex-col">
           <Link
-            href={`/room-types/${roomType.id}`}
             className="font-medium hover:underline cursor-pointer"
+            href={`/room-types/${roomType.id}`}
           >
             {roomType.name}
           </Link>

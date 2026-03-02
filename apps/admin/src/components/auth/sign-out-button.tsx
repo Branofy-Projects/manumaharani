@@ -11,23 +11,23 @@ import { useAuth } from './auth-provider';
 interface SignOutButtonProps {
   children?: React.ReactNode;
   className?: string;
-  variant?:
-    | "default"
-    | "destructive"
-    | "outline"
-    | "secondary"
-    | "ghost"
-    | "link";
-  size?: "default" | "sm" | "lg" | "icon";
   showIcon?: boolean;
+  size?: "default" | "icon" | "lg" | "sm";
+  variant?:
+  | "default"
+  | "destructive"
+  | "ghost"
+  | "link"
+  | "outline"
+  | "secondary";
 }
 
 export function SignOutButton({
   children,
   className,
-  variant = "ghost",
-  size = "default",
   showIcon = true,
+  size = "default",
+  variant = "ghost",
 }: SignOutButtonProps) {
   const { signOut } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
@@ -48,11 +48,11 @@ export function SignOutButton({
 
   return (
     <Button
-      variant={variant}
-      size={size}
       className={className}
-      onClick={handleSignOut}
       disabled={isLoading}
+      onClick={handleSignOut}
+      size={size}
+      variant={variant}
     >
       {showIcon && <LogOut className="h-4 w-4 mr-2" />}
       {children || (isLoading ? "Signing out..." : "Sign out")}

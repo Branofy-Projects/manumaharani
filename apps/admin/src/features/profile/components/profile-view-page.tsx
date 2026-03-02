@@ -1,13 +1,14 @@
 "use client";
 
-import { useAuth } from "@/hooks/use-auth";
-import { useForm } from "react-hook-form";
+import { format } from "date-fns";
+import { Calendar, Edit, Loader2, Mail, Phone, Shield } from "lucide-react";
 import { useState } from "react";
-import { z } from "zod";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { Loader2, Edit, Mail, Phone, User, Shield, Calendar } from "lucide-react";
+import { z } from "zod";
 
 import PageContainer from "@/components/layout/page-container";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -19,61 +20,60 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Heading } from "@/components/ui/heading";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { Heading } from "@/components/ui/heading";
+import { useAuth } from "@/hooks/use-auth";
 import { zodResolver } from "@/lib/zod-resolver";
-import { Badge } from "@/components/ui/badge";
-import { format } from "date-fns";
 
 const profileSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
   firstName: z.string().optional(),
   lastName: z.string().optional(),
+  name: z.string().min(2, "Name must be at least 2 characters"),
   phone: z.string().optional(),
 });
 
 const passwordSchema = z.object({
+  confirmPassword: z.string().min(8, "Please confirm your password"),
   currentPassword: z.string().min(1, "Current password is required"),
   newPassword: z.string().min(8, "Password must be at least 8 characters"),
-  confirmPassword: z.string().min(8, "Please confirm your password"),
 }).refine((data) => data.newPassword === data.confirmPassword, {
   message: "Passwords don't match",
   path: ["confirmPassword"],
 });
 
-type ProfileFormValues = z.infer<typeof profileSchema>;
 type PasswordFormValues = z.infer<typeof passwordSchema>;
+type ProfileFormValues = z.infer<typeof profileSchema>;
 
-export default function ProfileViewPage() {
-  const { user, updateUser, changePassword, isLoading: authLoading } = useAuth();
+export default function ProfxileViewPage() {
+  const { isLoading: authLoading, resetPassword, updateUser, user } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
   const profileForm = useForm<ProfileFormValues>({
-    resolver: zodResolver(profileSchema),
     defaultValues: {
-      name: user?.name || "",
       firstName: user?.firstName || "",
       lastName: user?.lastName || "",
+      name: user?.name || "",
       phone: user?.phone || "",
     },
+    resolver: zodResolver(profileSchema),
     values: {
-      name: user?.name || "",
       firstName: user?.firstName || "",
       lastName: user?.lastName || "",
+      name: user?.name || "",
       phone: user?.phone || "",
     },
   });
 
   const passwordForm = useForm<PasswordFormValues>({
-    resolver: zodResolver(passwordSchema),
     defaultValues: {
+      confirmPassword: "",
       currentPassword: "",
       newPassword: "",
-      confirmPassword: "",
     },
+    resolver: zodResolver(passwordSchema),
   });
 
   const onProfileSubmit = async (data: ProfileFormValues) => {
@@ -86,17 +86,17 @@ export default function ProfileViewPage() {
     try {
       // Update user profile
       await updateUser({
-        name: data.name,
         firstName: data.firstName,
         lastName: data.lastName,
+        name: data.name,
         phone: data.phone,
       });
 
       setIsEditing(false);
       profileForm.reset({
-        name: data.name,
         firstName: data.firstName,
         lastName: data.lastName,
+        name: data.name,
         phone: data.phone,
       });
     } catch (error: any) {
@@ -110,7 +110,7 @@ export default function ProfileViewPage() {
   const onPasswordSubmit = async (data: PasswordFormValues) => {
     setIsChangingPassword(true);
     try {
-      await changePassword(data.currentPassword, data.newPassword);
+      await resetPassword(data.newPassword);
       passwordForm.reset();
     } catch (error: any) {
       console.error("Error changing password:", error);
@@ -209,7 +209,7 @@ export default function ProfileViewPage() {
                         <Shield className="h-4 w-4" />
                         Role
                       </label>
-                      <Badge variant="secondary" className="mt-1">
+                      <Badge className="mt-1" variant="secondary">
                         {roleLabel}
                       </Badge>
                     </div>
@@ -268,8 +268,8 @@ export default function ProfileViewPage() {
                       setIsEditing(false);
                       profileForm.reset();
                     }}
-                    variant="ghost"
                     size="sm"
+                    variant="ghost"
                   >
                     Cancel
                   </Button>
@@ -380,17 +380,17 @@ export default function ProfileViewPage() {
                     </FormItem>
 
                     <div className="flex gap-2">
-                      <Button disabled={isSubmitting} type="submit" className="flex-1">
+                      <Button className="flex-1" disabled={isSubmitting} type="submit">
                         {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         Save Changes
                       </Button>
                       <Button
-                        type="button"
-                        variant="outline"
                         onClick={() => {
                           setIsEditing(false);
                           profileForm.reset();
                         }}
+                        type="button"
+                        variant="outline"
                       >
                         Cancel
                       </Button>
@@ -472,7 +472,7 @@ export default function ProfileViewPage() {
                       )}
                     />
 
-                    <Button disabled={isChangingPassword} type="submit" variant="outline" className="w-full">
+                    <Button className="w-full" disabled={isChangingPassword} type="submit" variant="outline">
                       {isChangingPassword && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                       Change Password
                     </Button>

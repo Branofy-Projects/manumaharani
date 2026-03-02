@@ -1,4 +1,5 @@
 "use client";
+import { createFaq, updateFaq } from '@repo/actions/master-data.actions';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
@@ -9,40 +10,40 @@ import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
-    Form, FormControl, FormField, FormItem, FormLabel, FormMessage
+  Form, FormControl, FormField, FormItem, FormLabel, FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { zodResolver } from '@/lib/zod-resolver';
-import { createFaq, updateFaq } from '@repo/actions';
+
 import type { TFaq } from "@repo/db";
 
 const formSchema = z.object({
-  question: z.string().min(1, "Question is required.").max(500),
   answer: z.string().min(1, "Answer is required."),
+  question: z.string().min(1, "Question is required.").max(500),
 });
 
 type TFaqFormProps = {
-  initialData: TFaq | null;
-  pageTitle: string;
   faqId?: string;
+  initialData: null | TFaq;
+  pageTitle: string;
 };
 
 const FaqForm = (props: TFaqFormProps) => {
-  const { initialData, pageTitle, faqId } = props;
+  const { faqId, initialData, pageTitle } = props;
 
   const router = useRouter();
 
   const defaultValues = useMemo(() => {
     return {
-      question: initialData?.question || "",
       answer: initialData?.answer || "",
+      question: initialData?.question || "",
     };
   }, [initialData]);
 
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
     defaultValues,
+    resolver: zodResolver(formSchema),
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -111,8 +112,8 @@ const FaqForm = (props: TFaqFormProps) => {
                   <FormLabel>Answer</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Enter answer"
                       className="min-h-[150px]"
+                      placeholder="Enter answer"
                       {...field}
                     />
                   </FormControl>
@@ -123,19 +124,19 @@ const FaqForm = (props: TFaqFormProps) => {
 
             <div className="flex items-center gap-4">
               <Button
-                type="submit"
-                disabled={isSubmitting}
                 className="w-full sm:w-auto"
+                disabled={isSubmitting}
+                type="submit"
               >
                 {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {faqId ? "Update FAQ" : "Create FAQ"}
               </Button>
               <Button
+                className="w-full sm:w-auto"
+                disabled={isSubmitting}
+                onClick={() => router.push("/faqs")}
                 type="button"
                 variant="outline"
-                onClick={() => router.push("/faqs")}
-                disabled={isSubmitting}
-                className="w-full sm:w-auto"
               >
                 Cancel
               </Button>

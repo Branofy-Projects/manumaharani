@@ -4,8 +4,8 @@ import { useRouter } from 'next/navigation';
 import { SignOutButton } from '@/components/auth/sign-out-button';
 import { Button } from '@/components/ui/button';
 import {
-    DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel,
-    DropdownMenuSeparator, DropdownMenuTrigger
+  DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel,
+  DropdownMenuSeparator, DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { UserAvatarProfile } from '@/components/user-avatar-profile';
 import { useAuth } from '@/hooks/use-auth';
@@ -17,15 +17,15 @@ export function UserNav() {
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+          <Button className="relative h-8 w-8 rounded-full" variant="ghost">
             <UserAvatarProfile user={user} />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          className="w-56"
           align="end"
-          sideOffset={10}
+          className="w-56"
           forceMount
+          sideOffset={10}
         >
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
@@ -36,17 +36,17 @@ export function UserNav() {
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuGroup>
-            <DropdownMenuItem onClick={() => router.push("/dashboard/profile")}>
+          {/* <DropdownMenuGroup> */}
+          {/* <DropdownMenuItem onClick={() => router.push("/dashboard/profile")}>
               Profile
-            </DropdownMenuItem>
-            <DropdownMenuItem>Billing</DropdownMenuItem>
-            <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuItem>New Team</DropdownMenuItem>
-          </DropdownMenuGroup>
-          <DropdownMenuSeparator />
+            </DropdownMenuItem> */}
+          {/* <DropdownMenuItem>Billing</DropdownMenuItem> */}
+          {/* <DropdownMenuItem>Settings</DropdownMenuItem> */}
+          {/* <DropdownMenuItem>New Team</DropdownMenuItem> */}
+          {/* </DropdownMenuGroup> */}
+          {/* <DropdownMenuSeparator /> */}
           <DropdownMenuItem asChild>
-            <SignOutButton variant="ghost" className="w-full justify-start" />
+            <SignOutButton className="w-full justify-start" variant="ghost" />
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

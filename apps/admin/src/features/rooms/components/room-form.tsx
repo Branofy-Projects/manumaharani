@@ -1,13 +1,22 @@
 "use client";
 
+import { getAmenities } from "@repo/actions";
+import {
+  createRoom,
+  syncRoomAmenities,
+  syncRoomImages,
+  updateRoom,
+} from "@repo/actions";
+import { createImages } from "@repo/actions/images.actions";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
 import { FileUploader, hasValidImages } from "@/components/file-uploader";
+import { IconSelectButton, RenderIcon } from "@/components/icon-select";
 import PageContainer from "@/components/layout/page-container";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,6 +31,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
 import {
   Select,
   SelectContent,
@@ -35,69 +45,62 @@ import { Textarea } from "@/components/ui/textarea";
 import { ImagesArraySchema } from "@/lib/image-schema";
 import { uploadFilesWithProgress } from "@/lib/upload-files";
 import { zodResolver } from "@/lib/zod-resolver";
-import { createImages } from "@repo/actions/images.actions";
-import { getAmenities } from "@repo/actions";
-import {
-  createRoom,
-  updateRoom,
-  syncRoomImages,
-  syncRoomAmenities,
-} from "@repo/actions";
+
 import type { TRoom } from "@repo/db";
 
 const BED_TYPE_OPTIONS = [
-  { value: "single", label: "Single" },
-  { value: "double", label: "Double" },
-  { value: "queen", label: "Queen" },
-  { value: "king", label: "King" },
-  { value: "twin", label: "Twin" },
+  { label: "Single", value: "single" },
+  { label: "Double", value: "double" },
+  { label: "Queen", value: "queen" },
+  { label: "King", value: "king" },
+  { label: "Twin", value: "twin" },
 ] as const;
 
-import type { NewFormImage, FormImage } from "@/lib/image-schema";
 import type { FormImage as FileUploaderFormImage } from "@/components/file-uploader";
+import type { FormImage, NewFormImage } from "@/lib/image-schema";
 
 const ROOM_STATUS_OPTIONS = [
-  { value: "available", label: "Available" },
-  { value: "occupied", label: "Occupied" },
-  { value: "maintenance", label: "Maintenance" },
-  { value: "blocked", label: "Blocked" },
+  { label: "Available", value: "available" },
+  { label: "Occupied", value: "occupied" },
+  { label: "Maintenance", value: "maintenance" },
+  { label: "Blocked", value: "blocked" },
 ] as const;
 
 /** Coerce to a numeric string for DB (e.g. base_price). Returns "0" if invalid. */
-function toNumericString(value: string | number | undefined | null, defaultVal: string = "0"): string {
+function toNumericString(value: null | number | string | undefined, defaultVal: string = "0"): string {
   if (value === undefined || value === null || value === "") return defaultVal;
   const n = Number(String(value).trim());
   return Number.isNaN(n) ? defaultVal : n.toFixed(2);
 }
 
 /** Coerce to numeric string or null for optional DB fields (e.g. peak_season_price, rating). */
-function toOptionalNumeric(value: string | number | undefined | null): string | null {
+function toOptionalNumeric(value: null | number | string | undefined): null | string {
   if (value === undefined || value === null || value === "") return null;
   const n = Number(String(value).trim());
   return Number.isNaN(n) ? null : n.toFixed(2);
 }
 
 /** For rating (scale 1 decimal). */
-function toOptionalRating(value: string | number | undefined | null): string | null {
+function toOptionalRating(value: null | number | string | undefined): null | string {
   if (value === undefined || value === null || value === "") return null;
   const n = Number(String(value).trim());
   return Number.isNaN(n) ? null : n.toFixed(1);
 }
 
 const formSchema = z.object({
-  title: z.string().min(1, "Title is required.").max(255),
-  slug: z.string().min(1, "Slug is required.").max(255),
   description: z.string().optional(),
+  slug: z.string().min(1, "Slug is required.").max(255),
+  title: z.string().min(1, "Title is required.").max(255),
   // Featured image (like offers)
   image: ImagesArraySchema(0, 1),
   // Gallery images
   images: ImagesArraySchema(0, 20),
   video_url: z.union([z.string().url(), z.literal("")]).optional(),
   // Size & capacity
-  size_sqft: z.coerce.number().min(0, "Size must be 0 or greater"),
+  bed_type: z.enum(["single", "double", "queen", "king", "twin"]),
   max_occupancy: z.coerce.number().min(1, "Max occupancy must be at least 1"),
   number_of_beds: z.coerce.number().min(0, "Number of beds must be 0 or greater"),
-  bed_type: z.enum(["single", "double", "queen", "king", "twin"]),
+  size_sqft: z.coerce.number().min(0, "Size must be 0 or greater"),
   // Check-in / Check-out
   check_in_time: z.string().max(20).optional(),
   check_out_time: z.string().max(20).optional(),
@@ -117,14 +120,14 @@ const formSchema = z.object({
   status: z.enum(["available", "occupied", "maintenance", "blocked"]),
   // Optional
   floor: z.coerce.number().min(0).optional(),
-  room_number: z.string().max(50).optional(),
   notes: z.string().optional(),
+  room_number: z.string().max(50).optional(),
   // Amenities (ids)
   amenity_ids: z.array(z.number()).default([]),
 });
 
 type TRoomFormProps = {
-  initialData: (TRoom & { images?: any[] }) | null;
+  initialData: ({ images?: any[] } & TRoom) | null;
   pageTitle: string;
   roomId?: string;
 };
@@ -150,65 +153,65 @@ export const RoomForm = (props: TRoomFormProps) => {
   }, []);
 
   const defaultValues = useMemo(() => {
-    const room = initialData as TRoom & { images?: Array<{ image_id?: number; image?: { id: number; small_url?: string; medium_url?: string; large_url?: string; original_url?: string; alt_text?: string }; order?: number }> };
+    const room = initialData as { images?: Array<{ image?: { alt_text?: string; id: number; large_url?: string; medium_url?: string; original_url?: string; small_url?: string; }; image_id?: number; order?: number }> } & TRoom;
     return {
-      title: room?.title || "",
-      slug: room?.slug || "",
+      amenity_ids: (room?.amenities ?? []).map((a: { amenity?: { id: number }; amenity_id?: number; }) => a.amenity_id ?? a.amenity?.id ?? 0).filter(Boolean),
+      base_price: room?.base_price?.toString() ?? "",
+      bed_type: (room?.bed_type as "double" | "king" | "queen" | "single" | "twin") ?? "double",
+      check_in_time: room?.check_in_time ?? "14:00",
+      check_out_time: room?.check_out_time ?? "11:00",
+      children_policy: room?.children_policy ?? "",
       description: room?.description || "",
+      extra_beds: room?.extra_beds ?? "",
+      floor: room?.floor ?? undefined,
       image: room?.image
         ? [
-            {
-              _type: "existing" as const,
-              alt_text: room.image.alt_text || "",
-              image_id: room.image.id,
-              large_url: room.image.large_url || "",
-              medium_url: room.image.medium_url || "",
-              order: 0,
-              original_url: room.image.original_url || "",
-              small_url: room.image.small_url || "",
-            },
-          ]
+          {
+            _type: "existing" as const,
+            alt_text: room.image.alt_text || "",
+            image_id: room.image.id,
+            large_url: room.image.large_url || "",
+            medium_url: room.image.medium_url || "",
+            order: 0,
+            original_url: room.image.original_url || "",
+            small_url: room.image.small_url || "",
+          },
+        ]
         : [],
       images: (room?.images ?? [])
         .sort((a: any, b: any) => (a.order ?? 0) - (b.order ?? 0))
         .map((pi: any) => ({
           _type: "existing" as const,
-          image_id: pi.image_id ?? pi.image?.id,
-          order: pi.order ?? 0,
-          small_url: pi.image?.small_url || "",
-          medium_url: pi.image?.medium_url || "",
-          large_url: pi.image?.large_url || "",
-          original_url: pi.image?.original_url || "",
           alt_text: pi.image?.alt_text || "",
+          image_id: pi.image_id ?? pi.image?.id,
+          large_url: pi.image?.large_url || "",
+          medium_url: pi.image?.medium_url || "",
+          order: pi.order ?? 0,
+          original_url: pi.image?.original_url || "",
+          small_url: pi.image?.small_url || "",
         })),
-      video_url: room?.video_url ?? "",
-      size_sqft: room?.size_sqft ?? 0,
+      is_featured: (room?.is_featured ?? 0) === 1,
       max_occupancy: room?.max_occupancy ?? 2,
+      notes: room?.notes ?? "",
       number_of_beds: room?.number_of_beds ?? 1,
-      bed_type: (room?.bed_type as "single" | "double" | "queen" | "king" | "twin") ?? "double",
-      check_in_time: room?.check_in_time ?? "14:00",
-      check_out_time: room?.check_out_time ?? "11:00",
-      children_policy: room?.children_policy ?? "",
-      extra_beds: room?.extra_beds ?? "",
-      base_price: room?.base_price?.toString() ?? "",
+      order: room?.order ?? 0,
       peak_season_price: room?.peak_season_price?.toString() ?? "",
-      weekend_price: room?.weekend_price?.toString() ?? "",
       rating: room?.rating?.toString() ?? "",
       review_count: room?.review_count ?? 0,
-      is_featured: (room?.is_featured ?? 0) === 1,
-      order: room?.order ?? 0,
-      status:
-        (room?.status as "available" | "occupied" | "maintenance" | "blocked") ?? "available",
-      floor: room?.floor ?? undefined,
       room_number: room?.room_number ?? "",
-      notes: room?.notes ?? "",
-      amenity_ids: (room?.amenities ?? []).map((a: { amenity_id?: number; amenity?: { id: number } }) => a.amenity_id ?? a.amenity?.id ?? 0).filter(Boolean),
+      size_sqft: room?.size_sqft ?? 0,
+      slug: room?.slug || "",
+      status:
+        (room?.status as "available" | "blocked" | "maintenance" | "occupied") ?? "available",
+      title: room?.title || "",
+      video_url: room?.video_url ?? "",
+      weekend_price: room?.weekend_price?.toString() ?? "",
     };
   }, [initialData]);
 
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
     defaultValues,
+    resolver: zodResolver(formSchema),
   });
 
   const featuredImage = form.watch("image");
@@ -237,7 +240,7 @@ export const RoomForm = (props: TRoomFormProps) => {
       setIsSubmitting(true);
 
       // 1) Featured image
-      let featuredImageId: number | null = null;
+      let featuredImageId: null | number = null;
       if (data.image && data.image.length > 0) {
         const img = data.image[0]!;
         if (img._type === "new") {
@@ -294,30 +297,30 @@ export const RoomForm = (props: TRoomFormProps) => {
       }
 
       const roomPayload = {
-        title: data.title,
-        slug: data.slug,
-        description: data.description || null,
-        image: featuredImageId,
-        video_url: data.video_url || null,
-        size_sqft: data.size_sqft,
-        max_occupancy: data.max_occupancy,
-        number_of_beds: data.number_of_beds,
+        base_price: toNumericString(data.base_price, "0"),
         bed_type: data.bed_type,
         check_in_time: data.check_in_time || null,
         check_out_time: data.check_out_time || null,
         children_policy: data.children_policy || null,
+        description: data.description || null,
         extra_beds: data.extra_beds || null,
-        base_price: toNumericString(data.base_price, "0"),
+        floor: data.floor ?? null,
+        image: featuredImageId,
+        is_featured: (data.is_featured === true) ? 1 : 0,
+        max_occupancy: data.max_occupancy,
+        notes: data.notes || null,
+        number_of_beds: data.number_of_beds,
+        order: Math.max(0, Math.floor(Number(data.order) || 0)),
         peak_season_price: toOptionalNumeric(data.peak_season_price),
-        weekend_price: toOptionalNumeric(data.weekend_price),
         rating: toOptionalRating(data.rating),
         review_count: Math.max(0, Math.floor(Number(data.review_count) || 0)),
-        is_featured: (data.is_featured === true || data.is_featured === 1) ? 1 : 0,
-        order: Math.max(0, Math.floor(Number(data.order) || 0)),
-        status: data.status,
-        floor: data.floor ?? null,
         room_number: data.room_number || null,
-        notes: data.notes || null,
+        size_sqft: data.size_sqft,
+        slug: data.slug,
+        status: data.status,
+        title: data.title,
+        video_url: data.video_url || null,
+        weekend_price: toOptionalNumeric(data.weekend_price),
       };
 
       let roomId: number;
@@ -367,14 +370,14 @@ export const RoomForm = (props: TRoomFormProps) => {
               <h1 className="text-2xl font-bold">{pageTitle}</h1>
               <div className="flex gap-3">
                 <Button
+                  disabled={busy}
+                  onClick={() => router.back()}
                   type="button"
                   variant="outline"
-                  onClick={() => router.back()}
-                  disabled={busy}
                 >
                   Cancel
                 </Button>
-                <Button type="submit" disabled={busy}>
+                <Button disabled={busy} type="submit">
                   {busy ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -413,54 +416,54 @@ export const RoomForm = (props: TRoomFormProps) => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <FormField
+                        control={form.control}
+                        name="title"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Title</FormLabel>
+                            <FormControl>
+                              <Input placeholder="e.g. Ocean View Suite" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="slug"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Slug</FormLabel>
+                            <FormControl>
+                              <Input placeholder="ocean-view-suite" {...field} />
+                            </FormControl>
+                            <FormDescription className="text-xs">
+                              URL-friendly identifier
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                     <FormField
                       control={form.control}
-                      name="title"
+                      name="description"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Title</FormLabel>
+                          <FormLabel>Description</FormLabel>
                           <FormControl>
-                            <Input placeholder="e.g. Ocean View Suite" {...field} />
+                            <Textarea
+                              className="min-h-[100px]"
+                              placeholder="Describe the room..."
+                              {...field}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
-                    <FormField
-                      control={form.control}
-                      name="slug"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Slug</FormLabel>
-                          <FormControl>
-                            <Input placeholder="ocean-view-suite" {...field} />
-                          </FormControl>
-                          <FormDescription className="text-xs">
-                            URL-friendly identifier
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Description</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="Describe the room..."
-                            className="min-h-[100px]"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
                   </CardContent>
                 </Card>
               </TabsContent>
@@ -475,71 +478,71 @@ export const RoomForm = (props: TRoomFormProps) => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                  <FormField
-                    control={form.control}
-                    name="image"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Featured image</FormLabel>
-                        <FormControl>
-                          <FileUploader
-                            value={field.value || []}
-                            onValueChange={field.onChange}
-                            maxFiles={1}
-                            progresses={progresses}
-                            disabled={busy}
-                            showValidation={hasAttemptedSubmit}
-                            id="room-featured-image"
-                          />
-                        </FormControl>
-                        <FormDescription className="text-xs">
-                          Main image for listings
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="images"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Gallery images</FormLabel>
-                        <FormControl>
-                          <FileUploader
-                            value={field.value || []}
-                            onValueChange={field.onChange}
-                            maxFiles={20}
-                            progresses={galleryProgresses}
-                            disabled={busy}
-                            showValidation={hasAttemptedSubmit}
-                            id="room-gallery-images"
-                          />
-                        </FormControl>
-                        <FormDescription className="text-xs">
-                          Additional room images. Drag to reorder.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="video_url"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Video URL</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="https://..."
-                            type="url"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                    <FormField
+                      control={form.control}
+                      name="image"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Featured image</FormLabel>
+                          <FormControl>
+                            <FileUploader
+                              disabled={busy}
+                              id="room-featured-image"
+                              maxFiles={1}
+                              onValueChange={field.onChange}
+                              progresses={progresses}
+                              showValidation={hasAttemptedSubmit}
+                              value={field.value || []}
+                            />
+                          </FormControl>
+                          <FormDescription className="text-xs">
+                            Main image for listings
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="images"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Gallery images</FormLabel>
+                          <FormControl>
+                            <FileUploader
+                              disabled={busy}
+                              id="room-gallery-images"
+                              maxFiles={20}
+                              onValueChange={field.onChange}
+                              progresses={galleryProgresses}
+                              showValidation={hasAttemptedSubmit}
+                              value={field.value || []}
+                            />
+                          </FormControl>
+                          <FormDescription className="text-xs">
+                            Additional room images. Drag to reorder.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="video_url"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Video URL</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="https://..."
+                              type="url"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </CardContent>
                 </Card>
               </TabsContent>
@@ -554,144 +557,144 @@ export const RoomForm = (props: TRoomFormProps) => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                <div className="space-y-4">
-                  <h3 className="text-sm font-medium">Size & capacity</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="size_sqft"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Size (sq ft)</FormLabel>
-                          <FormControl>
-                            <Input type="number" min={0} {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="max_occupancy"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Max occupancy</FormLabel>
-                          <FormControl>
-                            <Input type="number" min={1} {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="number_of_beds"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Number of beds</FormLabel>
-                          <FormControl>
-                            <Input type="number" min={0} {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="bed_type"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Bed type</FormLabel>
-                          <Select onValueChange={field.onChange} value={field.value}>
+                    <div className="space-y-4">
+                      <h3 className="text-sm font-medium">Size & capacity</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="size_sqft"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Size (sq ft)</FormLabel>
+                              <FormControl>
+                                <Input min={0} type="number" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="max_occupancy"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Max occupancy</FormLabel>
+                              <FormControl>
+                                <Input min={1} type="number" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="number_of_beds"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Number of beds</FormLabel>
+                              <FormControl>
+                                <Input min={0} type="number" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="bed_type"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Bed type</FormLabel>
+                              <Select onValueChange={field.onChange} value={field.value}>
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  {BED_TYPE_OPTIONS.map((opt) => (
+                                    <SelectItem key={opt.value} value={opt.value}>
+                                      {opt.label}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <h3 className="text-sm font-medium">Check-in & check-out</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="check_in_time"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Check-in time</FormLabel>
+                              <FormControl>
+                                <Input placeholder="14:00" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="check_out_time"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Check-out time</FormLabel>
+                              <FormControl>
+                                <Input placeholder="11:00" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <h3 className="text-sm font-medium">Policies</h3>
+                      <FormField
+                        control={form.control}
+                        name="children_policy"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Children policy</FormLabel>
                             <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select" />
-                              </SelectTrigger>
+                              <Textarea
+                                className="min-h-[80px]"
+                                placeholder="e.g. Children welcome. Extra bed available."
+                                {...field}
+                              />
                             </FormControl>
-                            <SelectContent>
-                              {BED_TYPE_OPTIONS.map((opt) => (
-                                <SelectItem key={opt.value} value={opt.value}>
-                                  {opt.label}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <h3 className="text-sm font-medium">Check-in & check-out</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="check_in_time"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Check-in time</FormLabel>
-                          <FormControl>
-                            <Input placeholder="14:00" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="check_out_time"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Check-out time</FormLabel>
-                          <FormControl>
-                            <Input placeholder="11:00" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <h3 className="text-sm font-medium">Policies</h3>
-                  <FormField
-                    control={form.control}
-                    name="children_policy"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Children policy</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="e.g. Children welcome. Extra bed available."
-                            className="min-h-[80px]"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="extra_beds"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Extra beds</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="e.g. Extra bed on request. Charge may apply."
-                            className="min-h-[60px]"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="extra_beds"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Extra beds</FormLabel>
+                            <FormControl>
+                              <Textarea
+                                className="min-h-[60px]"
+                                placeholder="e.g. Extra bed on request. Charge may apply."
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                   </CardContent>
                 </Card>
               </TabsContent>
@@ -706,60 +709,60 @@ export const RoomForm = (props: TRoomFormProps) => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                <div className="space-y-4">
-                  <h3 className="text-sm font-medium">Pricing</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="base_price"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Base price</FormLabel>
-                          <FormControl>
-                            <Input
-                              type="number"
-                              step="0.01"
-                              min={0}
-                              placeholder="0.00"
-                              inputMode="decimal"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormDescription className="text-xs">
-                            Numbers only (e.g. 10000)
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="peak_season_price"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Peak season price</FormLabel>
-                          <FormControl>
-                            <Input type="number" step="0.01" placeholder="Optional" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="weekend_price"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Weekend price</FormLabel>
-                          <FormControl>
-                            <Input type="number" step="0.01" placeholder="Optional" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
+                    <div className="space-y-4">
+                      <h3 className="text-sm font-medium">Pricing</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="base_price"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Base price</FormLabel>
+                              <FormControl>
+                                <Input
+                                  inputMode="decimal"
+                                  min={0}
+                                  placeholder="0.00"
+                                  step="0.01"
+                                  type="number"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormDescription className="text-xs">
+                                Numbers only (e.g. 10000)
+                              </FormDescription>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="peak_season_price"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Peak season price</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Optional" step="0.01" type="number" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="weekend_price"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Weekend price</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Optional" step="0.01" type="number" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               </TabsContent>
@@ -774,95 +777,95 @@ export const RoomForm = (props: TRoomFormProps) => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                <div className="space-y-4">
-                  <h3 className="text-sm font-medium">Reviews</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="rating"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Rating (e.g. 4.5)</FormLabel>
-                          <FormControl>
-                            <Input type="number" step="0.1" min={0} max={5} placeholder="Optional" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="review_count"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Review count</FormLabel>
-                          <FormControl>
-                            <Input type="number" min={0} {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
+                    <div className="space-y-4">
+                      <h3 className="text-sm font-medium">Reviews</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="rating"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Rating (e.g. 4.5)</FormLabel>
+                              <FormControl>
+                                <Input max={5} min={0} placeholder="Optional" step="0.1" type="number" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="review_count"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Review count</FormLabel>
+                              <FormControl>
+                                <Input min={0} type="number" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
 
-                <div className="space-y-4">
-                  <h3 className="text-sm font-medium">Display & status</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="is_featured"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                          <FormLabel className="text-base">Featured room</FormLabel>
-                          <FormControl>
-                            <Switch checked={field.value} onCheckedChange={field.onChange} />
-                          </FormControl>
-                          <FormDescription className="text-xs">
-                            Show in featured sections
-                          </FormDescription>
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="order"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Display order</FormLabel>
-                          <FormControl>
-                            <Input type="number" min={0} {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="status"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Status</FormLabel>
-                          <Select onValueChange={field.onChange} value={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select status" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {ROOM_STATUS_OPTIONS.map((s) => (
-                                <SelectItem key={s.value} value={s.value}>
-                                  {s.label}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
+                    <div className="space-y-4">
+                      <h3 className="text-sm font-medium">Display & status</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="is_featured"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                              <FormLabel className="text-base">Featured room</FormLabel>
+                              <FormControl>
+                                <Switch checked={field.value} onCheckedChange={field.onChange} />
+                              </FormControl>
+                              <FormDescription className="text-xs">
+                                Show in featured sections
+                              </FormDescription>
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="order"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Display order</FormLabel>
+                              <FormControl>
+                                <Input min={0} type="number" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="status"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Status</FormLabel>
+                              <Select onValueChange={field.onChange} value={field.value}>
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select status" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  {ROOM_STATUS_OPTIONS.map((s) => (
+                                    <SelectItem key={s.value} value={s.value}>
+                                      {s.label}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               </TabsContent>
@@ -877,96 +880,96 @@ export const RoomForm = (props: TRoomFormProps) => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                <div className="space-y-4">
-                  <h3 className="text-sm font-medium">Amenities</h3>
-                  <FormField
-                    control={form.control}
-                    name="amenity_ids"
-                    render={({ field }) => (
-                      <FormItem>
-                        <div className="flex flex-wrap gap-4 rounded-md border p-4">
-                          {amenities.map((a) => (
-                            <div
-                              key={a.id}
-                              className="flex flex-row items-center space-x-2"
-                            >
-                              <Checkbox
-                                id={`amenity-${a.id}`}
-                                checked={field.value?.includes(a.id)}
-                                onCheckedChange={(checked) => {
-                                  const next = checked
-                                    ? [...(field.value || []), a.id]
-                                    : (field.value || []).filter((id) => id !== a.id);
-                                  field.onChange(next);
-                                }}
-                              />
-                              <label
-                                htmlFor={`amenity-${a.id}`}
-                                className="text-sm font-normal cursor-pointer leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                              >
-                                {a.label}
-                              </label>
+                    <div className="space-y-4">
+                      <h3 className="text-sm font-medium">Amenities</h3>
+                      <FormField
+                        control={form.control}
+                        name="amenity_ids"
+                        render={({ field }) => (
+                          <FormItem>
+                            <div className="flex flex-wrap gap-4 rounded-md border p-4">
+                              {amenities.map((a) => (
+                                <div
+                                  className="flex flex-row items-center space-x-2"
+                                  key={a.id}
+                                >
+                                  <Checkbox
+                                    checked={field.value?.includes(a.id)}
+                                    id={`amenity-${a.id}`}
+                                    onCheckedChange={(checked) => {
+                                      const next = checked
+                                        ? [...(field.value || []), a.id]
+                                        : (field.value || []).filter((id) => id !== a.id);
+                                      field.onChange(next);
+                                    }}
+                                  />
+                                  <label
+                                    className="text-sm font-normal cursor-pointer leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                    htmlFor={`amenity-${a.id}`}
+                                  >
+                                    {a.label}
+                                  </label>
+                                </div>
+                              ))}
                             </div>
-                          ))}
-                        </div>
-                        <FormDescription className="text-xs">
-                          Select amenities for this room
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+                            <FormDescription className="text-xs">
+                              Select amenities for this room
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
 
-                <div className="space-y-4 pt-4">
-                  <h3 className="text-sm font-medium">Optional</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="floor"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Floor</FormLabel>
-                          <FormControl>
-                            <Input
-                              type="number"
-                              min={0}
-                              value={field.value ?? ""}
-                              onChange={(e) => field.onChange(e.target.value === "" ? undefined : Number(e.target.value))}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="room_number"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Room number</FormLabel>
-                          <FormControl>
-                            <Input placeholder="e.g. 101" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <FormField
-                    control={form.control}
-                    name="notes"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Internal notes</FormLabel>
-                        <FormControl>
-                          <Textarea placeholder="Not visible to guests" className="min-h-[60px]" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+                    <div className="space-y-4 pt-4">
+                      <h3 className="text-sm font-medium">Optional</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="floor"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Floor</FormLabel>
+                              <FormControl>
+                                <Input
+                                  min={0}
+                                  onChange={(e) => field.onChange(e.target.value === "" ? undefined : Number(e.target.value))}
+                                  type="number"
+                                  value={field.value ?? ""}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="room_number"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Room number</FormLabel>
+                              <FormControl>
+                                <Input placeholder="e.g. 101" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <FormField
+                        control={form.control}
+                        name="notes"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Internal notes</FormLabel>
+                            <FormControl>
+                              <Textarea className="min-h-[60px]" placeholder="Not visible to guests" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                   </CardContent>
                 </Card>
               </TabsContent>

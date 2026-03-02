@@ -1,9 +1,15 @@
 import type { TAmenityBase } from "./amenities.schema";
-import type { TAttractionBase } from "./attractions.schema";
+import type { TAttractionBase, TAttractionImageBase } from "./attractions.schema";
 import type { TUser } from "./auth.schema";
 import type { TBlogBase, TBlogImageBase } from "./blogs.schema";
 import type { TBookingBase, TBookingPaymentBase } from "./bookings.schema";
-import type { TEventBaser } from "./events.schema";
+import type {
+  TEventBase,
+  TEventFaqBase,
+  TEventHighlightBase,
+  TEventImageBase,
+  TEventItineraryBase,
+} from "./events.schema";
 import type { TFaqBase } from "./faqs.schema";
 import type { TGalleryBase } from "./gallery.schema";
 import type { TImage } from "./images.schema";
@@ -20,7 +26,11 @@ import type { TPolicyBase } from "./policies.schema";
 export type TAmenity = TAmenityBase;
 export type TAttraction = {
   image: null | TImage;
+  images: TAttractionImage[];
 } & TAttractionBase;
+export type TAttractionImage = {
+  image: TImage;
+} & TAttractionImageBase;
 export type TBlog = {
   author: null | TUser;
   featuredImage: null | TImage;
@@ -60,8 +70,31 @@ export type TBookingWithDetails = {
 } & TBookingBase;
 
 export type TEvent = {
+  highlights: TEventHighlight[];
   image: TImage;
-} & TEventBaser;
+  images: TEventImage[];
+  itinerary: TEventItinerary[];
+} & TEventBase;
+
+export type TEventFaq = {
+  faq: TFaqBase;
+} & TEventFaqBase;
+
+export type TEventHighlight = TEventHighlightBase;
+
+export type TEventImage = {
+  image: TImage;
+} & TEventImageBase;
+
+export type TEventItinerary = TEventItineraryBase;
+
+export type TEventWithDetails = {
+  faqs: TEventFaq[];
+  highlights: TEventHighlight[];
+  image: null | TImage;
+  images: TEventImage[];
+  itinerary: TEventItinerary[];
+} & TEventBase;
 
 export type TFaq = TFaqBase;
 
@@ -71,22 +104,22 @@ export type TGallery = {
   videoThumbnail: null | TImage;
 } & TGalleryBase;
 
-// Offer Types with Relations
-export type TOfferImage = {
-  image: TImage;
-} & TOfferImageBase;
-
-export type TOfferHighlight = TOfferHighlightBase;
-
-export type TOfferItinerary = TOfferItineraryBase;
+export type TOffer = {
+  image: null | TImage;
+} & TOfferBase;
 
 export type TOfferFaq = {
   faq: TFaqBase;
 } & TOfferFaqBase;
 
-export type TOffer = {
-  image: null | TImage;
-} & TOfferBase;
+export type TOfferHighlight = TOfferHighlightBase;
+
+// Offer Types with Relations
+export type TOfferImage = {
+  image: TImage;
+} & TOfferImageBase;
+
+export type TOfferItinerary = TOfferItineraryBase;
 
 export type TOfferWithDetails = {
   faqs: TOfferFaq[];
@@ -98,20 +131,21 @@ export type TOfferWithDetails = {
 
 export type TPolicy = TPolicyBase;
 
-// Room Types with Relations
-export type TRoomImage = {
-  image: TImage;
-} & TRoomImageBase;
+export type TRoom = {
+  amenities: TRoomAmenity[];
+  image: null | TImage;
+  images: TRoomImage[];
+} & TRoomBase;
 
 export type TRoomAmenity = {
   amenity: TAmenityBase;
 } & TRoomAmenityBase;
 
-export type TRoom = {
-  image: null | TImage;
-  images: TRoomImage[];
-  amenities: TRoomAmenity[];
-} & TRoomBase;
+
+// Room Types with Relations
+export type TRoomImage = {
+  image: TImage;
+} & TRoomImageBase;
 
 export type TRoomType = {
   amenities: TRoomTypeAmenity[];

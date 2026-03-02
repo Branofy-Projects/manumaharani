@@ -1,3 +1,4 @@
+import { IconPlus } from '@tabler/icons-react';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
@@ -9,7 +10,6 @@ import { DataTableSkeleton } from '@/components/ui/table/data-table-skeleton';
 import ProductListingPage from '@/features/products/components/product-listing';
 import { searchParamsCache } from '@/lib/searchparams';
 import { cn } from '@/lib/utils';
-import { IconPlus } from '@tabler/icons-react';
 
 import type { SearchParams } from "nuqs/server";
 

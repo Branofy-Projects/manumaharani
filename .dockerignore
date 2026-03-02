@@ -1,0 +1,9 @@
+node_modules
+.next
+.turbo
+.yarn/install-state.gz
+.git
+dist
+coverage
+*.log
+.env*

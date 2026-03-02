@@ -1,10 +1,10 @@
+import { getFaqById } from "@repo/actions/master-data.actions";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import FormCardSkeleton from "@/components/form-card-skeleton";
 import PageContainer from "@/components/layout/page-container";
 import FaqDetailsView from "@/features/master-data/components/faq-details-view";
-import { getFaqById } from "@repo/actions";
 
 export const metadata = {
   title: "Dashboard: FAQ Details",

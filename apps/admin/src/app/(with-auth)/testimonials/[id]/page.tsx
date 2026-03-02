@@ -1,10 +1,10 @@
+import { getTestimonialById } from "@repo/actions";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import FormCardSkeleton from "@/components/form-card-skeleton";
 import PageContainer from "@/components/layout/page-container";
 import TestimonialDetailsView from "@/features/testimonials/components/testimonial-details-view";
-import { getTestimonialById } from "@repo/actions";
 
 export const metadata = {
   title: "Dashboard: Testimonial Details",

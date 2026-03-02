@@ -15,65 +15,104 @@ import type { TNewRoom, TRoom } from "@repo/db";
 
 const ROOM_STATUS_VALUES = ["available", "occupied", "maintenance", "blocked"] as const;
 
+type TGetRoomsFilters = {
+  featured?: boolean;
+  limit?: number;
+  page?: number;
+  search?: string;
+  status?: "available" | "blocked" | "maintenance" | "occupied";
+};
+
+/** Build insert payload with only sanitized values (no spread of raw data). */
+function sanitizeRoomPayload(data: Partial<TNewRoom> | TNewRoom): TNewRoom {
+  const d = (data ?? {}) as Record<string, unknown>;
+  const status = d.status != null && ROOM_STATUS_VALUES.includes(d.status as (typeof ROOM_STATUS_VALUES)[number])
+    ? (d.status as (typeof ROOM_STATUS_VALUES)[number])
+    : "available";
+  const bedType = (d.bed_type ?? "double") as "double" | "king" | "queen" | "single" | "twin";
+  return {
+    base_price: toNumericString(d.base_price, "0"),
+    bed_type: bedType,
+    check_in_time: d.check_in_time != null && d.check_in_time !== "" ? String(d.check_in_time) : null,
+    check_out_time: d.check_out_time != null && d.check_out_time !== "" ? String(d.check_out_time) : null,
+    children_policy: d.children_policy != null && d.children_policy !== "" ? String(d.children_policy) : null,
+    description: d.description != null && d.description !== "" ? String(d.description) : null,
+    extra_beds: d.extra_beds != null && d.extra_beds !== "" ? String(d.extra_beds) : null,
+    floor: d.floor != null && d.floor !== "" ? Math.max(0, Math.floor(Number(d.floor))) : null,
+    image: d.image != null && d.image !== "" ? Number(d.image) : null,
+    is_featured: (d.is_featured === true || d.is_featured === 1) ? 1 : 0,
+    max_occupancy: Math.max(1, Math.floor(Number(d.max_occupancy) || 2)),
+    notes: d.notes != null && d.notes !== "" ? String(d.notes) : null,
+    number_of_beds: Math.max(0, Math.floor(Number(d.number_of_beds) || 1)),
+    order: Math.max(0, Math.floor(Number(d.order) || 0)),
+    peak_season_price: toOptionalNumeric(d.peak_season_price),
+    rating: toOptionalRating(d.rating),
+    review_count: Math.max(0, Math.floor(Number(d.review_count) || 0)),
+    room_number: d.room_number != null && d.room_number !== "" ? String(d.room_number) : null,
+    size_sqft: Math.max(0, Math.floor(Number(d.size_sqft) || 0)),
+    slug: String(d.slug ?? ""),
+    status,
+    title: String(d.title ?? ""),
+    video_url: d.video_url != null && d.video_url !== "" ? String(d.video_url) : null,
+    weekend_price: toOptionalNumeric(d.weekend_price),
+  } as TNewRoom;
+}
+
 function toNumericString(value: unknown, defaultVal: string): string {
   if (value === undefined || value === null || value === "") return defaultVal;
   const n = Number(String(value).trim());
   return Number.isNaN(n) ? defaultVal : n.toFixed(2);
 }
 
-function toOptionalNumeric(value: unknown): string | null {
+function toOptionalNumeric(value: unknown): null | string {
   if (value === undefined || value === null || value === "") return null;
   const n = Number(String(value).trim());
   return Number.isNaN(n) ? null : n.toFixed(2);
 }
 
-function toOptionalRating(value: unknown): string | null {
+function toOptionalRating(value: unknown): null | string {
   if (value === undefined || value === null || value === "") return null;
   const n = Number(String(value).trim());
   return Number.isNaN(n) ? null : n.toFixed(1);
 }
 
-/** Build insert payload with only sanitized values (no spread of raw data). */
-function sanitizeRoomPayload(data: TNewRoom | Partial<TNewRoom>): TNewRoom {
-  const d = (data ?? {}) as Record<string, unknown>;
-  const status = d.status != null && ROOM_STATUS_VALUES.includes(d.status as (typeof ROOM_STATUS_VALUES)[number])
-    ? (d.status as (typeof ROOM_STATUS_VALUES)[number])
-    : "available";
-  const bedType = (d.bed_type ?? "double") as "single" | "double" | "queen" | "king" | "twin";
-  return {
-    title: String(d.title ?? ""),
-    slug: String(d.slug ?? ""),
-    description: d.description != null && d.description !== "" ? String(d.description) : null,
-    image: d.image != null && d.image !== "" ? Number(d.image) : null,
-    video_url: d.video_url != null && d.video_url !== "" ? String(d.video_url) : null,
-    size_sqft: Math.max(0, Math.floor(Number(d.size_sqft) || 0)),
-    max_occupancy: Math.max(1, Math.floor(Number(d.max_occupancy) || 2)),
-    number_of_beds: Math.max(0, Math.floor(Number(d.number_of_beds) || 1)),
-    bed_type: bedType,
-    check_in_time: d.check_in_time != null && d.check_in_time !== "" ? String(d.check_in_time) : null,
-    check_out_time: d.check_out_time != null && d.check_out_time !== "" ? String(d.check_out_time) : null,
-    children_policy: d.children_policy != null && d.children_policy !== "" ? String(d.children_policy) : null,
-    extra_beds: d.extra_beds != null && d.extra_beds !== "" ? String(d.extra_beds) : null,
-    base_price: toNumericString(d.base_price, "0"),
-    peak_season_price: toOptionalNumeric(d.peak_season_price),
-    weekend_price: toOptionalNumeric(d.weekend_price),
-    rating: toOptionalRating(d.rating),
-    review_count: Math.max(0, Math.floor(Number(d.review_count) || 0)),
-    is_featured: (d.is_featured === true || d.is_featured === 1) ? 1 : 0,
-    order: Math.max(0, Math.floor(Number(d.order) || 0)),
-    status,
-    floor: d.floor != null && d.floor !== "" ? Math.max(0, Math.floor(Number(d.floor))) : null,
-    room_number: d.room_number != null && d.room_number !== "" ? String(d.room_number) : null,
-    notes: d.notes != null && d.notes !== "" ? String(d.notes) : null,
-  } as TNewRoom;
-}
+export const getAllRoomSlugs = async () => {
+  try {
+    if (!db || !process.env.DATABASE_URL) return [];
 
-type TGetRoomsFilters = {
-  search?: string;
-  page?: number;
-  limit?: number;
-  status?: "available" | "occupied" | "maintenance" | "blocked";
-  featured?: boolean;
+    return await db.query.Rooms.findMany({
+      columns: { created_at: true, slug: true, updated_at: true },
+      where: eq(Rooms.status, "available"),
+    });
+  } catch (error) {
+    console.error("Error fetching room slugs:", error);
+    return [];
+  }
+};
+
+export const getActiveRooms = async () => {
+  try {
+    if (!db || !process.env.DATABASE_URL) return [];
+
+    return await db.query.Rooms.findMany({
+      orderBy: (rooms, { asc }) => [asc(rooms.order), asc(rooms.id)],
+      where: eq(Rooms.status, "available"),
+      with: {
+        amenities: {
+          orderBy: (am, { asc }) => [asc(am.order)],
+          with: { amenity: true },
+        },
+        image: true,
+        images: {
+          orderBy: (img, { asc }) => [asc(img.order)],
+          with: { image: true },
+        },
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching active rooms:", error);
+    return [];
+  }
 };
 
 export const getRooms = async (filters: TGetRoomsFilters = {}) => {
@@ -120,21 +159,21 @@ export const getRooms = async (filters: TGetRoomsFilters = {}) => {
   const rooms = await safeDbQuery(
     async () => {
       return await db.query.Rooms.findMany({
-        where,
         limit,
         offset,
+        orderBy: (rooms, { asc }) => [asc(rooms.order), asc(rooms.id)],
+        where,
         with: {
+          amenities: {
+            orderBy: (am, { asc }) => [asc(am.order)],
+            with: { amenity: true },
+          },
           image: true,
           images: {
-            with: { image: true },
             orderBy: (img, { asc }) => [asc(img.order)],
-          },
-          amenities: {
-            with: { amenity: true },
-            orderBy: (am, { asc }) => [asc(am.order)],
+            with: { image: true },
           },
         },
-        orderBy: (rooms, { asc }) => [asc(rooms.order), asc(rooms.id)],
       });
     },
     [],
@@ -155,14 +194,14 @@ export const getRoomById = async (id: number) => {
     return await db.query.Rooms.findFirst({
       where: eq(Rooms.id, id),
       with: {
+        amenities: {
+          orderBy: (a, { asc }) => [asc(a.order)],
+          with: { amenity: true },
+        },
         image: true,
         images: {
-          with: { image: true },
           orderBy: (img, { asc }) => [asc(img.order)],
-        },
-        amenities: {
-          with: { amenity: true },
-          orderBy: (a, { asc }) => [asc(a.order)],
+          with: { image: true },
         },
       },
     });
@@ -179,14 +218,14 @@ export const getRoomBySlug = async (slug: string) => {
     return await db.query.Rooms.findFirst({
       where: eq(Rooms.slug, slug),
       with: {
+        amenities: {
+          orderBy: (a, { asc }) => [asc(a.order)],
+          with: { amenity: true },
+        },
         image: true,
         images: {
-          with: { image: true },
           orderBy: (img, { asc }) => [asc(img.order)],
-        },
-        amenities: {
-          with: { amenity: true },
-          orderBy: (a, { asc }) => [asc(a.order)],
+          with: { image: true },
         },
       },
     });
@@ -196,40 +235,41 @@ export const getRoomBySlug = async (slug: string) => {
   }
 };
 
+
+
 export const createRoom = async (data: TNewRoom) => {
   try {
     if (!db) throw new Error("Database connection not available");
 
     const s = sanitizeRoomPayload(data);
     const insertRow = {
-      title: s.title,
-      slug: s.slug,
-      description: s.description,
-      image: s.image,
-      video_url: s.video_url,
-      size_sqft: s.size_sqft,
-      max_occupancy: s.max_occupancy,
-      number_of_beds: s.number_of_beds,
+      base_price: s.base_price,
       bed_type: s.bed_type,
       check_in_time: s.check_in_time,
       check_out_time: s.check_out_time,
       children_policy: s.children_policy,
+      description: s.description,
       extra_beds: s.extra_beds,
-      base_price: s.base_price,
+      floor: s.floor,
+      image: s.image,
+      is_featured: s.is_featured,
+      max_occupancy: s.max_occupancy,
+      notes: s.notes,
+      number_of_beds: s.number_of_beds,
+      order: s.order,
       peak_season_price: s.peak_season_price,
-      weekend_price: s.weekend_price,
       rating: s.rating,
       review_count: s.review_count,
-      is_featured: s.is_featured,
-      order: s.order,
-      status: s.status,
-      floor: s.floor,
       room_number: s.room_number,
-      notes: s.notes,
+      size_sqft: s.size_sqft,
+      slug: s.slug,
+      status: s.status,
+      title: s.title,
+      video_url: s.video_url,
+      weekend_price: s.weekend_price,
     };
     const [room] = await db.insert(Rooms).values(insertRow).returning();
     revalidatePath("/rooms");
-    if (room) revalidatePath(`/rooms/${room.id}`);
     return room;
   } catch (error) {
     const err = error as { code?: string; message?: string };
@@ -264,7 +304,7 @@ function sanitizeRoomUpdate(data: Partial<TNewRoom>): Partial<TNewRoom> {
   if (data.weekend_price !== undefined) out.weekend_price = toOptionalNumeric(data.weekend_price);
   if (data.rating !== undefined) out.rating = toOptionalRating(data.rating);
   if (data.review_count !== undefined) out.review_count = Math.max(0, Math.floor(Number(data.review_count) || 0));
-  if (data.is_featured !== undefined) out.is_featured = (data.is_featured === true || data.is_featured === 1) ? 1 : 0;
+  if (data.is_featured !== undefined) out.is_featured = (data.is_featured === 1) ? 1 : 0;
   if (data.order !== undefined) out.order = Math.max(0, Math.floor(Number(data.order) || 0));
   if (data.status !== undefined && ROOM_STATUS_VALUES.includes(data.status as any))
     out.status = data.status;
@@ -313,9 +353,9 @@ export const syncRoomImages = async (
   if (images.length > 0) {
     await db.insert(RoomImages).values(
       images.map((img, index) => ({
-        room_id: roomId,
         image_id: img.image_id,
         order: img.order ?? index,
+        room_id: roomId,
       }))
     );
   }
@@ -335,9 +375,9 @@ export const syncRoomAmenities = async (
   if (amenities.length > 0) {
     await db.insert(RoomAmenities).values(
       amenities.map((a, index) => ({
-        room_id: roomId,
         amenity_id: a.amenity_id,
         order: a.order ?? index,
+        room_id: roomId,
       }))
     );
   }

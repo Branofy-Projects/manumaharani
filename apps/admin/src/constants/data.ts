@@ -19,7 +19,7 @@ export const navItems: NavItem[] = [
     items: [],
     shortcut: ["d", "d"],
     title: "Dashboard",
-    url: "/overview",
+    url: "/",
   },
   {
     icon: "settings",
@@ -36,8 +36,46 @@ export const navItems: NavItem[] = [
     url: "#",
   },
   {
+    icon: "help",
+    isActive: false,
+    items: [
+      {
+        icon: "billing",
+        shortcut: ["c", "q"],
+        title: "Contact Queries",
+        url: "/contact-queries",
+      },
+      {
+        icon: "billing",
+        shortcut: ["r", "b"],
+        title: "Room Bookings",
+        url: "/room-bookings",
+      },
+      {
+        icon: "billing",
+        shortcut: ["e", "b"],
+        title: "Event Bookings",
+        url: "/event-bookings",
+      },
+      {
+        icon: "billing",
+        shortcut: ["o", "b"],
+        title: "Offer Bookings",
+        url: "/offer-bookings",
+      },
+      {
+        icon: "billing",
+        shortcut: ["a", "b"],
+        title: "Attraction Bookings",
+        url: "/attraction-bookings",
+      },
+    ],
+    title: "Queries",
+    url: "#",
+  },
+  {
     icon: "post",
-    isActive: true,
+    isActive: false,
     items: [
       {
         icon: "post",
@@ -52,10 +90,22 @@ export const navItems: NavItem[] = [
         url: "/gallery",
       },
       {
+        icon: 'video',
+        shortcut: ["r", "e"],
+        title: "Reels",
+        url: "/reels",
+      },
+      {
         icon: "help",
         shortcut: ["t", "s"],
         title: "Testimonials",
         url: "/testimonials",
+      },
+      {
+        icon: "post",
+        shortcut: ["e", "x"],
+        title: "Experiences",
+        url: "/experiences",
       },
       {
         icon: "media",
@@ -63,13 +113,19 @@ export const navItems: NavItem[] = [
         title: "Nearby Attractions",
         url: "/nearby-attractions",
       },
+      {
+        icon: "media",
+        shortcut: ["s", "i"],
+        title: "Static Images",
+        url: "/static-images",
+      },
     ],
     title: "Content",
     url: "#",
   },
   {
     icon: "kanban",
-    isActive: true,
+    isActive: false,
     items: [
       {
         icon: "tag",
@@ -89,7 +145,7 @@ export const navItems: NavItem[] = [
   },
   {
     icon: "settings",
-    isActive: true,
+    isActive: false,
     items: [
       {
         icon: "media",
@@ -115,7 +171,7 @@ export const navItems: NavItem[] = [
   },
   {
     icon: "user",
-    isActive: true,
+    isActive: false,
     items: [
       {
         icon: "user",
@@ -129,7 +185,7 @@ export const navItems: NavItem[] = [
   },
   {
     icon: "billing",
-    isActive: true,
+    isActive: false,
     items: [
       {
         icon: "userPen",
@@ -152,45 +208,3 @@ export interface SaleUser {
   name: string;
 }
 
-export const recentSalesData: SaleUser[] = [
-  {
-    amount: "+$1,999.00",
-    email: "olivia.martin@email.com",
-    id: 1,
-    image: "https://api.slingacademy.com/public/sample-users/1.png",
-    initials: "OM",
-    name: "Olivia Martin",
-  },
-  {
-    amount: "+$39.00",
-    email: "jackson.lee@email.com",
-    id: 2,
-    image: "https://api.slingacademy.com/public/sample-users/2.png",
-    initials: "JL",
-    name: "Jackson Lee",
-  },
-  {
-    amount: "+$299.00",
-    email: "isabella.nguyen@email.com",
-    id: 3,
-    image: "https://api.slingacademy.com/public/sample-users/3.png",
-    initials: "IN",
-    name: "Isabella Nguyen",
-  },
-  {
-    amount: "+$99.00",
-    email: "will@email.com",
-    id: 4,
-    image: "https://api.slingacademy.com/public/sample-users/4.png",
-    initials: "WK",
-    name: "William Kim",
-  },
-  {
-    amount: "+$39.00",
-    email: "sofia.davis@email.com",
-    id: 5,
-    image: "https://api.slingacademy.com/public/sample-users/5.png",
-    initials: "SD",
-    name: "Sofia Davis",
-  },
-];

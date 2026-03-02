@@ -5,7 +5,7 @@ export default function FineDiningSection() {
     <section className="w-full py-24">
       <div className="max-w-screen-xl mx-auto px-4 xl:px-0">
         <h2
-          className="text-3xl md:text-4xl font-thin tracking-widest uppercase mb-4 text-center"
+          className="text-3xl md:text-4xl  tracking-widest uppercase mb-4 text-center"
           style={{ color: "#000000" }}
         >
           Fine Dining by the Kosi: A Global & Local Palate

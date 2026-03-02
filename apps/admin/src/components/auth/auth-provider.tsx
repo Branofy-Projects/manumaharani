@@ -1,13 +1,12 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from 'react';
-
+import { type BetterAuthSession, type BetterAuthUser, type User } from '@repo/auth';
 import { authClient } from '@repo/auth';
-
-interface AuthContextType {
+import { createContext, useContext, useEffect, useState } from 'react';
+export interface AuthContextType {
   isLoading: boolean;
   resendVerificationEmail: () => Promise<any>;
-  resetPassword: (token: string, password: string) => Promise<any>;
+  resetPassword: (token: string, password?: string,) => Promise<any>;
   sendPasswordResetEmail: (email: string) => Promise<any>;
   session: any | null;
   signIn: (email: string, password: string) => Promise<any>;
@@ -24,11 +23,11 @@ interface AuthContextType {
   verifyEmail: (token: string) => Promise<any>;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<any | null>(null);
-  const [session, setSession] = useState<any | null>(null);
+  const [user, setUser] = useState<BetterAuthUser | null>(null);
+  const [session, setSession] = useState<BetterAuthSession | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   // Initialize auth state
@@ -119,7 +118,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const result = await authClient.updateUser(data);
       if (result.data) {
-        setUser(result.data);
+        setUser(result.data as unknown as BetterAuthUser);
       }
       return result;
     } catch (error) {
@@ -130,7 +129,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const sendPasswordResetEmail = async (email: string) => {
     try {
-      const result = await authClient.forgetPassword({ email });
+      const result = await authClient.requestPasswordReset({ email, redirectTo: `${process.env.NEXT_PUBLIC_AUTH_URL}/reset-password` });
       return result;
     } catch (error) {
       console.error("Password reset error:", error);
@@ -138,11 +137,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const resetPassword = async (token: string, password: string) => {
+  const resetPassword = async (token: string, password?: string) => {
     try {
+      let tkn = !password ? token : null;
+
+      const pass = !password ? token : password;
+      if (!password) {
+        const session = await authClient.getSession();
+        tkn = session.data.session.token
+      }
+
       const result = await authClient.resetPassword({
-        newPassword: password,
-        token,
+        newPassword: pass,
+        token: tkn,
       });
       return result;
     } catch (error) {
@@ -157,7 +164,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         query: { token },
       });
       if (result.data) {
-        setUser(result.data);
+        setUser(result.data as unknown as BetterAuthUser);
       }
       return result;
     } catch (error) {

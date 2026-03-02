@@ -12,19 +12,20 @@ import type { Column, ColumnDef } from "@tanstack/react-table";
 
 const statusMap: Record<string, string> = {
   available: "Available",
-  occupied: "Occupied",
-  maintenance: "Maintenance",
   blocked: "Blocked",
+  maintenance: "Maintenance",
+  occupied: "Occupied",
 };
 
 const statusVariantMap = {
   available: "default",
-  occupied: "secondary",
-  maintenance: "destructive",
   blocked: "outline",
+  maintenance: "destructive",
+  occupied: "secondary",
 } as const;
 
 export const columns: ColumnDef<TRoom>[] = [
+
   {
     accessorKey: "room_number",
     cell: ({ row }) => {
@@ -32,8 +33,8 @@ export const columns: ColumnDef<TRoom>[] = [
       return (
         <div className="flex flex-col">
           <Link
-            href={`/rooms/${room.id}`}
             className="font-medium font-mono hover:underline cursor-pointer"
+            href={`/rooms/${room.id}`}
           >
             {room.room_number}
           </Link>
@@ -46,29 +47,50 @@ export const columns: ColumnDef<TRoom>[] = [
       <DataTableColumnHeader column={column} title="Room Number" />
     ),
     id: "room_number",
-    meta: {
-      icon: null,
-      label: "Room Number",
-      placeholder: "Search by room number...",
-      variant: "text",
-    },
+    // meta: {
+    //   icon: null,
+    //   label: "Room Number",
+    //   placeholder: "Search by room number...",
+    //   variant: "text",
+    // },
   },
   {
-    accessorKey: "roomType",
+    accessorKey: "title",
     cell: ({ row }) => {
-      const roomType = row.original.roomType;
+      const room = row.original;
       return (
         <div className="flex flex-col">
-          <div className="font-medium">{roomType?.name || "N/A"}</div>
-          <div className="text-sm text-muted-foreground">
-            Max {roomType?.max_occupancy || 0} guests
-          </div>
+          <div className="font-medium">{room.title}</div>
         </div>
       );
     },
-    header: "Room Type",
-    id: "room_type",
-  },
+    header: ({ column }: { column: Column<TRoom, unknown> }) => (
+      <DataTableColumnHeader column={column} title="Title" />
+    ),
+    id: "title",
+    // meta: {
+    //   icon: null,
+    //   label: "Title",
+    //   placeholder: "Search by title...",
+    //   variant: "text",
+    // },
+  }
+  ,  // {
+  //   accessorKey: "roomType",
+  //   cell: ({ row }) => {
+  //     const roomType = row.original.;
+  //     return (
+  //       <div className="flex flex-col">
+  //         <div className="font-medium">{roomType?.name || "N/A"}</div>
+  //         <div className="text-sm text-muted-foreground">
+  //           Max {roomType?.max_occupancy || 0} guests
+  //         </div>
+  //       </div>
+  //     );
+  //   },
+  //   header: "Room Type",
+  //   id: "room_type",
+  // },
   {
     accessorKey: "status",
     cell: ({ cell }) => {

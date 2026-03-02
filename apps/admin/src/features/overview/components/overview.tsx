@@ -1,20 +1,22 @@
+import { IconTrendingDown, IconTrendingUp } from '@tabler/icons-react';
+
 import PageContainer from '@/components/layout/page-container';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Card,
+  CardAction,
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
-  CardAction
+  CardTitle
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
 import { AreaGraph } from './area-graph';
 import { BarGraph } from './bar-graph';
 import { PieGraph } from './pie-graph';
 import { RecentSales } from './recent-sales';
-import { IconTrendingUp, IconTrendingDown } from '@tabler/icons-react';
-import { Badge } from '@/components/ui/badge';
 
 export default function OverViewPage() {
   return (
@@ -28,14 +30,14 @@ export default function OverViewPage() {
             <Button>Download</Button>
           </div>
         </div>
-        <Tabs defaultValue='overview' className='space-y-4'>
+        <Tabs className='space-y-4' defaultValue='overview'>
           <TabsList>
             <TabsTrigger value='overview'>Overview</TabsTrigger>
-            <TabsTrigger value='analytics' disabled>
+            <TabsTrigger disabled value='analytics'>
               Analytics
             </TabsTrigger>
           </TabsList>
-          <TabsContent value='overview' className='space-y-4'>
+          <TabsContent className='space-y-4' value='overview'>
             <div className='*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4'>
               <Card className='@container/card'>
                 <CardHeader>

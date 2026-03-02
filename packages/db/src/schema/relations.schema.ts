@@ -1,21 +1,25 @@
 import { relations } from 'drizzle-orm';
 
 import { Amenities } from './amenities.schema';
+import { AttractionBookings } from './attraction-bookings.schema';
+import { AttractionImages, Attractions } from './attractions.schema';
 import { Users } from './auth.schema';
 import { BlogImages, Blogs } from './blogs.schema';
 import { BookingPayments, Bookings } from './bookings.schema';
+import { EventBookings } from './event-bookings.schema';
+import { EventFaqs, EventHighlights, EventImages, EventItinerary, Events } from './events.schema';
 import { Faqs } from './faqs.schema';
 import { Gallery } from './gallery.schema';
 import { Images } from './images.schema';
+import { OfferBookings } from './offer-bookings.schema';
+import { OfferFaqs, OfferHighlights, OfferImages, OfferItinerary, Offers } from './offers.schema';
 import { Policies } from './policies.schema';
+import { RoomBookings } from './room-bookings.schema';
 import {
     RoomTypeAmenities, RoomTypeFaqs, RoomTypeImages, RoomTypePolicies, RoomTypes
 } from './room-types.schema';
 import { RoomAmenities, RoomImages, Rooms } from './rooms.schema';
 import { Testimonials } from './testimonials.schema';
-import { Events } from './events.schema';
-import { OfferFaqs, OfferHighlights, OfferImages, OfferItinerary, Offers } from './offers.schema';
-import { Attractions } from './attractions.schema';
 
 
 export const roomTypeRelations = relations(RoomTypes, ({ many }) => ({
@@ -76,12 +80,24 @@ export const roomTypeFaqsRelations = relations(RoomTypeFaqs, ({ one }) => ({
 }));
 
 export const roomRelations = relations(Rooms, ({ many, one }) => ({
+  amenities: many(RoomAmenities),
+  bookings: many(RoomBookings),
   image: one(Images, {
     fields: [Rooms.image],
     references: [Images.id],
   }),
   images: many(RoomImages),
-  amenities: many(RoomAmenities),
+}));
+
+export const roomAmenitiesRelations = relations(RoomAmenities, ({ one }) => ({
+  amenity: one(Amenities, {
+    fields: [RoomAmenities.amenity_id],
+    references: [Amenities.id],
+  }),
+  room: one(Rooms, {
+    fields: [RoomAmenities.room_id],
+    references: [Rooms.id],
+  }),
 }));
 
 export const roomImagesRelations = relations(RoomImages, ({ one }) => ({
@@ -92,17 +108,6 @@ export const roomImagesRelations = relations(RoomImages, ({ one }) => ({
   room: one(Rooms, {
     fields: [RoomImages.room_id],
     references: [Rooms.id],
-  }),
-}));
-
-export const roomAmenitiesRelations = relations(RoomAmenities, ({ one }) => ({
-  room: one(Rooms, {
-    fields: [RoomAmenities.room_id],
-    references: [Rooms.id],
-  }),
-  amenity: one(Amenities, {
-    fields: [RoomAmenities.amenity_id],
-    references: [Amenities.id],
   }),
 }));
 
@@ -133,10 +138,6 @@ export const bookingPaymentsRelations = relations(
 );
 
 export const blogRelations = relations(Blogs, ({ many, one }) => ({
-  author: one(Users, {
-    fields: [Blogs.author_id],
-    references: [Users.id],
-  }),
   featuredImage: one(Images, {
     fields: [Blogs.featured_image_id],
     references: [Images.id],
@@ -186,35 +187,78 @@ export const policyRelations = relations(Policies, ({ many }) => ({
 }));
 
 export const faqRelations = relations(Faqs, ({ many }) => ({
+  events: many(EventFaqs),
+  offers: many(OfferFaqs),
   roomTypes: many(RoomTypeFaqs),
 }));
 
-export const eventRelations = relations(Events, ({ one }) => ({
+export const eventRelations = relations(Events, ({ many, one }) => ({
+  bookings: many(EventBookings),
+  faqs: many(EventFaqs),
+  highlights: many(EventHighlights),
   image: one(Images, {
     fields: [Events.image],
     references: [Images.id],
   }),
+  images: many(EventImages),
+  itinerary: many(EventItinerary),
 }));
 
-export const offerRelations = relations(Offers, ({ one, many }) => ({
+export const eventImagesRelations = relations(EventImages, ({ one }) => ({
+  event: one(Events, {
+    fields: [EventImages.event_id],
+    references: [Events.id],
+  }),
+  image: one(Images, {
+    fields: [EventImages.image_id],
+    references: [Images.id],
+  }),
+}));
+
+export const eventHighlightsRelations = relations(EventHighlights, ({ one }) => ({
+  event: one(Events, {
+    fields: [EventHighlights.event_id],
+    references: [Events.id],
+  }),
+}));
+
+export const eventItineraryRelations = relations(EventItinerary, ({ one }) => ({
+  event: one(Events, {
+    fields: [EventItinerary.event_id],
+    references: [Events.id],
+  }),
+}));
+
+export const eventFaqsRelations = relations(EventFaqs, ({ one }) => ({
+  event: one(Events, {
+    fields: [EventFaqs.event_id],
+    references: [Events.id],
+  }),
+  faq: one(Faqs, {
+    fields: [EventFaqs.faq_id],
+    references: [Faqs.id],
+  }),
+}));
+
+export const offerRelations = relations(Offers, ({ many, one }) => ({
+  faqs: many(OfferFaqs),
+  highlights: many(OfferHighlights),
   image: one(Images, {
     fields: [Offers.image],
     references: [Images.id],
   }),
   images: many(OfferImages),
-  highlights: many(OfferHighlights),
   itinerary: many(OfferItinerary),
-  faqs: many(OfferFaqs),
 }));
 
 export const offerImagesRelations = relations(OfferImages, ({ one }) => ({
-  offer: one(Offers, {
-    fields: [OfferImages.offer_id],
-    references: [Offers.id],
-  }),
   image: one(Images, {
     fields: [OfferImages.image_id],
     references: [Images.id],
+  }),
+  offer: one(Offers, {
+    fields: [OfferImages.offer_id],
+    references: [Offers.id],
   }),
 }));
 
@@ -233,19 +277,60 @@ export const offerItineraryRelations = relations(OfferItinerary, ({ one }) => ({
 }));
 
 export const offerFaqsRelations = relations(OfferFaqs, ({ one }) => ({
-  offer: one(Offers, {
-    fields: [OfferFaqs.offer_id],
-    references: [Offers.id],
-  }),
   faq: one(Faqs, {
     fields: [OfferFaqs.faq_id],
     references: [Faqs.id],
   }),
+  offer: one(Offers, {
+    fields: [OfferFaqs.offer_id],
+    references: [Offers.id],
+  }),
 }));
 
-export const attractionRelations = relations(Attractions, ({ one }) => ({
+export const attractionRelations = relations(Attractions, ({ many, one }) => ({
+  bookings: many(AttractionBookings),
   image: one(Images, {
     fields: [Attractions.image],
     references: [Images.id],
+  }),
+  images: many(AttractionImages),
+}));
+
+export const attractionImageRelations = relations(AttractionImages, ({ one }) => ({
+  attraction: one(Attractions, {
+    fields: [AttractionImages.attraction_id],
+    references: [Attractions.id],
+  }),
+  image: one(Images, {
+    fields: [AttractionImages.image_id],
+    references: [Images.id],
+  }),
+}));
+
+export const attractionBookingRelations = relations(AttractionBookings, ({ one }) => ({
+  attraction: one(Attractions, {
+    fields: [AttractionBookings.attraction_id],
+    references: [Attractions.id],
+  }),
+}));
+
+export const eventBookingRelations = relations(EventBookings, ({ one }) => ({
+  event: one(Events, {
+    fields: [EventBookings.event_id],
+    references: [Events.id],
+  }),
+}));
+
+export const offerBookingRelations = relations(OfferBookings, ({ one }) => ({
+  offer: one(Offers, {
+    fields: [OfferBookings.offer_id],
+    references: [Offers.id],
+  }),
+}));
+
+export const roomBookingRelations = relations(RoomBookings, ({ one }) => ({
+  room: one(Rooms, {
+    fields: [RoomBookings.room_id],
+    references: [Rooms.id],
   }),
 }));

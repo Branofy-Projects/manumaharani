@@ -1,4 +1,4 @@
-import { getEventById } from "@repo/actions";
+import { getEventByIdWithDetails } from "@repo/actions";
 import { notFound } from "next/navigation";
 
 import EventForm from "@/features/events/components/event-form";
@@ -9,7 +9,7 @@ export default async function EditEventPage({
   params: Promise<{ eventId: string }>;
 }) {
   const { eventId } = await params;
-  const event = await getEventById(eventId);
+  const event = await getEventByIdWithDetails(eventId);
 
   if (!event) {
     notFound();

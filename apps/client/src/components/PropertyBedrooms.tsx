@@ -95,6 +95,7 @@ export function PropertyBedrooms({ bedrooms }: PropertyBedroomsProps) {
                   alt={bedroom.name}
                   className="object-cover"
                   fill
+                  sizes="33vw"
                   src={bedroom.image}
                 />
                 <div className="absolute bottom-3 left-3 rounded-md bg-white/90 px-3 py-1.5 text-sm font-medium backdrop-blur-sm">

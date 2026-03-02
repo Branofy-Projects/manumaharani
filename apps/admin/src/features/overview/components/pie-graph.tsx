@@ -1,15 +1,15 @@
 "use client";
 
+import { IconTrendingUp } from '@tabler/icons-react';
 import * as React from 'react';
 import { Label, Pie, PieChart } from 'recharts';
 
+import type { ChartConfig } from "@/components/ui/chart";
+
 import {
-    Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle
+  Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle
 } from '@/components/ui/card';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { IconTrendingUp } from '@tabler/icons-react';
-
-import type { ChartConfig } from "@/components/ui/chart";
 
 const chartData = [
   { browser: "chrome", fill: "var(--primary)", visitors: 275 },

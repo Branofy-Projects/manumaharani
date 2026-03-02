@@ -1,5 +1,7 @@
 "use client";
 
+import { createUser, updateUser } from "@repo/actions";
+import { AppResponseHandler } from "@repo/actions/utils/app-response-handler";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -7,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import PageContainer from "@/components/layout/page-container";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -26,17 +29,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import PageContainer from "@/components/layout/page-container";
 import { zodResolver } from "@/lib/zod-resolver";
-import { createUser, updateUser } from "@repo/actions";
-import { AppResponseHandler } from "@repo/actions/utils/app-response-handler";
 
 import type { TUser } from "@repo/db/schema/auth.schema";
 
 const ROLE_OPTIONS = [
-  { value: "user", label: "User" },
-  { value: "admin", label: "Admin" },
-  { value: "super_admin", label: "Super Admin" },
+  { label: "User", value: "user" },
+  { label: "Admin", value: "admin" },
+  { label: "Super Admin", value: "super_admin" },
 ] as const;
 
 const formSchema = z.object({
@@ -57,7 +57,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 interface UserFormProps {
-  initialData: TUser | null;
+  initialData: null | TUser;
   pageTitle: string;
   userId?: string;
 }
@@ -71,7 +71,6 @@ export default function UserForm({
   const isEdit = Boolean(userId && initialData);
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
     defaultValues: {
       email: initialData?.email ?? "",
       firstName: initialData?.firstName ?? "",
@@ -82,6 +81,7 @@ export default function UserForm({
       phone: initialData?.phone ?? "",
       userRole: (initialData?.userRole as FormValues["userRole"]) ?? "user",
     },
+    resolver: zodResolver(formSchema),
   });
 
   async function onSubmit(values: FormValues) {

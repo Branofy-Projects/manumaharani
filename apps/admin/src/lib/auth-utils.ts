@@ -1,7 +1,6 @@
+import { auth } from '@repo/auth/auth.config';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
-
-import { auth } from '@repo/auth/auth.config';
 
 // Server-side function to get current user with role
 export async function getCurrentUser() {

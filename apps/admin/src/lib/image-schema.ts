@@ -1,31 +1,30 @@
-import z from "zod";
-
 import { ACCEPTED_IMAGE_TYPES, MAX_FILE_SIZE } from "@repo/db/utils/file-utils";
+import z from "zod";
 
 export const ExistingImageSchema = z.object({
   _type: z.literal("existing"),
-  image_id: z.number(),
-  order: z.number().int().nonnegative(),
-  small_url: z.string().url(),
-  medium_url: z.string().url(),
-  large_url: z.string().url(),
-  original_url: z.string().url(),
   alt_text: z.string().min(1, "Alt text is required"),
+  image_id: z.number(),
+  large_url: z.string().url(),
+  medium_url: z.string().url(),
+  order: z.number().int().nonnegative(),
+  original_url: z.string().url(),
+  small_url: z.string().url(),
 });
 
 export const NewImageSchema = z.object({
-  _type: z.literal("new"),
   _tmpId: z.string(),
-  previewUrl: z.string(),
+  _type: z.literal("new"),
+  alt_text: z.string().min(1, "Alt text is required"),
   file: z.any(),
   mime_type: z.string(),
+  previewUrl: z.string(),
   size: z.number(),
-  alt_text: z.string().min(1, "Alt text is required"),
 });
 
 export type ExistingFormImage = z.infer<typeof ExistingImageSchema>;
-export type NewFormImage = z.infer<typeof NewImageSchema>;
 export type FormImage = ExistingFormImage | NewFormImage;
+export type NewFormImage = z.infer<typeof NewImageSchema>;
 
 export const ImagesArraySchema = (min?: number, max?: number) =>
   z

@@ -3,6 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 
+import { getRelatedPostsCache } from "@/lib/cache/blogs.cache";
+
 import { RelatedPostsSkeleton } from "./RelatedPostsSkeleton";
 
 import type { TBlogCategory } from "@repo/db/schema/blogs.schema";
@@ -14,18 +16,13 @@ export async function RelatedPosts({
   category: TBlogCategory;
   ignore: number[];
 }) {
-  const { blogs: relatedPosts } = await getBlogs({
-    category,
-    ignore,
-    limit: 3,
-    status: "published",
-  });
+  const relatedPosts = await getRelatedPostsCache(category, ignore);
 
   return (
     <section className="border-t border-gray-200 bg-gray-50 py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <h2
-          className={`mb-12 text-center text-3xl font-thin tracking-widest text-gray-900`}
+          className={`mb-12 text-center text-3xl  tracking-widest text-gray-900`}
         >
           Related Articles
         </h2>
@@ -41,6 +38,7 @@ export async function RelatedPosts({
                   alt={relatedPost.featuredImage?.alt_text || relatedPost.title}
                   className="object-cover object-center transition-transform duration-500 group-hover:scale-110"
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   src={
                     relatedPost.featuredImage?.original_url ||
                     "/path/to/placeholder-image.jpg"

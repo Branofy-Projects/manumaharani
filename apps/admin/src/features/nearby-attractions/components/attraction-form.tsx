@@ -1,7 +1,6 @@
 "use client";
 
-import { zodResolver } from "@/lib/zod-resolver";
-import { createAttraction, updateAttraction } from "@repo/actions";
+import { createAttraction, syncAttractionImages, updateAttraction } from "@repo/actions";
 import { createImages } from "@repo/actions/images.actions";
 import { Loader2, Plus, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -11,6 +10,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import type { FormImage as FileUploaderFormImage } from "@/components/file-uploader";
+
 import { FileUploader, hasValidImages } from "@/components/file-uploader";
 import PageContainer from "@/components/layout/page-container";
 import { Button } from "@/components/ui/button";
@@ -30,30 +30,34 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { ImagesArraySchema } from "@/lib/image-schema";
 import { uploadFilesWithProgress } from "@/lib/upload-files";
+import { zodResolver } from "@/lib/zod-resolver";
 
 import type { TAttraction } from "@repo/db";
 
 const faqItemSchema = z.object({
-  question: z.string().optional().default(""),
   answer: z.string().optional().default(""),
+  question: z.string().optional().default(""),
 });
 
 const formSchema = z.object({
-  title: z.string().min(1, "Title is required.").max(255),
-  subtitle: z.string().min(1, "Subtitle is required."),
-  link: z.string().default("#"),
-  distance: z.string().max(100).optional().default(""),
-  open_time: z.string().max(20).optional().default(""),
-  close_time: z.string().max(20).optional().default(""),
-  faqs: z.array(faqItemSchema).default([]),
   active: z.boolean().default(true),
-  order: z.preprocess((val) => Number(val), z.number().int().default(0)),
+  close_time: z.string().max(20).optional().default(""),
+  description: z.string().optional().default(""),
+  distance: z.string().max(100).optional().default(""),
+  faqs: z.array(faqItemSchema).default([]),
   image: ImagesArraySchema(0, 1),
+  images: ImagesArraySchema(0, 20),
+  link: z.string().default("#"),
+  open_time: z.string().max(20).optional().default(""),
+  order: z.preprocess((val) => Number(val), z.number().int().default(0)),
+  slug: z.string().min(1, "Slug is required.").max(255),
+  subtitle: z.string().min(1, "Subtitle is required."),
+  title: z.string().min(1, "Title is required.").max(255),
 });
 
 type TAttractionFormProps = {
   attractionId?: string;
-  initialData: TAttraction | null;
+  initialData: null | TAttraction;
   pageTitle: string;
 };
 
@@ -62,44 +66,56 @@ const AttractionForm = (props: TAttractionFormProps) => {
   const router = useRouter();
 
   const defaultValues = useMemo(() => {
-    let faqs: Array<{ question: string; answer: string }> = [];
+    let faqs: Array<{ answer: string; question: string; }> = [];
     if (initialData?.faq) {
       try {
         const parsed = JSON.parse(initialData.faq) as unknown;
         faqs = Array.isArray(parsed)
-          ? parsed.map((item: { question?: string; answer?: string }) => ({
-              question: item?.question ?? "",
-              answer: item?.answer ?? "",
-            }))
+          ? parsed.map((item: { answer?: string; question?: string; }) => ({
+            answer: item?.answer ?? "",
+            question: item?.question ?? "",
+          }))
           : [];
       } catch {
         faqs = [];
       }
     }
     return {
-      title: initialData?.title || "",
-      subtitle: initialData?.subtitle || "",
-      link: initialData?.link || "#",
-      distance: initialData?.distance ?? "",
-      open_time: initialData?.open_time ?? "",
-      close_time: initialData?.close_time ?? "",
-      faqs,
       active: initialData?.active ?? true,
-      order: initialData?.order || 0,
+      close_time: initialData?.close_time ?? "",
+      description: initialData?.description ?? "",
+      distance: initialData?.distance ?? "",
+      faqs,
       image: initialData?.image
         ? [
-            {
-              _type: "existing" as const,
-              alt_text: initialData.image.alt_text || "",
-              image_id: initialData.image.id,
-              large_url: initialData.image.large_url || "",
-              medium_url: initialData.image.medium_url || "",
-              order: 0,
-              original_url: initialData.image.original_url || "",
-              small_url: initialData.image.small_url || "",
-            },
-          ]
+          {
+            _type: "existing" as const,
+            alt_text: initialData.image.alt_text || "",
+            image_id: initialData.image.id,
+            large_url: initialData.image.large_url || "",
+            medium_url: initialData.image.medium_url || "",
+            order: 0,
+            original_url: initialData.image.original_url || "",
+            small_url: initialData.image.small_url || "",
+          },
+        ]
         : [],
+      images: initialData?.images?.map((img, idx) => ({
+        _type: "existing" as const,
+        alt_text: img.image.alt_text || "",
+        image_id: img.image.id,
+        large_url: img.image.large_url || "",
+        medium_url: img.image.medium_url || "",
+        order: idx,
+        original_url: img.image.original_url || "",
+        small_url: img.image.small_url || "",
+      })) || [],
+      link: initialData?.link || "#",
+      open_time: initialData?.open_time ?? "",
+      order: initialData?.order || 0,
+      slug: initialData?.slug || "",
+      subtitle: initialData?.subtitle || "",
+      title: initialData?.title || "",
     };
   }, [initialData]);
 
@@ -115,26 +131,38 @@ const AttractionForm = (props: TAttractionFormProps) => {
 
   const [activeTab, setActiveTab] = useState("basic");
   const [progresses, setProgresses] = useState<Record<string, number>>({});
+  const [galleryProgresses, setGalleryProgresses] = useState<Record<string, number>>({});
   const [isImageUploading, setIsImageUploading] = useState(false);
+  const [isGalleryUploading, setIsGalleryUploading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
 
   const image = form.watch("image");
+  const galleryImages = form.watch("images");
   const hasValidImage = useMemo(() => {
     return hasValidImages(image as FileUploaderFormImage[]);
   }, [image]);
+  const hasValidGallery = useMemo(
+    () => !galleryImages?.length || hasValidImages(galleryImages as FileUploaderFormImage[]),
+    [galleryImages]
+  );
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setHasAttemptedSubmit(true);
 
     if (data.image && data.image.length > 0 && !hasValidImage) {
-      toast.error("Please add alt text to the image");
+      toast.error("Please add alt text to the featured image");
+      return;
+    }
+    if (data.images && data.images.length > 0 && !hasValidGallery) {
+      toast.error("Please add alt text to all gallery images");
       return;
     }
 
     try {
       setIsSubmitting(true);
 
+      // 1) Featured image
       let imageId: null | number = null;
 
       if (data.image && data.image.length > 0) {
@@ -173,27 +201,64 @@ const AttractionForm = (props: TAttractionFormProps) => {
         }
       }
 
+      // 2) Gallery images (upload new, collect all ids + order)
+      const galleryPayload: Array<{ image_id: number; order: number }> = [];
+      if (data.images && data.images.length > 0) {
+        setIsGalleryUploading(true);
+        for (let i = 0; i < data.images.length; i++) {
+          const img = data.images[i]!;
+          if (img._type === "new") {
+            const [result] = await uploadFilesWithProgress(
+              [img.file],
+              (p) => setGalleryProgresses(p),
+              "/api/v1/upload-image"
+            );
+            const [created] = await createImages([
+              {
+                alt_text: img.alt_text,
+                large_url: result!.image.large_url,
+                medium_url: result!.image.medium_url,
+                original_url: result!.image.original_url,
+                small_url: result!.image.small_url,
+              },
+            ]);
+            if (Array.isArray(created) && created[0])
+              galleryPayload.push({ image_id: created[0].id, order: i });
+          } else {
+            galleryPayload.push({ image_id: img.image_id, order: i });
+          }
+        }
+        setIsGalleryUploading(false);
+      }
+
       const attractionData = {
-        title: data.title,
-        subtitle: data.subtitle,
-        link: data.link,
-        distance: data.distance || null,
-        open_time: data.open_time || null,
+        active: data.active,
         close_time: data.close_time || null,
+        description: data.description || null,
+        distance: data.distance || null,
         faq: (() => {
           const valid = data.faqs?.filter((f) => f.question?.trim() && f.answer?.trim()) ?? [];
           return valid.length ? JSON.stringify(valid) : null;
         })(),
-        active: data.active,
-        order: data.order,
+
         image: imageId,
+        link: data.link,
+        open_time: data.open_time || null,
+        order: data.order,
+        slug: data.slug,
+        subtitle: data.subtitle,
+        title: data.title,
       };
 
       if (props.attractionId) {
         await updateAttraction(props.attractionId, attractionData);
+        await syncAttractionImages(props.attractionId, galleryPayload);
         toast.success("Attraction updated successfully!");
       } else {
-        await createAttraction(attractionData);
+        const created = await createAttraction(attractionData);
+        if (created?.id) {
+          await syncAttractionImages(created.id, galleryPayload);
+        }
         toast.success("Attraction created successfully!");
       }
 
@@ -207,6 +272,7 @@ const AttractionForm = (props: TAttractionFormProps) => {
     } finally {
       setIsSubmitting(false);
       setIsImageUploading(false);
+      setIsGalleryUploading(false);
     }
   };
 
@@ -221,14 +287,14 @@ const AttractionForm = (props: TAttractionFormProps) => {
               <h1 className="text-2xl font-bold">{pageTitle}</h1>
               <div className="flex gap-3">
                 <Button
+                  disabled={busy}
+                  onClick={() => router.push("/nearby-attractions")}
                   type="button"
                   variant="outline"
-                  onClick={() => router.push("/nearby-attractions")}
-                  disabled={busy}
                 >
                   Cancel
                 </Button>
-                <Button type="submit" disabled={busy}>
+                <Button disabled={busy} type="submit">
                   {busy && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   {props.attractionId ? "Update Attraction" : "Create Attraction"}
                 </Button>
@@ -289,7 +355,7 @@ const AttractionForm = (props: TAttractionFormProps) => {
                         <FormItem>
                           <FormLabel>Subtitle / Description</FormLabel>
                           <FormControl>
-                            <Textarea placeholder="Enter a brief description" className="min-h-[100px]" {...field} />
+                            <Textarea className="min-h-[100px]" placeholder="Enter a brief description" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -422,23 +488,23 @@ const AttractionForm = (props: TAttractionFormProps) => {
                   <CardContent className="space-y-4">
                     <div className="flex justify-end">
                       <Button
+                        onClick={() => appendFaq({ answer: "", question: "" })}
+                        size="sm"
                         type="button"
                         variant="outline"
-                        size="sm"
-                        onClick={() => appendFaq({ question: "", answer: "" })}
                       >
                         <Plus className="mr-2 h-4 w-4" />
                         Add FAQ
                       </Button>
                     </div>
                     {faqFields.map((field, index) => (
-                      <div key={field.id} className="rounded-lg border p-4 space-y-3">
+                      <div className="rounded-lg border p-4 space-y-3" key={field.id}>
                         <div className="flex justify-end">
                           <Button
+                            onClick={() => removeFaq(index)}
+                            size="icon"
                             type="button"
                             variant="ghost"
-                            size="icon"
-                            onClick={() => removeFaq(index)}
                           >
                             <Trash2 className="h-4 w-4 text-destructive" />
                           </Button>
@@ -463,7 +529,7 @@ const AttractionForm = (props: TAttractionFormProps) => {
                             <FormItem>
                               <FormLabel>Answer</FormLabel>
                               <FormControl>
-                                <Textarea placeholder="Answer..." className="min-h-[80px]" {...f} />
+                                <Textarea className="min-h-[80px]" placeholder="Answer..." {...f} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>

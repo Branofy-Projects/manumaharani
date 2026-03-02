@@ -6,60 +6,82 @@
 import { config } from "dotenv";
 config({ path: "../../.env" });
 
-import { db, Faqs, OfferFaqs, OfferHighlights, OfferItinerary, Offers } from "./index";
+import { db, Faqs, OfferFaqs, OfferHighlights, OfferItinerary, Offers, eq, inArray } from "./index";
 
 async function seedOffer() {
   console.log("🌱 Starting offer seed...");
 
   try {
     // Create the main offer (Jim Corbett Safari Experience)
-    const [offer] = await db
-      .insert(Offers)
-      .values({
-        active: true,
-        booking_notice:
-          "Safari permits are limited and subject to availability. Book at least 48 hours in advance to ensure permit availability.",
-        cancellation_deadline: "72 hours",
-        cancellation_policy: `Full refund available up to 72 hours before the experience starts.
+    const offerValues = {
+      active: true,
+      booking_notice:
+        "Safari permits are limited and subject to availability. Book at least 48 hours in advance to ensure permit availability.",
+      cancellation_deadline: "72 hours",
+      cancellation_policy: `Full refund available up to 72 hours before the experience starts.
 50% refund available between 24-72 hours before the experience.
 No refund available within 24 hours of the experience.
 
 Note: Government safari permit fees are non-refundable once issued. In case of permit cancellation by forest authorities due to weather or other reasons, a full refund or rescheduling will be offered.`,
-        category: "adventure",
-        description: `Experience the thrill of India's oldest and most prestigious national park with our comprehensive Jim Corbett Safari Adventure. This full-day experience takes you deep into the heart of the jungle where you'll have the opportunity to witness incredible wildlife in their natural habitat.
+      category: "adventure",
+      description: `Experience the thrill of India's oldest and most prestigious national park with our comprehensive Jim Corbett Safari Adventure. This full-day experience takes you deep into the heart of the jungle where you'll have the opportunity to witness incredible wildlife in their natural habitat.
 
 Our expert naturalists and forest guides will accompany you throughout the journey, sharing their extensive knowledge about the park's diverse ecosystem, flora, and fauna. The safari covers multiple zones of the park, each offering unique wildlife sighting opportunities.
 
 Jim Corbett National Park is home to over 650 species of birds, 50 species of mammals, and 33 species of reptiles. The park is most famous for its Bengal tiger population, and while sightings cannot be guaranteed, our experienced guides know the best spots and times for maximum chances.
 
 The experience includes comfortable jeep transfers, all necessary permits, and refreshments. Whether you're a wildlife enthusiast, photographer, or simply looking to connect with nature, this safari offers an enriching and memorable adventure.`,
-        discounted_price: "6999",
-        duration: "Full Day (8-10 hours)",
-        excerpt:
-          "Embark on an unforgettable wildlife safari through Jim Corbett National Park. Spot majestic tigers, elephants, and exotic birds in their natural habitat with expert naturalists.",
-        free_cancellation: true,
-        languages: JSON.stringify(["English", "Hindi"]),
-        link: "/junglesafari/book-safari",
-        location: "Jim Corbett National Park, Uttarakhand",
-        max_group_size: 6,
-        meeting_point: "Manu Maharani Resort Lobby",
-        meeting_point_details:
-          "Meet at the resort lobby at 5:30 AM for morning safari or 2:00 PM for evening safari. Our guide will be holding a sign with the tour name. Please arrive 15 minutes early for registration.",
-        meta_description:
-          "Book an unforgettable Jim Corbett Safari experience. Spot tigers, elephants & exotic wildlife with expert guides. Full day adventure starting from ₹6,999.",
-        meta_title: "Jim Corbett Safari Adventure | Wildlife Experience at Manu Maharani",
-        min_group_size: 2,
-        name: "Jim Corbett Safari Adventure & Nature Experience",
-        original_price: "8500",
-        price_per: "person",
-        rating: "4.8",
-        review_count: 247,
-        slug: "jim-corbett-safari-adventure-nature-experience",
-        status: "active",
+      discounted_price: "6999",
+      duration: "Full Day (8-10 hours)",
+      excerpt:
+        "Embark on an unforgettable wildlife safari through Jim Corbett National Park. Spot majestic tigers, elephants, and exotic birds in their natural habitat with expert naturalists.",
+      free_cancellation: true,
+      languages: JSON.stringify(["English", "Hindi"]),
+      link: "/junglesafari/book-safari",
+      location: "Jim Corbett National Park, Uttarakhand",
+      max_group_size: 6,
+      meeting_point: "Manu Maharani Resort Lobby",
+      meeting_point_details:
+        "Meet at the resort lobby at 5:30 AM for morning safari or 2:00 PM for evening safari. Our guide will be holding a sign with the tour name. Please arrive 15 minutes early for registration.",
+      meta_description:
+        "Book an unforgettable Jim Corbett Safari experience. Spot tigers, elephants & exotic wildlife with expert guides. Full day adventure starting from ₹6,999.",
+      meta_title: "Jim Corbett Safari Adventure | Wildlife Experience at Manu Maharani",
+      min_group_size: 2,
+      name: "Jim Corbett Safari Adventure & Nature Experience",
+      original_price: "8500",
+      price_per: "person",
+      rating: "4.8",
+      review_count: 247,
+      slug: "jim-corbett-safari-adventure-nature-experience",
+      status: "active",
+    } as const; // Use as const to help with type inference if needed, though Drizzle handles it
+
+    const [offer] = await db
+      .insert(Offers)
+      .values(offerValues)
+      .onConflictDoUpdate({
+        target: Offers.slug,
+        set: offerValues,
       })
       .returning();
 
-    console.log("✅ Created offer:", offer.id);
+    console.log("✅ Created/Updated offer:", offer.id);
+
+    // Clean up existing related data to avoid duplicates
+    console.log("🧹 Cleaning up existing related data...");
+    
+    await db.delete(OfferHighlights).where(eq(OfferHighlights.offer_id, offer.id));
+    await db.delete(OfferItinerary).where(eq(OfferItinerary.offer_id, offer.id));
+    
+    // Find linked FAQs to clean them up
+    const linkedFaqs = await db.select({ faq_id: OfferFaqs.faq_id }).from(OfferFaqs).where(eq(OfferFaqs.offer_id, offer.id));
+    const faqIds = linkedFaqs.map(f => f.faq_id);
+    
+    await db.delete(OfferFaqs).where(eq(OfferFaqs.offer_id, offer.id));
+    
+    if (faqIds.length > 0) {
+        await db.delete(Faqs).where(inArray(Faqs.id, faqIds));
+    }
 
     // Create highlights (What's Included)
     const includedHighlights = [

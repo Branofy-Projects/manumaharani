@@ -1,10 +1,10 @@
+import { getUserById } from "@repo/actions";
+import { AppResponseHandler } from "@repo/actions/utils/app-response-handler";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import FormCardSkeleton from "@/components/form-card-skeleton";
 import UserForm from "@/features/users/components/user-form";
-import { getUserById } from "@repo/actions";
-import { AppResponseHandler } from "@repo/actions/utils/app-response-handler";
 
 export const metadata = {
   title: "Dashboard: Edit User",

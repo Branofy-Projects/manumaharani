@@ -8,10 +8,10 @@ import { GalleryTable } from "./gallery-tables";
 import { columns } from "./gallery-tables/columns";
 
 type TGetGalleryFilters = {
-  search?: string;
-  page?: number;
-  limit?: number;
   category?: string;
+  limit?: number;
+  page?: number;
+  search?: string;
   type?: string;
 };
 
@@ -36,7 +36,7 @@ export default async function GalleryListingPage() {
     return redirect("/sign-in");
   }
 
-  const { total, gallery } = await getGallery(filters);
+  const { gallery, total } = await getGallery(filters);
 
   return <GalleryTable columns={columns} data={gallery} totalItems={total} />;
 }

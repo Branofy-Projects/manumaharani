@@ -69,12 +69,12 @@ function renderNode(node: LexicalNode, index: number): React.ReactNode {
     case "heading":
       const Tag = (element.tag || "h1") as keyof React.JSX.IntrinsicElements;
       const classes = {
-        h1: "mb-6 text-4xl font-thin leading-tight text-gray-900 md:text-5xl lg:text-6xl",
-        h2: "mb-6 text-3xl font-thin text-gray-900",
-        h3: "mb-6 text-2xl font-thin text-gray-900",
-        h4: "mb-6 text-xl font-thin text-gray-900",
-        h5: "mb-6 text-lg font-thin text-gray-900",
-        h6: "mb-6 text-base font-thin text-gray-900",
+        h1: "mb-6 text-4xl  leading-tight text-gray-900 md:text-5xl lg:text-6xl",
+        h2: "mb-6 text-3xl  text-gray-900",
+        h3: "mb-6 text-2xl  text-gray-900",
+        h4: "mb-6 text-xl  text-gray-900",
+        h5: "mb-6 text-lg  text-gray-900",
+        h6: "mb-6 text-base  text-gray-900",
       };
       return (
         <Tag
@@ -91,7 +91,6 @@ function renderNode(node: LexicalNode, index: number): React.ReactNode {
       // It usually doesn't have children but has src/alt props directly
       const { altText, height, maxWidth, src, width } = element;
 
-      console.log(JSON.stringify(element, null, 2));
 
       return (
         <span
@@ -102,6 +101,7 @@ function renderNode(node: LexicalNode, index: number): React.ReactNode {
             alt={altText}
             className="object-cover object-center"
             fill
+            sizes="100vw"
             src={src}
           />
         </span>
@@ -150,7 +150,7 @@ function renderNode(node: LexicalNode, index: number): React.ReactNode {
       }
       return (
         <p
-          className="mb-2 text-lg font-thin leading-relaxed text-gray-700"
+          className="mb-2 text-lg  leading-relaxed text-gray-700"
           key={index}
         >
           {children}

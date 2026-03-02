@@ -88,6 +88,7 @@ export function PropertyRealMoments({ moments }: PropertyRealMomentsProps) {
                   alt={moment.alt}
                   className="object-cover"
                   fill
+                  sizes="50vw"
                   src={moment.image}
                 />
               </div>

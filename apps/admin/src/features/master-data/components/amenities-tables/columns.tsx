@@ -15,7 +15,7 @@ export const columns: ColumnDef<TAmenity>[] = [
     cell: ({ row }) => {
       const amenity = row.original;
       return (
-        <Link href={`/amenities/${amenity.id}`} className="hover:underline">
+        <Link className="hover:underline" href={`/amenities/${amenity.id}`}>
           <div className="font-medium">{amenity.label}</div>
         </Link>
       );

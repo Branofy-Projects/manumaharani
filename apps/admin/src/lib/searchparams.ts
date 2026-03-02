@@ -19,7 +19,7 @@ export const searchParams = {
   q: parseAsString,
   roles: parseAsArrayOf(parseAsStringEnum(userRoles.enumValues)),
   status: parseAsString,
-  type: parseAsString,
+  type: parseAsString,  
   // advanced filter
   // filters: getFiltersStateParser().withDefault([]),
   // joinOperator: parseAsStringEnum(['and', 'or']).withDefault('and')

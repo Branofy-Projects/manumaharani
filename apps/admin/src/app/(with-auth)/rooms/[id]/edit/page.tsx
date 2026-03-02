@@ -6,14 +6,11 @@ import FormCardSkeleton from "@/components/form-card-skeleton";
 import { RoomForm } from "@/features/rooms/components/room-form";
 
 export const metadata = {
-  title: "Dashboard: Edit Room",
+  title: "Dashboard: Edit User",
 };
 
-type PageProps = {
-  params: Promise<{ id: string }>;
-};
 
-export default async function EditRoomPage(props: PageProps) {
+export default async function EditRoomPage(props: PageProps<"/rooms/[id]/edit">) {
   const params = await props.params;
 
   if (!params.id || params.id === "new") {
@@ -26,10 +23,6 @@ export default async function EditRoomPage(props: PageProps) {
   }
 
   const room = await getRoomById(id);
-
-  if (!room) {
-    notFound();
-  }
 
   return (
     <Suspense fallback={<FormCardSkeleton />}>

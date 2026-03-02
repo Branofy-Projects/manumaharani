@@ -1,7 +1,7 @@
 "use client";
 
+import { Calendar, CheckCircle, Clock, Edit, FileText, Mail, MapPin, Star, User, XCircle } from "lucide-react";
 import Link from "next/link";
-import { Edit, Calendar, Star, Mail, MapPin, User, FileText, CheckCircle, XCircle, Clock } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,19 +11,19 @@ import { Separator } from "@/components/ui/separator";
 import type { TTestimonial } from "@repo/db";
 
 interface TestimonialDetailsViewProps {
-  testimonial: TTestimonial & {
+  testimonial: {
     guestAvatar?: any;
-  };
+  } & TTestimonial;
 }
 
-const statusMap: Record<string, { label: string; variant: "default" | "secondary" | "destructive" | "outline"; icon: any }> = {
-  pending: { label: "Pending", variant: "secondary", icon: Clock },
-  approved: { label: "Approved", variant: "default", icon: CheckCircle },
-  rejected: { label: "Rejected", variant: "destructive", icon: XCircle },
+const statusMap: Record<string, { icon: any; label: string; variant: "default" | "destructive" | "outline" | "secondary"; }> = {
+  approved: { icon: CheckCircle, label: "Approved", variant: "default" },
+  pending: { icon: Clock, label: "Pending", variant: "secondary" },
+  rejected: { icon: XCircle, label: "Rejected", variant: "destructive" },
 };
 
 export default function TestimonialDetailsView({ testimonial }: TestimonialDetailsViewProps) {
-  const statusInfo = statusMap[testimonial.status] || { label: testimonial.status, variant: "secondary" as const, icon: Clock };
+  const statusInfo = statusMap[testimonial.status] || { icon: Clock, label: testimonial.status, variant: "secondary" as const };
   const StatusIcon = statusInfo.icon;
 
   return (
@@ -33,7 +33,7 @@ export default function TestimonialDetailsView({ testimonial }: TestimonialDetai
         <div className="space-y-2">
           <div className="flex items-center gap-3">
             <h1 className="text-3xl font-bold">{testimonial.guest_name}</h1>
-            <Badge variant={statusInfo.variant} className="flex items-center gap-1">
+            <Badge className="flex items-center gap-1" variant={statusInfo.variant}>
               <StatusIcon className="h-3 w-3" />
               {statusInfo.label}
             </Badge>
@@ -65,9 +65,9 @@ export default function TestimonialDetailsView({ testimonial }: TestimonialDetai
                 <div className="flex items-center gap-4">
                   <div className="relative h-24 w-24 overflow-hidden rounded-full">
                     <img
-                      src={testimonial.guestAvatar.large_url || testimonial.guestAvatar.original_url}
                       alt={testimonial.guestAvatar.alt_text || testimonial.guest_name}
                       className="h-full w-full object-cover"
+                      src={testimonial.guestAvatar.large_url || testimonial.guestAvatar.original_url}
                     />
                   </div>
                   {testimonial.guestAvatar.alt_text && (
@@ -96,12 +96,11 @@ export default function TestimonialDetailsView({ testimonial }: TestimonialDetai
                   <div className="flex items-center gap-1">
                     {Array.from({ length: 5 }).map((_, i) => (
                       <Star
-                        key={i}
-                        className={`h-5 w-5 ${
-                          i < testimonial.rating
+                        className={`h-5 w-5 ${i < testimonial.rating
                             ? "fill-yellow-400 text-yellow-400"
                             : "text-muted-foreground"
-                        }`}
+                          }`}
+                        key={i}
                       />
                     ))}
                     <span className="ml-2 text-sm font-semibold">({testimonial.rating}/5)</span>
@@ -160,8 +159,8 @@ export default function TestimonialDetailsView({ testimonial }: TestimonialDetai
                       Email
                     </label>
                     <a
-                      href={`mailto:${testimonial.guest_email}`}
                       className="mt-1 block text-blue-600 hover:underline"
+                      href={`mailto:${testimonial.guest_email}`}
                     >
                       {testimonial.guest_email}
                     </a>
@@ -209,10 +208,10 @@ export default function TestimonialDetailsView({ testimonial }: TestimonialDetai
                 <p className="mt-1 text-sm text-muted-foreground">
                   {new Date(testimonial.created_at).toLocaleDateString("en-US", {
                     day: "numeric",
-                    month: "long",
-                    year: "numeric",
                     hour: "2-digit",
                     minute: "2-digit",
+                    month: "long",
+                    year: "numeric",
                   })}
                 </p>
               </div>
@@ -228,10 +227,10 @@ export default function TestimonialDetailsView({ testimonial }: TestimonialDetai
                     <p className="mt-1 text-sm text-muted-foreground">
                       {new Date(testimonial.updated_at).toLocaleDateString("en-US", {
                         day: "numeric",
-                        month: "long",
-                        year: "numeric",
                         hour: "2-digit",
                         minute: "2-digit",
+                        month: "long",
+                        year: "numeric",
                       })}
                     </p>
                   </div>

@@ -1,0 +1,1 @@
+ALTER TABLE "offer_bookings" ADD COLUMN "number_of_guests" integer DEFAULT 1 NOT NULL;

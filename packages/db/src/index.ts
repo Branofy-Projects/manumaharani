@@ -3,7 +3,8 @@ import { drizzle } from "drizzle-orm/neon-http";
 
 // Core Schemas
 import { Amenities } from "./schema/amenities.schema";
-import { Attractions } from "./schema/attractions.schema";
+import { AttractionBookings } from "./schema/attraction-bookings.schema";
+import { AttractionImages, Attractions } from "./schema/attractions.schema";
 // Auth Schema
 import {
   Accounts,
@@ -31,7 +32,8 @@ import {
   bookingStatusEnum,
   paymentStatusEnum,
 } from "./schema/bookings.schema";
-import { Events } from "./schema/events.schema";
+import { EventBookings } from "./schema/event-bookings.schema";
+import { EventFaqs, EventHighlights, EventImages, EventItinerary, Events } from "./schema/events.schema";
 import { Faqs } from "./schema/faqs.schema";
 // Gallery Schema
 import {
@@ -63,13 +65,13 @@ import {
   RoomTypes,
   roomTypeStatusEnum,
 } from "./schema/room-types.schema";
-// Rooms Schema
 import {
   RoomAmenities,
   RoomImages,
   Rooms,
   roomStatusEnum,
 } from "./schema/rooms.schema";
+// Rooms Schema
 // Testimonials Schema
 import {
   Testimonials,
@@ -85,15 +87,39 @@ export type {
   TUserRole,
   TVerification,
 } from "./schema/auth.schema";
+import { ContactQueries, contactQueryStatusEnum } from "./schema/contact-queries.schema";
+import { Experiences } from "./schema/experiences.schema";
+import { OfferBookings ,offerBookingStatusEnum} from "./schema/offer-bookings.schema";
+import { Reels, reelStatusEnum } from "./schema/reels.schema";
+import { RoomBookings } from "./schema/room-bookings.schema";
 
+export type { TEventBooking, TNewEventBooking } from "./schema/event-bookings.schema";
+export type { TContactQuery, TNewContactQuery } from "./schema/contact-queries.schema";
+export type {
+  TEventBase,
+  TEventFaqBase,
+  TEventHighlightBase,
+  TEventImageBase,
+  TEventItineraryBase,
+  TNewEvent,
+  TNewEventFaq,
+  TNewEventHighlight,
+  TNewEventImage,
+  TNewEventItinerary,
+} from "./schema/events.schema";
+export type { TExperience, TNewExperience } from "./schema/experiences.schema";
+export type { TNewReel, TReel } from "./schema/reels.schema";
+export type { TNewRoomBooking, TRoomBooking } from "./schema/room-bookings.schema";
 // Core Types
 export type {
   TAmenityBase,
   TInsertAmenity,
   TNewAmenity,
 } from "./schema/amenities.schema";
+export type { TAttractionBooking, TNewAttractionBooking } from "./schema/attraction-bookings.schema";
 export type {
   TAttractionBase,
+  TAttractionImageBase,
   TNewAttraction,
 } from "./schema/attractions.schema";
 
@@ -107,7 +133,7 @@ export type { TFaqBase, TInsertFaq, TNewFaq } from "./schema/faqs.schema";
 
 export type { TImage, TNewImage } from "./schema/images.schema";
 
-export type { TNewGallery } from "./schema/gallery.schema";
+export type { TGalleryBase, TGalleryCategory, TNewGallery } from "./schema/gallery.schema";
 
 export type {
   TNewRoomType,
@@ -125,10 +151,16 @@ export type {
 export type {
   TAmenity,
   TAttraction,
+  TAttractionImage,
   TBlog,
   TBlogImage,
   TBooking,
   TBookingWithDetails,
+  TEventFaq,
+  TEventHighlight,
+  TEventImage,
+  TEventItinerary,
+  TEventWithDetails,
   TFaq,
   TGallery,
   TOffer,
@@ -161,6 +193,8 @@ export {
   // Auth
   Accounts,
   Amenities,
+  AttractionBookings,
+  AttractionImages,
   Attractions,
   bedTypeEnum,
   blogCategoryEnum,
@@ -170,7 +204,14 @@ export {
   BookingPayments,
   Bookings,
   bookingStatusEnum,
+  ContactQueries,
+  contactQueryStatusEnum,
   EmailVerificationTokens,
+  EventBookings,
+  EventFaqs,
+  EventHighlights,
+  EventImages,
+  EventItinerary,
   Events,
   Faqs,
   Gallery,
@@ -178,6 +219,8 @@ export {
   galleryTypeEnum,
   highlightTypeEnum,
   Images,
+  OfferBookings,
+  offerBookingStatusEnum,
   offerCategoryEnum,
   OfferFaqs,
   OfferHighlights,
@@ -189,7 +232,10 @@ export {
   paymentStatusEnum,
   Policies,
   policyKindEnum,
+  Reels,
+  reelStatusEnum,
   RoomAmenities,
+  RoomBookings,
   RoomImages,
   Rooms,
   roomStatusEnum,
@@ -207,22 +253,32 @@ export {
   UserPreferences,
   userRoles,
   Users,
-  Verifications,
+  Verifications
 };
 
 export const schemaWithoutRelations = {
   Accounts,
   Amenities,
+  AttractionBookings,
+  AttractionImages,
   Attractions,
   BlogImages,
   Blogs,
   BookingPayments,
   Bookings,
+  ContactQueries,
   EmailVerificationTokens,
+  EventBookings,
+  EventFaqs,
+  EventHighlights,
+  EventImages,
+  EventItinerary,
   Events,
+  Experiences,
   Faqs,
   Gallery,
   Images,
+  OfferBookings,
   OfferFaqs,
   OfferHighlights,
   OfferImages,
@@ -230,7 +286,9 @@ export const schemaWithoutRelations = {
   Offers,
   PasswordResetTokens,
   Policies,
+  Reels,
   RoomAmenities,
+  RoomBookings,
   RoomImages,
   Rooms,
   RoomTypeAmenities,
@@ -244,7 +302,7 @@ export const schemaWithoutRelations = {
   UserAuditLog,
   UserPreferences,
   Users,
-  Verifications,
+  Verifications
 };
 
 export const schema = {
@@ -262,6 +320,7 @@ if (
   try {
     config({ path: "../../.env" });
   } catch (error) {
+    console.error("Error loading .env file:", error);
     // Silently fail if .env file doesn't exist or in Edge Runtime
     // This is expected when running in Edge Runtime or when .env is not present
   }

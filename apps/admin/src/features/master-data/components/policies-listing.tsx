@@ -1,4 +1,4 @@
-import { getPolicies } from "@repo/actions";
+import { getPolicies } from "@repo/actions/master-data.actions";
 import { redirect } from "next/navigation";
 
 import { getCurrentUser } from "@/lib/auth-utils";

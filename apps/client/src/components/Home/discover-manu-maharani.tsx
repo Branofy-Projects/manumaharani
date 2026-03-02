@@ -4,12 +4,11 @@ import BlogsLoadingSection from "./blogs-loading-section";
 import BlogsSection from "./blogs-section";
 
 
-
 export default function DiscoverManuMaharani() {
   return (
     <section className="w-full flex flex-col items-center py-10 md:py-20">
       <h2
-        className="text-3xl md:text-4xl font-thin tracking-widest uppercase mb-4 text-center px-4 xl:px-0"
+        className="text-3xl md:text-4xl  tracking-widest uppercase mb-4 text-center px-4 xl:px-0"
         style={{ color: "#000000" }}
       >
         DISCOVER MANU MAHARANI
@@ -21,6 +20,7 @@ export default function DiscoverManuMaharani() {
       <Suspense fallback={<BlogsLoadingSection />}>
         <BlogsSection />
       </Suspense>
+
     </section>
   );
 }

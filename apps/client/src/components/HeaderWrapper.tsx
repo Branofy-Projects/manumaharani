@@ -38,7 +38,7 @@ export const HeaderLogo = ({
       {/* Subtitle (hidden on mobile) */}
       {subtitle && (
         <div className="hidden xl:flex ml-2 flex-1 flex-col items-start">
-          <span className="text-xl tracking-widest text-white font-thin leading-none uppercase">
+          <span className="text-xl tracking-widest text-white  leading-none uppercase">
             {subtitle}
           </span>
         </div>

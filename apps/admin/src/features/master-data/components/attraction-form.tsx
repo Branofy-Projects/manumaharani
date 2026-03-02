@@ -1,7 +1,17 @@
 "use client";
 
-import { FileUploader, hasValidImages } from "@/components/file-uploader";
+import { createAttraction, updateAttraction } from "@repo/actions";
+import { createImages } from "@repo/actions/images.actions";
+import { Loader2, Plus, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useMemo, useState } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
 import type { FormImage as FileUploaderFormImage } from "@/components/file-uploader";
+
+import { FileUploader, hasValidImages } from "@/components/file-uploader";
 import PageContainer from "@/components/layout/page-container";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,37 +31,30 @@ import { Textarea } from "@/components/ui/textarea";
 import { ImagesArraySchema } from "@/lib/image-schema";
 import { uploadFilesWithProgress } from "@/lib/upload-files";
 import { zodResolver } from "@/lib/zod-resolver";
-import { createAttraction, updateAttraction } from "@repo/actions";
-import { createImages } from "@repo/actions/images.actions";
+
 import type { TAttraction } from "@repo/db";
-import { Loader2, Plus, Trash2 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
 
 const faqItemSchema = z.object({
-  question: z.string().optional().default(""),
   answer: z.string().optional().default(""),
+  question: z.string().optional().default(""),
 });
 
 const formSchema = z.object({
-  title: z.string().min(1, "Title is required.").max(255),
-  subtitle: z.string().min(1, "Subtitle is required."),
-  link: z.string().default("#"),
-  distance: z.string().max(100).optional().default(""),
-  open_time: z.string().max(20).optional().default(""),
-  close_time: z.string().max(20).optional().default(""),
-  faqs: z.array(faqItemSchema).default([]),
   active: z.boolean().default(true),
-  order: z.preprocess((val) => Number(val), z.number().int().default(0)),
+  close_time: z.string().max(20).optional().default(""),
+  distance: z.string().max(100).optional().default(""),
+  faqs: z.array(faqItemSchema).default([]),
   image: ImagesArraySchema(0, 1),
+  link: z.string().default("#"),
+  open_time: z.string().max(20).optional().default(""),
+  order: z.preprocess((val) => Number(val), z.number().int().default(0)),
+  subtitle: z.string().min(1, "Subtitle is required."),
+  title: z.string().min(1, "Title is required.").max(255),
 });
 
 type TAttractionFormProps = {
   attractionId?: string;
-  initialData: TAttraction | null;
+  initialData: null | TAttraction;
   pageTitle: string;
 };
 
@@ -60,44 +63,44 @@ const AttractionForm = (props: TAttractionFormProps) => {
   const router = useRouter();
 
   const defaultValues = useMemo(() => {
-    let faqs: Array<{ question: string; answer: string }> = [];
+    let faqs: Array<{ answer: string; question: string; }> = [];
     if (initialData?.faq) {
       try {
         const parsed = JSON.parse(initialData.faq) as unknown;
         faqs = Array.isArray(parsed)
-          ? parsed.map((item: { question?: string; answer?: string }) => ({
-              question: item?.question ?? "",
-              answer: item?.answer ?? "",
-            }))
+          ? parsed.map((item: { answer?: string; question?: string; }) => ({
+            answer: item?.answer ?? "",
+            question: item?.question ?? "",
+          }))
           : [];
       } catch {
         faqs = [];
       }
     }
     return {
-      title: initialData?.title || "",
-      subtitle: initialData?.subtitle || "",
-      link: initialData?.link || "#",
-      distance: initialData?.distance ?? "",
-      open_time: initialData?.open_time ?? "",
-      close_time: initialData?.close_time ?? "",
-      faqs,
       active: initialData?.active ?? true,
-      order: initialData?.order || 0,
+      close_time: initialData?.close_time ?? "",
+      distance: initialData?.distance ?? "",
+      faqs,
       image: initialData?.image
         ? [
-            {
-              _type: "existing" as const,
-              alt_text: initialData.image.alt_text || "",
-              image_id: initialData.image.id,
-              large_url: initialData.image.large_url || "",
-              medium_url: initialData.image.medium_url || "",
-              order: 0,
-              original_url: initialData.image.original_url || "",
-              small_url: initialData.image.small_url || "",
-            },
-          ]
+          {
+            _type: "existing" as const,
+            alt_text: initialData.image.alt_text || "",
+            image_id: initialData.image.id,
+            large_url: initialData.image.large_url || "",
+            medium_url: initialData.image.medium_url || "",
+            order: 0,
+            original_url: initialData.image.original_url || "",
+            small_url: initialData.image.small_url || "",
+          },
+        ]
         : [],
+      link: initialData?.link || "#",
+      open_time: initialData?.open_time ?? "",
+      order: initialData?.order || 0,
+      subtitle: initialData?.subtitle || "",
+      title: initialData?.title || "",
     };
   }, [initialData]);
 
@@ -171,20 +174,28 @@ const AttractionForm = (props: TAttractionFormProps) => {
         }
       }
 
+      const slug = data.title
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\s-]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-");
+
       const attractionData = {
-        title: data.title,
-        subtitle: data.subtitle,
-        link: data.link,
-        distance: data.distance || null,
-        open_time: data.open_time || null,
+        active: data.active,
         close_time: data.close_time || null,
+        distance: data.distance || null,
         faq: (() => {
           const valid = data.faqs?.filter((f) => f.question?.trim() && f.answer?.trim()) ?? [];
           return valid.length ? JSON.stringify(valid) : null;
         })(),
-        active: data.active,
-        order: data.order,
         image: imageId,
+        link: data.link,
+        open_time: data.open_time || null,
+        order: data.order,
+        slug,
+        subtitle: data.subtitle,
+        title: data.title,
       };
 
       if (props.attractionId) {
@@ -199,9 +210,9 @@ const AttractionForm = (props: TAttractionFormProps) => {
         router.push("/nearby-attractions");
         router.refresh();
       }, 100);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error saving attraction:", error);
-      toast.error(error?.message || "Failed to save attraction");
+      toast.error(error instanceof Error ? error.message : "Failed to save attraction");
     } finally {
       setIsSubmitting(false);
       setIsImageUploading(false);
@@ -218,10 +229,10 @@ const AttractionForm = (props: TAttractionFormProps) => {
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold">{pageTitle}</h1>
               <div className="flex gap-3">
-                <Button type="button" variant="outline" onClick={() => router.back()} disabled={busy}>
+                <Button disabled={busy} onClick={() => router.back()} type="button" variant="outline">
                   Cancel
                 </Button>
-                <Button type="submit" disabled={busy}>
+                <Button disabled={busy} type="submit">
                   {busy && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   {props.attractionId ? "Update Attraction" : "Create Attraction"}
                 </Button>
@@ -296,7 +307,7 @@ const AttractionForm = (props: TAttractionFormProps) => {
                         <FormItem>
                           <FormLabel>Subtitle / Description</FormLabel>
                           <FormControl>
-                            <Textarea placeholder="Enter a brief description" className="min-h-[100px]" {...field} />
+                            <Textarea className="min-h-[100px]" placeholder="Enter a brief description" {...field} />
                           </FormControl>
                           <FormDescription className="text-xs">A short description of the attraction</FormDescription>
                           <FormMessage />
@@ -416,19 +427,19 @@ const AttractionForm = (props: TAttractionFormProps) => {
                   <CardContent className="space-y-4">
                     <div className="flex justify-end">
                       <Button
+                        onClick={() => appendFaq({ answer: "", question: "" })}
+                        size="sm"
                         type="button"
                         variant="outline"
-                        size="sm"
-                        onClick={() => appendFaq({ question: "", answer: "" })}
                       >
                         <Plus className="mr-2 h-4 w-4" />
                         Add FAQ
                       </Button>
                     </div>
                     {faqFields.map((field, index) => (
-                      <div key={field.id} className="rounded-lg border p-4 space-y-3">
+                      <div className="rounded-lg border p-4 space-y-3" key={field.id}>
                         <div className="flex justify-end">
-                          <Button type="button" variant="ghost" size="icon" onClick={() => removeFaq(index)}>
+                          <Button onClick={() => removeFaq(index)} size="icon" type="button" variant="ghost">
                             <Trash2 className="h-4 w-4 text-destructive" />
                           </Button>
                         </div>
@@ -452,7 +463,7 @@ const AttractionForm = (props: TAttractionFormProps) => {
                             <FormItem>
                               <FormLabel>Answer</FormLabel>
                               <FormControl>
-                                <Textarea placeholder="Answer..." className="min-h-[80px]" {...f} />
+                                <Textarea className="min-h-[80px]" placeholder="Answer..." {...f} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>

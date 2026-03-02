@@ -1,6 +1,6 @@
 {
-  "id": "2b9308f9-e67e-4bed-b80f-e64030df0c83",
-  "prevId": "33a0b619-017c-4651-8c5c-2df1a5306eee",
+  "id": "91e78a93-8f39-439b-b9b3-29b36421a830",
+  "prevId": "0361b89d-e329-4071-99da-7551ecad4ae7",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -35,148 +35,6 @@
       },
       "indexes": {},
       "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.attractions": {
-      "name": "attractions",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "title": {
-          "name": "title",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "subtitle": {
-          "name": "subtitle",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "link": {
-          "name": "link",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "'#'"
-        },
-        "image": {
-          "name": "image",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "active": {
-          "name": "active",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": true
-        },
-        "order": {
-          "name": "order",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "distance": {
-          "name": "distance",
-          "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "open_time": {
-          "name": "open_time",
-          "type": "varchar(20)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "close_time": {
-          "name": "close_time",
-          "type": "varchar(20)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "faq": {
-          "name": "faq",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp (0)",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp (0)",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        }
-      },
-      "indexes": {
-        "attractions_order_idx": {
-          "name": "attractions_order_idx",
-          "columns": [
-            {
-              "expression": "order",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "attractions_active_idx": {
-          "name": "attractions_active_idx",
-          "columns": [
-            {
-              "expression": "active",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "attractions_image_images_id_fk": {
-          "name": "attractions_image_images_id_fk",
-          "tableFrom": "attractions",
-          "tableTo": "images",
-          "columnsFrom": [
-            "image"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        }
-      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
@@ -2071,6 +1929,57 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.experiences": {
+      "name": "experiences",
+      "schema": "",
+      "columns": {
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "image": {
+          "name": "image",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.faqs": {
       "name": "faqs",
       "schema": "",
@@ -3461,87 +3370,6 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.room_amenities": {
-      "name": "room_amenities",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "room_id": {
-          "name": "room_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "amenity_id": {
-          "name": "amenity_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "order": {
-          "name": "order",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        }
-      },
-      "indexes": {
-        "room_amenities_room_id_idx": {
-          "name": "room_amenities_room_id_idx",
-          "columns": [
-            {
-              "expression": "room_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "room_amenities_room_id_rooms_id_fk": {
-          "name": "room_amenities_room_id_rooms_id_fk",
-          "tableFrom": "room_amenities",
-          "tableTo": "rooms",
-          "columnsFrom": [
-            "room_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "room_amenities_amenity_id_amenities_id_fk": {
-          "name": "room_amenities_amenity_id_amenities_id_fk",
-          "tableFrom": "room_amenities",
-          "tableTo": "amenities",
-          "columnsFrom": [
-            "amenity_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
     "public.room_images": {
       "name": "room_images",
       "schema": "",
@@ -3550,12 +3378,6 @@
           "name": "id",
           "type": "serial",
           "primaryKey": true,
-          "notNull": true
-        },
-        "room_id": {
-          "name": "room_id",
-          "type": "integer",
-          "primaryKey": false,
           "notNull": true
         },
         "image_id": {
@@ -3570,16 +3392,22 @@
           "primaryKey": false,
           "notNull": true,
           "default": 0
+        },
+        "room_id": {
+          "name": "room_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "room_images_room_id_rooms_id_fk": {
-          "name": "room_images_room_id_rooms_id_fk",
+        "room_images_image_id_images_id_fk": {
+          "name": "room_images_image_id_images_id_fk",
           "tableFrom": "room_images",
-          "tableTo": "rooms",
+          "tableTo": "images",
           "columnsFrom": [
-            "room_id"
+            "image_id"
           ],
           "columnsTo": [
             "id"
@@ -3587,12 +3415,12 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "room_images_image_id_images_id_fk": {
-          "name": "room_images_image_id_images_id_fk",
+        "room_images_room_id_rooms_id_fk": {
+          "name": "room_images_room_id_rooms_id_fk",
           "tableFrom": "room_images",
-          "tableTo": "images",
+          "tableTo": "rooms",
           "columnsFrom": [
-            "image_id"
+            "room_id"
           ],
           "columnsTo": [
             "id"
@@ -3617,15 +3445,9 @@
           "primaryKey": true,
           "notNull": true
         },
-        "title": {
-          "name": "title",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "slug": {
-          "name": "slug",
-          "type": "varchar(255)",
+        "room_type_id": {
+          "name": "room_type_id",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
@@ -3635,116 +3457,23 @@
           "primaryKey": false,
           "notNull": false
         },
-        "image": {
-          "name": "image",
+        "title": {
+          "name": "title",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "floor": {
+          "name": "floor",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
-        "video_url": {
-          "name": "video_url",
-          "type": "text",
+        "room_number": {
+          "name": "room_number",
+          "type": "varchar(50)",
           "primaryKey": false,
-          "notNull": false
-        },
-        "size_sqft": {
-          "name": "size_sqft",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "max_occupancy": {
-          "name": "max_occupancy",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 2
-        },
-        "number_of_beds": {
-          "name": "number_of_beds",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 1
-        },
-        "bed_type": {
-          "name": "bed_type",
-          "type": "bed_type",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'double'"
-        },
-        "check_in_time": {
-          "name": "check_in_time",
-          "type": "varchar(20)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "check_out_time": {
-          "name": "check_out_time",
-          "type": "varchar(20)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "children_policy": {
-          "name": "children_policy",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "extra_beds": {
-          "name": "extra_beds",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "base_price": {
-          "name": "base_price",
-          "type": "numeric(10, 2)",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'0'"
-        },
-        "peak_season_price": {
-          "name": "peak_season_price",
-          "type": "numeric(10, 2)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "weekend_price": {
-          "name": "weekend_price",
-          "type": "numeric(10, 2)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "rating": {
-          "name": "rating",
-          "type": "numeric(2, 1)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "review_count": {
-          "name": "review_count",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "default": 0
-        },
-        "is_featured": {
-          "name": "is_featured",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "order": {
-          "name": "order",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
+          "notNull": true
         },
         "status": {
           "name": "status",
@@ -3753,18 +3482,6 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'available'"
-        },
-        "floor": {
-          "name": "floor",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "room_number": {
-          "name": "room_number",
-          "type": "varchar(50)",
-          "primaryKey": false,
-          "notNull": false
         },
         "notes": {
           "name": "notes",
@@ -3788,11 +3505,26 @@
         }
       },
       "indexes": {
-        "rooms_slug_idx": {
-          "name": "rooms_slug_idx",
+        "rooms_room_number_idx": {
+          "name": "rooms_room_number_idx",
           "columns": [
             {
-              "expression": "slug",
+              "expression": "room_number",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "rooms_room_type_id_idx": {
+          "name": "rooms_room_type_id_idx",
+          "columns": [
+            {
+              "expression": "room_type_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -3818,26 +3550,11 @@
           "method": "btree",
           "with": {}
         },
-        "rooms_is_featured_idx": {
-          "name": "rooms_is_featured_idx",
+        "rooms_floor_idx": {
+          "name": "rooms_floor_idx",
           "columns": [
             {
-              "expression": "is_featured",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "rooms_order_idx": {
-          "name": "rooms_order_idx",
-          "columns": [
-            {
-              "expression": "order",
+              "expression": "floor",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -3850,27 +3567,27 @@
         }
       },
       "foreignKeys": {
-        "rooms_image_images_id_fk": {
-          "name": "rooms_image_images_id_fk",
+        "rooms_room_type_id_room_types_id_fk": {
+          "name": "rooms_room_type_id_room_types_id_fk",
           "tableFrom": "rooms",
-          "tableTo": "images",
+          "tableTo": "room_types",
           "columnsFrom": [
-            "image"
+            "room_type_id"
           ],
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "rooms_slug_unique": {
-          "name": "rooms_slug_unique",
+        "rooms_room_number_unique": {
+          "name": "rooms_room_number_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "slug"
+            "room_number"
           ]
         }
       },

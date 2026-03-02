@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function OffersLayout({ children }: { children: React.ReactNode }) {
     return (
-        <main className="min-h-screen pt-24 pb-12">
+        <main className="min-h-screen pt-[72px] md:pt-[88px] pb-12">
             {/* Hero / Membership Section */}
             <section className="w-full max-w-screen-xl mx-auto px-4 xl:px-0 mb-16">
                 <div className="grid pt-4 grid-cols-1 lg:grid-cols-5 gap-8 items-center">
@@ -24,6 +24,7 @@ export default function OffersLayout({ children }: { children: React.ReactNode }
                             alt="Membership Benefits"
                             className="object-cover object-center"
                             fill
+                            sizes="100vw"
                             src="https://thelibrary.mgmresorts.com/transform/2sXDQHygCqH31gRb/TCO159308211.jpg"
                         />
                     </div>

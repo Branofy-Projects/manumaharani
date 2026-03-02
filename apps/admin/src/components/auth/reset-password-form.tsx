@@ -1,13 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@/lib/zod-resolver";
-import { z } from "zod";
-import { Eye, EyeOff, CheckCircle } from "lucide-react";
+import { CheckCircle, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,15 +18,17 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { zodResolver } from "@/lib/zod-resolver";
+
 import { useAuth } from "./auth-provider";
 
 const resetPasswordSchema = z.object({
+  confirmPassword: z.string(),
   password: z.string()
     .min(8, "Password must be at least 8 characters")
     .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
     .regex(/[a-z]/, "Password must contain at least one lowercase letter")
     .regex(/[0-9]/, "Password must contain at least one number"),
-  confirmPassword: z.string(),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ["confirmPassword"],
@@ -47,11 +48,11 @@ export function ResetPasswordForm() {
   const token = searchParams.get("token");
 
   const form = useForm<ResetPasswordFormData>({
-    resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
-      password: "",
       confirmPassword: "",
+      password: "",
     },
+    resolver: zodResolver(resetPasswordSchema),
   });
 
   const onSubmit = async (data: ResetPasswordFormData) => {
@@ -63,7 +64,7 @@ export function ResetPasswordForm() {
     try {
       setIsLoading(true);
       const result = await resetPassword(token, data.password);
-      
+
       if (result.error) {
         toast.error(result.error.message || "Failed to reset password");
         return;
@@ -92,10 +93,10 @@ export function ResetPasswordForm() {
               viewBox="0 0 24 24"
             >
               <path
+                d="M6 18L18 6M6 6l12 12"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
               />
             </svg>
           </div>
@@ -151,7 +152,7 @@ export function ResetPasswordForm() {
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
             control={form.control}
             name="password"
@@ -162,17 +163,17 @@ export function ResetPasswordForm() {
                   <div className="relative">
                     <Input
                       {...field}
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Create a strong password"
                       disabled={isLoading}
+                      placeholder="Create a strong password"
+                      type={showPassword ? "text" : "password"}
                     />
                     <Button
+                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                      disabled={isLoading}
+                      onClick={() => setShowPassword(!showPassword)}
+                      size="sm"
                       type="button"
                       variant="ghost"
-                      size="sm"
-                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                      onClick={() => setShowPassword(!showPassword)}
-                      disabled={isLoading}
                     >
                       {showPassword ? (
                         <EyeOff className="h-4 w-4" />
@@ -197,17 +198,17 @@ export function ResetPasswordForm() {
                   <div className="relative">
                     <Input
                       {...field}
-                      type={showConfirmPassword ? "text" : "password"}
-                      placeholder="Confirm your new password"
                       disabled={isLoading}
+                      placeholder="Confirm your new password"
+                      type={showConfirmPassword ? "text" : "password"}
                     />
                     <Button
+                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                      disabled={isLoading}
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      size="sm"
                       type="button"
                       variant="ghost"
-                      size="sm"
-                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      disabled={isLoading}
                     >
                       {showConfirmPassword ? (
                         <EyeOff className="h-4 w-4" />
@@ -222,14 +223,14 @@ export function ResetPasswordForm() {
             )}
           />
 
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button className="w-full" disabled={isLoading} type="submit">
             {isLoading ? "Resetting..." : "Reset password"}
           </Button>
         </form>
       </Form>
 
       <div className="text-center">
-        <Link href="/sign-in" className="text-sm text-primary hover:underline">
+        <Link className="text-sm text-primary hover:underline" href="/sign-in">
           Back to sign in
         </Link>
       </div>

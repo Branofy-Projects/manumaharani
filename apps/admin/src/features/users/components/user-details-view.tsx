@@ -1,16 +1,16 @@
 "use client";
 
-import Link from "next/link";
 import {
+  Calendar,
+  CheckCircle,
   Edit,
   Mail,
-  User,
   Phone,
-  Calendar,
   Shield,
-  CheckCircle,
+  User,
   XCircle,
 } from "lucide-react";
+import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -32,11 +32,11 @@ const rolesVariantMap = {
 } as const;
 
 interface UserDetailsViewProps {
-  user: TUser;
   canEdit?: boolean;
+  user: TUser;
 }
 
-export default function UserDetailsView({ user, canEdit = true }: UserDetailsViewProps) {
+export default function UserDetailsView({ canEdit = true, user }: UserDetailsViewProps) {
   const roleValue = user.userRole;
   const roleLabel = rolesMap[roleValue] ?? roleValue;
   const roleVariant = rolesVariantMap[roleValue as keyof typeof rolesVariantMap] ?? "outline";
@@ -51,14 +51,14 @@ export default function UserDetailsView({ user, canEdit = true }: UserDetailsVie
                 ? `${user.firstName} ${user.lastName}`
                 : user.name ?? "Unnamed User"}
             </h1>
-            <Badge variant={roleVariant} className="flex items-center gap-1">
+            <Badge className="flex items-center gap-1" variant={roleVariant}>
               <Shield className="h-3 w-3" />
               {roleLabel}
             </Badge>
             {user.isActive !== undefined && (
               <Badge
-                variant={user.isActive ? "default" : "secondary"}
                 className="flex items-center gap-1"
+                variant={user.isActive ? "default" : "secondary"}
               >
                 {user.isActive ? (
                   <>
@@ -177,12 +177,12 @@ export default function UserDetailsView({ user, canEdit = true }: UserDetailsVie
                 <p className="mt-1 text-sm text-muted-foreground">
                   {user.createdAt
                     ? new Date(user.createdAt).toLocaleDateString("en-US", {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      month: "long",
+                      year: "numeric",
+                    })
                     : "—"}
                 </p>
               </div>
@@ -197,10 +197,10 @@ export default function UserDetailsView({ user, canEdit = true }: UserDetailsVie
                     <p className="mt-1 text-sm text-muted-foreground">
                       {new Date(user.updatedAt).toLocaleDateString("en-US", {
                         day: "numeric",
-                        month: "long",
-                        year: "numeric",
                         hour: "2-digit",
                         minute: "2-digit",
+                        month: "long",
+                        year: "numeric",
                       })}
                     </p>
                   </div>

@@ -14,95 +14,58 @@ const columns = [
         label: "About Us",
       },
       {
-        href: "/four-seasons-for-good",
-        label: "Four Seasons For Good",
-      },
-      {
-        href: "/health-and-safety",
-        label: "Health and Safety",
-      },
-      {
-        href: "/careers",
-        label: "Careers",
-      },
-      {
         href: "/contact-us",
         label: "Contact Us",
       },
     ],
   },
   {
-    heading: "Reservations",
+    heading: "Explore",
     links: [
       {
-        href: "/request-an-invoice",
-        label: "Request an Invoice",
+        href: "/rooms",
+        label: "Rooms",
       },
       {
-        href: "/find-a-reservation",
-        label: "Find a Reservation",
+        href: "/offers",
+        label: "Experiences",
       },
-    ]
+      {
+        href: "/events",
+        label: "Events",
+      },
+      {
+        href: "/fine-dining",
+        label: "Fine Dining",
+      },
+      {
+        href: "/junglesafari",
+        label: "Jungle Safari",
+      },
+      {
+        href: "/wedding",
+        label: "Weddings",
+      },
+    ],
   },
   {
     heading: "News",
     links: [
       {
-        href: "/press-room",
-        label: "Press Room",
+        href: "/blogs",
+        label: "Blogs",
       },
-      {
-        href: "/new-openings",
-        label: "New Openings",
-      },
-      {
-        href: "/magazine",
-        label: "Magazine",
-      },
-      {
-        href: "/newsletter",
-        label: "Newsletter",
-      },
-    ]
-  },
-  {
-    heading: "More",
-    links: [
-      {
-        href: "/private-jet",
-        label: "Private Jet",
-      },
-      {
-        href: "/yachts",
-        label: "Yachts",
-      },
-      {
-        href: "/residences",
-        label: "Residences",
-      },
-      {
-        href: "/villa-and-residence-rentals",
-        label: "Villa & Residence Rentals",
-      },
-      {
-        href: "/extraordinary-experiences",
-        label: "Extraordinary Experiences",
-      },
-      {
-        href: "/gift-cards",
-        label: "Gift Cards",
-      },
-    ]
+    ],
   },
 ];
 
 const legalLinks = [
-  { href: "#", label: "Legal Notice" },
-  { href: "#", label: "Privacy Notice" },
-  { href: "#", label: "Cookie Preferences" },
-  { href: "#", label: "Do Not Sell My Personal Information" },
-  { href: "#", label: "Accessibility Policy" },
-  { href: "#", label: "Modern Slavery Statement" },
+  { href: "/legal-notice", label: "Legal Notice" },
+  { href: "/privacy-notice", label: "Privacy Notice" },
+  { href: "/cookie-preferences", label: "Cookie Preferences" },
+  { href: "/do-not-sell", label: "Do Not Sell My Personal Information" },
+  { href: "/accessibility-policy", label: "Accessibility Policy" },
+  { href: "/modern-slavery-statement", label: "Modern Slavery Statement" },
 ];
 
 export default function Footer() {
@@ -119,7 +82,7 @@ export default function Footer() {
           />
         </div>
       </div>
-      <div className="w-full max-w-screen-xl mx-auto grid grid-cols-1 gap-8 md:grid-cols-4 md:gap-12 text-center md:text-left">
+      <div className="w-full max-w-screen-xl mx-auto grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-12 text-center md:text-left">
         {columns.map((col) => (
           <div key={col.heading}>
             <h3
@@ -182,12 +145,12 @@ export default function Footer() {
           <div className="flex flex-wrap gap-x-2 gap-y-2 justify-center md:justify-start">
             {legalLinks.map((link, idx) => (
               <React.Fragment key={link.label}>
-                <a
+                <Link
                   className="hover:text-foreground/70 text-foreground text-[0.6rem] transition whitespace-nowrap font-medium"
                   href={link.href}
                 >
                   {link.label}
-                </a>
+                </Link>
                 {idx < legalLinks.length - 1 && (
                   <span className="mx-1 text-[0.6rem]">&bull;</span>
                 )}

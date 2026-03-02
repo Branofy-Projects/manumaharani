@@ -9,17 +9,18 @@ import type { TBooking } from "@repo/db";
 import type { Column, ColumnDef } from "@tanstack/react-table";
 
 const statusMap: Record<string, string> = {
-  pending: "Pending",
-  confirmed: "Confirmed",
+  cancelled: "Cancelled",
   checked_in: "Checked In",
   checked_out: "Checked Out",
-  cancelled: "Cancelled",
+  confirmed: "Confirmed",
+  no_show: "No Show",
+  pending: "Pending",
 };
 
 const paymentStatusMap: Record<string, string> = {
-  pending: "Pending",
-  partial: "Partial",
   paid: "Paid",
+  partial: "Partial",
+  pending: "Pending",
   refunded: "Refunded",
 };
 
@@ -104,8 +105,14 @@ export const columns: ColumnDef<TBooking>[] = [
     accessorKey: "booking_status",
     cell: ({ cell }) => {
       const statusValue = cell.row.original.booking_status;
+      const variant =
+        statusValue === "confirmed"
+          ? "default"
+          : statusValue === "cancelled" || statusValue === "no_show"
+            ? "destructive"
+            : "secondary";
       return (
-        <Badge variant="outline">
+        <Badge variant={variant}>
           {statusMap[statusValue as string] || statusValue}
         </Badge>
       );
@@ -123,6 +130,7 @@ export const columns: ColumnDef<TBooking>[] = [
         { label: "Checked In", value: "checked_in" },
         { label: "Checked Out", value: "checked_out" },
         { label: "Cancelled", value: "cancelled" },
+        { label: "No Show", value: "no_show" },
       ],
       variant: "select",
     },

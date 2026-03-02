@@ -1,4 +1,6 @@
-import { HomeHeroBookingBar } from "./HomeHeroBookingBar";
+import Image from "next/image";
+
+import { HeroVideo } from "./hero-video";
 
 export const HomeHeroSection = () => {
   return (
@@ -8,16 +10,16 @@ export const HomeHeroSection = () => {
     >
       {/* Video Background */}
       <div className="absolute inset-0 z-0 overflow-hidden">
-        <video
-          autoPlay
-          className="w-full h-full object-cover object-center"
-          loop
-          muted
-          playsInline
-          poster="https://www.fourseasons.com/alt/img-opt/~70.1530.0,0000-0,0000-1536,0000-864,0000/publish/content/dam/fourseasons/images/web/BSA/BSA_1200x800.jpg"
-        >
-          <source src="https://ik.imagekit.io/teggaadfo/manu%20-%201080WebShareName.mov/ik-video.mp4?updatedAt=1760112353814" />
-        </video>
+        {/* Priority poster image for fast LCP */}
+        <Image
+          alt="Manu Maharani Resort aerial view"
+          className="object-cover object-center"
+          fill
+          priority
+          sizes="100vw"
+          src="https://storage.googleapis.com/manumaharani-files-bucket/static/1771513678071-Safari__Home_page_.webp"
+        />
+        <HeroVideo />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80" />
       </div>
 
@@ -29,10 +31,10 @@ export const HomeHeroSection = () => {
               <span className="text-base md:text-lg font-serif p-0 italic text-white/90">
                 Manu Maharani Resort & Spa
               </span>
-              <span className="text-2xl md:text-4xl font-thin tracking-[0.2em] md:tracking-[0.3em] uppercase text-white leading-tight pt-2 pb-4 md:pb-6">
-                Luxury Riverside Resort in
+              <span className="text-2xl md:text-4xl  tracking-[0.2em] md:tracking-[0.3em] uppercase text-white leading-tight pt-2 pb-4 md:pb-6">
+                Luxury Riverside Resort
                 <br />
-                Jim Corbett
+                in Jim Corbett
               </span>
             </h1>
             <div>
@@ -46,14 +48,16 @@ export const HomeHeroSection = () => {
                 <button className="text-white text-xs font-bold h-5 tracking-widest hover:text-white/50 transition border-b-1 border-white">
                   +91 – 9971889911
                 </button>
-              </div> */}
+                {/* <button className="text-white text-xs font-bold h-5 tracking-widest hover:text-white/50 transition border-b-1 border-white">
+                  Book Now
+                </button> */}
             </div>
           </div>
         </div>
       </div>
 
       {/* Booking Form in 5-part grid below divider */}
-      <HomeHeroBookingBar />
-    </section>
+      {/* <HomeHeroBookingBar /> */}
+    </section >
   );
 };

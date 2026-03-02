@@ -1,17 +1,20 @@
-import { getEvents } from "@repo/actions/events.actions";
+
 import { MapPinIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
+import { getUpcomingEventsCache } from "@/lib/cache/events.cache";
+
 export default async function UpcomingEvents() {
-  const { events } = await getEvents({ limit: 3, upcomingOnly: true });
+  const { events } = await getUpcomingEventsCache();
+
 
   return (
     <div className="w-full lg:w-1/2 flex flex-col">
       <div className="flex items-center justify-between mb-6 md:mb-8">
         <h2
-          className="text-2xl md:text-3xl font-thin tracking-widest uppercase"
+          className="text-2xl md:text-3xl  tracking-widest uppercase"
           style={{ color: "#000000" }}
         >
           Upcoming Events
@@ -31,7 +34,7 @@ export default async function UpcomingEvents() {
           const month = date.toLocaleString("default", { month: "short" });
 
           return (
-            <div className="flex gap-4 group cursor-pointer" key={idx}>
+            <Link className="flex gap-4 group cursor-pointer" href={`/events/${event.slug}`} key={idx}>
               {/* Date */}
               <div className="flex flex-col items-center justify-start pt-2 min-w-[60px]">
                 <span className="text-3xl md:text-4xl font-light leading-none text-gray-900">
@@ -47,12 +50,13 @@ export default async function UpcomingEvents() {
 
               {/* Image */}
               <div className="relative w-24 h-24 md:w-32 md:h-32 shrink-0 overflow-hidden rounded-md">
-                <Image
-                  alt={event.name}
+                {event.image && <Image
+                  alt={event.image.alt_text}
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   src={event.image.original_url}
-                />
+                />}
               </div>
 
               {/* Content */}
@@ -70,7 +74,7 @@ export default async function UpcomingEvents() {
                   </span>
                 </div>
               </div>
-            </div>
+            </Link>
           );
         })}
       </div>

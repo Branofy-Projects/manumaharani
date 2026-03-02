@@ -17,33 +17,20 @@ export const HeaderWrapper = ({ children }: HeaderWrapperProps) => {
     href?: string;
     label: string;
   }> = [
-    { href: "#about", label: "About Us" },
-    { href: "#dining", label: "Fine Dining" },
-    {
-      children: [
-        { href: "#wedding-destination", label: "Destination Wedding" },
-        { href: "#events", label: "Events/Off-Sites" },
-      ],
-      label: "Wedding/Mice",
-    },
-    {
-      children: [
-        { href: "#regal-experience", label: "Regal Experience" },
-        { href: "#book-safari", label: "Book A Safari" },
-      ],
-      label: "Experiences",
-    },
-    {
-      children: [
-        { href: "#luxury-room", label: "Luxury Room" },
-        { href: "#luxury-cottages", label: "Luxury Cottages" },
-        { href: "#club-cottages", label: "Club Cottages" },
-        { href: "#family-room", label: "Family Room" },
-      ],
-      label: "Accomodation",
-    },
-    { href: "#contact", label: "Contact Us" },
-  ];
+      { href: "/about-us", label: "About Us" },
+      { href: "/rooms", label: "Accommodation" },
+      { href: "/wedding", label: "Weddings" },
+      { href: "/fine-dining", label: "Dining" },
+      {
+        href: "/events",
+        label: "Mice",
+      },
+      {
+        href: "/offers",
+        label: "Offers",
+      },
+      { href: "/contact-us", label: "Contact Us" },
+    ];
 
   const [activeIndex, setActiveIndex] = React.useState<number | undefined>(
     undefined
@@ -82,7 +69,7 @@ export const HeaderWrapper = ({ children }: HeaderWrapperProps) => {
 
       {/* Full-screen menu overlay (slides in from the left) */}
       <div className="pointer-events-none fixed inset-y-0 left-0 bg-[#fff] opacity-0 -translate-x-full transform-gpu transition-[opacity,transform] duration-400 ease-in-out peer-checked:opacity-100 peer-checked:translate-x-0 peer-checked:pointer-events-auto w-full max-w-4xl">
-        <div className="w-full p-6 px-10 sm:p-10 sm:px-20 flex flex-row items-center justify-between min-w-xl">
+        <div className="w-full p-6 px-10 sm:p-10 sm:px-20 flex flex-row items-center justify-between">
           <Image
             alt="Manu Maharani"
             className={`transition-all duration-300 h-10 sm:h-12 w-auto`}
@@ -91,7 +78,7 @@ export const HeaderWrapper = ({ children }: HeaderWrapperProps) => {
             width={180}
           />
           <label
-            className="text-[#2b2b2b] cursor-pointer text-xl"
+            className="text-[#2b2b2b] block pl-4 cursor-pointer text-2xl  md:text-xl"
             htmlFor="mobile-menu-toggle"
           >
             ×
@@ -109,11 +96,11 @@ export const HeaderWrapper = ({ children }: HeaderWrapperProps) => {
                   >
                     <a
                       className={cn(
-                        "block text-xl hover:opacity-70 font-thin cursor-pointer",
+                        "block text-xl hover:opacity-70 cursor-pointer",
                         activeIndex !== undefined
                           ? pathname !== item.href &&
-                              activeIndex !== idx &&
-                              "opacity-50"
+                          activeIndex !== idx &&
+                          "opacity-50"
                           : null
                       )}
                       href={item.href || "#"}
@@ -149,7 +136,7 @@ export const HeaderWrapper = ({ children }: HeaderWrapperProps) => {
                   {menuItems[activeIndex].children!.map((child) => (
                     <a
                       className={cn(
-                        "flex items-center justify-between text-md text-foreground font-thin hover:opacity-70"
+                        "flex items-center justify-between text-md text-foreground  hover:opacity-70"
                         // pathname !== child.href && "opacity-50"
                       )}
                       href={child.href || "#"}
@@ -171,7 +158,6 @@ export const HeaderWrapper = ({ children }: HeaderWrapperProps) => {
               <button
                 className="inline-flex items-center gap-1.5 text-sm text-[#2b2b2b] whitespace-nowrap"
                 onClick={() => {
-                  console.log("back");
                   setMobileSubmenuIndex(null);
                 }}
               >
@@ -193,7 +179,7 @@ export const HeaderWrapper = ({ children }: HeaderWrapperProps) => {
                 menuItems[mobileSubmenuIndex]?.children?.map((child) => (
                   <a
                     className={cn(
-                      "flex items-center justify-between text-md text-foreground font-thin hover:opacity-70",
+                      "flex items-center justify-between text-md text-foreground  hover:opacity-70",
                       pathname !== child.href && "opacity-50"
                     )}
                     href={child.href || "#"}

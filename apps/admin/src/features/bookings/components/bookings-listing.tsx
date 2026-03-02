@@ -8,11 +8,11 @@ import { BookingsTable } from "./bookings-tables";
 import { columns } from "./bookings-tables/columns";
 
 type TGetBookingsFilters = {
-  search?: string;
-  page?: number;
   limit?: number;
-  status?: string;
+  page?: number;
   payment_status?: string;
+  search?: string;
+  status?: string;
 };
 
 export default async function BookingsListingPage() {
@@ -30,13 +30,7 @@ export default async function BookingsListingPage() {
     ...(paymentStatus && { payment_status: paymentStatus }),
   };
 
-  const user = await getCurrentUser();
-
-  if (!user) {
-    return redirect("/sign-in");
-  }
-
-  const { total, bookings } = await getBookings(filters);
+  const { bookings, total } = await getBookings(filters);
 
   return <BookingsTable columns={columns} data={bookings} totalItems={total} />;
 }

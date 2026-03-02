@@ -7,14 +7,11 @@ import PageContainer from "@/components/layout/page-container";
 import RoomDetailsView from "@/features/rooms/components/room-details-view";
 
 export const metadata = {
-  title: "Dashboard: Room Details",
+  title: "Dashboard: User Details",
 };
 
-type PageProps = {
-  params: Promise<{ id: string }>;
-};
 
-export default async function RoomDetailPage(props: PageProps) {
+export default async function RoomDetailPage(props: PageProps<"/rooms/[id]">) {
   const params = await props.params;
 
   if (!params.id) {
@@ -27,10 +24,6 @@ export default async function RoomDetailPage(props: PageProps) {
   }
 
   const room = await getRoomById(id);
-
-  if (!room) {
-    notFound();
-  }
 
   return (
     <PageContainer scrollable>

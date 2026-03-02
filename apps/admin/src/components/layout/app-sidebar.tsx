@@ -1,31 +1,27 @@
 "use client";
+import {
+  IconChevronRight, IconChevronsDown
+} from '@tabler/icons-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import * as React from 'react';
-
-const LOGO_URL =
-  'https://www.manumaharaniresorts.com/wp-content/uploads/2022/09/Final-Logo_Manu-Maharani-1536x1070.png';
 
 import { SignOutButton } from '@/components/auth/sign-out-button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
-    DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel,
-    DropdownMenuSeparator, DropdownMenuTrigger
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
+  DropdownMenuSeparator, DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import {
-    Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupLabel, SidebarHeader,
-    SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton,
-    SidebarMenuSubItem, SidebarRail
+  Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupLabel, SidebarHeader,
+  SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton,
+  SidebarMenuSubItem, SidebarRail
 } from '@/components/ui/sidebar';
 import { UserAvatarProfile } from '@/components/user-avatar-profile';
 import { navItems } from '@/constants/data';
 import { useAuth } from '@/hooks/use-auth';
 import { useMediaQuery } from '@/hooks/use-media-query';
-import {
-    IconBell, IconChevronRight, IconChevronsDown, IconCreditCard, IconLogout,
-    IconUserCircle
-} from '@tabler/icons-react';
 
 import { Icons } from '../icons';
 
@@ -33,7 +29,6 @@ export default function AppSidebar() {
   const pathname = usePathname();
   const { isOpen } = useMediaQuery();
   const { user } = useAuth();
-  const router = useRouter();
   const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
@@ -61,16 +56,16 @@ export default function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarHeader suppressHydrationWarning>
         <Link
-          href="/dashboard"
           className="flex items-center justify-center px-2 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md min-h-[3rem]"
+          href="/"
         >
           <Image
-            src={LOGO_URL}
             alt="Manu Maharani"
-            width={160}
-            height={112}
             className="h-10 w-auto max-w-full object-contain group-data-[collapsible=icon]:h-8"
+            height={112}
             priority
+            src="/logo.webp"
+            width={160}
           />
         </Link>
       </SidebarHeader>
@@ -100,18 +95,20 @@ export default function AppSidebar() {
                     </CollapsibleTrigger>
                     <CollapsibleContent suppressHydrationWarning>
                       <SidebarMenuSub>
-                        {item.items?.map((subItem) => (
-                          <SidebarMenuSubItem key={subItem.title}>
+                        {item.items?.map((subItem) => {
+                          // const SubItemIcon = subItem.icon ? Icons[subItem.icon] : undefined
+                          return <SidebarMenuSubItem key={subItem.title}>
                             <SidebarMenuSubButton
                               asChild
                               isActive={pathname === subItem.url}
                             >
                               <Link href={subItem.url}>
+                                {/* {SubItemIcon && <SubItemIcon />} */}
                                 <span>{subItem.title}</span>
                               </Link>
                             </SidebarMenuSubButton>
                           </SidebarMenuSubItem>
-                        ))}
+                        })}
                       </SidebarMenuSub>
                     </CollapsibleContent>
                   </SidebarMenuItem>
@@ -173,7 +170,7 @@ export default function AppSidebar() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
 
-                <DropdownMenuGroup>
+                {/* <DropdownMenuGroup>
                   <DropdownMenuItem
                     onClick={() => router.push("/dashboard/profile")}
                   >
@@ -188,8 +185,8 @@ export default function AppSidebar() {
                     <IconBell className="mr-2 h-4 w-4" />
                     Notifications
                   </DropdownMenuItem>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
+                </DropdownMenuGroup> */}
+                {/* <DropdownMenuSeparator /> */}
                 <DropdownMenuItem asChild>
                   <SignOutButton
                     className="w-full justify-start"

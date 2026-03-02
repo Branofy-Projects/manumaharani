@@ -15,7 +15,7 @@ export function handleDatabaseError(
   const isTableMissing =
     errorString.includes("does not exist") ||
     errorString.includes("relation") ||
-    errorString.includes("failed query") ||
+    (errorString.includes("failed query") && !errorString.includes("abort")) ||
     errorString.includes(`"${tableName}"`) ||
     errorString.includes(`'${tableName}'`);
 
@@ -61,7 +61,6 @@ export async function safeDbQuery<T>(
   try {
     return await queryFn();
   } catch (error: any) {
-    console.log("error",error);
     
     const { isTableMissing, shouldReturn } = handleDatabaseError(
       error,

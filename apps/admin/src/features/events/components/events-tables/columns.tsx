@@ -46,9 +46,9 @@ export const columns: ColumnDef<TEvent>[] = [
     cell: ({ row }) => {
       const startDate = row.original.startDate;
       const endDate = row.original.endDate;
-      
+
       if (!startDate) return <div className="text-sm text-muted-foreground">—</div>;
-      
+
       const formattedStart = new Date(startDate).toLocaleDateString("en-US", {
         day: "numeric",
         month: "short",

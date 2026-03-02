@@ -1,7 +1,7 @@
 "use client";
 
+import { Ban, Building2, Calendar, CheckCircle, Edit, FileText, Hash, Wrench, XCircle } from "lucide-react";
 import Link from "next/link";
-import { Edit, Calendar, Building2, Hash, FileText, CheckCircle, XCircle, Wrench, Ban } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,21 +11,21 @@ import { Separator } from "@/components/ui/separator";
 import type { TRoom } from "@repo/db";
 
 interface RoomDetailsViewProps {
-  room: TRoom & {
-    roomType?: any;
+  room: {
     images?: Array<{ image: any; order: number }>;
-  };
+    roomType?: any;
+  } & TRoom;
 }
 
-const statusMap: Record<string, { label: string; variant: "default" | "secondary" | "destructive" | "outline"; icon: any }> = {
-  available: { label: "Available", variant: "default", icon: CheckCircle },
-  occupied: { label: "Occupied", variant: "secondary", icon: XCircle },
-  maintenance: { label: "Maintenance", variant: "destructive", icon: Wrench },
-  blocked: { label: "Blocked", variant: "outline", icon: Ban },
+const statusMap: Record<string, { icon: any; label: string; variant: "default" | "destructive" | "outline" | "secondary"; }> = {
+  available: { icon: CheckCircle, label: "Available", variant: "default" },
+  blocked: { icon: Ban, label: "Blocked", variant: "outline" },
+  maintenance: { icon: Wrench, label: "Maintenance", variant: "destructive" },
+  occupied: { icon: XCircle, label: "Occupied", variant: "secondary" },
 };
 
 export default function RoomDetailsView({ room }: RoomDetailsViewProps) {
-  const statusInfo = statusMap[room.status] || { label: room.status, variant: "secondary" as const, icon: CheckCircle };
+  const statusInfo = statusMap[room.status] || { icon: CheckCircle, label: room.status, variant: "secondary" as const };
   const StatusIcon = statusInfo.icon;
 
   return (
@@ -35,7 +35,7 @@ export default function RoomDetailsView({ room }: RoomDetailsViewProps) {
         <div className="space-y-2">
           <div className="flex items-center gap-3">
             <h1 className="text-3xl font-bold font-mono">{room.room_number}</h1>
-            <Badge variant={statusInfo.variant} className="flex items-center gap-1">
+            <Badge className="flex items-center gap-1" variant={statusInfo.variant}>
               <StatusIcon className="h-3 w-3" />
               {statusInfo.label}
             </Badge>
@@ -66,11 +66,11 @@ export default function RoomDetailsView({ room }: RoomDetailsViewProps) {
               <CardContent>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {room.images.map((item, index) => (
-                    <div key={index} className="relative aspect-video w-full overflow-hidden rounded-lg">
+                    <div className="relative aspect-video w-full overflow-hidden rounded-lg" key={index}>
                       <img
-                        src={item.image.large_url || item.image.original_url}
                         alt={item.image.alt_text || `Room ${room.room_number} image ${index + 1}`}
                         className="h-full w-full object-cover"
+                        src={item.image.large_url || item.image.original_url}
                       />
                     </div>
                   ))}
@@ -178,10 +178,10 @@ export default function RoomDetailsView({ room }: RoomDetailsViewProps) {
                 <p className="mt-1 text-sm text-muted-foreground">
                   {new Date(room.created_at).toLocaleDateString("en-US", {
                     day: "numeric",
-                    month: "long",
-                    year: "numeric",
                     hour: "2-digit",
                     minute: "2-digit",
+                    month: "long",
+                    year: "numeric",
                   })}
                 </p>
               </div>
@@ -197,10 +197,10 @@ export default function RoomDetailsView({ room }: RoomDetailsViewProps) {
                     <p className="mt-1 text-sm text-muted-foreground">
                       {new Date(room.updated_at).toLocaleDateString("en-US", {
                         day: "numeric",
-                        month: "long",
-                        year: "numeric",
                         hour: "2-digit",
                         minute: "2-digit",
+                        month: "long",
+                        year: "numeric",
                       })}
                     </p>
                   </div>

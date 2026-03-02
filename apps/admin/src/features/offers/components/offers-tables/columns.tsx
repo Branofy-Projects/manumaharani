@@ -155,7 +155,7 @@ export const columns: ColumnDef<TOffer>[] = [
             {offer.active ? "Active" : "Inactive"}
           </Badge>
           {offer.status && offer.status !== "active" && (
-            <Badge variant="outline" className="text-xs">
+            <Badge className="text-xs" variant="outline">
               {offer.status}
             </Badge>
           )}

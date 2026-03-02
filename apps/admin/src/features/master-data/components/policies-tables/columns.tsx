@@ -16,7 +16,7 @@ export const columns: ColumnDef<TPolicy>[] = [
     cell: ({ row }) => {
       const policy = row.original;
       return (
-        <Link href={`/policies/${policy.id}`} className="hover:underline">
+        <Link className="hover:underline" href={`/policies/${policy.id}`}>
           <div className="font-medium">{policy.label}</div>
         </Link>
       );

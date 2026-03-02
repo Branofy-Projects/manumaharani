@@ -4,14 +4,10 @@ import { createInsertSchema } from 'drizzle-zod';
 import { Images } from './images.schema';
 
 export const galleryCategoryEnum = pgEnum("gallery_category", [
-  "rooms",
+  "room",
+  "overview",
   "dining",
-  "spa",
-  "activities",
-  "facilities",
-  "events",
-  "surroundings",
-  "general",
+  "wedding",
 ]);
 
 export const galleryTypeEnum = pgEnum("gallery_type", ["image", "video"]);
@@ -34,7 +30,7 @@ export const Gallery = pgTable(
     ),
     video_url: text("video_url"),
 
-    category: galleryCategoryEnum("category").notNull().default("general"),
+    category: galleryCategoryEnum("category").notNull().default("overview"),
 
     is_featured: integer("is_featured").notNull().default(0),
     order: integer("order").notNull().default(0),
