@@ -8,14 +8,14 @@ const restaurants = [
     description:
       "LOYA takes its diners on a gastronomic journey through North India's diverse landscape, blending flavours from the Himalayan foothills to the vibrant streets of Delhi.",
     image:
-      "https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=1600&auto=format&fit=crop",
+      "https://storage.googleapis.com/manumaharani-files-bucket/static/1772469042731-Nivalya_.webp",
     name: "Nivalaya",
   },
   {
     description:
       "From its first location at The Taj Mahal Palace, Mumbai, Golden Dragon has introduced guests to rarefied, divine experiences that transcend mere dining.",
     image:
-      "https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=1600&auto=format&fit=crop",
+      "https://storage.googleapis.com/manumaharani-files-bucket/static/1772469050230-vyom-vibeshot.webp",
     name: "Vyom",
   },
   {
@@ -135,10 +135,10 @@ export function RestaurantCarousel() {
                   <p className="mb-4 font-serif text-sm leading-relaxed text-[#5a5a5a] md:mb-6">
                     {restaurant.description}
                   </p>
-                  <button className="inline-flex items-center gap-2 font-serif text-sm tracking-[0.08em] uppercase text-[#c9a961] transition-all hover:gap-3">
+                  {/* <button className="inline-flex items-center gap-2 font-serif text-sm tracking-[0.08em] uppercase text-[#c9a961] transition-all hover:gap-3">
                     More
                     <span className="text-lg">›</span>
-                  </button>
+                  </button> */}
                 </div>
               </div>
             </div>

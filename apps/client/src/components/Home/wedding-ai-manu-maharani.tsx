@@ -86,9 +86,9 @@ export default function WeddingAiManuMaharani() {
           </div>
         </div>
       </div>
-      <button className="mx-auto block mt-8 border border-black px-6 md:px-8 py-2 md:py-3 text-black tracking-widest font-medium uppercase text-xs md:text-base hover:bg-black hover:text-white transition">
+      {/* <button className="mx-auto block mt-8 border border-black px-6 md:px-8 py-2 md:py-3 text-black tracking-widest font-medium uppercase text-xs md:text-base hover:bg-black hover:text-white transition">
         Plan Your Event
-      </button>
+      </button> */}
     </section>
   );
 }

@@ -23,7 +23,7 @@ export default function EventsLayout({ children }: { children: React.ReactNode }
                             className="object-cover object-center"
                             fill
                             sizes="100vw"
-                            src="https://images.unsplash.com/photo-1514525253440-b393452e3383?auto=format&fit=crop&w=1200&q=80"
+                            src="https://storage.googleapis.com/manumaharani-files-bucket/static/1771514157372-corporate_mice__Home_page_.webp"
                         />
                     </div>
                 </div>

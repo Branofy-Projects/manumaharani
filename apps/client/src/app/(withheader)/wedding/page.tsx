@@ -105,9 +105,9 @@ const destinations = [
 
 export default function Page() {
   return (
-    <main className="bg-white pt-[72px] md:pt-[88px]">
+    <main className="bg-white">
       {/* Hero */}
-      <section className="relative w-full min-h-[70vh] md:min-h-[80vh] flex items-center">
+      <section className="relative w-full min-h-[50dvh] lg:min-h-dvh flex items-center">
         <div className="absolute inset-0">
           <Image
             alt="Timeless Weddings"
@@ -119,8 +119,8 @@ export default function Page() {
           />
           <div className="absolute inset-0 bg-black/50" />
         </div>
-        <div className="relative z-10 w-full">
-          <div className="max-w-screen-xl mx-auto px-4 xl:px-0 py-16 md:py-24">
+        <div className="relative z-10 w-full pt-[72px] md:pt-[88px]">
+          <div className="max-w-screen-xl mx-4 lg:mx-16 px-4 xl:px-0 py-16 md:py-24">
             <p className="text-white/90 font-serif italic text-sm md:text-base">
               The Wedding Destination in Jim Corbett
             </p>
@@ -135,7 +135,7 @@ export default function Page() {
             <div className="mt-8">
               <a
                 className="inline-block bg-[#2b2b2b] text-[#f4efe8] px-6 py-3 text-xs md:text-sm tracking-widest uppercase"
-                href="#plan"
+                href="/contact-us"
               >
                 Plan Your Corbett Wedding
               </a>
@@ -190,7 +190,7 @@ export default function Page() {
             </div>
             <a
               className="bg-[#f4efe8] text-[#2b2b2b] px-6 py-3 text-xs md:text-sm tracking-widest uppercase"
-              href="#contact"
+              href="/contact-us"
             >
               Enquire Now
             </a>

@@ -1,7 +1,9 @@
 import dynamic from "next/dynamic";
+import { Suspense } from "react";
 
 import FeaturedOffers from "@/components/Home/featured-offers";
 import { HomeHeroSection } from "@/components/Home/home-hero-section";
+import HomeInstaImageSkeleton from "@/components/Home/home-insta-image-skeleton";
 import SectionShortcuts from "@/components/Home/home-shortcuts";
 
 const AccommodationsCarousel = dynamic(() => import("@/components/Home/accommodations-carousel"));
@@ -10,6 +12,7 @@ const NearbyAttractions = dynamic(() => import("@/components/Home/nearby-attract
 const HomeInstaImageSection = dynamic(() => import("@/components/Home/home-insta-image-section"));
 const DiscoverManuMaharani = dynamic(() => import("@/components/Home/discover-manu-maharani"));
 const ExperienceButton = dynamic(() => import("@/components/Home/expreince-button"));
+const ReelsFloatingButton = dynamic(() => import("@/components/Home/reels-floating-button"));
 
 export default function Home() {
   return (
@@ -20,9 +23,12 @@ export default function Home() {
       <AccommodationsCarousel />
       <JimCorbett />
       <NearbyAttractions />
-      <HomeInstaImageSection />
+      <Suspense fallback={<HomeInstaImageSkeleton />}>
+        <HomeInstaImageSection />
+      </Suspense>
       <DiscoverManuMaharani />
       <ExperienceButton />
+      <ReelsFloatingButton />
     </main>
   );
 }

@@ -73,7 +73,7 @@ export function GalleryGrid({ gallery }: GalleryGridProps) {
 
               return (
                 <div
-                  className="group md:h-[300px] h-[250px] aspect-3/2 relative bg-background break-inside-avoid overflow-hidden rounded-lg cursor-pointer mb-4"
+                  className="group aspect-3/2 relative bg-background break-inside-avoid overflow-hidden rounded-lg cursor-pointer mb-4"
                   key={item.id}
                   onClick={() => openLightbox(index)}
                 >
@@ -165,10 +165,11 @@ export function GalleryGrid({ gallery }: GalleryGridProps) {
               }
               className="max-h-[85vh] w-auto h-auto object-contain rounded-lg"
               height={1000}
+              key={currentItem.id}
               sizes="90vw"
               src={
-                currentItem.image?.original_url ||
                 currentItem.image?.large_url ||
+                currentItem.image?.original_url ||
                 ""
               }
               width={1400}

@@ -89,6 +89,7 @@ export type {
 } from "./schema/auth.schema";
 import { ContactQueries, contactQueryStatusEnum } from "./schema/contact-queries.schema";
 import { Experiences } from "./schema/experiences.schema";
+import { NotificationRecipients } from "./schema/notification-recipients.schema";
 import { OfferBookings ,offerBookingStatusEnum} from "./schema/offer-bookings.schema";
 import { Reels, reelStatusEnum } from "./schema/reels.schema";
 import { RoomBookings } from "./schema/room-bookings.schema";
@@ -108,6 +109,7 @@ export type {
   TNewEventItinerary,
 } from "./schema/events.schema";
 export type { TExperience, TNewExperience } from "./schema/experiences.schema";
+export type { TNewNotificationRecipient, TNotificationRecipient } from "./schema/notification-recipients.schema";
 export type { TNewReel, TReel } from "./schema/reels.schema";
 export type { TNewRoomBooking, TRoomBooking } from "./schema/room-bookings.schema";
 // Core Types
@@ -219,6 +221,7 @@ export {
   galleryTypeEnum,
   highlightTypeEnum,
   Images,
+  NotificationRecipients,
   OfferBookings,
   offerBookingStatusEnum,
   offerCategoryEnum,
@@ -278,6 +281,7 @@ export const schemaWithoutRelations = {
   Faqs,
   Gallery,
   Images,
+  NotificationRecipients,
   OfferBookings,
   OfferFaqs,
   OfferHighlights,

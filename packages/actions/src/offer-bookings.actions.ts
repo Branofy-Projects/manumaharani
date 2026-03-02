@@ -1,8 +1,9 @@
 "use server";
 
 import { and, count, eq, or } from "@repo/db";
-import { db, OfferBookings } from "@repo/db";
+import { db, OfferBookings, Offers } from "@repo/db";
 
+import { notifyNewBooking } from "./notifications.actions";
 import { safeDbQuery } from "./utils/db-error-handler";
 
 import type { TNewOfferBooking } from "@repo/db/schema/offer-bookings.schema";
@@ -137,6 +138,24 @@ export const createOfferBooking = async (data: {
   if (!booking) {
     throw new Error("Failed to create booking");
   }
+
+  const offer = await db.query.Offers.findFirst({
+    columns: { name: true },
+    where: eq(Offers.id, data.offer_id as any),
+  });
+
+  void notifyNewBooking({
+    details: [
+      ...(offer ? [{ label: "Offer", value: offer.name }] : []),
+      { label: "Travel Date", value: data.travel_date },
+      { label: "Guests", value: String(data.number_of_guests) },
+    ],
+    guestEmail: data.email,
+    guestMessage: data.message,
+    guestName: data.name,
+    guestPhone: data.phone,
+    type: "offer_booking",
+  });
 
   return booking;
 };

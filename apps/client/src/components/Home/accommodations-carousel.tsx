@@ -1,10 +1,14 @@
 "use client";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useEffect, useMemo, useRef, useState } from "react";
+
+import { Button } from "../ui/button";
 
 interface Accommodation {
   description: string;
+  href: string
   image: string;
   title: string;
 }
@@ -13,6 +17,7 @@ const accommodations: Accommodation[] = [
   {
     description:
       "Drink in warm sunshine and fresh breezes from your private balcony, which looks out to the best backyard in Austin: our manicured lawns, verdant gardens and Lady Bird Lake.",
+    href: "/rooms",
     image:
       "https://storage.googleapis.com/manumaharani-files-bucket/static/1771514100268-NISH2049_-_Signature_Stays__Home_page__.webp",
     title: "Signature Stays",
@@ -20,13 +25,15 @@ const accommodations: Accommodation[] = [
   {
     description:
       "Evenings spent on your expansive wraparound deck, with firepits lending a glow to the lake views, are experiences you'll remember for a lifetime.",
+    href: "/wedding",
     image:
-      "https://www.manumaharaniresorts.com/wp-content/uploads/2024/04/romantic-getaway-1.webp",
+      "https://storage.googleapis.com/manumaharani-files-bucket/static/1772465052377-freepik__indian-wedding-couple-standing-together-during-a-t__14570.webp",
     title: "Weddings",
   },
   {
     description:
       "This pied-à-terre is perfectly suited to city living, with views down buzzy San Jacinto Boulevard, Austin-inspired art around you and plenty of space to put your feet up.",
+    href: "/fine-dining",
     image:
       "https://storage.googleapis.com/manumaharani-files-bucket/static/1771514132202-NISH1139__1__Fine_dining__home_page_.webp",
     title: "Fine Dining",
@@ -34,6 +41,7 @@ const accommodations: Accommodation[] = [
   {
     description:
       "Your fully equipped residence, this suite provides space to spare, with balcony breezes filtering in and a service kitchen for hosting dinners or fixing midnight snacks.",
+    href: "/events",
     image:
       "https://storage.googleapis.com/manumaharani-files-bucket/static/1771514157372-corporate_mice__Home_page_.webp",
     title: "Corporate & MICE",
@@ -41,8 +49,9 @@ const accommodations: Accommodation[] = [
   {
     description:
       "Bring the kids or a group of friends: This flexible suite can sleep up to five people in perfect comfort, thanks to two full bathrooms and separate living and sleeping areas.",
+    href: "/junglesafari",
     image:
-      "https://www.manumaharaniresorts.com/wp-content/uploads/2025/01/mm-executive-room.webp",
+      "https://storage.googleapis.com/manumaharani-files-bucket/static/1771513678071-Safari__Home_page_.webp",
     title: "Safari",
   },
 ];
@@ -155,8 +164,9 @@ export default function AccommodationsCarousel() {
             const cardW = isActive ? dims.cardWidthActive : dims.cardWidth;
 
             return (
-              <div
+              <Link
                 className="shrink-0 relative bg-white border border-gray-300"
+                href={card.href}
                 key={i + card.title}
                 style={{
                   height: cardHeight,
@@ -203,16 +213,14 @@ export default function AccommodationsCarousel() {
                       {card.description}
                     </p>
                     {/* <div className="flex gap-2 md:gap-3">
-                      <Button variant="reserve">
-                        Check Rates
-                      </Button>
+
                       <Button variant="outline">
                         Details
                       </Button>
                     </div> */}
                   </div>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>

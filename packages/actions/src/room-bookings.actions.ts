@@ -1,8 +1,9 @@
 "use server";
 
 import { and, count, eq, or } from "@repo/db";
-import { db, RoomBookings } from "@repo/db";
+import { db, RoomBookings, Rooms } from "@repo/db";
 
+import { notifyNewBooking } from "./notifications.actions";
 import { safeDbQuery } from "./utils/db-error-handler";
 
 import type { TNewRoomBooking } from "@repo/db/schema/room-bookings.schema";
@@ -141,6 +142,26 @@ export const createRoomBooking = async (data: {
   if (!booking) {
     throw new Error("Failed to create room booking");
   }
+
+  const room = await db.query.Rooms.findFirst({
+    columns: { title: true },
+    where: eq(Rooms.id, data.room_id),
+  });
+
+  void notifyNewBooking({
+    details: [
+      ...(room ? [{ label: "Room", value: room.title }] : []),
+      { label: "Check-in", value: data.check_in_date },
+      { label: "Check-out", value: data.check_out_date },
+      { label: "Guests", value: String(data.number_of_guests) },
+      { label: "Rooms", value: String(data.number_of_rooms) },
+    ],
+    guestEmail: data.email,
+    guestMessage: data.message,
+    guestName: data.name,
+    guestPhone: data.phone,
+    type: "room_booking",
+  });
 
   return booking;
 };

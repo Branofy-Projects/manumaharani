@@ -16,6 +16,7 @@ async function sendEmail({
   text?: string;
   to: string;
 }) {
+  
   // In a real implementation, you would use a service like Resend, SendGrid, etc.
   console.log(`Email would be sent to: ${to}`);
   console.log(`Subject: ${subject}`);

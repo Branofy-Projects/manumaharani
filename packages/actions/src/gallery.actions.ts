@@ -3,7 +3,8 @@ import { and, count, eq, ilike } from "@repo/db";
 import { db, Gallery } from "@repo/db";
 
 import { revalidateTags } from "./client.actions";
-import { bumpVersion, GALLERY_CACHE_KEY } from "./libs/cache";
+import { bumpVersion, GALLERY_CACHE_KEY, getOrSet, INSTA_GALLERY_CACHE_KEY } from "./libs/cache";
+import { instaGalleryKey } from "./libs/keys";
 import { safeDbQuery } from "./utils/db-error-handler";
 
 import type { TGallery, TGalleryCategory, TNewGallery } from "@repo/db";
@@ -15,6 +16,32 @@ type TGetGalleryFilters = {
   search?: string;
   type?: string;
 };
+
+export const getInstaGallery = async () => {
+  if (!db || !process.env.DATABASE_URL) return [];
+
+  const categories: TGalleryCategory[] = ["room", "overview", "dining", "wedding"];
+
+  return getOrSet(
+    async () => {
+      const results = await Promise.all(
+        categories.map((category) =>
+          db.query.Gallery.findMany({
+            limit: 2,
+            orderBy: (gallery, { asc }) => [asc(gallery.order), asc(gallery.created_at)],
+            where: eq(Gallery.category, category),
+            with: {
+              image: true,
+              videoThumbnail: true,
+            },
+          })
+        )
+      );
+      return results.flat() as unknown as TGallery[];
+    },
+    { key: await instaGalleryKey() }
+  );
+}
 
 export const getGallery = async (filters: TGetGalleryFilters = {}) => {
   if (!db || !process.env.DATABASE_URL) {
@@ -151,7 +178,7 @@ export const createGallery = async (data: TNewGallery) => {
     const [item] = await db.insert(Gallery).values(data).returning();
 
     await bumpVersion("gallery");
-    await revalidateTags([GALLERY_CACHE_KEY]);
+    await revalidateTags([GALLERY_CACHE_KEY, INSTA_GALLERY_CACHE_KEY]);
 
     return item;
   } catch (error) {
@@ -171,7 +198,7 @@ export const updateGallery = async (id: number, data: Partial<TNewGallery>) => {
       .returning();
 
     await bumpVersion("gallery");
-    await revalidateTags([GALLERY_CACHE_KEY]);
+    await revalidateTags([GALLERY_CACHE_KEY, INSTA_GALLERY_CACHE_KEY]);
 
     return updated;
   } catch (error) {
@@ -187,7 +214,7 @@ export const deleteGallery = async (id: number) => {
     await db.delete(Gallery).where(eq(Gallery.id, id));
 
     await bumpVersion("gallery");
-    await revalidateTags([GALLERY_CACHE_KEY]);
+    await revalidateTags([GALLERY_CACHE_KEY, INSTA_GALLERY_CACHE_KEY]);
   } catch (error) {
     console.error("Error deleting gallery item:", error);
     throw error;

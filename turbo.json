@@ -19,7 +19,9 @@
   "REVALIDATION_SECRET",
   "BETTER_AUTH_SECRET",
   "ADMIN_WEBHOOK_SECRET",
-  "BOOKING_URL"
+  "BOOKING_URL",
+  "RESEND_API_KEY",
+  "RESEND_FROM_EMAIL"
  ],
  "globalDependencies": [".env"],
  "tasks": {

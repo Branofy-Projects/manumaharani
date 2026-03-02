@@ -15,55 +15,51 @@ const categories = [
     blurb:
       "High-definition photos of the restaurant at 'Golden Hour' (sunset), candlelight setups by the Kosi River, and the architectural details of the dining hall.",
     image:
-      "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?q=80&w=1600&auto=format&fit=crop",
+      "https://storage.googleapis.com/manumaharani-files-bucket/static/1772469050230-vyom-vibeshot.webp",
     title: "The 'Vibe' Shots",
   },
   {
     blurb:
       "Include 'chef in action' shots—plating a delicate dish or a mixologist crafting a signature mocktail. This adds a human element of craftsmanship.",
     image:
-      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1600&auto=format&fit=crop",
+      "https://storage.googleapis.com/manumaharani-files-bucket/static/1772469040343-Action___Artistry.webp",
     title: "Action & Artistry",
   },
   {
     blurb:
       "Integrate 5-10 second 'Cinemagraphs' (photos with slight movement, like a flickering candle or a flowing river in the background) to make the page feel premium and modern.",
     image:
-      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1600&auto=format&fit=crop",
+      "https://storage.googleapis.com/manumaharani-files-bucket/static/1772469044696-The_2026_Trend.webp",
     title: "The 2026 Trend",
   },
   {
     blurb:
       "Close-ups of fine linen, branded cutlery, and the 'Riverside Romance' setup to sell the experience to couples.",
     image:
-      "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80",
+      "https://storage.googleapis.com/manumaharani-files-bucket/static/1772469048073-The_Table_Setting.webp",
     title: "The Table Setting",
   },
 ];
 
 export default function FineDiningPage() {
   return (
-    <main className="w-full bg-white pt-[72px] md:pt-[88px]">
+    <main className="w-full bg-white">
       {/* Hero Section */}
-      <section className="relative h-[100vh] min-h-[500px] w-full overflow-hidden">
+      <section className="relative min-h-[50dvh] md:min-h-[70dvh] lg:min-h-dvh w-full overflow-hidden">
         <Image
           alt="Fine Dining at Manu Maharani"
           className="object-cover"
           fill
           priority
           sizes="100vw"
-          src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=2000&auto=format&fit=crop"
+          src="https://storage.googleapis.com/manumaharani-files-bucket/static/1772469042731-Nivalya_.webp"
         />
-        <div className="absolute inset-0 bg-black/30" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center text-white">
-            <div className="flex items-center justify-center gap-4">
-              <div className="h-[1px] w-16 bg-white/60" />
-              <h1 className="font-serif text-5xl font-light tracking-[0.15em] md:text-6xl lg:text-7xl">
-                A Culinary Journey by the Kosi: Riverside Fine Dining & Bar at Manu Maharani
-              </h1>
-              <div className="h-[1px] w-16 bg-white/60" />
-            </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80" />
+        <div className="absolute inset-0 flex px-4 md:px-8 pb-4 md:pb-8 lg:pb-20  items-end pt-[72px] md:pt-[88px] justify-end">
+          <div className="max-w-7xl mx-auto text-white">
+            <h1 className="text-2xl md:text-4xl  tracking-[0.2em] md:tracking-[0.3em] uppercase text-white leading-tight">
+              A Culinary Journey by the Kosi: Riverside Fine Dining & Bar at Manu Maharani
+            </h1>
           </div>
         </div>
       </section>
@@ -169,7 +165,7 @@ export default function FineDiningPage() {
       </section>
 
       {/* Call to Action */}
-      <section className="w-full bg-[#2b2b2b] py-16 text-center md:py-20">
+      {/* <section className="w-full bg-[#2b2b2b] py-16 text-center md:py-20">
         <div className="mx-auto max-w-screen-xl px-4 xl:px-0">
           <h2 className="mb-6 font-serif text-3xl font-light tracking-[0.08em] uppercase text-white md:text-4xl">
             Reserve Your Table
@@ -181,7 +177,7 @@ export default function FineDiningPage() {
             Book Table
           </button>
         </div>
-      </section>
+      </section> */}
     </main>
   );
 }

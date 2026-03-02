@@ -1,8 +1,9 @@
 "use server";
 
 import { and, count, eq, or } from "@repo/db";
-import { db, EventBookings } from "@repo/db";
+import { db, EventBookings, Events } from "@repo/db";
 
+import { notifyNewBooking } from "./notifications.actions";
 import { safeDbQuery } from "./utils/db-error-handler";
 
 import type { TNewEventBooking } from "@repo/db/schema/event-bookings.schema";
@@ -135,6 +136,23 @@ export const createEventBooking = async (data: {
   if (!booking) {
     throw new Error("Failed to create event booking");
   }
+
+  const event = await db.query.Events.findFirst({
+    columns: { name: true },
+    where: eq(Events.id, data.event_id as any),
+  });
+
+  void notifyNewBooking({
+    details: [
+      ...(event ? [{ label: "Event", value: event.name }] : []),
+      { label: "Guests", value: String(data.number_of_guests) },
+    ],
+    guestEmail: data.email,
+    guestMessage: data.message,
+    guestName: data.name,
+    guestPhone: data.phone,
+    type: "event_booking",
+  });
 
   return booking;
 };

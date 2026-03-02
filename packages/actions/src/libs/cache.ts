@@ -110,6 +110,7 @@ export const getBlogBySlugKey = (slug: string) => {
 };
 
 export const GALLERY_CACHE_KEY = 'gallery';
+export const INSTA_GALLERY_CACHE_KEY = 'gallery:insta';
 
 export const REELS_CACHE_KEY = 'reels';
 

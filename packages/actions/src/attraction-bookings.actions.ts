@@ -1,8 +1,9 @@
 "use server";
 
 import { and, count, eq, or } from "@repo/db";
-import { AttractionBookings, db } from "@repo/db";
+import { AttractionBookings, Attractions, db } from "@repo/db";
 
+import { notifyNewBooking } from "./notifications.actions";
 import { safeDbQuery } from "./utils/db-error-handler";
 
 import type { TNewAttractionBooking } from "@repo/db/schema/attraction-bookings.schema";
@@ -137,6 +138,24 @@ export const createAttractionBooking = async (data: {
   if (!booking) {
     throw new Error("Failed to create booking");
   }
+
+  const attraction = await db.query.Attractions.findFirst({
+    columns: { title: true },
+    where: eq(Attractions.id, data.attraction_id as any),
+  });
+
+  void notifyNewBooking({
+    details: [
+      ...(attraction ? [{ label: "Attraction", value: attraction.title }] : []),
+      { label: "Travel Date", value: data.travel_date },
+      { label: "Guests", value: String(data.number_of_guests) },
+    ],
+    guestEmail: data.email,
+    guestMessage: data.message,
+    guestName: data.name,
+    guestPhone: data.phone,
+    type: "attraction_booking",
+  });
 
   return booking;
 };

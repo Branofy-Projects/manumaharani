@@ -1,7 +1,8 @@
 "use server";
 import { and, count, eq, gte, lte, or } from "@repo/db";
-import { BookingPayments, Bookings, db } from "@repo/db";
+import { BookingPayments, Bookings, db, Rooms, RoomTypes } from "@repo/db";
 
+import { notifyNewBooking } from "./notifications.actions";
 import { safeDbQuery } from "./utils/db-error-handler";
 
 import type { TNewBooking, TNewBookingPayment } from "@repo/db/schema/bookings.schema";
@@ -125,6 +126,41 @@ export const createBooking = async (data: TNewBooking) => {
       confirmation_code: confirmationCode,
     })
     .returning();
+
+  const [roomType, room] = await Promise.all([
+    data.room_type_id
+      ? db.query.RoomTypes.findFirst({
+          columns: { name: true },
+          where: eq(RoomTypes.id, data.room_type_id),
+        })
+      : null,
+    data.room_id
+      ? db.query.Rooms.findFirst({
+          columns: { title: true },
+          where: eq(Rooms.id, data.room_id),
+        })
+      : null,
+  ]);
+
+  void notifyNewBooking({
+    details: [
+      { label: "Confirmation Code", value: confirmationCode },
+      ...(roomType ? [{ label: "Room Type", value: roomType.name }] : []),
+      ...(room ? [{ label: "Room", value: room.title }] : []),
+      { label: "Check-in", value: data.check_in_date },
+      { label: "Check-out", value: data.check_out_date },
+      { label: "Nights", value: String(data.number_of_nights) },
+      { label: "Adults", value: String(data.number_of_adults ?? 1) },
+      { label: "Children", value: String(data.number_of_children ?? 0) },
+      { label: "Rooms", value: String(data.number_of_rooms ?? 1) },
+      { label: "Total Amount", value: `₹${data.total_amount}` },
+    ],
+    guestEmail: data.guest_email,
+    guestMessage: data.special_requests || undefined,
+    guestName: data.guest_name,
+    guestPhone: data.guest_phone,
+    type: "booking",
+  });
 
   return booking;
 };

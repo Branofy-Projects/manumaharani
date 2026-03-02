@@ -1,18 +1,13 @@
-"use client";
 import Image from "next/image";
 import Link from "next/link";
 
-const images = [
-  "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=1200&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1519823551278-64ac92734fb1?q=80&w=1200&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1544731612-de7f96afe55f?q=80&w=1200&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1548013146-72479768bada?q=80&w=1200&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1200&auto=format&fit=crop",
-];
+import { getInstaGalleryCache } from "@/lib/cache/gallery.cache";
 
-export default function HomeInstaImageSection() {
+export default async function HomeInstaImageSection() {
+  const gallery = await getInstaGalleryCache();
+
+  if (!gallery || gallery.length === 0) return null;
+
   return (
     <section className="w-full py-24">
       <div className="max-w-7xl mx-auto px-4">
@@ -34,10 +29,10 @@ export default function HomeInstaImageSection() {
               </h3>
               <p className="mt-4 text-[0.5rem] md:text-sm sm:text-base opacity-90">
                 Catch glimpses of river mornings, festive evenings, and
-                behind‑the‑scenes life <b>@manumaharani_resorts</b>
+                behind‑the‑scenes life <b>@manumaharaniresorts</b>
               </p>
             </div>
-            <Link className="mt-10" href="#">
+            <Link className="mt-10" href="https://www.instagram.com/manumaharaniresorts/" target="_blank">
               <span className="inline-block text-[0.5rem] md:text-sm sm:text-base tracking-wider">
                 Follow Our Journey
               </span>
@@ -45,28 +40,39 @@ export default function HomeInstaImageSection() {
             </Link>
           </div>
 
-          {images.map((src, i) => (
-            <div
-              className="group relative aspect-square overflow-hidden"
-              key={`insta-${i}`}
-            >
-              <Image
-                alt={`Gallery ${i + 1}`}
-                className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-                fill
-                loading="lazy"
-                sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
-                src={src}
-              />
-              <div className="pointer-events-none absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-              <div className="pointer-events-none absolute inset-0 flex items-end p-4">
-                <div className="text-white w-full translate-y-3 opacity-0 transition-all duration-500 ease-out group-hover:translate-y-0 group-hover:opacity-100">
-                  <p className="text-[0.5rem] md:text-xs opacity-90">Share your memories with</p>
-                  <p className="text-[0.5rem] md:text-sm font-medium">@manu_maharani</p>
+          {gallery.slice(0, 7).map((item, i) => {
+            const src =
+              item.image?.large_url ||
+              item.image?.original_url ||
+              item.image?.medium_url;
+
+            if (!src) return null;
+
+            return (
+              <Link
+                className="group relative aspect-square overflow-hidden"
+                href="https://www.instagram.com/manumaharaniresorts/"
+                key={item.id ?? `insta-${i}`}
+                target="_blank"
+              >
+                <Image
+                  alt={item.image?.alt_text || item.title || "Gallery image"}
+                  className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                  fill
+                  loading="lazy"
+                  sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
+                  src={src}
+                />
+                <div className="pointer-events-none absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                <div className="pointer-events-none absolute inset-0 flex items-end p-4">
+                  <div className="text-white w-full translate-y-3 opacity-0 transition-all duration-500 ease-out group-hover:translate-y-0 group-hover:opacity-100">
+                    <p className="text-[0.5rem] md:text-xs opacity-90">Share your memories with</p>
+                    <p className="text-[0.5rem] md:text-sm font-medium">@manumaharaniresorts</p>
+                  </div>
                 </div>
-              </div>
-            </div>
-          ))}
+              </Link>
+            );
+          })}
         </div>
       </div>
     </section>

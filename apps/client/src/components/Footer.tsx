@@ -59,14 +59,14 @@ const columns = [
   },
 ];
 
-const legalLinks = [
-  { href: "/legal-notice", label: "Legal Notice" },
-  { href: "/privacy-notice", label: "Privacy Notice" },
-  { href: "/cookie-preferences", label: "Cookie Preferences" },
-  { href: "/do-not-sell", label: "Do Not Sell My Personal Information" },
-  { href: "/accessibility-policy", label: "Accessibility Policy" },
-  { href: "/modern-slavery-statement", label: "Modern Slavery Statement" },
-];
+// const legalLinks = [
+//   { href: "/legal-notice", label: "Legal Notice" },
+//   { href: "/privacy-notice", label: "Privacy Notice" },
+//   { href: "/cookie-preferences", label: "Cookie Preferences" },
+//   { href: "/do-not-sell", label: "Do Not Sell My Personal Information" },
+//   { href: "/accessibility-policy", label: "Accessibility Policy" },
+//   { href: "/modern-slavery-statement", label: "Modern Slavery Statement" },
+// ];
 
 export default function Footer() {
   return (
@@ -121,7 +121,7 @@ export default function Footer() {
             <a
               aria-label="Instagram"
               className="hover:text-foreground/70 transition"
-              href="#"
+              href="https://www.instagram.com/manumaharaniresorts"
             >
               <FaInstagram size={22} />
             </a>
@@ -142,7 +142,7 @@ export default function Footer() {
         <hr className="border-t border-foreground/40 mb-4" />
         <div className="flex flex-col items-center md:items-start gap-2 text-xs text-foreground/70">
           {/* Legal Links */}
-          <div className="flex flex-wrap gap-x-2 gap-y-2 justify-center md:justify-start">
+          {/* <div className="flex flex-wrap gap-x-2 gap-y-2 justify-center md:justify-start">
             {legalLinks.map((link, idx) => (
               <React.Fragment key={link.label}>
                 <Link
@@ -156,7 +156,7 @@ export default function Footer() {
                 )}
               </React.Fragment>
             ))}
-          </div>
+          </div> */}
           {/* Copyright */}
           <div className="text-center md:text-right w-full md:w-auto">
             All Rights Reserved.

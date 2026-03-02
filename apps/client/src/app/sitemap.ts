@@ -39,13 +39,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Legal/policy pages - lower priority, rarely change
   const legalRoutes = [
-    '/legal-notice',
-    '/privacy-notice',
     '/privacy-policy',
-    '/cookie-preferences',
-    '/do-not-sell',
-    '/accessibility-policy',
-    '/modern-slavery-statement',
   ].map((route) => ({
     changeFrequency: 'yearly' as const,
     lastModified: new Date(),

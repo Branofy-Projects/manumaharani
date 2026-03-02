@@ -10,6 +10,7 @@ export * from "./experiences.actions";
 export * from "./gallery.actions";
 export * from "./images.actions";
 export * from "./master-data.actions";
+export * from "./notification-recipients.actions";
 export * from "./offer-bookings.actions";
 export * from "./offers.actions";
 export * from "./reels.actions";

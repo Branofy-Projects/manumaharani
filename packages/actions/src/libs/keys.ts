@@ -15,6 +15,11 @@ export async function galleryKey(category?: string): Promise<string> {
   return category ? `gallery:${category}:v${v}` : `gallery:all:v${v}`;
 }
 
+export async function instaGalleryKey(): Promise<string> {
+  const v = await getVersion("gallery");
+  return `gallery:insta:v${v}`;
+}
+
 export async function resortBySlugKey(slug: string): Promise<string> {
   const v = await getVersion("resort");
   return `resort:slug:${slug}:v${v}`;

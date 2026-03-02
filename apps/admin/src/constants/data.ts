@@ -184,6 +184,20 @@ export const navItems: NavItem[] = [
     url: "#",
   },
   {
+    icon: "settings",
+    isActive: false,
+    items: [
+      {
+        icon: "billing",
+        shortcut: ["n", "r"],
+        title: "Notification Recipients",
+        url: "/notification-recipients",
+      },
+    ],
+    title: "Settings",
+    url: "#",
+  },
+  {
     icon: "billing",
     isActive: false,
     items: [

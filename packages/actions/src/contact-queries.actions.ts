@@ -3,6 +3,7 @@
 import { and, count, eq, or } from "@repo/db";
 import { ContactQueries, db } from "@repo/db";
 
+import { notifyNewBooking } from "./notifications.actions";
 import { safeDbQuery } from "./utils/db-error-handler";
 
 import type { TNewContactQuery } from "@repo/db/schema/contact-queries.schema";
@@ -130,6 +131,17 @@ export const createContactQuery = async (data: {
   if (!query) {
     throw new Error("Failed to create contact query");
   }
+
+  void notifyNewBooking({
+    details: [
+      { label: "Subject", value: data.subject },
+    ],
+    guestEmail: data.email,
+    guestMessage: data.message,
+    guestName: data.name,
+    guestPhone: data.phone,
+    type: "contact_query",
+  });
 
   return query;
 };
