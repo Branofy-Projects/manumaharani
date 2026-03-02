@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { Check, ChevronsUpDown, GalleryVerticalEnd } from 'lucide-react';
 import * as React from 'react';
@@ -6,7 +6,11 @@ import * as React from 'react';
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
+import {
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from '@/components/ui/sidebar';
 
 export interface Tenant {
   id: string;
@@ -22,9 +26,9 @@ export function OrgSwitcher({
   onTenantSwitch?: (tenantId: string) => void;
   tenants: Tenant[];
 }) {
-  const [selectedTenant, setSelectedTenant] = React.useState<
-    Tenant | undefined
-  >(defaultTenant || (tenants.length > 0 ? tenants[0] : undefined));
+  const [selectedTenant, setSelectedTenant] = React.useState<Tenant | undefined>(
+    defaultTenant || (tenants.length > 0 ? tenants[0] : undefined)
+  );
   const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
@@ -65,8 +69,7 @@ export function OrgSwitcher({
                 <GalleryVerticalEnd className="size-4" />
               </div>
               <div className="flex flex-col gap-0.5 leading-none">
-                <span className="font-semibold">Next Starter</span>
-                <span className="">{selectedTenant.name}</span>
+                <span className="font-semibold">{selectedTenant.name}</span>
               </div>
               <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
@@ -81,10 +84,8 @@ export function OrgSwitcher({
                 key={tenant.id}
                 onSelect={() => handleTenantSwitch(tenant)}
               >
-                {tenant.name}{" "}
-                {tenant.id === selectedTenant.id && (
-                  <Check className="ml-auto" />
-                )}
+                {tenant.name}{' '}
+                {tenant.id === selectedTenant.id && <Check className="ml-auto" />}
               </DropdownMenuItem>
             ))}
           </DropdownMenuContent>

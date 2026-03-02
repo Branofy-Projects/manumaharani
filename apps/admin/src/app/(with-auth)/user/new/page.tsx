@@ -1,16 +1,16 @@
 import { Suspense } from "react";
 
 import FormCardSkeleton from "@/components/form-card-skeleton";
-import { RoomForm } from "@/features/rooms/components/room-form";
+import UserForm from "@/features/users/components/user-form";
 
 export const metadata = {
-  title: "Dashboard: Create Room",
+  title: "Dashboard: Create User",
 };
 
-export default function NewRoomPage() {
+export default function NewUserPage() {
   return (
     <Suspense fallback={<FormCardSkeleton />}>
-      <RoomForm initialData={null} pageTitle="Create New Room" />
+      <UserForm initialData={null} pageTitle="Create New User" />
     </Suspense>
   );
 }

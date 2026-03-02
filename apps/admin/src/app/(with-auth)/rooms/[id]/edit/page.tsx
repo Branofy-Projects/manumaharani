@@ -1,37 +1,35 @@
-import { getUserById } from "@repo/actions";
-import { AppResponseHandler } from "@repo/actions/utils/app-response-handler";
+import { getRoomById } from "@repo/actions";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import FormCardSkeleton from "@/components/form-card-skeleton";
-import UserForm from "@/features/users/components/user-form";
+import { RoomForm } from "@/features/rooms/components/room-form";
 
 export const metadata = {
   title: "Dashboard: Edit User",
 };
 
 
-export default async function EditUserPage(props: PageProps<"/user/[userId]">) {
+export default async function EditRoomPage(props: PageProps<"/rooms/[id]/edit">) {
   const params = await props.params;
 
-  if (!params.userId || params.userId === "new") {
+  if (!params.id || params.id === "new") {
     notFound();
   }
 
-  const result = await getUserById(params.userId);
-
-  if (AppResponseHandler.isError(result)) {
+  const id = parseInt(params.id, 10);
+  if (Number.isNaN(id)) {
     notFound();
   }
 
-  const user = result;
+  const room = await getRoomById(id);
 
   return (
     <Suspense fallback={<FormCardSkeleton />}>
-      <UserForm
-        initialData={user}
-        pageTitle={`Edit User${user.name ? `: ${user.name}` : ""}`}
-        userId={params.userId}
+      <RoomForm
+        initialData={room}
+        pageTitle={`Edit Room${room.room_number ? `: ${room.room_number}` : ""}`}
+        roomId={params.id}
       />
     </Suspense>
   );

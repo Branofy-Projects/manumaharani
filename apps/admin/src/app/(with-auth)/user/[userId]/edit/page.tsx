@@ -4,18 +4,17 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import FormCardSkeleton from "@/components/form-card-skeleton";
-import PageContainer from "@/components/layout/page-container";
-import UserDetailsView from "@/features/users/components/user-details-view";
+import UserForm from "@/features/users/components/user-form";
 
 export const metadata = {
-  title: "Dashboard: User Details",
+  title: "Dashboard: Edit User",
 };
 
 type PageProps = {
   params: Promise<{ userId: string }>;
 };
 
-export default async function UserDetailPage(props: PageProps) {
+export default async function EditUserPage(props: PageProps) {
   const params = await props.params;
 
   if (!params.userId || params.userId === "new") {
@@ -31,12 +30,12 @@ export default async function UserDetailPage(props: PageProps) {
   const user = result;
 
   return (
-    <PageContainer scrollable>
-      <div className="flex-1 space-y-4">
-        <Suspense fallback={<FormCardSkeleton />}>
-          <UserDetailsView user={user} />
-        </Suspense>
-      </div>
-    </PageContainer>
+    <Suspense fallback={<FormCardSkeleton />}>
+      <UserForm
+        initialData={user}
+        pageTitle={`Edit User${user.name ? `: ${user.name}` : ""}`}
+        userId={params.userId}
+      />
+    </Suspense>
   );
 }

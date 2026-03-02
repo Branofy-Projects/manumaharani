@@ -23,6 +23,10 @@ const nextConfig: NextConfig = {
         hostname: "plus.unsplash.com",
         protocol: "https",
       },
+      {
+        hostname: "www.manumaharaniresorts.com",
+        protocol: "https",
+      },
     ],
   },
   output: "standalone",

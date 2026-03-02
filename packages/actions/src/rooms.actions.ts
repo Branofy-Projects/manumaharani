@@ -235,6 +235,8 @@ export const getRoomBySlug = async (slug: string) => {
   }
 };
 
+
+
 export const createRoom = async (data: TNewRoom) => {
   try {
     if (!db) throw new Error("Database connection not available");
@@ -270,6 +272,26 @@ export const createRoom = async (data: TNewRoom) => {
     revalidatePath("/rooms");
     return room;
   } catch (error) {
+    const err = error as { code?: string; message?: string };
+    const errorString = String(error);
+    const errorMessage = err?.message ?? errorString;
+
+    // Duplicate slug (or room_number if unique) - user-friendly message
+    if (
+      err?.code === "23505" ||
+      errorString.includes("duplicate key") ||
+      errorString.includes("unique constraint") ||
+      errorString.includes("rooms_slug_unique") ||
+      errorMessage.includes("duplicate key") ||
+      errorMessage.includes("unique constraint")
+    ) {
+      const friendly = new Error(
+        "A room with this slug already exists. Please use a different slug."
+      );
+      console.error("Room create constraint error:", friendly);
+      throw friendly;
+    }
+
     console.error("Error creating room:", error);
     throw error;
   }

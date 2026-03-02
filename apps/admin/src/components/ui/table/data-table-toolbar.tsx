@@ -34,8 +34,6 @@ export function DataTableToolbar<TData>({
     () => table.getAllColumns().filter((column) => column.getCanFilter()),
     [table]
   );
-  console.log("columns", table.getAllColumns(), columns);
-
 
   const onReset = React.useCallback(() => {
     table.resetColumnFilters();

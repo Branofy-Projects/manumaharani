@@ -240,6 +240,7 @@ const AttractionForm = (props: TAttractionFormProps) => {
           const valid = data.faqs?.filter((f) => f.question?.trim() && f.answer?.trim()) ?? [];
           return valid.length ? JSON.stringify(valid) : null;
         })(),
+
         image: imageId,
         link: data.link,
         open_time: data.open_time || null,
@@ -275,7 +276,7 @@ const AttractionForm = (props: TAttractionFormProps) => {
     }
   };
 
-  const busy = isSubmitting || isImageUploading || isGalleryUploading;
+  const busy = isSubmitting || isImageUploading;
 
   return (
     <PageContainer scrollable={true}>
@@ -325,22 +326,7 @@ const AttractionForm = (props: TAttractionFormProps) => {
                           <FormItem>
                             <FormLabel>Title</FormLabel>
                             <FormControl>
-                              <Input
-                                placeholder="Enter attraction title"
-                                {...field}
-                                onChange={(e) => {
-                                  field.onChange(e);
-                                  if (!props.attractionId) {
-                                    const slug = e.target.value
-                                      .toLowerCase()
-                                      .replace(/[^a-z0-9\s-]/g, "")
-                                      .replace(/\s+/g, "-")
-                                      .replace(/-+/g, "-")
-                                      .trim();
-                                    form.setValue("slug", slug);
-                                  }
-                                }}
-                              />
+                              <Input placeholder="Enter attraction title" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -348,14 +334,14 @@ const AttractionForm = (props: TAttractionFormProps) => {
                       />
                       <FormField
                         control={form.control}
-                        name="slug"
+                        name="order"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Slug</FormLabel>
+                            <FormLabel>Display Order</FormLabel>
                             <FormControl>
-                              <Input placeholder="auto-generated-from-title" {...field} />
+                              <Input type="number" {...field} />
                             </FormControl>
-                            <FormDescription className="text-xs">URL-friendly identifier (auto-generated from title)</FormDescription>
+                            <FormDescription className="text-xs">Lower numbers appear first</FormDescription>
                             <FormMessage />
                           </FormItem>
                         )}
@@ -367,40 +353,10 @@ const AttractionForm = (props: TAttractionFormProps) => {
                       name="subtitle"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Subtitle</FormLabel>
+                          <FormLabel>Subtitle / Description</FormLabel>
                           <FormControl>
-                            <Input placeholder="Enter a brief subtitle" {...field} />
+                            <Textarea className="min-h-[100px]" placeholder="Enter a brief description" {...field} />
                           </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="description"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Description (Optional)</FormLabel>
-                          <FormControl>
-                            <Textarea className="min-h-[120px]" placeholder="Enter a detailed description for the detail page" {...field} />
-                          </FormControl>
-                          <FormDescription className="text-xs">Shown on the attraction detail page. Falls back to subtitle if empty.</FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="order"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Display Order</FormLabel>
-                          <FormControl>
-                            <Input type="number" {...field} />
-                          </FormControl>
-                          <FormDescription className="text-xs">Lower numbers appear first</FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -491,7 +447,7 @@ const AttractionForm = (props: TAttractionFormProps) => {
                   <CardHeader>
                     <CardTitle>Media</CardTitle>
                     <CardDescription>
-                      Featured image and gallery photos
+                      Attraction image for listings and the website
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
@@ -500,43 +456,18 @@ const AttractionForm = (props: TAttractionFormProps) => {
                       name="image"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Featured Image</FormLabel>
+                          <FormLabel>Attraction Image</FormLabel>
                           <FormControl>
                             <FileUploader
-                              disabled={busy}
+                              disabled={isImageUploading || isSubmitting}
                               id="attraction-image"
                               maxFiles={1}
-                              minDimensions={{ width: 1920, height: 1080 }}
                               onValueChange={field.onChange}
                               progresses={progresses}
                               showValidation={hasAttemptedSubmit}
                               value={field.value || []}
                             />
                           </FormControl>
-                          <FormDescription className="text-xs">Main image shown on listing cards</FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="images"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Gallery Images</FormLabel>
-                          <FormControl>
-                            <FileUploader
-                              disabled={busy}
-                              id="attraction-gallery-images"
-                              maxFiles={20}
-                              minDimensions={{ width: 1920, height: 1080 }}
-                              onValueChange={field.onChange}
-                              progresses={galleryProgresses}
-                              showValidation={hasAttemptedSubmit}
-                              value={field.value || []}
-                            />
-                          </FormControl>
-                          <FormDescription className="text-xs">Additional photos shown on the detail page gallery (up to 20)</FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}

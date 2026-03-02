@@ -1,17 +1,16 @@
 "use client";
 import {
-  IconBell, IconChevronRight, IconChevronsDown, IconCreditCard, IconLogout, IconPhotoUp,
-  IconUserCircle
+  IconChevronRight, IconChevronsDown
 } from '@tabler/icons-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import * as React from 'react';
 
 import { SignOutButton } from '@/components/auth/sign-out-button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel,
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
   DropdownMenuSeparator, DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import {
@@ -24,34 +23,13 @@ import { navItems } from '@/constants/data';
 import { useAuth } from '@/hooks/use-auth';
 import { useMediaQuery } from '@/hooks/use-media-query';
 
-import type { Tenant } from "../org-switcher";
-
 import { Icons } from '../icons';
-
-export const company = {
-  logo: IconPhotoUp,
-  name: "Acme Inc",
-  plan: "Enterprise",
-};
-
-const tenants: Tenant[] = [
-  { id: "1", name: "Acme Inc" },
-  { id: "2", name: "Beta Corp" },
-  { id: "3", name: "Gamma Ltd" },
-];
 
 export default function AppSidebar() {
   const pathname = usePathname();
   const { isOpen } = useMediaQuery();
   const { user } = useAuth();
-  const router = useRouter();
   const [mounted, setMounted] = React.useState(false);
-
-  const handleSwitchTenant = (_tenantId: string) => {
-    // Tenant switching functionality would be implemented here
-  };
-
-  const activeTenant = tenants[0];
 
   React.useEffect(() => {
     setMounted(true);

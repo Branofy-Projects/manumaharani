@@ -24,11 +24,9 @@ import { Testimonials } from './testimonials.schema';
 
 export const roomTypeRelations = relations(RoomTypes, ({ many }) => ({
   amenities: many(RoomTypeAmenities),
-  bookings: many(Bookings),
   faqs: many(RoomTypeFaqs),
   images: many(RoomTypeImages),
   policies: many(RoomTypePolicies),
-  rooms: many(Rooms),
 }));
 
 export const roomTypeImagesRelations = relations(RoomTypeImages, ({ one }) => ({

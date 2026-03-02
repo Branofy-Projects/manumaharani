@@ -1,6 +1,6 @@
 "use client";
 
-import { createAmenity, getAmenities } from "@repo/actions";
+import { getAmenities } from "@repo/actions";
 import {
   createRoom,
   syncRoomAmenities,
@@ -8,8 +8,7 @@ import {
   updateRoom,
 } from "@repo/actions";
 import { createImages } from "@repo/actions/images.actions";
-import { getVideoUploadUrl } from "@repo/actions/reels.actions";
-import { Loader2, Plus, Upload, X } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -22,15 +21,6 @@ import PageContainer from "@/components/layout/page-container";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -67,6 +57,7 @@ const BED_TYPE_OPTIONS = [
 ] as const;
 
 import type { FormImage as FileUploaderFormImage } from "@/components/file-uploader";
+import type { FormImage, NewFormImage } from "@/lib/image-schema";
 
 const ROOM_STATUS_OPTIONS = [
   { label: "Available", value: "available" },
@@ -74,7 +65,6 @@ const ROOM_STATUS_OPTIONS = [
   { label: "Maintenance", value: "maintenance" },
   { label: "Blocked", value: "blocked" },
 ] as const;
-
 
 /** Coerce to a numeric string for DB (e.g. base_price). Returns "0" if invalid. */
 function toNumericString(value: null | number | string | undefined, defaultVal: string = "0"): string {
@@ -145,7 +135,7 @@ type TRoomFormProps = {
 export const RoomForm = (props: TRoomFormProps) => {
   const { initialData, pageTitle } = props;
   const router = useRouter();
-  const [amenities, setAmenities] = useState<Array<{ icon: string; id: number; label: string }>>([]);
+  const [amenities, setAmenities] = useState<Array<{ id: number; label: string }>>([]);
   const [progresses, setProgresses] = useState<Record<string, number>>({});
   const [galleryProgresses, setGalleryProgresses] = useState<Record<string, number>>({});
   const [isImageUploading, setIsImageUploading] = useState(false);
@@ -153,19 +143,11 @@ export const RoomForm = (props: TRoomFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const [activeTab, setActiveTab] = useState("basic");
-  const [amenityDialogOpen, setAmenityDialogOpen] = useState(false);
-  const [newAmenityLabel, setNewAmenityLabel] = useState("");
-  const [newAmenityIcon, setNewAmenityIcon] = useState("");
-  const [isCreatingAmenity, setIsCreatingAmenity] = useState(false);
-  const [videoFile, setVideoFile] = useState<File | null>(null);
-  const [videoUploadProgress, setVideoUploadProgress] = useState(0);
-  const [isVideoUploading, setIsVideoUploading] = useState(false);
-  const videoInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     getAmenities().then((list) => {
       setAmenities(
-        (list || []).map((a: { icon: string; id: number; label: string }) => ({ icon: a.icon, id: a.id, label: a.label }))
+        (list || []).map((a: { id: number; label: string }) => ({ id: a.id, label: a.label }))
       );
     });
   }, []);
@@ -377,7 +359,7 @@ export const RoomForm = (props: TRoomFormProps) => {
     }
   };
 
-  const busy = isSubmitting || isImageUploading || isGalleryUploading || isVideoUploading;
+  const busy = isSubmitting || isImageUploading || isGalleryUploading;
 
   return (
     <PageContainer scrollable={true}>
@@ -415,13 +397,13 @@ export const RoomForm = (props: TRoomFormProps) => {
             </div>
 
             <Tabs className="w-full" onValueChange={setActiveTab} value={activeTab}>
-              <TabsList className="sticky top-0 z-10 flex w-full overflow-x-auto">
-                <TabsTrigger className="flex-1 min-w-0" value="basic">Basic</TabsTrigger>
-                <TabsTrigger className="flex-1 min-w-0" value="media">Media</TabsTrigger>
-                <TabsTrigger className="flex-1 min-w-0" value="capacity">Capacity</TabsTrigger>
-                <TabsTrigger className="flex-1 min-w-0" value="pricing">Pricing</TabsTrigger>
-                <TabsTrigger className="flex-1 min-w-0" value="reviews">Status</TabsTrigger>
-                <TabsTrigger className="flex-1 min-w-0" value="amenities">Amenities</TabsTrigger>
+              <TabsList className="grid sticky top-0 z-10 w-full grid-cols-6">
+                <TabsTrigger value="basic">Basic Info</TabsTrigger>
+                <TabsTrigger value="media">Media</TabsTrigger>
+                <TabsTrigger value="capacity">Capacity & Policies</TabsTrigger>
+                <TabsTrigger value="pricing">Pricing</TabsTrigger>
+                <TabsTrigger value="reviews">Reviews & Status</TabsTrigger>
+                <TabsTrigger value="amenities">Amenities & Optional</TabsTrigger>
               </TabsList>
 
               {/* Tab: Basic Info */}
@@ -507,7 +489,6 @@ export const RoomForm = (props: TRoomFormProps) => {
                               disabled={busy}
                               id="room-featured-image"
                               maxFiles={1}
-                              minDimensions={{ width: 1920, height: 1080 }}
                               onValueChange={field.onChange}
                               progresses={progresses}
                               showValidation={hasAttemptedSubmit}
@@ -532,7 +513,6 @@ export const RoomForm = (props: TRoomFormProps) => {
                               disabled={busy}
                               id="room-gallery-images"
                               maxFiles={20}
-                              minDimensions={{ width: 1920, height: 1080 }}
                               onValueChange={field.onChange}
                               progresses={galleryProgresses}
                               showValidation={hasAttemptedSubmit}
@@ -551,146 +531,13 @@ export const RoomForm = (props: TRoomFormProps) => {
                       name="video_url"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Video</FormLabel>
+                          <FormLabel>Video URL</FormLabel>
                           <FormControl>
-                            <div className="space-y-3">
-                              {/* Current video preview */}
-                              {field.value && !videoFile && (
-                                <div className="relative rounded-lg border overflow-hidden">
-                                  <video
-                                    className="w-full max-h-48 object-contain bg-black"
-                                    controls
-                                    preload="metadata"
-                                    src={`${field.value}#t=0.5`}
-                                  />
-                                  <Button
-                                    className="absolute top-2 right-2 h-7 w-7 p-0"
-                                    onClick={() => {
-                                      field.onChange("");
-                                    }}
-                                    size="sm"
-                                    type="button"
-                                    variant="destructive"
-                                  >
-                                    <X className="h-4 w-4" />
-                                  </Button>
-                                </div>
-                              )}
-
-                              {/* Upload area */}
-                              {!field.value && !videoFile && (
-                                <div
-                                  className="flex cursor-pointer flex-col items-center gap-2 rounded-lg border-2 border-dashed p-6 text-center transition-colors hover:border-primary"
-                                  onClick={() => videoInputRef.current?.click()}
-                                >
-                                  <Upload className="h-8 w-8 text-muted-foreground" />
-                                  <p className="text-sm text-muted-foreground">
-                                    Click to select a video file
-                                  </p>
-                                </div>
-                              )}
-
-                              {/* Selected file pending upload */}
-                              {videoFile && (
-                                <div className="space-y-2 rounded-lg border p-4">
-                                  <div className="flex items-center justify-between">
-                                    <div>
-                                      <p className="text-sm font-medium">{videoFile.name}</p>
-                                      <p className="text-xs text-muted-foreground">
-                                        {(videoFile.size / (1024 * 1024)).toFixed(2)} MB
-                                      </p>
-                                    </div>
-                                    <div className="flex gap-2">
-                                      <Button
-                                        disabled={isVideoUploading}
-                                        onClick={async () => {
-                                          try {
-                                            setIsVideoUploading(true);
-                                            setVideoUploadProgress(0);
-                                            const { publicUrl, signedUrl } = await getVideoUploadUrl(
-                                              videoFile.name,
-                                              videoFile.type
-                                            );
-                                            await new Promise<void>((resolve, reject) => {
-                                              const xhr = new XMLHttpRequest();
-                                              xhr.open("PUT", signedUrl);
-                                              xhr.setRequestHeader("Content-Type", videoFile.type);
-                                              xhr.upload.onprogress = (event) => {
-                                                if (event.lengthComputable) {
-                                                  setVideoUploadProgress(
-                                                    Math.round((event.loaded / event.total) * 100)
-                                                  );
-                                                }
-                                              };
-                                              xhr.onload = () =>
-                                                xhr.status >= 200 && xhr.status < 300
-                                                  ? resolve()
-                                                  : reject(new Error(`Upload failed: ${xhr.status}`));
-                                              xhr.onerror = () => reject(new Error("Upload failed"));
-                                              xhr.send(videoFile);
-                                            });
-                                            field.onChange(publicUrl);
-                                            setVideoFile(null);
-                                            setVideoUploadProgress(0);
-                                            toast.success("Video uploaded!");
-                                          } catch (err: unknown) {
-                                            toast.error(
-                                              err instanceof Error ? err.message : "Video upload failed"
-                                            );
-                                          } finally {
-                                            setIsVideoUploading(false);
-                                          }
-                                        }}
-                                        size="sm"
-                                        type="button"
-                                      >
-                                        {isVideoUploading ? (
-                                          <Loader2 className="mr-1 h-4 w-4 animate-spin" />
-                                        ) : (
-                                          <Upload className="mr-1 h-4 w-4" />
-                                        )}
-                                        Upload
-                                      </Button>
-                                      <Button
-                                        disabled={isVideoUploading}
-                                        onClick={() => {
-                                          setVideoFile(null);
-                                          setVideoUploadProgress(0);
-                                          if (videoInputRef.current) videoInputRef.current.value = "";
-                                        }}
-                                        size="sm"
-                                        type="button"
-                                        variant="outline"
-                                      >
-                                        Remove
-                                      </Button>
-                                    </div>
-                                  </div>
-                                  {isVideoUploading && videoUploadProgress > 0 && (
-                                    <div className="space-y-1">
-                                      <Progress value={videoUploadProgress} />
-                                      <p className="text-center text-xs text-muted-foreground">
-                                        Uploading... {videoUploadProgress}%
-                                      </p>
-                                    </div>
-                                  )}
-                                </div>
-                              )}
-
-                              <input
-                                accept="video/*"
-                                className="hidden"
-                                onChange={(e) => {
-                                  const file = e.target.files?.[0];
-                                  if (file) {
-                                    setVideoFile(file);
-                                    setVideoUploadProgress(0);
-                                  }
-                                }}
-                                ref={videoInputRef}
-                                type="file"
-                              />
-                            </div>
+                            <Input
+                              placeholder="https://..."
+                              type="url"
+                              {...field}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -862,56 +709,59 @@ export const RoomForm = (props: TRoomFormProps) => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <FormField
-                        control={form.control}
-                        name="base_price"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Base price</FormLabel>
-                            <FormControl>
-                              <Input
-                                inputMode="decimal"
-                                min={0}
-                                placeholder="0.00"
-                                step="0.01"
-                                type="number"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormDescription className="text-xs">
-                              Numbers only (e.g. 10000)
-                            </FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="peak_season_price"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Peak season price</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Optional" step="0.01" type="number" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="weekend_price"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Weekend price</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Optional" step="0.01" type="number" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                    <div className="space-y-4">
+                      <h3 className="text-sm font-medium">Pricing</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="base_price"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Base price</FormLabel>
+                              <FormControl>
+                                <Input
+                                  inputMode="decimal"
+                                  min={0}
+                                  placeholder="0.00"
+                                  step="0.01"
+                                  type="number"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormDescription className="text-xs">
+                                Numbers only (e.g. 10000)
+                              </FormDescription>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="peak_season_price"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Peak season price</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Optional" step="0.01" type="number" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="weekend_price"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Weekend price</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Optional" step="0.01" type="number" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -967,15 +817,13 @@ export const RoomForm = (props: TRoomFormProps) => {
                           name="is_featured"
                           render={({ field }) => (
                             <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                              <div className="space-y-0.5">
-                                <FormLabel className="text-base">Featured room</FormLabel>
-                                <FormDescription className="text-xs">
-                                  Show in featured sections
-                                </FormDescription>
-                              </div>
+                              <FormLabel className="text-base">Featured room</FormLabel>
                               <FormControl>
                                 <Switch checked={field.value} onCheckedChange={field.onChange} />
                               </FormControl>
+                              <FormDescription className="text-xs">
+                                Show in featured sections
+                              </FormDescription>
                             </FormItem>
                           )}
                         />
@@ -1026,127 +874,27 @@ export const RoomForm = (props: TRoomFormProps) => {
               <TabsContent className="space-y-6" value="amenities">
                 <Card>
                   <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <CardTitle>
-                          Amenities
-                          {form.watch("amenity_ids")?.length > 0 && (
-                            <span className="ml-2 text-sm font-normal text-muted-foreground">
-                              ({form.watch("amenity_ids").length} selected)
-                            </span>
-                          )}
-                        </CardTitle>
-                        <CardDescription>
-                          Select the amenities available in this room
-                        </CardDescription>
-                      </div>
-                      <Dialog onOpenChange={(open) => {
-                        setAmenityDialogOpen(open);
-                        if (!open) {
-                          setNewAmenityLabel("");
-                          setNewAmenityIcon("");
-                        }
-                      }} open={amenityDialogOpen}>
-                        <DialogTrigger asChild>
-                          <Button size="sm" type="button" variant="outline">
-                            <Plus className="mr-1 h-4 w-4" />
-                            New Amenity
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>Create Amenity</DialogTitle>
-                            <DialogDescription>
-                              Add a new amenity. It will be auto-selected for this room.
-                            </DialogDescription>
-                          </DialogHeader>
-                          <div className="space-y-4 py-2">
-                            <div className="space-y-2">
-                              <label className="text-sm font-medium">Icon</label>
-                              <IconSelectButton
-                                onIconSelect={setNewAmenityIcon}
-                                selectedIcon={newAmenityIcon || undefined}
-                              />
-                            </div>
-                            <div className="space-y-2">
-                              <label className="text-sm font-medium" htmlFor="new-amenity-label">
-                                Label
-                              </label>
-                              <Input
-                                id="new-amenity-label"
-                                onChange={(e) => setNewAmenityLabel(e.target.value)}
-                                placeholder="e.g. Bathtub"
-                                value={newAmenityLabel}
-                              />
-                            </div>
-                          </div>
-                          <DialogFooter>
-                            <Button
-                              disabled={isCreatingAmenity}
-                              onClick={() => setAmenityDialogOpen(false)}
-                              type="button"
-                              variant="outline"
-                            >
-                              Cancel
-                            </Button>
-                            <Button
-                              disabled={isCreatingAmenity || !newAmenityLabel.trim() || !newAmenityIcon.trim()}
-                              onClick={async () => {
-                                try {
-                                  setIsCreatingAmenity(true);
-                                  const created = await createAmenity({
-                                    icon: newAmenityIcon.trim(),
-                                    label: newAmenityLabel.trim(),
-                                  });
-                                  if (created?.id) {
-                                    setAmenities((prev) => [
-                                      ...prev,
-                                      { icon: created.icon, id: created.id, label: created.label },
-                                    ]);
-                                    const currentIds = form.getValues("amenity_ids") || [];
-                                    form.setValue("amenity_ids", [...currentIds, created.id]);
-                                    toast.success("Amenity created and selected!");
-                                  }
-                                  setAmenityDialogOpen(false);
-                                  setNewAmenityLabel("");
-                                  setNewAmenityIcon("");
-                                } catch (err: unknown) {
-                                  toast.error(err instanceof Error ? err.message : "Failed to create amenity");
-                                } finally {
-                                  setIsCreatingAmenity(false);
-                                }
-                              }}
-                              type="button"
-                            >
-                              {isCreatingAmenity && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                              Create
-                            </Button>
-                          </DialogFooter>
-                        </DialogContent>
-                      </Dialog>
-                    </div>
+                    <CardTitle>Amenities & Optional</CardTitle>
+                    <CardDescription>
+                      Room amenities and optional floor, number, notes
+                    </CardDescription>
                   </CardHeader>
-                  <CardContent>
-                    <FormField
-                      control={form.control}
-                      name="amenity_ids"
-                      render={({ field }) => (
-                        <FormItem>
-                          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-                            {amenities.map((a) => {
-                              const isSelected = field.value?.includes(a.id);
-                              return (
-                                <label
-                                  className={`flex flex-col items-center gap-2 rounded-lg border-2 p-4 cursor-pointer transition-all hover:bg-accent/50 ${isSelected
-                                      ? "border-primary bg-primary/5"
-                                      : "border-muted"
-                                    }`}
-                                  htmlFor={`amenity-${a.id}`}
+                  <CardContent className="space-y-4">
+                    <div className="space-y-4">
+                      <h3 className="text-sm font-medium">Amenities</h3>
+                      <FormField
+                        control={form.control}
+                        name="amenity_ids"
+                        render={({ field }) => (
+                          <FormItem>
+                            <div className="flex flex-wrap gap-4 rounded-md border p-4">
+                              {amenities.map((a) => (
+                                <div
+                                  className="flex flex-row items-center space-x-2"
                                   key={a.id}
                                 >
                                   <Checkbox
-                                    checked={isSelected}
-                                    className="sr-only"
+                                    checked={field.value?.includes(a.id)}
                                     id={`amenity-${a.id}`}
                                     onCheckedChange={(checked) => {
                                       const next = checked
@@ -1155,75 +903,73 @@ export const RoomForm = (props: TRoomFormProps) => {
                                       field.onChange(next);
                                     }}
                                   />
-                                  <RenderIcon className="text-foreground" name={a.icon} size={24} />
-                                  <span className="text-xs font-medium text-center leading-tight">
+                                  <label
+                                    className="text-sm font-normal cursor-pointer leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                    htmlFor={`amenity-${a.id}`}
+                                  >
                                     {a.label}
-                                  </span>
-                                </label>
-                              );
-                            })}
-                          </div>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Optional Details</CardTitle>
-                    <CardDescription>
-                      Floor, room number, and internal notes
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <FormField
-                        control={form.control}
-                        name="floor"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Floor</FormLabel>
-                            <FormControl>
-                              <Input
-                                min={0}
-                                onChange={(e) => field.onChange(e.target.value === "" ? undefined : Number(e.target.value))}
-                                type="number"
-                                value={field.value ?? ""}
-                              />
-                            </FormControl>
+                                  </label>
+                                </div>
+                              ))}
+                            </div>
+                            <FormDescription className="text-xs">
+                              Select amenities for this room
+                            </FormDescription>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
+                    </div>
+
+                    <div className="space-y-4 pt-4">
+                      <h3 className="text-sm font-medium">Optional</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="floor"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Floor</FormLabel>
+                              <FormControl>
+                                <Input
+                                  min={0}
+                                  onChange={(e) => field.onChange(e.target.value === "" ? undefined : Number(e.target.value))}
+                                  type="number"
+                                  value={field.value ?? ""}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="room_number"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Room number</FormLabel>
+                              <FormControl>
+                                <Input placeholder="e.g. 101" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
                       <FormField
                         control={form.control}
-                        name="room_number"
+                        name="notes"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Room number</FormLabel>
+                            <FormLabel>Internal notes</FormLabel>
                             <FormControl>
-                              <Input placeholder="e.g. 101" {...field} />
+                              <Textarea className="min-h-[60px]" placeholder="Not visible to guests" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
                     </div>
-                    <FormField
-                      control={form.control}
-                      name="notes"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Internal notes</FormLabel>
-                          <FormControl>
-                            <Textarea className="min-h-[60px]" placeholder="Not visible to guests" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
                   </CardContent>
                 </Card>
               </TabsContent>

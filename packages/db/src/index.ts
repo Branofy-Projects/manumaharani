@@ -171,6 +171,8 @@ export type {
   TOfferWithDetails,
   TPolicy,
   TRoom,
+  TRoomAmenity,
+  TRoomImage,
   TRoomType,
   TRoomTypeAmenity,
   TRoomTypeFaq,

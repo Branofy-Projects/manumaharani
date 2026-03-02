@@ -141,6 +141,7 @@ export type TRoomAmenity = {
   amenity: TAmenityBase;
 } & TRoomAmenityBase;
 
+
 // Room Types with Relations
 export type TRoomImage = {
   image: TImage;
