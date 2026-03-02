@@ -2,7 +2,8 @@
 import { and, count, eq, ilike, inArray } from "@repo/db";
 import { db, Images, RoomTypeImages, RoomTypes } from "@repo/db";
 
-import { bumpVersion, getOrSet } from "./libs/cache";
+import { revalidateTags } from "./client.actions";
+import { ACTIVE_ROOM_TYPES_CACHE_KEY, bumpVersion, getOrSet, getRoomTypeBySlugKey, ROOM_TYPES_CACHE_KEY } from "./libs/cache";
 import { roomTypeBySlugKey, roomTypesListKey } from "./libs/keys";
 import { safeDbQuery } from "./utils/db-error-handler";
 
@@ -168,6 +169,7 @@ export const createRoomType = async (data: TNewRoomType) => {
     const [roomType] = await db.insert(RoomTypes).values(data).returning();
 
     await bumpVersion("room-types");
+    revalidateTags([ROOM_TYPES_CACHE_KEY, ACTIVE_ROOM_TYPES_CACHE_KEY, getRoomTypeBySlugKey(roomType.slug)]);
 
     return roomType;
   } catch (error: any) {
@@ -241,6 +243,7 @@ export const updateRoomType = async (
     .returning();
 
   await bumpVersion("room-types");
+  revalidateTags([ROOM_TYPES_CACHE_KEY, ACTIVE_ROOM_TYPES_CACHE_KEY, getRoomTypeBySlugKey(updated.slug)]);
 
   return updated;
 };
@@ -274,9 +277,11 @@ export const getRoomTypeById = async (id: number) => {
 export const deleteRoomType = async (id: number) => {
   if (!db) throw new Error("Database connection not available");
 
+  const roomType = await db.query.RoomTypes.findFirst({ where: eq(RoomTypes.id, id) });
   await db.delete(RoomTypes).where(eq(RoomTypes.id, id));
 
   await bumpVersion("room-types");
+  revalidateTags([ROOM_TYPES_CACHE_KEY, ACTIVE_ROOM_TYPES_CACHE_KEY, ...(roomType?.slug ? [getRoomTypeBySlugKey(roomType.slug)] : [])]);
 };
 
 export const updateRoomTypeImages = async (
@@ -376,6 +381,8 @@ export const updateRoomTypeImages = async (
   }
 
   await bumpVersion("room-types");
+  const roomType = await db.query.RoomTypes.findFirst({ where: eq(RoomTypes.id, roomTypeId) });
+  revalidateTags([ROOM_TYPES_CACHE_KEY, ACTIVE_ROOM_TYPES_CACHE_KEY, ...(roomType?.slug ? [getRoomTypeBySlugKey(roomType.slug)] : [])]);
 
   // Return updated room type images
   return await db

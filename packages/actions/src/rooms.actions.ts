@@ -1,14 +1,15 @@
 "use server";
 
-import { and, asc, count, eq, ilike } from "@repo/db";
+import { and, count, eq, ilike } from "@repo/db";
 import {
   db,
   RoomAmenities,
   RoomImages,
   Rooms,
 } from "@repo/db";
-import { revalidatePath } from "next/cache";
 
+import { revalidateTags } from "./client.actions";
+import { ACTIVE_ROOMS_CACHE_KEY, getRoomBySlugKey, ROOMS_CACHE_KEY } from "./libs/cache";
 import { safeDbQuery } from "./utils/db-error-handler";
 
 import type { TNewRoom, TRoom } from "@repo/db";
@@ -269,7 +270,7 @@ export const createRoom = async (data: TNewRoom) => {
       weekend_price: s.weekend_price,
     };
     const [room] = await db.insert(Rooms).values(insertRow).returning();
-    revalidatePath("/rooms");
+    revalidateTags([ROOMS_CACHE_KEY, ACTIVE_ROOMS_CACHE_KEY, getRoomBySlugKey(room.slug)]);
     return room;
   } catch (error) {
     const err = error as { code?: string; message?: string };
@@ -321,8 +322,7 @@ export const updateRoom = async (id: number, data: Partial<TNewRoom>) => {
       .set({ ...sanitized, updated_at: new Date() })
       .where(eq(Rooms.id, id))
       .returning();
-    revalidatePath("/rooms");
-    revalidatePath(`/rooms/${id}`);
+    revalidateTags([ROOMS_CACHE_KEY, ACTIVE_ROOMS_CACHE_KEY, getRoomBySlugKey(updated.slug)]);
     return updated;
   } catch (error) {
     console.error("Error updating room:", error);
@@ -334,8 +334,9 @@ export const deleteRoom = async (id: number) => {
   try {
     if (!db) throw new Error("Database connection not available");
 
+    const room = await db.query.Rooms.findFirst({ where: eq(Rooms.id, id) });
     await db.delete(Rooms).where(eq(Rooms.id, id));
-    revalidatePath("/rooms");
+    revalidateTags([ROOMS_CACHE_KEY, ACTIVE_ROOMS_CACHE_KEY, ...(room?.slug ? [getRoomBySlugKey(room.slug)] : [])]);
   } catch (error) {
     console.error("Error deleting room:", error);
     throw error;
@@ -360,8 +361,8 @@ export const syncRoomImages = async (
     );
   }
 
-  revalidatePath("/rooms");
-  revalidatePath(`/rooms/${roomId}`);
+  const room = await db.query.Rooms.findFirst({ where: eq(Rooms.id, roomId) });
+  revalidateTags([ROOMS_CACHE_KEY, ACTIVE_ROOMS_CACHE_KEY, ...(room?.slug ? [getRoomBySlugKey(room.slug)] : [])]);
 };
 
 export const syncRoomAmenities = async (
@@ -382,6 +383,6 @@ export const syncRoomAmenities = async (
     );
   }
 
-  revalidatePath("/rooms");
-  revalidatePath(`/rooms/${roomId}`);
+  const room = await db.query.Rooms.findFirst({ where: eq(Rooms.id, roomId) });
+  revalidateTags([ROOMS_CACHE_KEY, ACTIVE_ROOMS_CACHE_KEY, ...(room?.slug ? [getRoomBySlugKey(room.slug)] : [])]);
 };

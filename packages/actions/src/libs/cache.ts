@@ -119,3 +119,10 @@ export const ATTRACTIONS_CACHE_KEY = 'attractions';
 export const getAttractionBySlugKey = (slug: string) => {
     return `attraction:slug:${slug}`;
 };
+
+export const ROOMS_CACHE_KEY = 'rooms';
+export const ACTIVE_ROOMS_CACHE_KEY = `${ROOMS_CACHE_KEY}:active`;
+
+export const getRoomBySlugKey = (slug: string) => {
+    return `${ROOMS_CACHE_KEY}:slug:${slug}`;
+};

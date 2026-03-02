@@ -119,6 +119,7 @@ export const deleteExperience = async (id: number) => {
     await db.delete(Experiences).where(eq(Experiences.id, id));
 
     await bumpVersion("experiences");
+    await revalidateTags(["experiences"]);
   } catch (error) {
     console.error("Error deleting experience:", error);
     throw error;

@@ -8,7 +8,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   description: "Explore our collection of rooms and cottages at Manu Maharani Resort & Spa, nestled in the heart of Jim Corbett National Park.",
-  title: "Accommodation | Manu Maharani Resort & Spa",
+  title: "Accommodation",
 };
 
 export default async function RoomsPage() {
