@@ -3,6 +3,7 @@
 import { getAmenities } from "@repo/actions";
 import {
   createRoom,
+  getNextAvailableRoomSlug,
   syncRoomAmenities,
   syncRoomImages,
   updateRoom,
@@ -10,13 +11,12 @@ import {
 import { createImages } from "@repo/actions/images.actions";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
 import { FileUploader, hasValidImages } from "@/components/file-uploader";
-import { IconSelectButton, RenderIcon } from "@/components/icon-select";
 import PageContainer from "@/components/layout/page-container";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -57,7 +57,6 @@ const BED_TYPE_OPTIONS = [
 ] as const;
 
 import type { FormImage as FileUploaderFormImage } from "@/components/file-uploader";
-import type { FormImage, NewFormImage } from "@/lib/image-schema";
 
 const ROOM_STATUS_OPTIONS = [
   { label: "Available", value: "available" },
@@ -65,6 +64,17 @@ const ROOM_STATUS_OPTIONS = [
   { label: "Maintenance", value: "maintenance" },
   { label: "Blocked", value: "blocked" },
 ] as const;
+
+/**
+ * Derive a URL-safe slug from a title (lowercase, hyphens, no leading/trailing hyphens).
+ */
+export function slugFromTitle(title: string): string {
+  return title
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
 
 /** Coerce to a numeric string for DB (e.g. base_price). Returns "0" if invalid. */
 function toNumericString(value: null | number | string | undefined, defaultVal: string = "0"): string {
@@ -86,7 +96,6 @@ function toOptionalRating(value: null | number | string | undefined): null | str
   const n = Number(String(value).trim());
   return Number.isNaN(n) ? null : n.toFixed(1);
 }
-
 const formSchema = z.object({
   description: z.string().optional(),
   slug: z.string().min(1, "Slug is required.").max(255),
@@ -214,6 +223,35 @@ export const RoomForm = (props: TRoomFormProps) => {
     resolver: zodResolver(formSchema),
   });
 
+  const [isGeneratingSlug, setIsGeneratingSlug] = useState(false);
+  const titleForSlug = form.watch("title");
+
+  const handleGenerateSlug = async () => {
+    const title = form.getValues("title")?.trim() ?? "";
+    console.log("title", title, initialData.title);
+
+    if (initialData?.title && initialData?.title === title) {
+      toast.error("Title is the same as the current title.");
+      return;
+    }
+    const base = slugFromTitle(title);
+    if (!base) {
+      toast.error("Enter a title first to generate a slug.");
+      return;
+    }
+    setIsGeneratingSlug(true);
+    try {
+      const excludeId = props.roomId ? parseInt(props.roomId, 10) : undefined;
+      const nextSlug = await getNextAvailableRoomSlug(base, excludeId);
+      form.setValue("slug", nextSlug);
+      toast.success("Slug generated.");
+    } catch {
+      toast.error("Failed to generate slug.");
+    } finally {
+      setIsGeneratingSlug(false);
+    }
+  };
+
   const featuredImage = form.watch("image");
   const galleryImages = form.watch("images");
   const hasValidFeatured = useMemo(
@@ -318,7 +356,7 @@ export const RoomForm = (props: TRoomFormProps) => {
         size_sqft: data.size_sqft,
         slug: data.slug,
         status: data.status,
-        title: data.title,
+        title: data.title.trim(),
         video_url: data.video_url || null,
         weekend_price: toOptionalNumeric(data.weekend_price),
       };
@@ -433,15 +471,40 @@ export const RoomForm = (props: TRoomFormProps) => {
                       <FormField
                         control={form.control}
                         name="slug"
+
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Slug</FormLabel>
                             <FormControl>
-                              <Input placeholder="ocean-view-suite" {...field} />
+                              <div className="flex gap-2">
+                                <Input
+                                  className="flex-1"
+                                  placeholder="ocean-view-suite"
+                                  {...field}
+                                  disabled
+                                />
+                                <Button
+                                  disabled={
+                                    isGeneratingSlug || !titleForSlug?.trim()
+                                  }
+                                  onClick={handleGenerateSlug}
+                                  type="button"
+                                  variant="outline"
+                                >
+                                  {isGeneratingSlug ? (
+                                    <>
+                                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                      Generating...
+                                    </>
+                                  ) : (
+                                    "Generate slug"
+                                  )}
+                                </Button>
+                              </div>
                             </FormControl>
-                            <FormDescription className="text-xs">
-                              URL-friendly identifier
-                            </FormDescription>
+                            {/* <FormDescription className="text-xs">
+                              From title (lowercase, hyphens). If the slug exists, -1, -2, etc. are added.
+                            </FormDescription> */}
                             <FormMessage />
                           </FormItem>
                         )}

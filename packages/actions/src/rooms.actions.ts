@@ -1,12 +1,16 @@
 "use server";
 
-import { and, count, eq, ilike } from "@repo/db";
 import {
+  and,
+  count,
   db,
+  eq,
+  ilike,
   RoomAmenities,
   RoomImages,
   Rooms,
 } from "@repo/db";
+import { like, ne, or } from "drizzle-orm";
 
 import { revalidateTags } from "./client.actions";
 import { ACTIVE_ROOMS_CACHE_KEY, getRoomBySlugKey, ROOMS_CACHE_KEY } from "./libs/cache";
@@ -233,6 +237,43 @@ export const getRoomBySlug = async (slug: string) => {
   } catch (error) {
     console.error("Error fetching room by slug:", error);
     return null;
+  }
+};
+
+
+
+/**
+ * Returns the next available room slug. If baseSlug is free, returns it; otherwise returns baseSlug-1, baseSlug-2, etc.
+ * When editing (excludeRoomId set), the current room's slug is treated as available.
+ */
+export const getNextAvailableRoomSlug = async (
+  baseSlug: string,
+  excludeRoomId?: number
+): Promise<string> => {
+  try {
+    if (!db || !baseSlug) return baseSlug;
+
+    const slugPattern = `${baseSlug}-%`;
+    const whereConditions = [
+      or(eq(Rooms.slug, baseSlug), like(Rooms.slug, slugPattern)),
+    ];
+    if (excludeRoomId != null) {
+      whereConditions.push(ne(Rooms.id, excludeRoomId));
+    }
+    const existing = await db
+      .select({ slug: Rooms.slug })
+      .from(Rooms)
+      .where(and(...whereConditions));
+
+    const used = new Set(existing.map((r) => r.slug));
+
+    if (!used.has(baseSlug)) return baseSlug;
+    let n = 1;
+    while (used.has(`${baseSlug}-${n}`)) n++;
+    return `${baseSlug}-${n}`;
+  } catch (error) {
+    console.error("Error getting next available room slug:", error);
+    return baseSlug;
   }
 };
 
