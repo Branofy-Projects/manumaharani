@@ -80,7 +80,7 @@ export function RoomGallery({ images, title }: RoomGalleryProps) {
                 <div className="mx-auto max-w-screen-xl px-4 py-4">
                     {images.length === 1 ? (
                         <div
-                            className="relative aspect-[16/9] max-h-[500px] w-full cursor-pointer overflow-hidden rounded-2xl"
+                            className="relative aspect-[16/9] bg-white max-h-[500px] w-full cursor-pointer overflow-hidden rounded-2xl"
                             onClick={() => openLightbox(0)}
                         >
                             <Image
@@ -96,7 +96,7 @@ export function RoomGallery({ images, title }: RoomGalleryProps) {
                         <div className="grid grid-cols-2 gap-2">
                             {images.map((img, idx) => (
                                 <div
-                                    className={`relative aspect-[4/3] cursor-pointer overflow-hidden ${idx === 0 ? "rounded-l-2xl" : "rounded-r-2xl"}`}
+                                    className={`relative bg-white aspect-[4/3] cursor-pointer overflow-hidden ${idx === 0 ? "rounded-l-2xl" : "rounded-r-2xl"}`}
                                     key={idx}
                                     onClick={() => openLightbox(idx)}
                                 >
@@ -114,7 +114,7 @@ export function RoomGallery({ images, title }: RoomGalleryProps) {
                     ) : (
                         <>
                             {/* Mobile: Show only 1 image */}
-                            <div className="relative aspect-[16/9] max-h-[400px] w-full cursor-pointer overflow-hidden rounded-2xl md:hidden" onClick={() => openLightbox(0)}>
+                            <div className="relative bg-white aspect-[16/9] max-h-[400px] w-full cursor-pointer overflow-hidden rounded-2xl md:hidden" onClick={() => openLightbox(0)}>
                                 <Image
                                     alt={title}
                                     className="object-cover transition-transform hover:scale-[1.02]"
@@ -136,7 +136,7 @@ export function RoomGallery({ images, title }: RoomGalleryProps) {
                             {/* Tablet: Show 3 images */}
                             <div className="hidden h-[350px] grid-cols-3 grid-rows-2 gap-2 md:grid lg:hidden">
                                 <div
-                                    className="relative col-span-2 row-span-2 cursor-pointer overflow-hidden rounded-l-2xl"
+                                    className="relative bg-white col-span-2 row-span-2 cursor-pointer overflow-hidden rounded-l-2xl"
                                     onClick={() => openLightbox(0)}
                                 >
                                     <Image
@@ -149,7 +149,7 @@ export function RoomGallery({ images, title }: RoomGalleryProps) {
                                     />
                                 </div>
                                 <div
-                                    className="relative cursor-pointer overflow-hidden rounded-tr-2xl"
+                                    className="relative bg-white cursor-pointer overflow-hidden rounded-tr-2xl"
                                     onClick={() => openLightbox(1)}
                                 >
                                     <Image
@@ -161,7 +161,7 @@ export function RoomGallery({ images, title }: RoomGalleryProps) {
                                     />
                                 </div>
                                 <div
-                                    className="relative cursor-pointer overflow-hidden rounded-br-2xl"
+                                    className="relative bg-white cursor-pointer overflow-hidden rounded-br-2xl"
                                     onClick={() => openLightbox(2)}
                                 >
                                     <Image
@@ -187,7 +187,7 @@ export function RoomGallery({ images, title }: RoomGalleryProps) {
                             {/* Desktop: 1 large + 4 small */}
                             <div className="hidden h-[400px] grid-cols-4 grid-rows-2 gap-2 lg:grid xl:h-[450px] 2xl:h-[500px]">
                                 <div
-                                    className="relative col-span-2 row-span-2 cursor-pointer overflow-hidden rounded-l-2xl"
+                                    className="relative bg-white col-span-2 row-span-2 cursor-pointer overflow-hidden rounded-l-2xl"
                                     onClick={() => openLightbox(0)}
                                 >
                                     <Image
@@ -207,7 +207,7 @@ export function RoomGallery({ images, title }: RoomGalleryProps) {
                                     >
                                         <Image
                                             alt={`${title} - Image ${idx + 2}`}
-                                            className="object-cover transition-transform hover:scale-[1.02]"
+                                            className="object-cover bg-white transition-transform hover:scale-[1.02]"
                                             fill
                                             sizes="25vw"
                                             src={img}
@@ -216,13 +216,13 @@ export function RoomGallery({ images, title }: RoomGalleryProps) {
                                 ))}
                                 {images.slice(3, 5).map((img, idx) => (
                                     <div
-                                        className={`relative cursor-pointer overflow-hidden ${idx === 1 ? "rounded-br-2xl" : ""}`}
+                                        className={`relative  cursor-pointer overflow-hidden ${idx === 1 ? "rounded-br-2xl" : ""}`}
                                         key={idx}
                                         onClick={() => openLightbox(idx + 3)}
                                     >
                                         <Image
                                             alt={`${title} - Image ${idx + 4}`}
-                                            className="object-cover transition-transform hover:scale-[1.02]"
+                                            className="object-cover bg-white transition-transform hover:scale-[1.02]"
                                             fill
                                             sizes="25vw"
                                             src={img}

@@ -15,8 +15,8 @@ export const Reels = pgTable("reels", {
   video_url: text("video_url").notNull(),
 });
 
-export type TReel = typeof Reels.$inferSelect;
 export type TNewReel = typeof Reels.$inferInsert;
+export type TReel = typeof Reels.$inferSelect;
 
 export const createReelSchema = createInsertSchema(Reels);
 export const selectReelSchema = createSelectSchema(Reels);
