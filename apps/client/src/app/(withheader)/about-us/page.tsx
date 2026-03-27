@@ -69,7 +69,7 @@ export default function AboutUsPage() {
           fill
           priority
           sizes="100vw"
-          src="/about-us/photo-1566073771259-6a8506099945.webp"
+          src="https://storage.googleapis.com/manumaharani-files-bucket/static/1771514100268-NISH2049_-_Signature_Stays__Home_page__.webp"
         />
         <div className="absolute inset-0 bg-black/40" />
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white">
@@ -94,7 +94,7 @@ export default function AboutUsPage() {
                 className="object-cover transition-transform duration-700 hover:scale-105"
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
-                src="/about-us/photo-1582719508461-905c673771fd.webp"
+                src="https://storage.googleapis.com/manumaharani-files-bucket/static/1772469044696-The_2026_Trend.webp"
               />
             </div>
             <div className="relative aspect-[3/4] w-full overflow-hidden rounded-lg">
@@ -103,7 +103,7 @@ export default function AboutUsPage() {
                 className="object-cover transition-transform duration-700 hover:scale-105"
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
-                src="/about-us/photo-1590490360182-c33d57733427.webp"
+                src="https://storage.googleapis.com/manumaharani-files-bucket/static/1771514132202-NISH1139__1__Fine_dining__home_page_.webp"
               />
             </div>
             {/* Decorative element */}
@@ -213,7 +213,7 @@ export default function AboutUsPage() {
             className="object-cover"
             fill
             sizes="100vw"
-            src="/about-us/photo-467463764734-c945839849384.webp"
+            src="https://storage.googleapis.com/manumaharani-files-bucket/static/1772469050230-vyom-vibeshot.webp"
           />
           <div className="absolute inset-0 bg-black/60" />
         </div>
