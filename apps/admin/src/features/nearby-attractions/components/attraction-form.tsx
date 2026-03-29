@@ -46,7 +46,7 @@ const formSchema = z.object({
   distance: z.string().max(100).optional().default(""),
   faqs: z.array(faqItemSchema).default([]),
   image: ImagesArraySchema(0, 1),
-  images: ImagesArraySchema(0, 20),
+  images: ImagesArraySchema(5, 20),
   link: z.string().default("#"),
   open_time: z.string().max(20).optional().default(""),
   order: z.preprocess((val) => Number(val), z.number().int().default(0)),
@@ -152,6 +152,11 @@ const AttractionForm = (props: TAttractionFormProps) => {
 
     if (data.image && data.image.length > 0 && !hasValidImage) {
       toast.error("Please add alt text to the featured image");
+      return;
+    }
+    if (!data.images || data.images.length < 5) {
+      toast.error("Please add at least 5 gallery images");
+      setActiveTab("media");
       return;
     }
     if (data.images && data.images.length > 0 && !hasValidGallery) {
@@ -276,7 +281,7 @@ const AttractionForm = (props: TAttractionFormProps) => {
     }
   };
 
-  const busy = isSubmitting || isImageUploading;
+  const busy = isSubmitting || isImageUploading || isGalleryUploading;
 
   return (
     <PageContainer scrollable={true}>
@@ -459,7 +464,7 @@ const AttractionForm = (props: TAttractionFormProps) => {
                           <FormLabel>Attraction Image</FormLabel>
                           <FormControl>
                             <FileUploader
-                              disabled={isImageUploading || isSubmitting}
+                              disabled={isImageUploading || isGalleryUploading || isSubmitting}
                               id="attraction-image"
                               maxFiles={1}
                               onValueChange={field.onChange}
@@ -469,6 +474,35 @@ const AttractionForm = (props: TAttractionFormProps) => {
                             />
                           </FormControl>
                           <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="images"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Gallery Images *</FormLabel>
+                          <FormControl>
+                            <FileUploader
+                              disabled={isImageUploading || isGalleryUploading || isSubmitting}
+                              id="attraction-gallery"
+                              maxFiles={20}
+                              onValueChange={field.onChange}
+                              progresses={galleryProgresses}
+                              showValidation={hasAttemptedSubmit}
+                              value={field.value || []}
+                            />
+                          </FormControl>
+                          <FormDescription className="text-xs">
+                            Additional attraction images (minimum 5, maximum 20). Drag to reorder.
+                          </FormDescription>
+                          <FormMessage />
+                          {hasAttemptedSubmit && (!field.value || field.value.length < 5) && (
+                            <p className="text-sm font-medium text-destructive">
+                              At least 5 gallery images are required
+                            </p>
+                          )}
                         </FormItem>
                       )}
                     />

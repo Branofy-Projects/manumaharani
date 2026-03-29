@@ -134,7 +134,7 @@ const formSchema = z.object({
   review_count: z.number().optional(),
 
   // Media
-  gallery_images: ImagesArraySchema(1, 20),
+  gallery_images: ImagesArraySchema(5, 20),
   image: ImagesArraySchema(0, 1),
 
   // Highlights
@@ -498,8 +498,8 @@ const OfferForm = (props: TOfferFormProps) => {
     if (!offerId) return;
 
     // Validate gallery images
-    if (!data.gallery_images || data.gallery_images.length < 1) {
-      toast.error("Please add at least 1 gallery image");
+    if (!data.gallery_images || data.gallery_images.length < 5) {
+      toast.error("Please add at least 5 gallery images");
       return;
     }
 
@@ -707,8 +707,8 @@ const OfferForm = (props: TOfferFormProps) => {
     }
 
     // Validate minimum gallery images
-    if (!data.gallery_images || data.gallery_images.length < 1) {
-      toast.error("Please add at least 1 gallery image");
+    if (!data.gallery_images || data.gallery_images.length < 5) {
+      toast.error("Please add at least 5 gallery images");
       setActiveTab("media");
       return;
     }
@@ -1624,7 +1624,7 @@ const OfferForm = (props: TOfferFormProps) => {
                   <CardHeader>
                     <CardTitle>Gallery Images *</CardTitle>
                     <CardDescription>
-                      Upload images for the offer gallery (minimum 1, maximum 20 images)
+                      Upload images for the offer gallery (minimum 5, maximum 20 images)
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -1647,12 +1647,12 @@ const OfferForm = (props: TOfferFormProps) => {
                           </FormControl>
                           <FormDescription>
                             These images will be displayed in the gallery on the offer detail page.
-                            Add between 1-20 images. The first image will be used as the main gallery image.
+                            Add between 5-20 images. The first image will be used as the main gallery image.
                           </FormDescription>
                           <FormMessage />
-                          {hasAttemptedSubmit && (!field.value || field.value.length < 1) && (
+                          {hasAttemptedSubmit && (!field.value || field.value.length < 5) && (
                             <p className="text-sm font-medium text-destructive">
-                              At least 1 gallery image is required
+                              At least 5 gallery images are required
                             </p>
                           )}
                         </FormItem>
