@@ -6,31 +6,24 @@ import React, { useCallback, useRef, useState } from "react";
 const restaurants = [
   {
     description:
-      "LOYA takes its diners on a gastronomic journey through North India's diverse landscape, blending flavours from the Himalayan foothills to the vibrant streets of Delhi.",
+      "Nivalaya is our all-day dining restaurant, offering a vibrant spread of global and Indian cuisines in a warm, welcoming setting. Perfect for families and groups, it brings together rich flavors and comforting classics.",
     image:
       "https://storage.googleapis.com/manumaharani-files-bucket/static/1772469042731-Nivalya_.webp",
     name: "Nivalaya",
   },
   {
     description:
-      "From its first location at The Taj Mahal Palace, Mumbai, Golden Dragon has introduced guests to rarefied, divine experiences that transcend mere dining.",
+      "Vyom offers a magical open-air dining experience, where the sky becomes your ceiling. Whether it's a romantic dinner or a relaxed evening with friends, Vyom creates unforgettable moments under the stars.",
     image:
       "https://storage.googleapis.com/manumaharani-files-bucket/static/1772469050230-vyom-vibeshot.webp",
     name: "Vyom",
   },
   {
     description:
-      "Experience the artistry of Japanese cuisine with the finest ingredients, masterful techniques and an unwavering commitment to authenticity.",
+      "Rasa is a celebration of taste, artistry, and culinary storytelling. Inspired by the richness of Indian traditions and modern gastronomy, Rasa offers a refined dining experience for the discerning palate.",
     image:
-      "https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?q=80&w=1600&auto=format&fit=crop",
+      "https://storage.googleapis.com/manumaharani-files-bucket/static/1772469040343-Action___Artistry.webp",
     name: "Rasa",
-  },
-  {
-    description:
-      "Experience the artistry of Japanese cuisine with the finest ingredients, masterful techniques and an unwavering commitment to authenticity.",
-    image:
-      "https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?q=80&w=1600&auto=format&fit=crop",
-    name: "Discotheque",
   },
 ];
 

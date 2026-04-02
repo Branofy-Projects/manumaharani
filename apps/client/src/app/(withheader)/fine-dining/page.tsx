@@ -1,5 +1,7 @@
 import Image from 'next/image';
 
+import { RestaurantCarousel } from './restaurant-carousel';
+
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -7,56 +9,36 @@ export const metadata: Metadata = {
   title: "Best Fine Dining & Bar in Jim Corbett | Riverside Restaurant | Manu Maharani Resorts & Spa",
 };
 
-const restaurants = [
+
+const categories = [
   {
-    description:
-      "Nivalaya is our all-day dining restaurant, offering a vibrant spread of global and Indian cuisines in a warm, welcoming setting. Perfect for families and groups, it brings together rich flavors and comforting classics.",
-    highlights: [
-      "Lavish breakfast, lunch & dinner buffets",
-      "Indian, Continental & regional Kumaoni specialties",
-      "Fresh, locally sourced ingredients",
-      "Elegant indoor seating with serene views",
-    ],
-    image:
-      "https://storage.googleapis.com/manumaharani-files-bucket/static/1772469042731-Nivalya_.webp",
-    name: "Nivalaya",
-    tagline: "The Essence of Wholesome Dining",
-  },
-  {
-    description:
-      "Vyom offers a magical open-air dining experience, where the sky becomes your ceiling. Whether it's a romantic dinner or a relaxed evening with friends, Vyom creates unforgettable moments under the stars.",
-    highlights: [
-      "Open-air, rooftop-style ambiance",
-      "Perfect for romantic dinners & private celebrations",
-      "Curated menus with grills, live counters & signature dishes",
-      "Evening experiences with soft lighting and music",
-    ],
+    blurb:
+      "High-definition photos of the restaurant at 'Golden Hour' (sunset), candlelight setups by the Kosi River, and the architectural details of the dining hall.",
     image:
       "https://storage.googleapis.com/manumaharani-files-bucket/static/1772469050230-vyom-vibeshot.webp",
-    name: "Vyom",
-    tagline: "Dining Under the Open Sky",
+    title: "The 'Vibe' Shots",
   },
   {
-    description:
-      "Rasa is a celebration of taste, artistry, and culinary storytelling. Inspired by the richness of Indian traditions and modern gastronomy, Rasa offers a refined dining experience for the discerning palate.",
-    highlights: [
-      "Signature Indian and fusion cuisine",
-      "Chef-curated menus and seasonal specials",
-      "Elegant, intimate dining setting",
-      "Focus on presentation, flavors, and storytelling",
-    ],
+    blurb:
+      "Include 'chef in action' shots—plating a delicate dish or a mixologist crafting a signature mocktail. This adds a human element of craftsmanship.",
     image:
       "https://storage.googleapis.com/manumaharani-files-bucket/static/1772469040343-Action___Artistry.webp",
-    name: "Rasa",
-    tagline: "Flavours that Tell a Story",
+    title: "Action & Artistry",
   },
-];
-
-const signatureExperiences = [
-  "Riverside Dining: Private meals by the tranquil Kosi River",
-  "Candlelight Dinners: Perfect for romantic evenings",
-  "Curated Celebrations: Birthdays, anniversaries & special occasions",
-  "Nature Breakfasts: Begin your day amidst scenic beauty",
+  {
+    blurb:
+      "Integrate 5-10 second 'Cinemagraphs' (photos with slight movement, like a flickering candle or a flowing river in the background) to make the page feel premium and modern.",
+    image:
+      "https://storage.googleapis.com/manumaharani-files-bucket/static/1772469044696-The_2026_Trend.webp",
+    title: "The 2026 Trend",
+  },
+  {
+    blurb:
+      "Close-ups of fine linen, branded cutlery, and the 'Riverside Romance' setup to sell the experience to couples.",
+    image:
+      "https://storage.googleapis.com/manumaharani-files-bucket/static/1772469048073-The_Table_Setting.webp",
+    title: "The Table Setting",
+  },
 ];
 
 export default function FineDiningPage() {
@@ -73,16 +55,16 @@ export default function FineDiningPage() {
           src="https://storage.googleapis.com/manumaharani-files-bucket/static/1772469042731-Nivalya_.webp"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80" />
-        <div className="absolute inset-0 flex px-4 md:px-8 pb-4 md:pb-8 lg:pb-20 items-end pt-[72px] md:pt-[88px] justify-end">
+        <div className="absolute inset-0 flex px-4 md:px-8 pb-4 md:pb-8 lg:pb-20  items-end pt-[72px] md:pt-[88px] justify-end">
           <div className="max-w-7xl mx-auto text-white">
-            <h1 className="text-2xl md:text-4xl tracking-[0.2em] md:tracking-[0.3em] uppercase text-white leading-tight">
+            <h1 className="text-2xl md:text-4xl  tracking-[0.2em] md:tracking-[0.3em] uppercase text-white leading-tight">
               Al-Fresco Dining & Bar by the Kosi River
             </h1>
           </div>
         </div>
       </section>
 
-      {/* Tagline Section */}
+      {/* Description Section */}
       <section className="w-full bg-white py-16 md:py-24">
         <div className="mx-auto max-w-5xl px-4 text-center xl:px-0">
           <div className="mb-8 flex items-center justify-center gap-4">
@@ -98,137 +80,103 @@ export default function FineDiningPage() {
         </div>
       </section>
 
-      {/* Dining Introduction Section */}
+      {/* Three Categories Section */}
       <section className="w-full bg-[#f8f8f8] py-16 md:py-24">
-        <div className="mx-auto max-w-5xl px-4 text-center xl:px-0">
-          <div className="mb-6 flex items-center justify-center gap-3">
-            <div className="h-[1px] w-12 bg-[#2b2b2b]" />
-            <h2 className="font-serif text-3xl font-light tracking-[0.08em] uppercase text-[#2b2b2b] md:text-4xl lg:text-5xl">
-              Dining at Manu Maharani Resort & Spa
-            </h2>
-            <div className="h-[1px] w-12 bg-[#2b2b2b]" />
+        <div className="mx-auto max-w-screen-xl px-4 xl:px-0">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12">
+            {categories.map((category, idx) => (
+              <div
+                className="group cursor-pointer transition-all duration-300"
+                key={idx}
+              >
+                <div className="relative mb-6 h-[300px] overflow-hidden md:h-[350px]">
+                  <Image
+                    alt={category.title}
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    src={category.image}
+                  />
+                </div>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="h-[1px] w-8 bg-[#2b2b2b]" />
+                  <h3 className="font-serif text-xl tracking-[0.08em] uppercase md:text-2xl">
+                    {category.title}
+                  </h3>
+                </div>
+                {/* <p className="font-serif text-sm leading-relaxed text-[#5a5a5a] md:text-base">
+                  {category.blurb}
+                </p> */}
+              </div>
+            ))}
           </div>
-          <h3 className="mb-8 font-serif text-xl tracking-[0.08em] text-[#5a5a5a] md:text-2xl">
-            A Culinary Journey in the Heart of the Wilderness
-          </h3>
-          <p className="font-serif text-base leading-relaxed text-[#5a5a5a] md:text-lg">
-            At Manu Maharani Resort & Spa, dining is more than just a meal — it is an experience crafted with flavor,
-            ambiance, and nature. Surrounded by lush greenery and the soothing presence of the Kosi River, our culinary
-            spaces offer a harmonious blend of global cuisines and regional delicacies.
-          </p>
-          <p className="mt-4 font-serif text-base leading-relaxed text-[#5a5a5a] md:text-lg">
-            From indulgent breakfasts to intimate dinners under the stars, every moment is designed to delight your senses.
-          </p>
         </div>
       </section>
 
-      {/* Restaurant Sections */}
-      {restaurants.map((restaurant, idx) => (
-        <section
-          className={`w-full py-16 md:py-24 ${idx % 2 === 0 ? 'bg-white' : 'bg-[#f8f8f8]'}`}
-          key={restaurant.name}
-        >
-          <div className="mx-auto max-w-screen-xl px-4 xl:px-0">
-            <div className={`grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-16 items-center ${idx % 2 !== 0 ? 'md:[direction:rtl]' : ''}`}>
-              <div className={`relative h-[350px] overflow-hidden md:h-[500px] ${idx % 2 !== 0 ? 'md:[direction:ltr]' : ''}`}>
-                <Image
-                  alt={restaurant.name}
-                  className="object-cover"
-                  fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  src={restaurant.image}
-                />
-              </div>
-              <div className={idx % 2 !== 0 ? 'md:[direction:ltr]' : ''}>
-                <div className="mb-4 flex items-center gap-3">
-                  <div className="h-[1px] w-12 bg-[#2b2b2b]" />
-                  <h2 className="font-serif text-3xl font-light tracking-[0.08em] uppercase text-[#2b2b2b] md:text-4xl">
-                    {restaurant.name}
-                  </h2>
-                </div>
-                <h3 className="mb-6 font-serif text-lg tracking-[0.05em] text-[#5a5a5a] md:text-xl">
-                  {restaurant.tagline}
-                </h3>
-                <p className="mb-6 font-serif text-base leading-relaxed text-[#5a5a5a] md:text-lg">
-                  {restaurant.description}
-                </p>
-                <div>
-                  <h4 className="mb-3 font-serif text-sm font-medium tracking-[0.1em] uppercase text-[#2b2b2b]">
-                    Highlights
-                  </h4>
-                  <ul className="space-y-2">
-                    {restaurant.highlights.map((highlight) => (
-                      <li
-                        className="flex items-start gap-2 font-serif text-sm leading-relaxed text-[#5a5a5a] md:text-base"
-                        key={highlight}
-                      >
-                        <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#c9a961]" />
-                        {highlight}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+      {/* Legendary Restaurant Brands Section */}
+      <section className="w-full bg-white py-16 md:py-24">
+        <div className="mx-auto max-w-screen-xl px-4 xl:px-0">
+          <div className="mb-12 grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-16">
+            <div>
+              <div className="mb-6 flex items-center gap-3">
+                <div className="h-[1px] w-12 bg-[#2b2b2b]" />
+                <h2 className="font-serif text-3xl font-light tracking-[0.08em] uppercase md:text-4xl lg:text-5xl">
+                  Our Legendary Restaurant Brands
+                </h2>
               </div>
             </div>
+            <div className="flex items-center">
+              <p className="font-serif text-base leading-relaxed text-[#5a5a5a] md:text-lg">
+                At Manu Maharani Resort & Spa, dining is more than just a meal — it is an experience crafted with flavor,
+                ambiance, and nature. Surrounded by lush greenery and the soothing presence of the Kosi River, our culinary
+                spaces offer a harmonious blend of global cuisines and regional delicacies.
+              </p>
+            </div>
           </div>
-        </section>
-      ))}
 
-      {/* Signature Experiences Section */}
-      <section className="relative min-h-[600px] w-full overflow-hidden">
+          <RestaurantCarousel />
+        </div>
+      </section>
+
+      {/* Culinary Legacy Section */}
+      <section className="relative h-[80vh] min-h-[600px] w-full overflow-hidden">
         <Image
-          alt="Signature Dining Experiences"
+          alt="A Culinary Legacy"
           className="object-cover"
           fill
           sizes="100vw"
           src="https://storage.googleapis.com/manumaharani-files-bucket/static/1772469048073-The_Table_Setting.webp"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/30" />
-        <div className="relative z-10 flex min-h-[600px] items-center">
-          <div className="mx-auto max-w-screen-xl px-4 py-16 md:py-24 xl:px-0">
-            <div className="max-w-2xl">
-              <div className="mb-4 flex items-center gap-3">
-                <div className="h-[1px] w-12 bg-white/80" />
-                <h2 className="font-serif text-3xl font-light tracking-[0.15em] uppercase text-white md:text-4xl lg:text-5xl">
-                  Signature Experiences
-                </h2>
-              </div>
-              <p className="mb-8 font-serif text-base leading-relaxed text-white/90 md:text-lg">
-                Enhance your stay with bespoke dining experiences designed to create lasting memories:
-              </p>
-              <ul className="space-y-3">
-                {signatureExperiences.map((experience) => (
-                  <li
-                    className="flex items-start gap-3 font-serif text-base leading-relaxed text-white/90 md:text-lg"
-                    key={experience}
-                  >
-                    <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#c9a961]" />
-                    {experience}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* A Taste of Manu Maharani - Closing Section */}
-      <section className="w-full bg-white py-16 md:py-24">
-        <div className="mx-auto max-w-5xl px-4 text-center xl:px-0">
-          <div className="mb-8 flex items-center justify-center gap-3">
-            <div className="h-[1px] w-12 bg-[#2b2b2b]" />
-            <h2 className="font-serif text-3xl font-light tracking-[0.15em] uppercase text-[#2b2b2b] md:text-4xl lg:text-5xl">
-              A Taste of Manu Maharani
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
+        <div className="absolute bottom-0 left-0 right-0 p-8 md:p-16 lg:p-24">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="h-[1px] w-12 bg-white/80" />
+            <h2 className="font-serif text-3xl font-light tracking-[0.15em] uppercase text-white md:text-4xl lg:text-5xl">
+              A Culinary Legacy
             </h2>
-            <div className="h-[1px] w-12 bg-[#2b2b2b]" />
           </div>
-          <p className="font-serif text-base leading-relaxed text-[#5a5a5a] md:text-lg">
+          <p className="max-w-2xl font-serif text-base leading-relaxed text-white/90 md:text-lg">
             Every dish at Manu Maharani is a reflection of our philosophy — to combine authentic flavors with warm
             hospitality. Whether you seek indulgence, comfort, or a fine dining escape, our restaurants promise an
             experience that lingers long after your meal.
           </p>
         </div>
       </section>
+
+      {/* Call to Action */}
+      {/* <section className="w-full bg-[#2b2b2b] py-16 text-center md:py-20">
+        <div className="mx-auto max-w-screen-xl px-4 xl:px-0">
+          <h2 className="mb-6 font-serif text-3xl font-light tracking-[0.08em] uppercase text-white md:text-4xl">
+            Reserve Your Table
+          </h2>
+          <p className="mb-8 font-serif text-base text-white/80 md:text-lg">
+            Experience the pinnacle of fine dining at Manu Maharani
+          </p>
+          <button className="inline-block border border-[#c9a961] bg-transparent px-10 py-3 font-serif text-sm tracking-[0.08em] uppercase text-[#c9a961] transition-all hover:bg-[#c9a961] hover:text-white">
+            Book Table
+          </button>
+        </div>
+      </section> */}
     </main>
   );
 }
