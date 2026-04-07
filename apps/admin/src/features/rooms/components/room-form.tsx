@@ -103,7 +103,7 @@ const formSchema = z.object({
   // Featured image (like offers)
   image: ImagesArraySchema(0, 1),
   // Gallery images
-  images: ImagesArraySchema(0, 20),
+  images: ImagesArraySchema(5, 20),
   video_url: z.union([z.string().url(), z.literal("")]).optional(),
   // Size & capacity
   bed_type: z.enum(["single", "double", "queen", "king", "twin"]),
@@ -583,9 +583,14 @@ export const RoomForm = (props: TRoomFormProps) => {
                             />
                           </FormControl>
                           <FormDescription className="text-xs">
-                            Additional room images. Drag to reorder.
+                            Additional room images (minimum 5, maximum 20). Drag to reorder.
                           </FormDescription>
                           <FormMessage />
+                          {hasAttemptedSubmit && (!field.value || field.value.length < 5) && (
+                            <p className="text-sm font-medium text-destructive">
+                              At least 5 gallery images are required
+                            </p>
+                          )}
                         </FormItem>
                       )}
                     />
