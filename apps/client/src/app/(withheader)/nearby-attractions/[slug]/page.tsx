@@ -180,11 +180,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export async function generateStaticParams() {
-    const attractions = await getAttractionsCache(true);
+    try {
+        const attractions = await getAttractionsCache(true);
+        const params = attractions
+            .filter((a) => a.slug)
+            .map((a) => ({ slug: a.slug as string }));
 
-    return attractions
-        .filter((a) => a.slug)
-        .map((a) => ({
-            slug: a.slug,
-        }));
+        return params.length > 0 ? params : [{ slug: '_build' }];
+    } catch {
+        return [{ slug: '_build' }];
+    }
 }

@@ -169,11 +169,11 @@ export async function generateMetadata({
 };
 
 export async function generateStaticParams() {
-    const { blogs } = await getBlogs({
-        status: "published",
-    });
-
-    return blogs.map((post) => ({
-        "blog-slug": post.slug,
-    }));
+    try {
+        const { blogs } = await getBlogs({ status: "published" });
+        const params = blogs.map((post) => ({ "blog-slug": post.slug }));
+        return params.length > 0 ? params : [{ "blog-slug": "_build" }];
+    } catch {
+        return [{ "blog-slug": "_build" }];
+    }
 }

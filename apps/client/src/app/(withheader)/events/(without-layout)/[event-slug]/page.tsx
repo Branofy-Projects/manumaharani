@@ -415,13 +415,15 @@ export async function generateMetadata({ params }: PageProps) {
 }
 
 export async function generateStaticParams() {
-    const events = await getAllEventsSlugs();
-
-    return events
-        .filter((event) => event.slug)
-        .map((event) => ({
-            "event-slug": event.slug,
-        }));
+    try {
+        const events = await getAllEventsSlugs();
+        const params = events
+            .filter((event) => event.slug)
+            .map((event) => ({ "event-slug": event.slug }));
+        return params.length > 0 ? params : [{ "event-slug": "_build" }];
+    } catch {
+        return [{ "event-slug": "_build" }];
+    }
 }
 
 function formatEventDate(startDate: string, endDate?: null | string) {

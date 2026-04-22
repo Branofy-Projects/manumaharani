@@ -34,13 +34,15 @@ export async function generateMetadata({ params }: PageProps<"/rooms/[room-slug]
 }
 
 export async function generateStaticParams() {
-    const rooms = await getActiveRooms();
-
-    return rooms
-        .filter((room) => room.slug)
-        .map((room) => ({
-            "room-slug": room.slug,
-        }));
+    try {
+        const rooms = await getActiveRooms();
+        const params = rooms
+            .filter((room) => room.slug)
+            .map((room) => ({ "room-slug": room.slug }));
+        return params.length > 0 ? params : [{ "room-slug": "_build" }];
+    } catch {
+        return [{ "room-slug": "_build" }];
+    }
 }
 
 export default async function RoomDetailPage({ params }: PageProps<"/rooms/[room-slug]">) {

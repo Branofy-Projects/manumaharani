@@ -52,13 +52,15 @@ export async function generateMetadata({ params }: PageProps) {
 }
 
 export async function generateStaticParams() {
-    const offers = await getAllOffersSlugs({ status: 'active' })
-
-    return offers
-        .filter((offer) => offer.slug)
-        .map((offer) => ({
-            "offer-slug": offer.slug,
-        }));
+    try {
+        const offers = await getAllOffersSlugs({ status: 'active' });
+        const params = offers
+            .filter((offer) => offer.slug)
+            .map((offer) => ({ "offer-slug": offer.slug }));
+        return params.length > 0 ? params : [{ "offer-slug": "_build" }];
+    } catch {
+        return [{ "offer-slug": "_build" }];
+    }
 }
 
 export default async function OfferDetailPage({ params }: PageProps) {
