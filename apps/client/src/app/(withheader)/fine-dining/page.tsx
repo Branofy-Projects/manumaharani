@@ -18,7 +18,7 @@ const specialExperiences = [
     includes: "Private table, Infinity Pool deck + personal butler",
     name: '"Gourmet Grill" Private Dinner',
     primaryCta: { href: "#book", label: "Book a Table" },
-    tag: "Most Romantic",
+    tag: "Buffet service",
     timing: "7:00 PM – 10:30 PM",
   },
   {
@@ -27,7 +27,7 @@ const specialExperiences = [
     includes: "Guests + naturalist peaks + artisanal cocktails",
     name: "Sunset Spark at Vyom",
     primaryCta: { href: "#book", label: "Book a Table" },
-    tag: "Unique Experience",
+    tag: "Sunset at bar",
     timing: "5:00 PM – 8:00 PM",
   },
   {
@@ -36,7 +36,7 @@ const specialExperiences = [
     includes: "Artisanal basket in Jeep setting",
     name: "The Safari Picnic Hamper",
     primaryCta: { href: "#book", label: "Book a Table" },
-    tag: "Adventure Ready",
+    tag: "Jazz Night",
     timing: "6:00 AM – 9:00 AM",
   },
 ];
