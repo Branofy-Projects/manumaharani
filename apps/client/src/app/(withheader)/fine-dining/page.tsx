@@ -15,8 +15,8 @@ const specialExperiences = [
   {
     dresscode: "Smart Casual",
     image: "https://storage.googleapis.com/manumaharani-files-bucket/static/1772469048073-The_Table_Setting.webp",
-    includes: "Private table, Infinity Pool deck + personal butler",
-    name: '"Gourmet Grill" Private Dinner',
+    includes: "Hearty meals for the adventurous soul.",
+    name: '"Nivalya" All day dining',
     primaryCta: { href: "#book", label: "Book a Table" },
     tag: "Buffet service",
     timing: "7:00 PM – 10:30 PM",
@@ -24,8 +24,8 @@ const specialExperiences = [
   {
     dresscode: "Resort Casual",
     image: "https://storage.googleapis.com/manumaharani-files-bucket/static/1772469050230-vyom-vibeshot.webp",
-    includes: "Guests + naturalist peaks + artisanal cocktails",
-    name: "Sunset Spark at Vyom",
+    includes: "Ultimate spot for sundowners and artisanal mocktails",
+    name: "Vyom – Upper Deck",
     primaryCta: { href: "#book", label: "Book a Table" },
     tag: "Sunset at bar",
     timing: "5:00 PM – 8:00 PM",
@@ -33,8 +33,8 @@ const specialExperiences = [
   {
     dresscode: "Comfortable & Outdoors",
     image: "https://storage.googleapis.com/manumaharani-files-bucket/static/1772469040343-Action___Artistry.webp",
-    includes: "Artisanal basket in Jeep setting",
-    name: "The Safari Picnic Hamper",
+    includes: "Curated Kumaoni flavours by day, vibrant evenings by night",
+    name: "Rasa & The Discotheque",
     primaryCta: { href: "#book", label: "Book a Table" },
     tag: "Jazz Night",
     timing: "6:00 AM – 9:00 AM",
@@ -119,30 +119,27 @@ export default function FineDiningPage() {
             <div className="flex flex-col sm:flex-row sm:items-center gap-3">
               <span className="font-serif text-sm font-semibold text-[#2b2b2b]">Manu Maharani Resort & Spa, Jim Corbett</span>
               <div className="flex items-center gap-1">
-                {[1, 2, 3, 4].map((i) => (
+                {[1, 2, 3, 4, 5].map((i) => (
                   <svg className="w-3.5 h-3.5 text-[#c9a961] fill-current" key={i} viewBox="0 0 20 20">
                     <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
                   </svg>
                 ))}
-                <svg className="w-3.5 h-3.5 text-[#e0ddd8] fill-current" viewBox="0 0 20 20">
-                  <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                </svg>
-                <span className="font-serif text-xs text-[#5a5a5a] ml-1">4.3 · 200+ Reviews</span>
+                <span className="font-serif text-xs text-[#5a5a5a] ml-1">4.8 · 200+ Reviews</span>
               </div>
             </div>
             <div className="flex items-center gap-5">
-              <a className="flex items-center gap-1.5 font-serif text-xs tracking-wide text-[#c9a961] hover:underline" href="https://maps.google.com/?q=Manu+Maharani+Resort+Jim+Corbett" rel="noopener noreferrer" target="_blank">
+              <a className="flex items-center gap-1.5 font-serif text-xs tracking-wide text-[#c9a961] hover:underline" href="https://www.google.com/maps?q=29.4166669823029,79.1356783151129" rel="noopener noreferrer" target="_blank">
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
                   <circle cx="12" cy="9" r="2.5" />
                 </svg>
                 View Map
               </a>
-              <a className="flex items-center gap-1.5 font-serif text-xs tracking-wide text-[#5a5a5a] hover:text-[#2b2b2b]" href="tel:+911234567890">
+              <a className="flex items-center gap-1.5 font-serif text-xs tracking-wide text-[#5a5a5a] hover:text-[#2b2b2b]" href="tel:+919876543210">
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.01 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
                 </svg>
-                +91 124-456-7890
+                +91 98765 43210
               </a>
             </div>
           </div>
