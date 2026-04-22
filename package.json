@@ -2,7 +2,7 @@
  "name": "ManuMaharani",
  "private": true,
  "scripts": {
-  "build": "turbo run build",
+  "build": "dotenv -e .env -- turbo run build",
   "start": "turbo run start",
   "dev": "dotenv -e .env -- turbo run dev",
   "lint": "turbo run lint",
