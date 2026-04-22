@@ -128,10 +128,12 @@ export function RestaurantCarousel() {
                   <p className="mb-4 font-serif text-sm leading-relaxed text-[#5a5a5a] md:mb-6">
                     {restaurant.description}
                   </p>
-                  {/* <button className="inline-flex items-center gap-2 font-serif text-sm tracking-[0.08em] uppercase text-[#c9a961] transition-all hover:gap-3">
-                    More
-                    <span className="text-lg">›</span>
-                  </button> */}
+                  <a
+                    className="inline-flex items-center justify-center bg-[#2b2b2b] px-6 py-3 font-serif text-xs tracking-[0.15em] uppercase text-white transition-all hover:bg-[#c9a961] min-h-[44px]"
+                    href="#book"
+                  >
+                    Book a Table
+                  </a>
                 </div>
               </div>
             </div>
