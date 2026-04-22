@@ -182,15 +182,6 @@ export default function FineDiningPage() {
                   >
                     {exp.primaryCta.label}
                   </a>
-                  <div className="flex gap-2 justify-center flex-wrap">
-                    <span className="border border-[#e8e4dc] px-3 py-1.5 font-serif text-[10px] tracking-wide text-[#5a5a5a] flex items-center gap-1">
-                      <svg className="w-3 h-3 text-[#c9a961]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>
-                      {exp.timing}
-                    </span>
-                    <span className="border border-[#e8e4dc] px-3 py-1.5 font-serif text-[10px] tracking-wide text-[#5a5a5a]">
-                      {exp.dresscode}
-                    </span>
-                  </div>
                 </div>
               </div>
             ))}
@@ -288,6 +279,12 @@ export default function FineDiningPage() {
             hospitality. Whether you seek indulgence, comfort, or a fine dining escape, our restaurants promise an
             experience that lingers long after your meal.
           </p>
+          <a
+            className="mt-8 inline-flex items-center justify-center bg-white px-8 py-4 font-serif text-xs tracking-[0.2em] uppercase text-[#2b2b2b] transition-all hover:bg-[#c9a961] hover:text-white min-h-[44px]"
+            href="#book"
+          >
+            Book a Table
+          </a>
         </div>
       </section>
 
